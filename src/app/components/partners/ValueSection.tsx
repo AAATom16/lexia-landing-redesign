@@ -1,4 +1,4 @@
-import { Clock, TrendingUp, Zap, BarChart } from 'lucide-react';
+import { Clock, TrendingUp, Zap, BarChart, Check } from 'lucide-react';
 
 const metrics = [
   {
@@ -41,10 +41,10 @@ export function ValueSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#0066CC]/10 rounded-full mb-6">
             <span className="text-sm text-[#0066CC]">Produktová hodnota</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
             Čísla, která mluví za vše
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
             Rychlost, výdělek a jednoduchost v jedné platformě
           </p>
         </div>
@@ -59,11 +59,11 @@ export function ValueSection() {
                    style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }} />
 
               <div className="relative p-8 bg-white border border-border rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-[1.02] h-full">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${metric.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <metric.icon className="w-7 h-7 text-white" />
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${metric.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <metric.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
                 </div>
 
-                <div className="text-3xl lg:text-4xl mb-2 text-foreground">
+                <div className="text-2xl lg:text-3xl xl:text-4xl mb-2 text-foreground tracking-tight">
                   {metric.value}
                 </div>
                 <div className="text-base mb-3 text-foreground">
@@ -135,7 +135,7 @@ export function ValueSection() {
                         <div className="text-2xl text-green-900">950 Kč</div>
                       </div>
                       <div className="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-green-700">
-                        ✓
+                        <Check className="w-6 h-6" strokeWidth={2.5} />
                       </div>
                     </div>
                   </div>

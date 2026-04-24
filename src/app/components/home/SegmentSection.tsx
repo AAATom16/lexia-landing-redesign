@@ -1,10 +1,12 @@
+import { Home, Briefcase, ArrowRight } from 'lucide-react';
+
 export function SegmentSection() {
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">Pro koho je Lexia</h2>
-          <p className="text-xl text-muted-foreground">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">Pro koho je Lexia</h2>
+          <p className="text-lg md:text-xl text-muted-foreground text-pretty">
             Právní ochrana pro každou životní situaci
           </p>
         </div>
@@ -14,12 +16,12 @@ export function SegmentSection() {
             <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 rounded-full blur-2xl" />
 
             <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-3xl mb-6">
-                🏠
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white mb-6 shadow-lg shadow-[#0066CC]/20">
+                <Home className="w-7 h-7" strokeWidth={1.75} />
               </div>
 
-              <h3 className="text-3xl mb-4 text-foreground">Rodiny a jednotlivci</h3>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <h3 className="text-2xl md:text-3xl mb-4 text-foreground tracking-tight">Rodiny a jednotlivci</h3>
+              <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed text-pretty">
                 Každodenní situace, které se mohou stát každému.
               </p>
 
@@ -37,22 +39,23 @@ export function SegmentSection() {
                 ))}
               </div>
 
-              <button className="px-6 py-3 bg-white text-[#0066CC] rounded-xl border-2 border-[#0066CC]/20 hover:bg-[#0066CC] hover:text-white transition-all group-hover:shadow-lg">
-                Zjistit více →
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0066CC] rounded-xl border-2 border-[#0066CC]/20 hover:bg-[#0066CC] hover:text-white transition-all group-hover:shadow-lg">
+                Zjistit více
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           <div className="group relative bg-gradient-to-br from-[#F7F9FC] to-white rounded-3xl border-2 border-border hover:border-[#0066CC]/30 p-10 hover:shadow-2xl transition-all duration-300 cursor-pointer">
-            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-full blur-2xl" />
+            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-slate-500/10 to-slate-700/10 rounded-full blur-2xl" />
 
             <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-3xl mb-6">
-                💼
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white mb-6 shadow-lg shadow-slate-900/20">
+                <Briefcase className="w-7 h-7" strokeWidth={1.75} />
               </div>
 
-              <h3 className="text-3xl mb-4 text-foreground">Podnikatelé a firmy</h3>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <h3 className="text-2xl md:text-3xl mb-4 text-foreground tracking-tight">Podnikatelé a firmy</h3>
+              <p className="text-base md:text-lg text-muted-foreground mb-8 leading-relaxed text-pretty">
                 Ochrana vašeho podnikání před právními riziky.
               </p>
 
@@ -64,14 +67,15 @@ export function SegmentSection() {
                   'Ochrana duševního vlastnictví'
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-600" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-slate-700" />
                     <span className="text-foreground">{item}</span>
                   </div>
                 ))}
               </div>
 
-              <button className="px-6 py-3 bg-white text-purple-600 rounded-xl border-2 border-purple-600/20 hover:bg-purple-600 hover:text-white transition-all group-hover:shadow-lg">
-                Zjistit více →
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl border-2 border-slate-300 hover:bg-slate-900 hover:text-white transition-all group-hover:shadow-lg">
+                Zjistit více
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

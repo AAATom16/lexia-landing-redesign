@@ -1,4 +1,32 @@
+import { Zap, BarChart3, MessageSquare, FileX, Home, Car } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+type Feature = { icon: LucideIcon; title: string; description: string };
+
 export function DigitalSection() {
+  const features: Feature[] = [
+    {
+      icon: Zap,
+      title: 'Nahlášení případu během pár minut',
+      description: 'Rychlý formulář s inteligentním asistentem'
+    },
+    {
+      icon: BarChart3,
+      title: 'Přehled případů v aplikaci',
+      description: 'Sledujte stav všech vašich právních věcí'
+    },
+    {
+      icon: MessageSquare,
+      title: 'Rychlá komunikace',
+      description: 'Chat s právníkem přímo v aplikaci'
+    },
+    {
+      icon: FileX,
+      title: 'Bez papírování',
+      description: 'Vše digitálně, včetně dokumentů a podpisů'
+    }
+  ];
+
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6 lg:px-12">
@@ -8,47 +36,29 @@ export function DigitalSection() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F9FC] rounded-full border border-border mb-6">
                 <span className="text-sm text-[#0066CC]">Digitální platforma</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
                 Vše vyřídíte online
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-lg md:text-xl text-muted-foreground text-pretty">
                 Moderní platforma pro správu vašich právních záležitostí
               </p>
             </div>
 
             <div className="space-y-6">
-              {[
-                {
-                  icon: '⚡',
-                  title: 'Nahlášení případu během pár minut',
-                  description: 'Rychlý formulář s inteligentním asistentem'
-                },
-                {
-                  icon: '📊',
-                  title: 'Přehled případů v aplikaci',
-                  description: 'Sledujte stav všech vašich právních věcí'
-                },
-                {
-                  icon: '💬',
-                  title: 'Rychlá komunikace',
-                  description: 'Chat s právníkem přímo v aplikaci'
-                },
-                {
-                  icon: '🚫',
-                  title: 'Bez papírování',
-                  description: 'Vše digitálně, včetně dokumentů a podpisů'
-                }
-              ].map((feature, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 flex items-center justify-center text-2xl">
-                    {feature.icon}
+              {features.map((feature, i) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={i} className="flex gap-4">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 flex items-center justify-center text-[#0066CC]">
+                      <Icon className="w-6 h-6" strokeWidth={1.75} />
+                    </div>
+                    <div>
+                      <h3 className="text-lg text-foreground mb-1 tracking-tight">{feature.title}</h3>
+                      <p className="text-muted-foreground text-pretty">{feature.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg text-foreground mb-1">{feature.title}</h3>
-                    <p className="text-muted-foreground">{feature.description}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -83,8 +93,8 @@ export function DigitalSection() {
                   <div className="p-4 bg-[#F7F9FC] rounded-xl border border-border">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white">
-                          🏠
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white">
+                          <Home className="w-5 h-5" strokeWidth={1.75} />
                         </div>
                         <div>
                           <div className="text-sm text-foreground">Spor o kauci</div>
@@ -107,7 +117,7 @@ export function DigitalSection() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white">
-                          🚗
+                          <Car className="w-5 h-5" strokeWidth={1.75} />
                         </div>
                         <div>
                           <div className="text-sm text-foreground">Dopravní nehoda</div>

@@ -8,11 +8,11 @@ export function FinalCTASection() {
 
       <div className="container mx-auto px-6 lg:px-12 relative">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl lg:text-6xl leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-[1.1] tracking-tight text-balance">
             Jeden právní problém vás může stát víc než roční pojištění
           </h2>
 
-          <p className="text-xl text-white/90 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto text-pretty">
             S Lexií máte právní pomoc vždy po ruce. Bez starostí, bez nečekaných výdajů.
           </p>
 
@@ -27,15 +27,15 @@ export function FinalCTASection() {
 
           <div className="grid grid-cols-3 gap-8 pt-12 border-t border-white/20 max-w-2xl mx-auto">
             <div>
-              <div className="text-3xl mb-2">5 min</div>
+              <div className="text-2xl md:text-3xl mb-2 tracking-tight">5 min</div>
               <div className="text-sm text-white/70">Sjednání online</div>
             </div>
             <div>
-              <div className="text-3xl mb-2">24/7</div>
+              <div className="text-2xl md:text-3xl mb-2 tracking-tight">24/7</div>
               <div className="text-sm text-white/70">Právní pomoc</div>
             </div>
             <div>
-              <div className="text-3xl mb-2">0 Kč</div>
+              <div className="text-2xl md:text-3xl mb-2 tracking-tight">0 Kč</div>
               <div className="text-sm text-white/70">Skryté poplatky</div>
             </div>
           </div>

@@ -1,3 +1,5 @@
+import { Check, LayoutDashboard } from 'lucide-react';
+
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#F7F9FC]">
@@ -15,14 +17,13 @@ export function Hero() {
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-6xl leading-tight text-foreground">
-                Právní ochrana,
-                <br />
+              <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl leading-[1.1] tracking-tight text-foreground text-balance">
+                Právní ochrana,{' '}
                 <span className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] bg-clip-text text-transparent">
                   kterou prodáte během minut
                 </span>
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
+              <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl text-pretty">
                 Digitální platforma pro partnery. Sjednejte smlouvu za 3 minuty,
                 sledujte provize v reálném čase a spravujte celé portfolio online.
               </p>
@@ -37,19 +38,19 @@ export function Hero() {
               </button>
             </div>
 
-            <div className="flex items-center gap-8 pt-4">
+            <div className="flex flex-wrap items-center gap-6 md:gap-8 pt-4">
               <div>
-                <div className="text-3xl text-foreground mb-1">3 min</div>
+                <div className="text-2xl md:text-3xl text-foreground mb-1 tracking-tight">3 min</div>
                 <div className="text-sm text-muted-foreground">Průměrná doba sjednání</div>
               </div>
-              <div className="w-px h-12 bg-border" />
+              <div className="w-px h-12 bg-border hidden sm:block" />
               <div>
-                <div className="text-3xl text-foreground mb-1">24/7</div>
+                <div className="text-2xl md:text-3xl text-foreground mb-1 tracking-tight">24/7</div>
                 <div className="text-sm text-muted-foreground">Přístup do platformy</div>
               </div>
-              <div className="w-px h-12 bg-border" />
+              <div className="w-px h-12 bg-border hidden sm:block" />
               <div>
-                <div className="text-3xl text-foreground mb-1">100%</div>
+                <div className="text-2xl md:text-3xl text-foreground mb-1 tracking-tight">100%</div>
                 <div className="text-sm text-muted-foreground">Online proces</div>
               </div>
             </div>
@@ -62,8 +63,8 @@ export function Hero() {
               <div className="relative bg-white rounded-2xl shadow-2xl border border-border overflow-hidden">
                 <div className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] px-6 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                      <div className="w-4 h-4 bg-white rounded" />
+                    <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-white">
+                      <LayoutDashboard className="w-4 h-4" strokeWidth={2} />
                     </div>
                     <span className="text-white">Partner Dashboard</span>
                   </div>
@@ -124,7 +125,7 @@ export function Hero() {
               <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl border border-border p-4 animate-pulse">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                    ✓
+                    <Check className="w-5 h-5" strokeWidth={2.5} />
                   </div>
                   <div>
                     <div className="text-sm text-foreground">Smlouva sjednána</div>

@@ -1,3 +1,5 @@
+import { Check, Home, Briefcase } from 'lucide-react';
+
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#F7F9FC] pt-8 pb-24">
@@ -10,15 +12,14 @@ export function Hero() {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-6xl leading-tight text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl leading-[1.1] tracking-tight text-foreground text-balance">
                 Právní problém vás může stát{' '}
-                <span className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] bg-clip-text text-transparent">
-                  desítky tisíc.
+                <span className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] bg-clip-text text-transparent whitespace-nowrap">
+                  desítky tisíc
                 </span>
-                <br />
-                Vyřešit ho můžete během pár minut.
+                . Vyřešit ho zvládnete během pár minut.
               </h1>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl text-pretty">
                 Sjednejte si právní ochranu online a mějte právníka vždy po ruce –
                 pro každodenní situace doma i v podnikání.
               </p>
@@ -34,9 +35,7 @@ export function Hero() {
             </div>
 
             <div className="flex items-center gap-3 text-sm text-muted-foreground pt-4">
-              <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+              <Check className="w-5 h-5 text-green-600" strokeWidth={2.5} />
               <span>Bez papírování. Aktivní během pár minut.</span>
             </div>
           </div>
@@ -56,11 +55,17 @@ export function Hero() {
                     <div className="text-xs text-muted-foreground mb-2">Pro koho sjednáváte?</div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="p-4 border-2 border-[#0066CC] bg-[#0066CC]/5 rounded-xl cursor-pointer">
-                        <div className="text-sm text-foreground mb-1">🏠 Domácnost</div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Home className="w-4 h-4 text-[#0066CC]" />
+                          <span className="text-sm text-foreground">Domácnost</span>
+                        </div>
                         <div className="text-xs text-muted-foreground">Rodina, jednotlivec</div>
                       </div>
                       <div className="p-4 border border-border bg-white rounded-xl cursor-pointer hover:border-[#0066CC]/30">
-                        <div className="text-sm text-foreground mb-1">💼 Podnikatel</div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Briefcase className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-foreground">Podnikatel</span>
+                        </div>
                         <div className="text-xs text-muted-foreground">OSVČ, firma</div>
                       </div>
                     </div>
@@ -75,9 +80,7 @@ export function Hero() {
                         'Úhrada soudních poplatků'
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-4 h-4 text-green-600 shrink-0" strokeWidth={2.5} />
                           <span className="text-sm text-foreground">{item}</span>
                         </div>
                       ))}

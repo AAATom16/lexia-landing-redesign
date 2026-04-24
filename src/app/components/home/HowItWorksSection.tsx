@@ -24,8 +24,8 @@ export function HowItWorksSection() {
     <section className="py-24 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">Jak to funguje</h2>
-          <p className="text-xl text-muted-foreground">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight">Jak to funguje</h2>
+          <p className="text-lg md:text-xl text-muted-foreground">
             Tři jednoduché kroky k právní ochraně
           </p>
         </div>

@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react';
+
 export function SupportSection() {
   return (
     <section className="py-24 bg-white">
@@ -8,10 +10,10 @@ export function SupportSection() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F9FC] rounded-full border border-border mb-6">
                 <span className="text-sm text-[#0066CC]">Onboarding & podpora</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
                 Vše nastavíme za vás
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-lg md:text-xl text-muted-foreground text-pretty">
                 Od registrace po první smlouvu během 48 hodin. Včetně školení.
               </p>
             </div>
@@ -54,8 +56,8 @@ export function SupportSection() {
 
             <div className="p-6 bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl border border-green-200">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-green-200 flex items-center justify-center text-green-700 flex-shrink-0">
-                  ✓
+                <div className="w-12 h-12 rounded-xl bg-green-200 flex items-center justify-center text-green-700 shrink-0">
+                  <Check className="w-6 h-6" strokeWidth={2.5} />
                 </div>
                 <div>
                   <h4 className="text-lg text-green-900 mb-1">Kontinuální podpora</h4>

@@ -1,3 +1,5 @@
+import { Check } from 'lucide-react';
+
 export function ToolsSection() {
   return (
     <section className="py-24 bg-[#F7F9FC]">
@@ -6,8 +8,8 @@ export function ToolsSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-border mb-6">
             <span className="text-sm text-[#0066CC]">Platforma</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl mb-4 text-foreground">Vše, co potřebujete na jednom místě</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">Vše, co potřebujete na jednom místě</h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
             Pokročilé nástroje pro správu portfolia a maximalizaci příjmů
           </p>
         </div>
@@ -89,7 +91,7 @@ export function ToolsSection() {
                 <div className="p-4 border-2 border-[#0066CC] rounded-lg bg-[#0066CC]/5">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-foreground">Model A</span>
-                    <div className="w-5 h-5 rounded-full bg-[#0066CC] flex items-center justify-center text-white text-xs">✓</div>
+                    <div className="w-5 h-5 rounded-full bg-[#0066CC] flex items-center justify-center text-white"><Check className="w-3 h-3" strokeWidth={3} /></div>
                   </div>
                   <div className="text-lg text-[#0066CC] mb-1">850-1200 Kč</div>
                   <div className="text-xs text-muted-foreground">Za smlouvu</div>
