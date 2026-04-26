@@ -36,9 +36,9 @@ export function HowItWorksSection() {
           <div className="grid lg:grid-cols-3 gap-8">
             {steps.map((step, index) => (
               <div key={index} className="relative">
-                <div className="bg-white rounded-2xl p-8 border-2 border-border hover:border-[#0066CC]/30 hover:shadow-xl transition-all duration-300">
+                <div className="bg-white rounded-2xl p-8 border-2 border-border hover:border-[#0045BF]/30 hover:shadow-xl transition-all duration-300">
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white text-2xl relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white text-2xl relative z-10">
                       {step.number}
                     </div>
                     <div className="px-3 py-1 bg-[#F7F9FC] rounded-full text-sm text-muted-foreground border border-border">
@@ -54,7 +54,7 @@ export function HowItWorksSection() {
 
                 {index < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-16 -right-4 z-20">
-                    <svg className="w-8 h-8 text-[#0066CC]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-8 h-8 text-[#0045BF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </div>

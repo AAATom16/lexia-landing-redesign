@@ -38,8 +38,8 @@ export function ValueSection() {
 
       <div className="container mx-auto px-6 lg:px-12 relative">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#0066CC]/10 rounded-full mb-6">
-            <span className="text-sm text-[#0066CC]">Produktová hodnota</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#0045BF]/10 rounded-full mb-6">
+            <span className="text-sm text-[#0045BF]">Produktová hodnota</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
             Čísla, která mluví za vše
@@ -90,12 +90,12 @@ export function ValueSection() {
                   { step: '03', text: 'Klient podepíše online, vy vidíte provizi okamžitě', time: '1 min' }
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white">
                       {item.step}
                     </div>
                     <div className="flex-1">
                       <p className="text-foreground mb-1">{item.text}</p>
-                      <p className="text-sm text-[#0066CC]">{item.time}</p>
+                      <p className="text-sm text-[#0045BF]">{item.time}</p>
                     </div>
                   </div>
                 ))}
@@ -107,8 +107,8 @@ export function ValueSection() {
                 <div className="flex items-center justify-between mb-6">
                   <div className="text-sm text-muted-foreground">Nové sjednání</div>
                   <div className="flex gap-1">
-                    <div className="w-8 h-1 bg-[#0066CC] rounded-full" />
-                    <div className="w-8 h-1 bg-[#0066CC] rounded-full" />
+                    <div className="w-8 h-1 bg-[#0045BF] rounded-full" />
+                    <div className="w-8 h-1 bg-[#0045BF] rounded-full" />
                     <div className="w-8 h-1 bg-[#E5E9F0] rounded-full" />
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export function ValueSection() {
                     </div>
                   </div>
 
-                  <button className="w-full py-3 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-lg text-sm">
+                  <button className="w-full py-3 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-lg text-sm">
                     Dokončit sjednání
                   </button>
                 </div>

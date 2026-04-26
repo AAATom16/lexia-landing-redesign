@@ -4,14 +4,14 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#F7F9FC]">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#0066CC]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#0052A3]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#0045BF]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#001843]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 py-16 lg:py-24 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-[#0066CC]/20 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-[#0045BF]/20 shadow-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span className="text-sm text-foreground">Plně digitální platforma</span>
             </div>
@@ -19,7 +19,7 @@ export function Hero() {
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl leading-[1.1] tracking-tight text-foreground text-balance">
                 Právní ochrana,{' '}
-                <span className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#0045BF] to-[#001843] bg-clip-text text-transparent">
                   kterou prodáte během minut
                 </span>
               </h1>
@@ -30,7 +30,7 @@ export function Hero() {
             </div>
 
             <div className="flex flex-wrap items-center gap-6">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
+              <button className="px-8 py-4 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]">
                 Začít vydělávat
               </button>
               <button className="px-8 py-4 bg-white text-foreground rounded-xl border border-border hover:shadow-lg transition-all duration-200">
@@ -58,10 +58,10 @@ export function Hero() {
 
           <div className="relative lg:pl-12">
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-[#0066CC]/20 to-[#0052A3]/20 rounded-3xl blur-2xl" />
+              <div className="absolute -inset-4 bg-gradient-to-tr from-[#0045BF]/20 to-[#001843]/20 rounded-3xl blur-2xl" />
 
               <div className="relative bg-white rounded-2xl shadow-2xl border border-border overflow-hidden">
-                <div className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] px-6 py-4 flex items-center justify-between">
+                <div className="bg-gradient-to-r from-[#0045BF] to-[#001843] px-6 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-white">
                       <LayoutDashboard className="w-4 h-4" strokeWidth={2} />
@@ -102,7 +102,7 @@ export function Hero() {
                       ].map((contract, i) => (
                         <div key={i} className="flex items-center justify-between p-3 bg-white rounded-lg border border-border">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white text-xs">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white text-xs">
                               {contract.name.split(' ').map(n => n[0]).join('')}
                             </div>
                             <div>
@@ -116,7 +116,7 @@ export function Hero() {
                     </div>
                   </div>
 
-                  <button className="w-full py-3 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-lg text-sm hover:shadow-lg transition-all">
+                  <button className="w-full py-3 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-lg text-sm hover:shadow-lg transition-all">
                     + Nová smlouva
                   </button>
                 </div>

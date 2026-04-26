@@ -6,7 +6,7 @@ export function ToolsSection() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-border mb-6">
-            <span className="text-sm text-[#0066CC]">Platforma</span>
+            <span className="text-sm text-[#0045BF]">Platforma</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">Vše, co potřebujete na jednom místě</h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
@@ -16,7 +16,7 @@ export function ToolsSection() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="bg-white rounded-2xl shadow-lg border border-border overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-            <div className="p-6 bg-gradient-to-br from-[#0066CC] to-[#0052A3]">
+            <div className="p-6 bg-gradient-to-br from-[#0045BF] to-[#001843]">
               <div className="text-white/80 text-sm mb-2">Rychlé sjednání</div>
               <div className="text-white text-2xl mb-4">3 minuty</div>
               <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
@@ -33,7 +33,7 @@ export function ToolsSection() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#0066CC] text-xs">3</div>
+                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#0045BF] text-xs">3</div>
                   <div className="flex-1 h-2 bg-white/30 rounded-full">
                     <div className="h-full w-2/3 bg-white rounded-full animate-pulse" />
                   </div>
@@ -45,7 +45,7 @@ export function ToolsSection() {
               <p className="text-muted-foreground mb-4">
                 Klient vyplní údaje, systém vytvoří smlouvu, vše podepíše online. Hotovo.
               </p>
-              <div className="text-sm text-[#0066CC]">→ Bez papírování</div>
+              <div className="text-sm text-[#0045BF]">→ Bez papírování</div>
             </div>
           </div>
 
@@ -56,7 +56,7 @@ export function ToolsSection() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 bg-[#F7F9FC] rounded-lg">
                   <span className="text-sm text-foreground">Dnešní smlouvy</span>
-                  <span className="text-lg text-[#0066CC]">8</span>
+                  <span className="text-lg text-[#0045BF]">8</span>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-[#F7F9FC] rounded-lg">
                   <span className="text-sm text-foreground">Tento měsíc</span>
@@ -79,7 +79,7 @@ export function ToolsSection() {
               <p className="text-muted-foreground mb-4">
                 Sledujte všechny smlouvy, provize a statistiky v reálném čase.
               </p>
-              <div className="text-sm text-[#0066CC]">→ Živá data</div>
+              <div className="text-sm text-[#0045BF]">→ Živá data</div>
             </div>
           </div>
 
@@ -88,12 +88,12 @@ export function ToolsSection() {
               <div className="text-muted-foreground text-sm mb-2">Provizní modely</div>
               <div className="text-foreground text-2xl mb-4">Flexibilní nastavení</div>
               <div className="space-y-3">
-                <div className="p-4 border-2 border-[#0066CC] rounded-lg bg-[#0066CC]/5">
+                <div className="p-4 border-2 border-[#0045BF] rounded-lg bg-[#0045BF]/5">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-foreground">Model A</span>
-                    <div className="w-5 h-5 rounded-full bg-[#0066CC] flex items-center justify-center text-white"><Check className="w-3 h-3" strokeWidth={3} /></div>
+                    <div className="w-5 h-5 rounded-full bg-[#0045BF] flex items-center justify-center text-white"><Check className="w-3 h-3" strokeWidth={3} /></div>
                   </div>
-                  <div className="text-lg text-[#0066CC] mb-1">850-1200 Kč</div>
+                  <div className="text-lg text-[#0045BF] mb-1">850-1200 Kč</div>
                   <div className="text-xs text-muted-foreground">Za smlouvu</div>
                 </div>
                 <div className="p-4 border border-border rounded-lg">
@@ -117,7 +117,7 @@ export function ToolsSection() {
               <p className="text-muted-foreground mb-4">
                 Vyberte si provizní model, který nejlépe sedí vašemu byznysu.
               </p>
-              <div className="text-sm text-[#0066CC]">→ Plná kontrola</div>
+              <div className="text-sm text-[#0045BF]">→ Plná kontrola</div>
             </div>
           </div>
         </div>

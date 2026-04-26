@@ -2,7 +2,7 @@ import { ArrowRight, Check, GraduationCap, Wallet, Zap, TrendingUp } from 'lucid
 
 export function CTASection() {
   return (
-    <section className="py-24 bg-gradient-to-br from-[#0066CC] via-[#0052A3] to-[#003d7a] text-white relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-br from-[#0045BF] via-[#001843] to-[#001843] text-white relative overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
@@ -27,7 +27,7 @@ export function CTASection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="px-8 py-4 bg-white text-[#0066CC] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
+              <button className="px-8 py-4 bg-white text-[#0045BF] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
                 Začít vydělávat
                 <ArrowRight className="w-5 h-5" />
               </button>

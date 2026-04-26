@@ -33,7 +33,7 @@ export function LoginPage() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <div className="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] items-center justify-center mb-4">
+            <div className="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0045BF] to-[#001843] items-center justify-center mb-4">
               <ShieldCheck className="w-7 h-7 text-white" strokeWidth={2} />
             </div>
             <h1 className="text-3xl md:text-4xl mb-2 text-foreground tracking-tight">Přihlášení do účtu</h1>
@@ -52,7 +52,7 @@ export function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-[#0066CC] focus:ring-2 focus:ring-[#0066CC]/20 outline-none transition-all"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-[#0045BF] focus:ring-2 focus:ring-[#0045BF]/20 outline-none transition-all"
                   placeholder="vas@email.cz"
                   autoComplete="email"
                 />
@@ -67,7 +67,7 @@ export function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-[#0066CC] focus:ring-2 focus:ring-[#0066CC]/20 outline-none transition-all"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-[#0045BF] focus:ring-2 focus:ring-[#0045BF]/20 outline-none transition-all"
                   placeholder="••••••••"
                   autoComplete="current-password"
                 />
@@ -81,7 +81,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full px-6 py-3.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loading ? 'Přihlašuji…' : 'Přihlásit se'}
               {!loading && <ArrowRight className="w-4 h-4" strokeWidth={2} />}
@@ -94,7 +94,7 @@ export function LoginPage() {
 
           <div className="text-center mt-6 text-sm text-muted-foreground">
             Nemáte účet?{' '}
-            <Link to="/" className="text-[#0066CC] hover:underline">
+            <Link to="/" className="text-[#0045BF] hover:underline">
               Sjednat online
             </Link>
           </div>

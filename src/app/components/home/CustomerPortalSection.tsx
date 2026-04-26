@@ -45,15 +45,15 @@ export function CustomerPortalSection() {
   return (
     <section id="ucet" className="py-24 bg-gradient-to-b from-[#F7F9FC] to-white relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 -left-32 w-[28rem] h-[28rem] bg-[#0066CC]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] bg-[#0052A3]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -left-32 w-[28rem] h-[28rem] bg-[#0045BF]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] bg-[#001843]/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-12 relative">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-border shadow-sm mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#0066CC]" />
-            <span className="text-sm text-[#0066CC]">Zákaznický účet</span>
+            <span className="w-2 h-2 rounded-full bg-[#0045BF]" />
+            <span className="text-sm text-[#0045BF]">Zákaznický účet</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
             Vaše právní ochrana, kterou máte plně pod kontrolou
@@ -67,13 +67,13 @@ export function CustomerPortalSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div className="space-y-10">
             <div>
-              <div className="text-sm uppercase tracking-wider text-[#0066CC] mb-4">Co uvidíte</div>
+              <div className="text-sm uppercase tracking-wider text-[#0045BF] mb-4">Co uvidíte</div>
               <div className="grid sm:grid-cols-2 gap-4">
                 {seePoints.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="p-5 bg-white border border-border rounded-2xl hover:border-[#0066CC]/30 hover:shadow-md transition-all">
-                      <div className="inline-flex w-10 h-10 rounded-xl bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 items-center justify-center text-[#0066CC] mb-3">
+                    <div key={i} className="p-5 bg-white border border-border rounded-2xl hover:border-[#0045BF]/30 hover:shadow-md transition-all">
+                      <div className="inline-flex w-10 h-10 rounded-xl bg-gradient-to-br from-[#0045BF]/10 to-[#001843]/10 items-center justify-center text-[#0045BF] mb-3">
                         <Icon className="w-5 h-5" strokeWidth={1.75} />
                       </div>
                       <div className="text-foreground mb-1 tracking-tight">{item.title}</div>
@@ -85,13 +85,13 @@ export function CustomerPortalSection() {
             </div>
 
             <div>
-              <div className="text-sm uppercase tracking-wider text-[#0066CC] mb-4">Co můžete</div>
+              <div className="text-sm uppercase tracking-wider text-[#0045BF] mb-4">Co můžete</div>
               <div className="space-y-3">
                 {doPoints.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="flex items-start gap-4 p-4 bg-white border border-border rounded-xl hover:border-[#0066CC]/30 transition-all">
-                      <div className="shrink-0 w-10 h-10 rounded-xl bg-[#F7F9FC] flex items-center justify-center text-[#0066CC]">
+                    <div key={i} className="flex items-start gap-4 p-4 bg-white border border-border rounded-xl hover:border-[#0045BF]/30 transition-all">
+                      <div className="shrink-0 w-10 h-10 rounded-xl bg-[#F7F9FC] flex items-center justify-center text-[#0045BF]">
                         <Icon className="w-5 h-5" strokeWidth={1.75} />
                       </div>
                       <div className="flex-1">
@@ -107,10 +107,10 @@ export function CustomerPortalSection() {
           </div>
 
           <div className="relative lg:sticky lg:top-28">
-            <div className="absolute -inset-6 bg-gradient-to-tr from-[#0066CC]/15 to-[#0052A3]/15 rounded-[2rem] blur-2xl" />
+            <div className="absolute -inset-6 bg-gradient-to-tr from-[#0045BF]/15 to-[#001843]/15 rounded-[2rem] blur-2xl" />
 
             <div className="relative bg-white rounded-2xl shadow-2xl border border-border overflow-hidden">
-              <div className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] px-6 py-5">
+              <div className="bg-gradient-to-r from-[#0045BF] to-[#001843] px-6 py-5">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-white/80 text-xs">Můj účet</div>
@@ -131,7 +131,7 @@ export function CustomerPortalSection() {
                       onClick={() => setActiveTab(t.id)}
                       className={`px-3 py-3 text-sm border-b-2 transition-colors whitespace-nowrap ${
                         activeTab === t.id
-                          ? 'border-[#0066CC] text-[#0066CC]'
+                          ? 'border-[#0045BF] text-[#0045BF]'
                           : 'border-transparent text-muted-foreground hover:text-foreground'
                       }`}
                     >
@@ -170,7 +170,7 @@ export function CustomerPortalSection() {
 function PoliciesPanel() {
   return (
     <div className="space-y-3">
-      <div className="p-4 rounded-xl border border-[#0066CC]/30 bg-gradient-to-br from-[#0066CC]/5 to-transparent">
+      <div className="p-4 rounded-xl border border-[#0045BF]/30 bg-gradient-to-br from-[#0045BF]/5 to-transparent">
         <div className="flex items-center justify-between mb-3">
           <div>
             <div className="text-xs text-muted-foreground">Smlouva č. LX-2026-04812</div>
@@ -211,7 +211,7 @@ function ClaimsPanel() {
     amber: 'bg-amber-100 text-amber-700',
   };
   const barTone = {
-    blue: 'bg-[#0066CC]',
+    blue: 'bg-[#0045BF]',
     green: 'bg-green-600',
     amber: 'bg-amber-500',
   };
@@ -236,7 +236,7 @@ function ClaimsPanel() {
         </div>
       ))}
 
-      <button className="w-full py-3 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2">
+      <button className="w-full py-3 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2">
         <Bell className="w-4 h-4" />
         Nahlásit novou událost
       </button>
@@ -297,21 +297,21 @@ function DocumentsPanel() {
   return (
     <div className="space-y-2">
       {docs.map((d, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-border hover:border-[#0066CC]/30 transition-all">
-          <div className="shrink-0 w-10 h-10 rounded-lg bg-[#F7F9FC] flex items-center justify-center text-[#0066CC] border border-border">
+        <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-border hover:border-[#0045BF]/30 transition-all">
+          <div className="shrink-0 w-10 h-10 rounded-lg bg-[#F7F9FC] flex items-center justify-center text-[#0045BF] border border-border">
             <FileText className="w-5 h-5" strokeWidth={1.75} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm text-foreground truncate">{d.name}</div>
             <div className="text-xs text-muted-foreground">{d.size} · {d.date}</div>
           </div>
-          <button className="shrink-0 w-9 h-9 rounded-lg text-muted-foreground hover:text-[#0066CC] hover:bg-[#F7F9FC] flex items-center justify-center transition-colors" aria-label="Stáhnout">
+          <button className="shrink-0 w-9 h-9 rounded-lg text-muted-foreground hover:text-[#0045BF] hover:bg-[#F7F9FC] flex items-center justify-center transition-colors" aria-label="Stáhnout">
             <Download className="w-4 h-4" />
           </button>
         </div>
       ))}
 
-      <button className="w-full py-3 mt-2 border-2 border-dashed border-border text-muted-foreground rounded-xl text-sm hover:border-[#0066CC]/40 hover:text-[#0066CC] transition-all flex items-center justify-center gap-2">
+      <button className="w-full py-3 mt-2 border-2 border-dashed border-border text-muted-foreground rounded-xl text-sm hover:border-[#0045BF]/40 hover:text-[#0045BF] transition-all flex items-center justify-center gap-2">
         <Upload className="w-4 h-4" />
         Nahrát dokument
       </button>

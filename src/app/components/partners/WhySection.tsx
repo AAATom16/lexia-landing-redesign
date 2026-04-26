@@ -6,7 +6,7 @@ export function WhySection() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F9FC] rounded-full border border-border mb-6">
-            <span className="text-sm text-[#0066CC]">Funkce</span>
+            <span className="text-sm text-[#0045BF]">Funkce</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">Produktové výhody platformy</h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
@@ -16,11 +16,11 @@ export function WhySection() {
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="group relative bg-white border border-border rounded-2xl p-8 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 rounded-2xl blur-2xl" />
+            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-[#0045BF]/10 to-[#001843]/10 rounded-2xl blur-2xl" />
             <div className="relative">
               <div className="flex items-start justify-between mb-6">
                 <div>
-                  <div className="text-sm text-[#0066CC] mb-2">Smart Contracts</div>
+                  <div className="text-sm text-[#0045BF] mb-2">Smart Contracts</div>
                   <h3 className="text-xl md:text-2xl text-foreground mb-2 tracking-tight">Automatické generování smluv</h3>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-500/20">
@@ -32,7 +32,7 @@ export function WhySection() {
               </p>
               <div className="bg-[#F7F9FC] rounded-xl p-4 border border-border">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#0066CC] border border-border">
+                  <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#0045BF] border border-border">
                     <FileCheck className="w-4 h-4" strokeWidth={2} />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export function WhySection() {
                 ].map((client, i) => (
                   <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0066CC] to-[#0052A3] text-white text-xs flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0045BF] to-[#001843] text-white text-xs flex items-center justify-center">
                         {client.name[0]}
                       </div>
                       <span className="text-sm text-foreground">{client.name}</span>

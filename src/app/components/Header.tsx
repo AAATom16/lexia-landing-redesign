@@ -40,7 +40,7 @@ export function Header() {
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L4 7V12C4 16.5 7.5 20.5 12 22C16.5 20.5 20 16.5 20 12V7L12 2Z" fill="white" />
               </svg>
@@ -51,20 +51,20 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               to="/"
-              className={`transition-colors ${location.pathname === '/' ? 'text-[#0066CC]' : 'text-[#1a1a2e] hover:text-[#0066CC]'}`}
+              className={`transition-colors ${location.pathname === '/' ? 'text-[#0045BF]' : 'text-[#1a1a2e] hover:text-[#0045BF]'}`}
             >
               Pro klienty
             </Link>
             <Link
               to="/partnerstvi"
-              className={`transition-colors ${location.pathname === '/partnerstvi' ? 'text-[#0066CC]' : 'text-[#1a1a2e] hover:text-[#0066CC]'}`}
+              className={`transition-colors ${location.pathname === '/partnerstvi' ? 'text-[#0045BF]' : 'text-[#1a1a2e] hover:text-[#0045BF]'}`}
             >
               Partnerství
             </Link>
-            <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors">
+            <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors">
               Produkty
             </a>
-            <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors">
+            <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors">
               Kontakt
             </a>
           </nav>
@@ -74,7 +74,7 @@ export function Header() {
               <>
                 <button
                   onClick={() => navigate('/ucet')}
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all"
                 >
                   <User className="w-4 h-4" strokeWidth={1.75} />
                   <span className="max-w-[10rem] truncate">{user.name}</span>
@@ -91,11 +91,11 @@ export function Header() {
               <>
                 <button
                   onClick={handleLoginClick}
-                  className="hidden md:block px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
+                  className="hidden md:block px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all"
                 >
                   Přihlásit se
                 </button>
-                <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
+                <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all">
                   Sjednat online
                 </button>
               </>
@@ -115,22 +115,22 @@ export function Header() {
             <nav className="flex flex-col gap-4">
               <Link
                 to="/"
-                className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors py-2"
+                className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Pro klienty
               </Link>
               <Link
                 to="/partnerstvi"
-                className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors py-2"
+                className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Partnerství
               </Link>
-              <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors py-2">
+              <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2">
                 Produkty
               </a>
-              <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0066CC] transition-colors py-2">
+              <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2">
                 Kontakt
               </a>
               <div className="flex flex-col gap-2 pt-2">
@@ -138,7 +138,7 @@ export function Header() {
                   <>
                     <button
                       onClick={() => { setIsMenuOpen(false); navigate('/ucet'); }}
-                      className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2"
+                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2"
                     >
                       <User className="w-4 h-4" strokeWidth={1.75} /> {user.name}
                     </button>
@@ -153,11 +153,11 @@ export function Header() {
                   <>
                     <button
                       onClick={() => { setIsMenuOpen(false); handleLoginClick(); }}
-                      className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
+                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
                     >
                       Přihlásit se
                     </button>
-                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
+                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all">
                       Sjednat online
                     </button>
                   </>

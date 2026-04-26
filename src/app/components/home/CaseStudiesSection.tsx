@@ -57,7 +57,7 @@ export function CaseStudiesSection() {
               <div key={index} className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
                 <div className="p-6 border-b border-border">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 flex items-center justify-center text-[#0066CC]">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0045BF]/10 to-[#001843]/10 flex items-center justify-center text-[#0045BF]">
                       <Icon className="w-6 h-6" strokeWidth={1.75} />
                     </div>
                     <div>

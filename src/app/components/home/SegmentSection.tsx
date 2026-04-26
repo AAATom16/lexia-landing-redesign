@@ -12,11 +12,11 @@ export function SegmentSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <div className="group relative bg-gradient-to-br from-[#F7F9FC] to-white rounded-3xl border-2 border-border hover:border-[#0066CC]/30 p-10 hover:shadow-2xl transition-all duration-300 cursor-pointer">
-            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 rounded-full blur-2xl" />
+          <div className="group relative bg-gradient-to-br from-[#F7F9FC] to-white rounded-3xl border-2 border-border hover:border-[#0045BF]/30 p-10 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+            <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-[#0045BF]/10 to-[#001843]/10 rounded-full blur-2xl" />
 
             <div className="relative">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white mb-6 shadow-lg shadow-[#0066CC]/20">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white mb-6 shadow-lg shadow-[#0045BF]/20">
                 <Home className="w-7 h-7" strokeWidth={1.75} />
               </div>
 
@@ -33,20 +33,20 @@ export function SegmentSection() {
                   'Sousedské spory'
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#0066CC]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0045BF]" />
                     <span className="text-foreground">{item}</span>
                   </div>
                 ))}
               </div>
 
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0066CC] rounded-xl border-2 border-[#0066CC]/20 hover:bg-[#0066CC] hover:text-white transition-all group-hover:shadow-lg">
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0045BF] rounded-xl border-2 border-[#0045BF]/20 hover:bg-[#0045BF] hover:text-white transition-all group-hover:shadow-lg">
                 Zjistit více
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          <div className="group relative bg-gradient-to-br from-[#F7F9FC] to-white rounded-3xl border-2 border-border hover:border-[#0066CC]/30 p-10 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+          <div className="group relative bg-gradient-to-br from-[#F7F9FC] to-white rounded-3xl border-2 border-border hover:border-[#0045BF]/30 p-10 hover:shadow-2xl transition-all duration-300 cursor-pointer">
             <div className="absolute top-8 right-8 w-24 h-24 bg-gradient-to-br from-slate-500/10 to-slate-700/10 rounded-full blur-2xl" />
 
             <div className="relative">

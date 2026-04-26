@@ -8,7 +8,7 @@ export function SupportSection() {
           <div className="space-y-8">
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F9FC] rounded-full border border-border mb-6">
-                <span className="text-sm text-[#0066CC]">Onboarding & podpora</span>
+                <span className="text-sm text-[#0045BF]">Onboarding & podpora</span>
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
                 Vše nastavíme za vás
@@ -40,13 +40,13 @@ export function SupportSection() {
                 }
               ].map((item, i) => (
                 <div key={i} className="flex gap-4 p-6 bg-[#F7F9FC] rounded-xl border border-border hover:shadow-lg transition-all duration-200">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white text-xl">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white text-xl">
                     {item.step}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg text-foreground">{item.title}</h3>
-                      <span className="text-sm text-[#0066CC] bg-white px-3 py-1 rounded-full">{item.time}</span>
+                      <span className="text-sm text-[#0045BF] bg-white px-3 py-1 rounded-full">{item.time}</span>
                     </div>
                     <p className="text-muted-foreground">{item.desc}</p>
                   </div>
@@ -70,10 +70,10 @@ export function SupportSection() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-[#0066CC]/20 to-[#0052A3]/20 rounded-3xl blur-2xl" />
+            <div className="absolute -inset-4 bg-gradient-to-br from-[#0045BF]/20 to-[#001843]/20 rounded-3xl blur-2xl" />
 
             <div className="relative bg-white rounded-2xl shadow-2xl border border-border overflow-hidden">
-              <div className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] px-6 py-4">
+              <div className="bg-gradient-to-r from-[#0045BF] to-[#001843] px-6 py-4">
                 <div className="text-white/80 text-sm">Vzdělávací centrum</div>
                 <div className="text-white text-xl">Partner Academy</div>
               </div>
@@ -127,7 +127,7 @@ export function SupportSection() {
                 </div>
 
                 <div className="flex gap-3">
-                  <button className="flex-1 py-3 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-lg text-sm">
+                  <button className="flex-1 py-3 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-lg text-sm">
                     Pokračovat v kurzu
                   </button>
                   <button className="px-4 py-3 bg-[#F7F9FC] text-foreground rounded-lg text-sm border border-border">

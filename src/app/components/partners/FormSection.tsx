@@ -27,8 +27,8 @@ export function FormSection() {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl">Registrace partnera</h2>
                 <div className="flex gap-2">
-                  <div className={`w-8 h-1.5 rounded-full ${step >= 1 ? 'bg-[#0066CC]' : 'bg-[#E5E9F0]'}`} />
-                  <div className={`w-8 h-1.5 rounded-full ${step >= 2 ? 'bg-[#0066CC]' : 'bg-[#E5E9F0]'}`} />
+                  <div className={`w-8 h-1.5 rounded-full ${step >= 1 ? 'bg-[#0045BF]' : 'bg-[#E5E9F0]'}`} />
+                  <div className={`w-8 h-1.5 rounded-full ${step >= 2 ? 'bg-[#0045BF]' : 'bg-[#E5E9F0]'}`} />
                 </div>
               </div>
               <p className="text-muted-foreground">
@@ -46,7 +46,7 @@ export function FormSection() {
                         type="text"
                         value={formData.firstName}
                         onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0066CC] transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0045BF] transition-all"
                         placeholder="Jan"
                         required
                       />
@@ -57,7 +57,7 @@ export function FormSection() {
                         type="text"
                         value={formData.lastName}
                         onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0066CC] transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0045BF] transition-all"
                         placeholder="Novák"
                         required
                       />
@@ -70,7 +70,7 @@ export function FormSection() {
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0066CC] transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0045BF] transition-all"
                       placeholder="jan.novak@email.cz"
                       required
                     />
@@ -82,7 +82,7 @@ export function FormSection() {
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0066CC] transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0045BF] transition-all"
                       placeholder="+420 123 456 789"
                       required
                     />
@@ -92,7 +92,7 @@ export function FormSection() {
                     type="button"
                     onClick={() => setStep(2)}
                     disabled={!isStep1Valid}
-                    className="w-full py-4 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     Pokračovat
                     <ArrowRight className="w-5 h-5" />
@@ -107,7 +107,7 @@ export function FormSection() {
                     <textarea
                       value={formData.motivation}
                       onChange={(e) => setFormData({...formData, motivation: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0066CC] transition-all min-h-[150px] resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white focus:outline-none focus:ring-2 focus:ring-[#0045BF] transition-all min-h-[150px] resize-none"
                       placeholder="Sdělte nám vaši motivaci..."
                       required
                     />
@@ -123,7 +123,7 @@ export function FormSection() {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-4 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                      className="flex-1 py-4 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
                     >
                       <CheckCircle className="w-5 h-5" />
                       Odeslat žádost

@@ -34,7 +34,7 @@ export function DigitalSection() {
           <div className="space-y-8">
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F9FC] rounded-full border border-border mb-6">
-                <span className="text-sm text-[#0066CC]">Digitální platforma</span>
+                <span className="text-sm text-[#0045BF]">Digitální platforma</span>
               </div>
               <h2 className="text-3xl md:text-4xl lg:text-5xl mb-4 text-foreground tracking-tight text-balance">
                 Vše vyřídíte online
@@ -49,7 +49,7 @@ export function DigitalSection() {
                 const Icon = feature.icon;
                 return (
                   <div key={i} className="flex gap-4">
-                    <div className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0066CC]/10 to-[#0052A3]/10 flex items-center justify-center text-[#0066CC]">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[#0045BF]/10 to-[#001843]/10 flex items-center justify-center text-[#0045BF]">
                       <Icon className="w-6 h-6" strokeWidth={1.75} />
                     </div>
                     <div>
@@ -63,10 +63,10 @@ export function DigitalSection() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-[#0066CC]/20 to-[#0052A3]/20 rounded-3xl blur-2xl" />
+            <div className="absolute -inset-4 bg-gradient-to-br from-[#0045BF]/20 to-[#001843]/20 rounded-3xl blur-2xl" />
 
             <div className="relative bg-white rounded-2xl shadow-2xl border border-border overflow-hidden">
-              <div className="bg-gradient-to-r from-[#0066CC] to-[#0052A3] px-6 py-4">
+              <div className="bg-gradient-to-r from-[#0045BF] to-[#001843] px-6 py-4">
                 <div className="text-white/80 text-sm">Vaše případy</div>
                 <div className="text-white text-xl">Dashboard</div>
               </div>
@@ -93,7 +93,7 @@ export function DigitalSection() {
                   <div className="p-4 bg-[#F7F9FC] rounded-xl border border-border">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0066CC] to-[#0052A3] flex items-center justify-center text-white">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white">
                           <Home className="w-5 h-5" strokeWidth={1.75} />
                         </div>
                         <div>
@@ -131,7 +131,7 @@ export function DigitalSection() {
                   </div>
                 </div>
 
-                <button className="w-full py-3 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-lg text-sm">
+                <button className="w-full py-3 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-lg text-sm">
                   + Nahlásit nový případ
                 </button>
               </div>
