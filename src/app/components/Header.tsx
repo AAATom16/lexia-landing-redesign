@@ -1,10 +1,39 @@
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, User, LogOut } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { getUser, logout, type AuthUser } from '../lib/auth';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(getUser());
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function sync() {
+      setUser(getUser());
+    }
+    window.addEventListener('lexia-auth-change', sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener('lexia-auth-change', sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    setUser(getUser());
+  }, [location.pathname]);
+
+  function handleLoginClick() {
+    if (user) navigate('/ucet');
+    else navigate('/prihlaseni');
+  }
+
+  function handleLogout() {
+    logout();
+    navigate('/');
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
@@ -41,15 +70,36 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => document.getElementById('ucet')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-              className="hidden md:block px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
-            >
-              Přihlásit se
-            </button>
-            <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
-              Sjednat online
-            </button>
+            {user ? (
+              <>
+                <button
+                  onClick={() => navigate('/ucet')}
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
+                >
+                  <User className="w-4 h-4" strokeWidth={1.75} />
+                  <span className="max-w-[10rem] truncate">{user.name}</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 border border-border text-foreground rounded-xl hover:bg-[#F7F9FC] transition-all"
+                >
+                  <LogOut className="w-4 h-4" strokeWidth={1.75} />
+                  Odhlásit
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleLoginClick}
+                  className="hidden md:block px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
+                >
+                  Přihlásit se
+                </button>
+                <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
+                  Sjednat online
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -84,15 +134,34 @@ export function Header() {
                 Kontakt
               </a>
               <div className="flex flex-col gap-2 pt-2">
-                <button
-                  onClick={() => { setIsMenuOpen(false); document.getElementById('ucet')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                  className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
-                >
-                  Přihlásit se
-                </button>
-                <button className="px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
-                  Sjednat online
-                </button>
+                {user ? (
+                  <>
+                    <button
+                      onClick={() => { setIsMenuOpen(false); navigate('/ucet'); }}
+                      className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2"
+                    >
+                      <User className="w-4 h-4" strokeWidth={1.75} /> {user.name}
+                    </button>
+                    <button
+                      onClick={() => { setIsMenuOpen(false); handleLogout(); }}
+                      className="px-6 py-2.5 border border-border text-foreground rounded-xl hover:bg-[#F7F9FC] transition-all text-left flex items-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" strokeWidth={1.75} /> Odhlásit
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => { setIsMenuOpen(false); handleLoginClick(); }}
+                      className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
+                    >
+                      Přihlásit se
+                    </button>
+                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
+                      Sjednat online
+                    </button>
+                  </>
+                )}
               </div>
             </nav>
           </div>
