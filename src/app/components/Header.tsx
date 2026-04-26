@@ -41,7 +41,10 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button className="hidden md:block px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all">
+            <button
+              onClick={() => document.getElementById('ucet')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="hidden md:block px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all"
+            >
               Přihlásit se
             </button>
             <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">
@@ -81,7 +84,10 @@ export function Header() {
                 Kontakt
               </a>
               <div className="flex flex-col gap-2 pt-2">
-                <button className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left">
+                <button
+                  onClick={() => { setIsMenuOpen(false); document.getElementById('ucet')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                  className="px-6 py-2.5 text-[#0066CC] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
+                >
                   Přihlásit se
                 </button>
                 <button className="px-6 py-2.5 bg-gradient-to-r from-[#0066CC] to-[#0052A3] text-white rounded-xl hover:shadow-lg transition-all">

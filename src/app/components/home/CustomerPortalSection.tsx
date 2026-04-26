@@ -43,7 +43,7 @@ export function CustomerPortalSection() {
   const [activeTab, setActiveTab] = useState<Tab>('udalosti');
 
   return (
-    <section className="py-24 bg-gradient-to-b from-[#F7F9FC] to-white relative overflow-hidden">
+    <section id="ucet" className="py-24 bg-gradient-to-b from-[#F7F9FC] to-white relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 -left-32 w-[28rem] h-[28rem] bg-[#0066CC]/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -right-32 w-[28rem] h-[28rem] bg-[#0052A3]/5 rounded-full blur-3xl" />
