@@ -32,10 +32,7 @@ export function Hero() {
             <div className="space-y-6">
               <h1 className="font-display text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl leading-[1.05] tracking-tight text-foreground text-balance">
                 Právní ochrana, která má{' '}
-                <span className="relative inline-block whitespace-nowrap">
-                  <span className="relative z-10 bg-gradient-to-r from-[#0057F0] via-[#0045BF] to-[#001843] bg-clip-text text-transparent">smysl.</span>
-                  <span className="absolute inset-x-0 bottom-1 h-3 bg-[#0057F0]/15 rounded-sm -z-0" />
-                </span>{' '}
+                <span className="bg-gradient-to-r from-[#0057F0] via-[#0045BF] to-[#001843] bg-clip-text text-transparent whitespace-nowrap">smysl.</span>{' '}
                 Záchranný kruh, když ho potřebujete.
               </h1>
               <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl text-pretty">
