@@ -67,6 +67,12 @@ export function Header() {
             <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors">
               Kontakt
             </a>
+            <Link
+              to="/crm"
+              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0045BF]/10 to-[#001843]/10 border border-[#0045BF]/20 text-[#0045BF] text-sm hover:from-[#0045BF]/15 hover:to-[#001843]/15 transition-colors"
+            >
+              CRM Demo
+            </Link>
           </nav>
 
           <div className="flex items-center gap-4">
