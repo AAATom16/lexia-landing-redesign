@@ -31,11 +31,12 @@ export function PortalCalculatorPage() {
       commissionModel,
     });
     setSavedId(draft.id);
+    navigate(`/portal/sjednani/${draft.id}`);
   }
 
   async function handleSendToClient() {
     if (!snapshot || !user) return;
-    await saveDraft({
+    const draft = await saveDraft({
       createdBy: user.email,
       source: 'distributor',
       status: 'Odesláno klientovi',
@@ -45,7 +46,7 @@ export function PortalCalculatorPage() {
       result: snapshot.result,
       commissionModel,
     });
-    navigate('/portal/sjednani');
+    navigate(`/portal/sjednani/${draft.id}`);
   }
 
   return (

@@ -4,6 +4,7 @@ import { Calculator, FileText, TrendingUp, Wallet, Users, ArrowRight, Sparkles }
 import { listDrafts, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
 import { previewCommission, formatCzk } from '../../domain/calculator';
+import { OnboardingBanner } from '../../components/onboarding/OnboardingBanner';
 
 export function PortalDashboardPage() {
   const user = getUser();
@@ -28,6 +29,7 @@ export function PortalDashboardPage() {
 
   return (
     <div className="container mx-auto px-6 lg:px-12 py-8">
+      <OnboardingBanner surface="portal" />
       <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
         <div>
           <div className="text-sm text-muted-foreground">Vítejte zpět</div>

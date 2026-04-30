@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Calculator, Wallet, Save, Trash2, Check, ExternalLink } from 'lucide-react';
 import { CalculatorWidget } from '../../components/calculator/CalculatorWidget';
 import { previewCommission, formatCzk } from '../../domain/calculator';
@@ -9,6 +10,7 @@ import { getUser } from '../../lib/auth';
 
 export function CrmCalculatorPage() {
   const user = getUser();
+  const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<{ result: CalculationResult; input: CalculatorInput } | null>(null);
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -46,8 +48,7 @@ export function CrmCalculatorPage() {
         result: snapshot.result,
         commissionModel: model,
       });
-      setSavedToast(`Uloženo jako ${status} (${d.id})`);
-      setTimeout(() => setSavedToast(null), 4000);
+      navigate(`/crm/smlouvy/${d.id}`);
     } catch {
       setSavedToast('Uložení selhalo — zkuste znovu');
       setTimeout(() => setSavedToast(null), 4000);
@@ -185,7 +186,11 @@ export function CrmCalculatorPage() {
             </thead>
             <tbody>
               {drafts.map((d) => (
-                <tr key={d.id} className="border-t border-border hover:bg-[#F7F9FC]/50">
+                <tr
+                  key={d.id}
+                  onClick={() => navigate(`/crm/smlouvy/${d.id}`)}
+                  className="border-t border-border hover:bg-[#F7F9FC]/50 cursor-pointer"
+                >
                   <td className="px-4 py-3 text-sm">{new Date(d.createdAt).toLocaleString('cs-CZ')}</td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`px-2 py-0.5 rounded-full text-xs ${
@@ -201,7 +206,7 @@ export function CrmCalculatorPage() {
                   <td className="px-4 py-3 text-sm">{d.status}</td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={async () => { if (confirm('Smazat?')) await deleteDraft(d.id); }}
+                      onClick={async (e) => { e.stopPropagation(); if (confirm('Smazat?')) await deleteDraft(d.id); }}
                       className="p-1.5 text-muted-foreground hover:text-red-600 rounded-lg hover:bg-red-50"
                     >
                       <Trash2 className="w-4 h-4" />

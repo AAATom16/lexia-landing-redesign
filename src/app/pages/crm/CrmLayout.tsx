@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { getUser, logout, type AuthUser } from '../../lib/auth';
+import { HelpButton } from '../../components/help/HelpButton';
 
 const navItems = [
   { to: '/crm', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -187,6 +188,8 @@ export function CrmLayout() {
               />
               <kbd className="hidden lg:inline text-[10px] px-1.5 py-0.5 rounded bg-white border border-border text-muted-foreground">⌘K</kbd>
             </div>
+
+            <HelpButton surface="crm" />
 
             <button className="relative p-2 rounded-xl hover:bg-[#F7F9FC] transition-colors">
               <Bell className="w-5 h-5 text-[#1a1a2e]" strokeWidth={1.75} />

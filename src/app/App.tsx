@@ -15,11 +15,13 @@ import { CrmDocumentsPage } from './pages/crm/CrmDocumentsPage';
 import { CrmTasksPage } from './pages/crm/CrmTasksPage';
 import { CrmLeadsPage } from './pages/crm/CrmLeadsPage';
 import { CrmCalculatorPage } from './pages/crm/CrmCalculatorPage';
+import { CrmDraftDetailPage } from './pages/crm/CrmDraftDetailPage';
 import { PortalLayout } from './pages/portal/PortalLayout';
 import { PortalLoginPage } from './pages/portal/PortalLoginPage';
 import { PortalDashboardPage } from './pages/portal/PortalDashboardPage';
 import { PortalCalculatorPage } from './pages/portal/PortalCalculatorPage';
 import { PortalDraftsPage } from './pages/portal/PortalDraftsPage';
+import { PortalDraftDetailPage } from './pages/portal/PortalDraftDetailPage';
 import { PortalClientsPage } from './pages/portal/PortalClientsPage';
 
 function MarketingChrome({ children }: { children: React.ReactNode }) {
@@ -51,6 +53,7 @@ export default function App() {
             <Route index element={<PortalDashboardPage />} />
             <Route path="kalkulacka" element={<PortalCalculatorPage />} />
             <Route path="sjednani" element={<PortalDraftsPage />} />
+            <Route path="sjednani/:id" element={<PortalDraftDetailPage />} />
             <Route path="klienti" element={<PortalClientsPage />} />
           </Route>
 
@@ -60,6 +63,7 @@ export default function App() {
             <Route path="klienti" element={<CrmClientsPage />} />
             <Route path="klienti/:id" element={<CrmClientDetailPage />} />
             <Route path="smlouvy" element={<CrmContractsPage />} />
+            <Route path="smlouvy/:id" element={<CrmDraftDetailPage />} />
             <Route path="kalkulacka" element={<CrmCalculatorPage />} />
             <Route path="dokumenty" element={<CrmDocumentsPage />} />
             <Route path="ukoly" element={<CrmTasksPage />} />

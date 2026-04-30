@@ -10,6 +10,7 @@ import {
   contracts,
   formatCurrency,
 } from './mock-data';
+import { OnboardingBanner } from '../../components/onboarding/OnboardingBanner';
 
 function KpiCard({
   label,
@@ -48,6 +49,7 @@ export function CrmDashboardPage() {
 
   return (
     <div className="space-y-8">
+      <OnboardingBanner surface="crm" />
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
           <div className="text-sm text-muted-foreground mb-1">Vítej zpět, Jano</div>
@@ -57,9 +59,12 @@ export function CrmDashboardPage() {
           <button className="px-4 py-2.5 rounded-xl border border-border text-sm hover:bg-white transition-colors">
             Export
           </button>
-          <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md transition-all">
+          <Link
+            to="/crm/kalkulacka"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md transition-all"
+          >
             + Nová smlouva
-          </button>
+          </Link>
         </div>
       </div>
 
