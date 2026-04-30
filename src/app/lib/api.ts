@@ -103,6 +103,71 @@ export type LeadInput = {
   notes?: string;
 };
 
+export type LegalCaseStatus = 'REGISTROVANO' | 'V_SETRENI' | 'KRYTO' | 'ZAMITNUTO' | 'UKONCENO';
+export type LegalCaseModel = 'TELEFONICKA_PORADA' | 'SAMOREGULACE' | 'EXTERNI_LIKVIDACE';
+export type DenialReason = 'PRED_POJISTENIM' | 'CEKACI_DOBA' | 'PROMLCENO' | 'MIMO_VECNY_ROZSAH' | 'VYLUKA' | 'NESPADA_DO_PILIRE' | 'JINE';
+
+export type ApiLegalCase = {
+  id: string;
+  caseNumber: string;
+  contractDraftId: string | null;
+  policyholderName: string;
+  policyholderEmail: string | null;
+  policyholderIco: string | null;
+  isVip: boolean;
+  reporterName: string | null;
+  reporterPhone: string | null;
+  productCode: string;
+  pillarCode: string;
+  legalAreaCode: string | null;
+  claimType: string | null;
+  caseDate: string;
+  reportedDate: string;
+  policyStart: string | null;
+  status: LegalCaseStatus;
+  model: LegalCaseModel;
+  isTelefonicka: boolean;
+  reserveExternal: number;
+  reserveInternal: number;
+  paidExternal: number;
+  paidInternal: number;
+  description: string | null;
+  denialReason: DenialReason | null;
+  denialNote: string | null;
+  createdById: string | null;
+  assigneeId: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LegalCaseInput = {
+  policyholderName: string;
+  policyholderEmail?: string;
+  policyholderIco?: string;
+  isVip?: boolean;
+  reporterName?: string;
+  reporterPhone?: string;
+  productCode: 'INDIVIDUAL' | 'BUSINESS' | 'DRIVERS_VEHICLES';
+  pillarCode: string;
+  legalAreaCode?: string;
+  claimType?: string;
+  caseDate: string;
+  reportedDate?: string;
+  policyStart?: string;
+  status?: LegalCaseStatus;
+  model?: LegalCaseModel;
+  isTelefonicka?: boolean;
+  reserveExternal?: number;
+  reserveInternal?: number;
+  paidExternal?: number;
+  paidInternal?: number;
+  description?: string;
+  denialReason?: DenialReason;
+  denialNote?: string;
+  contractDraftId?: string;
+  assigneeId?: string;
+};
+
 export type RegisterInput = {
   email: string;
   password: string;
@@ -143,5 +208,13 @@ export const api = {
   },
   customer: {
     contracts: () => request<ApiDraft[]>('/customer/contracts'),
+  },
+  legalCases: {
+    list: () => request<ApiLegalCase[]>('/legal-cases'),
+    get: (id: string) => request<ApiLegalCase>(`/legal-cases/${id}`),
+    create: (body: LegalCaseInput) =>
+      request<ApiLegalCase>('/legal-cases', { method: 'POST', body: JSON.stringify(body) }),
+    update: (id: string, body: Partial<LegalCaseInput>) =>
+      request<ApiLegalCase>(`/legal-cases/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
   },
 };

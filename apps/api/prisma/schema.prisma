@@ -35,6 +35,30 @@ enum DraftSource {
   CRM
 }
 
+enum LegalCaseStatus {
+  REGISTROVANO
+  V_SETRENI
+  KRYTO
+  ZAMITNUTO
+  UKONCENO
+}
+
+enum LegalCaseModel {
+  TELEFONICKA_PORADA
+  SAMOREGULACE
+  EXTERNI_LIKVIDACE
+}
+
+enum DenialReason {
+  PRED_POJISTENIM
+  CEKACI_DOBA
+  PROMLCENO
+  MIMO_VECNY_ROZSAH
+  VYLUKA
+  NESPADA_DO_PILIRE
+  JINE
+}
+
 model User {
   id              String           @id @default(cuid())
   email           String           @unique
@@ -50,6 +74,8 @@ model User {
   brokerPool      String?
   drafts          ContractDraft[]
   auditLogs       AuditLog[]
+  createdCases    LegalCase[] @relation("LegalCaseCreator")
+  assignedCases   LegalCase[] @relation("LegalCaseAssignee")
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
@@ -77,12 +103,60 @@ model ContractDraft {
   inputJson        Json
   resultJson       Json
   notes            String?
+  legalCases       LegalCase[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
   @@index([createdById])
   @@index([status])
   @@index([source])
+}
+
+model LegalCase {
+  id              String          @id @default(cuid())
+  caseNumber      String          @unique
+  contractDraftId String?
+  contractDraft   ContractDraft?  @relation(fields: [contractDraftId], references: [id])
+  // Pojistník + nahlašovatel
+  policyholderName  String
+  policyholderEmail String?
+  policyholderIco   String?
+  isVip             Boolean       @default(false)
+  reporterName      String?
+  reporterPhone     String?
+  // Pojistné krytí
+  productCode     String
+  pillarCode      String
+  legalAreaCode   String?
+  claimType       String?
+  // Časové údaje
+  caseDate        DateTime        // Datum vzniku případu
+  reportedDate    DateTime        @default(now())
+  policyStart     DateTime?
+  // Stav a model
+  status          LegalCaseStatus @default(REGISTROVANO)
+  model           LegalCaseModel  @default(SAMOREGULACE)
+  isTelefonicka   Boolean         @default(false)
+  // Finanční údaje (Kč, integers)
+  reserveExternal Int             @default(0)
+  reserveInternal Int             @default(0)
+  paidExternal    Int             @default(0)
+  paidInternal    Int             @default(0)
+  // Popis + zamítnutí
+  description     String?
+  denialReason    DenialReason?
+  denialNote      String?
+  // Audit
+  createdById     String?
+  createdBy       User?           @relation("LegalCaseCreator", fields: [createdById], references: [id])
+  assigneeId      String?
+  assignee        User?           @relation("LegalCaseAssignee", fields: [assigneeId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([policyholderEmail])
+  @@index([status])
+  @@index([contractDraftId])
 }
 
 model AuditLog {
