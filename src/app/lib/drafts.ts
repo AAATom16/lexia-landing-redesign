@@ -145,6 +145,37 @@ export async function deleteDraft(id: string): Promise<void> {
   writeLocal(readLocal().filter((d) => d.id !== id));
 }
 
+export async function updateDraft(
+  id: string,
+  patch: Partial<Pick<ContractDraft, 'status' | 'clientName' | 'clientEmail' | 'notes' | 'commissionModel'>>,
+): Promise<ContractDraft | undefined> {
+  if (backendIsApi()) {
+    const updated = await api.drafts.update(id, {
+      status: patch.status ? STATUS_TO_API[patch.status] : undefined,
+      clientName: patch.clientName,
+      clientEmail: patch.clientEmail,
+      notes: patch.notes,
+      commissionModel: patch.commissionModel,
+    });
+    emitChange();
+    return fromApi(updated, '');
+  }
+  const list = readLocal();
+  const idx = list.findIndex((d) => d.id === id);
+  if (idx === -1) return undefined;
+  list[idx] = { ...list[idx], ...patch };
+  writeLocal(list);
+  return list[idx];
+}
+
+export const DRAFT_STATUSES: DraftStatus[] = ['Návrh', 'Odesláno klientovi', 'Podepsáno'];
+
+export function nextStatus(current: DraftStatus): DraftStatus | null {
+  const i = DRAFT_STATUSES.indexOf(current);
+  if (i === -1 || i >= DRAFT_STATUSES.length - 1) return null;
+  return DRAFT_STATUSES[i + 1];
+}
+
 export async function getDraft(id: string): Promise<ContractDraft | undefined> {
   if (backendIsApi()) {
     try {

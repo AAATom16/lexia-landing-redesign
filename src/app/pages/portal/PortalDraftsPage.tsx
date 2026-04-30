@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Calculator, Trash2, FileText, Mail } from 'lucide-react';
 import { deleteDraft, listDrafts, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
@@ -8,6 +8,7 @@ import { getProduct } from '../../domain/products';
 
 export function PortalDraftsPage() {
   const user = getUser();
+  const navigate = useNavigate();
   const [drafts, setDrafts] = useState<ContractDraft[]>([]);
 
   useEffect(() => {
@@ -67,7 +68,11 @@ export function PortalDraftsPage() {
             </thead>
             <tbody>
               {drafts.map((d) => (
-                <tr key={d.id} className="border-t border-border hover:bg-[#F7F9FC]/50">
+                <tr
+                  key={d.id}
+                  onClick={() => navigate(`/portal/sjednani/${d.id}`)}
+                  className="border-t border-border hover:bg-[#F7F9FC]/50 cursor-pointer"
+                >
                   <td className="px-4 py-3 text-sm">{new Date(d.createdAt).toLocaleString('cs-CZ')}</td>
                   <td className="px-4 py-3 text-sm">
                     <div>{d.clientName ?? '—'}</div>
@@ -90,7 +95,8 @@ export function PortalDraftsPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.stopPropagation();
                         if (confirm('Smazat návrh?')) await deleteDraft(d.id);
                       }}
                       className="p-1.5 text-muted-foreground hover:text-red-600 rounded-lg hover:bg-red-50"

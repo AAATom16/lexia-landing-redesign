@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Calculator, FileText, Home, LayoutDashboard, LogOut, ShieldCheck, Users } from 'lucide-react';
 import { getUser, logout, type AuthUser } from '../../lib/auth';
+import { HelpButton } from '../../components/help/HelpButton';
 
 export function PortalLayout() {
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ export function PortalLayout() {
               </nav>
             </div>
             <div className="flex items-center gap-3">
+              <HelpButton surface="portal" />
               <Link to="/" className="hidden md:inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-[#0045BF]">
                 <Home className="w-4 h-4" /> Web
               </Link>
