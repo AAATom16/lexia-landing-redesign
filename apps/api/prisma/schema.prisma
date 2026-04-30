@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  DISTRIBUTOR
+  ADMIN
+}
+
+enum DistributorType {
+  SZ_PM
+  SZ_PA
+  DJ
+  VZ
+  DPZ
+  TIPAR
+}
+
+enum DraftStatus {
+  DRAFT
+  SENT_TO_CLIENT
+  SIGNED
+  CANCELLED
+}
+
+enum DraftSource {
+  PUBLIC
+  DISTRIBUTOR
+  CRM
+}
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  name            String
+  passwordHash    String
+  role            UserRole         @default(CUSTOMER)
+  distributorType DistributorType?
+  ico             String?
+  parentId        String?
+  parent          User?            @relation("DistributorTree", fields: [parentId], references: [id])
+  children        User[]           @relation("DistributorTree")
+  inheritCommissions Boolean       @default(false)
+  brokerPool      String?
+  drafts          ContractDraft[]
+  auditLogs       AuditLog[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([role])
+  @@index([parentId])
+}
+
+model ContractDraft {
+  id               String      @id @default(cuid())
+  number           String?     @unique
+  createdById      String
+  createdBy        User        @relation(fields: [createdById], references: [id])
+  source           DraftSource
+  status           DraftStatus @default(DRAFT)
+  productCode      String
+  clientName       String?
+  clientEmail      String?
+  clientIco        String?
+  pillars          String[]
+  segment          String?
+  territorialScope String      @default("CZ")
+  commissionModel  Int?
+  premiumMonthly   Int
+  premiumYearly    Int
+  inputJson        Json
+  resultJson       Json
+  notes            String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([createdById])
+  @@index([status])
+  @@index([source])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String?
+  actor       User?    @relation(fields: [actorId], references: [id])
+  action      String
+  entityType  String
+  entityId    String
+  payload     Json?
+  createdAt   DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entityType, entityId])
+}
