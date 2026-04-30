@@ -106,6 +106,13 @@ export function Header() {
               Produkty
             </a>
             <a
+              href="/#kalkulacka"
+              onClick={(e) => handleAnchor(e, '#kalkulacka')}
+              className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors"
+            >
+              Kalkulačka
+            </a>
+            <a
               href="/#kontakt"
               onClick={(e) => handleAnchor(e, '#kontakt')}
               className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors"
@@ -113,10 +120,16 @@ export function Header() {
               Kontakt
             </a>
             <Link
+              to="/portal"
+              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#008EA5]/10 to-[#0045BF]/10 border border-[#008EA5]/20 text-[#008EA5] text-sm hover:from-[#008EA5]/15 hover:to-[#0045BF]/15 transition-colors"
+            >
+              Partner portál
+            </Link>
+            <Link
               to="/crm"
               className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0045BF]/10 to-[#001843]/10 border border-[#0045BF]/20 text-[#0045BF] text-sm hover:from-[#0045BF]/15 hover:to-[#001843]/15 transition-colors"
             >
-              CRM Demo
+              CRM
             </Link>
           </nav>
 
@@ -190,6 +203,13 @@ export function Header() {
                 Produkty
               </a>
               <a
+                href="/#kalkulacka"
+                onClick={(e) => handleAnchor(e, '#kalkulacka')}
+                className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
+              >
+                Kalkulačka
+              </a>
+              <a
                 href="/#kontakt"
                 onClick={(e) => handleAnchor(e, '#kontakt')}
                 className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
@@ -197,11 +217,18 @@ export function Header() {
                 Kontakt
               </a>
               <Link
+                to="/portal"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-[#008EA5] py-2"
+              >
+                Partner portál
+              </Link>
+              <Link
                 to="/crm"
                 onClick={() => setIsMenuOpen(false)}
                 className="text-[#0045BF] py-2"
               >
-                CRM Demo
+                CRM
               </Link>
               <div className="flex flex-col gap-2 pt-2">
                 {user ? (

@@ -6,6 +6,7 @@ import { ValueSection } from '../components/home/ValueSection';
 import { HowItWorksSection } from '../components/home/HowItWorksSection';
 import { ComparisonSection } from '../components/home/ComparisonSection';
 import { ProductsSection } from '../components/home/ProductsSection';
+import { CalculatorSection } from '../components/home/CalculatorSection';
 import { CustomerPortalSection } from '../components/home/CustomerPortalSection';
 import { CaseStudiesSection } from '../components/home/CaseStudiesSection';
 import { DigitalSection } from '../components/home/DigitalSection';
@@ -37,6 +38,7 @@ export function HomePage() {
       <HowItWorksSection />
       <ComparisonSection />
       <ProductsSection />
+      <CalculatorSection />
       <CustomerPortalSection />
       <CaseStudiesSection />
       <DigitalSection />

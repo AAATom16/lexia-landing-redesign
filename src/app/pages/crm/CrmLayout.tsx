@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Users,
@@ -12,14 +12,18 @@ import {
   ChevronRight,
   Globe,
   ShieldCheck,
+  Calculator,
+  LogOut,
 } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getUser, logout, type AuthUser } from '../../lib/auth';
 
 const navItems = [
   { to: '/crm', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/crm/leady', label: 'Leady', icon: Sparkles },
   { to: '/crm/klienti', label: 'Klienti', icon: Users },
   { to: '/crm/smlouvy', label: 'Smlouvy', icon: FileText },
+  { to: '/crm/kalkulacka', label: 'Kalkulačka', icon: Calculator },
   { to: '/crm/dokumenty', label: 'Dokumenty', icon: FolderOpen },
   { to: '/crm/ukoly', label: 'Úkoly', icon: CheckSquare },
 ];
@@ -31,10 +35,19 @@ const breadcrumbMap: Record<string, string> = {
   dokumenty: 'Dokumenty',
   ukoly: 'Úkoly',
   leady: 'Leady',
+  kalkulacka: 'Kalkulačka',
 };
 
 export function CrmLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<AuthUser | null>(getUser());
+
+  useEffect(() => {
+    const sync = () => setUser(getUser());
+    window.addEventListener('lexia-auth-change', sync);
+    return () => window.removeEventListener('lexia-auth-change', sync);
+  }, []);
 
   const crumbs = useMemo(() => {
     const parts = location.pathname.split('/').filter(Boolean);
@@ -43,6 +56,23 @@ export function CrmLayout() {
       to: '/' + parts.slice(0, i + 1).join('/'),
     }));
   }, [location.pathname]);
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/crm/prihlaseni" state={{ from: location.pathname }} replace />;
+  }
+
+  function handleLogout() {
+    logout();
+    navigate('/');
+  }
+
+  const initials = user.name
+    .split(' ')
+    .map((s) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] text-[#1a1a2e]">
@@ -117,12 +147,19 @@ export function CrmLayout() {
         <div className="border-t border-border p-4">
           <div className="flex items-center gap-3 rounded-xl bg-[#F7F9FC] p-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0045BF] to-[#001843] flex items-center justify-center text-white font-medium">
-              JD
+              {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium truncate">Jana Dvořáková</div>
-              <div className="text-xs text-muted-foreground truncate">Senior poradce</div>
+              <div className="text-sm font-medium truncate">{user.name}</div>
+              <div className="text-xs text-muted-foreground truncate">{user.email}</div>
             </div>
+            <button
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg hover:bg-white text-muted-foreground hover:text-red-600 transition-colors"
+              title="Odhlásit"
+            >
+              <LogOut className="w-4 h-4" strokeWidth={1.75} />
+            </button>
           </div>
         </div>
       </aside>
