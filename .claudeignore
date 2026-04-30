@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build output
+dist
+build
+.next
+out
+
+# Lockfiles (browse on demand only)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Logs / caches
+*.log
+.cache
+.parcel-cache
+.turbo
+.vite
+.eslintcache
+
+# Env
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# Coverage
+coverage
+.nyc_output
+
+# Worktree internals
+.claude/worktrees

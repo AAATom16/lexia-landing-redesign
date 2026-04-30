@@ -10,7 +10,8 @@ import {
   Bell,
   Settings,
   ChevronRight,
-  LogOut,
+  Globe,
+  ShieldCheck,
 } from 'lucide-react';
 import { useMemo } from 'react';
 
@@ -84,8 +85,26 @@ export function CrmLayout() {
             })}
           </ul>
 
-          <div className="mt-8 px-3 pb-2 text-[11px] uppercase tracking-wider text-muted-foreground">Nastavení</div>
+          <div className="mt-8 px-3 pb-2 text-[11px] uppercase tracking-wider text-muted-foreground">Přepnout</div>
           <ul className="flex flex-col gap-1">
+            <li>
+              <Link
+                to="/"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#1a1a2e] hover:bg-[#F7F9FC] transition-colors"
+              >
+                <Globe className="w-4 h-4" strokeWidth={1.75} />
+                Web Lexia
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/ucet"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#1a1a2e] hover:bg-[#F7F9FC] transition-colors"
+              >
+                <ShieldCheck className="w-4 h-4" strokeWidth={1.75} />
+                Klientská zóna
+              </Link>
+            </li>
             <li>
               <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#1a1a2e] hover:bg-[#F7F9FC] transition-colors">
                 <Settings className="w-4 h-4" strokeWidth={1.75} />
@@ -104,9 +123,6 @@ export function CrmLayout() {
               <div className="text-sm font-medium truncate">Jana Dvořáková</div>
               <div className="text-xs text-muted-foreground truncate">Senior poradce</div>
             </div>
-            <Link to="/" className="p-1.5 rounded-lg hover:bg-white transition-colors" title="Zpět na web">
-              <LogOut className="w-4 h-4 text-muted-foreground" strokeWidth={1.75} />
-            </Link>
           </div>
         </div>
       </aside>

@@ -1,5 +1,6 @@
 import { Home, Briefcase, Building2, Check, ShieldCheck, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 type Product = {
   icon: LucideIcon;
@@ -13,6 +14,7 @@ type Product = {
 };
 
 export function ProductsSection() {
+  const navigate = useNavigate();
   const products: Product[] = [
     {
       icon: Home,
@@ -137,6 +139,7 @@ export function ProductsSection() {
                 </div>
 
                 <button
+                  onClick={() => navigate('/prihlaseni')}
                   className={`w-full py-3.5 rounded-xl transition-all ${
                     product.popular
                       ? 'bg-gradient-to-r from-[#0057F0] to-[#0045BF] text-white hover:shadow-lg'

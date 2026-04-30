@@ -1,6 +1,8 @@
 import { ArrowRight, Phone } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export function FinalCTASection() {
+  const navigate = useNavigate();
   return (
     <section id="kontakt" className="py-24 bg-gradient-to-br from-[#0057F0] via-[#0045BF] to-[#001843] text-white relative overflow-hidden">
       <div className="absolute inset-0">
@@ -29,7 +31,10 @@ export function FinalCTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <button className="group px-8 py-4 bg-white text-[#0045BF] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.03] inline-flex items-center justify-center gap-2 text-lg">
+            <button
+              onClick={() => navigate('/prihlaseni')}
+              className="group px-8 py-4 bg-white text-[#0045BF] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.03] inline-flex items-center justify-center gap-2 text-lg"
+            >
               Sjednat od 179 Kč/měs
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
             </button>

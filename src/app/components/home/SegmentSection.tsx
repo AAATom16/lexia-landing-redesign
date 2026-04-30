@@ -1,6 +1,10 @@
 import { Home, Briefcase, ArrowRight } from 'lucide-react';
 
 export function SegmentSection() {
+  function scrollToProducts() {
+    const el = document.getElementById('produkty');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6 lg:px-12">
@@ -39,7 +43,7 @@ export function SegmentSection() {
                 ))}
               </div>
 
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0045BF] rounded-xl border-2 border-[#0045BF]/20 hover:bg-[#0045BF] hover:text-white transition-all group-hover:shadow-lg">
+              <button onClick={scrollToProducts} className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0045BF] rounded-xl border-2 border-[#0045BF]/20 hover:bg-[#0045BF] hover:text-white transition-all group-hover:shadow-lg">
                 Zjistit více
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -73,7 +77,7 @@ export function SegmentSection() {
                 ))}
               </div>
 
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl border-2 border-slate-300 hover:bg-slate-900 hover:text-white transition-all group-hover:shadow-lg">
+              <button onClick={scrollToProducts} className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-xl border-2 border-slate-300 hover:bg-slate-900 hover:text-white transition-all group-hover:shadow-lg">
                 Zjistit více
                 <ArrowRight className="w-4 h-4" />
               </button>

@@ -1,0 +1,56 @@
+# Dependencies (Railway installs from package.json)
+node_modules
+.pnpm-store
+
+# Build artifacts (Railway builds in container)
+dist
+build
+
+# Git / VCS
+.git
+.gitignore
+
+# Editor / IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Claude / project tooling
+.claude
+.claudeignore
+.cursorignore
+.cursor
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / caches
+*.log
+.cache
+.turbo
+.vite
+.eslintcache
+
+# Env (Railway has its own env vars)
+.env
+.env.local
+.env.*.local
+
+# Tests / coverage
+coverage
+.nyc_output
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Docs / misc
+guidelines
+ATTRIBUTIONS.md
+README.md
+default_shadcn_theme.css
+
+# Unused Figma screenshots (~8MB)
+src/imports

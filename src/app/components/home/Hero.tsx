@@ -1,11 +1,18 @@
 import { Check, Home, Briefcase, ShieldCheck, Star, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export function Hero() {
+  const navigate = useNavigate();
   const limits = [
     { label: 'Pojistný limit', value: '2,5 mil. Kč' },
     { label: 'Sjednání', value: '5 minut' },
     { label: 'Územní platnost', value: 'Celá Evropa' }
   ];
+
+  function scrollToContact() {
+    const el = document.getElementById('kontakt');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-[#F7F9FC] via-white to-[#F7F9FC] pt-12 pb-24">
@@ -42,11 +49,17 @@ export function Hero() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="group px-7 py-4 bg-gradient-to-r from-[#0057F0] to-[#0045BF] text-white rounded-xl hover:shadow-xl hover:shadow-[#0045BF]/20 transition-all duration-200 transform hover:scale-[1.02] inline-flex items-center justify-center gap-2">
+              <button
+                onClick={() => navigate('/prihlaseni')}
+                className="group px-7 py-4 bg-gradient-to-r from-[#0057F0] to-[#0045BF] text-white rounded-xl hover:shadow-xl hover:shadow-[#0045BF]/20 transition-all duration-200 transform hover:scale-[1.02] inline-flex items-center justify-center gap-2"
+              >
                 Sjednat od 179 Kč/měs
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
               </button>
-              <button className="px-7 py-4 bg-white text-foreground rounded-xl border border-border hover:border-[#0045BF]/30 hover:shadow-lg transition-all duration-200">
+              <button
+                onClick={scrollToContact}
+                className="px-7 py-4 bg-white text-foreground rounded-xl border border-border hover:border-[#0045BF]/30 hover:shadow-lg transition-all duration-200"
+              >
                 Spočítat moji ochranu
               </button>
             </div>
@@ -143,7 +156,10 @@ export function Hero() {
                   </div>
                 </div>
 
-                <button className="w-full py-3.5 bg-gradient-to-r from-[#0057F0] to-[#0045BF] text-white rounded-xl hover:shadow-lg transition-all inline-flex items-center justify-center gap-2 group">
+                <button
+                  onClick={() => navigate('/prihlaseni')}
+                  className="w-full py-3.5 bg-gradient-to-r from-[#0057F0] to-[#0045BF] text-white rounded-xl hover:shadow-lg transition-all inline-flex items-center justify-center gap-2 group"
+                >
                   Pokračovat
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
                 </button>
