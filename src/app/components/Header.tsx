@@ -1,4 +1,4 @@
-import { Menu, X, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getUser, logout, type AuthUser } from '../lib/auth';
@@ -25,7 +25,32 @@ export function Header() {
     setUser(getUser());
   }, [location.pathname]);
 
+  function scrollToHash(hash: string) {
+    requestAnimationFrame(() => {
+      const el = document.getElementById(hash.replace('#', ''));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function handleAnchor(e: React.MouseEvent, hash: string) {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    if (location.pathname === '/') {
+      scrollToHash(hash);
+      window.history.replaceState(null, '', '/' + hash);
+    } else {
+      navigate('/' + hash);
+      setTimeout(() => scrollToHash(hash), 80);
+    }
+  }
+
   function handleLoginClick() {
+    if (user) navigate('/ucet');
+    else navigate('/prihlaseni');
+  }
+
+  function handleClientZone() {
+    setIsMenuOpen(false);
     if (user) navigate('/ucet');
     else navigate('/prihlaseni');
   }
@@ -34,6 +59,18 @@ export function Header() {
     logout();
     navigate('/');
   }
+
+  function handleSjednat(e: React.MouseEvent) {
+    e.preventDefault();
+    setIsMenuOpen(false);
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
+  }
+
+  const isOnHome = location.pathname === '/';
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
@@ -48,10 +85,10 @@ export function Header() {
             <span className="text-2xl text-[#1a1a2e]">Lexia</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-7">
             <Link
               to="/"
-              className={`transition-colors ${location.pathname === '/' ? 'text-[#0045BF]' : 'text-[#1a1a2e] hover:text-[#0045BF]'}`}
+              className={`transition-colors ${isOnHome ? 'text-[#0045BF]' : 'text-[#1a1a2e] hover:text-[#0045BF]'}`}
             >
               Pro klienty
             </Link>
@@ -61,10 +98,18 @@ export function Header() {
             >
               Partnerství
             </Link>
-            <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors">
+            <a
+              href="/#produkty"
+              onClick={(e) => handleAnchor(e, '#produkty')}
+              className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors"
+            >
               Produkty
             </a>
-            <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors">
+            <a
+              href="/#kontakt"
+              onClick={(e) => handleAnchor(e, '#kontakt')}
+              className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors"
+            >
               Kontakt
             </a>
             <Link
@@ -75,33 +120,37 @@ export function Header() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {user ? (
               <>
                 <button
                   onClick={() => navigate('/ucet')}
                   className="hidden md:flex items-center gap-2 px-4 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all"
                 >
-                  <User className="w-4 h-4" strokeWidth={1.75} />
+                  <ShieldCheck className="w-4 h-4" strokeWidth={1.75} />
                   <span className="max-w-[10rem] truncate">{user.name}</span>
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="hidden md:flex items-center gap-2 px-4 py-2.5 border border-border text-foreground rounded-xl hover:bg-[#F7F9FC] transition-all"
+                  className="hidden md:flex items-center gap-2 px-3 py-2.5 border border-border text-foreground rounded-xl hover:bg-[#F7F9FC] transition-all"
+                  title="Odhlásit"
                 >
                   <LogOut className="w-4 h-4" strokeWidth={1.75} />
-                  Odhlásit
                 </button>
               </>
             ) : (
               <>
                 <button
-                  onClick={handleLoginClick}
-                  className="hidden md:block px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all"
+                  onClick={handleClientZone}
+                  className="hidden md:flex items-center gap-2 px-4 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all border border-[#0045BF]/20"
                 >
-                  Přihlásit se
+                  <ShieldCheck className="w-4 h-4" strokeWidth={1.75} />
+                  Klientská zóna
                 </button>
-                <button className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all">
+                <button
+                  onClick={handleSjednat}
+                  className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all"
+                >
                   Sjednat online
                 </button>
               </>
@@ -133,20 +182,35 @@ export function Header() {
               >
                 Partnerství
               </Link>
-              <a href="#produkty" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2">
+              <a
+                href="/#produkty"
+                onClick={(e) => handleAnchor(e, '#produkty')}
+                className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
+              >
                 Produkty
               </a>
-              <a href="#kontakt" className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2">
+              <a
+                href="/#kontakt"
+                onClick={(e) => handleAnchor(e, '#kontakt')}
+                className="text-[#1a1a2e] hover:text-[#0045BF] transition-colors py-2"
+              >
                 Kontakt
               </a>
+              <Link
+                to="/crm"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-[#0045BF] py-2"
+              >
+                CRM Demo
+              </Link>
               <div className="flex flex-col gap-2 pt-2">
                 {user ? (
                   <>
                     <button
                       onClick={() => { setIsMenuOpen(false); navigate('/ucet'); }}
-                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2"
+                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2 border border-[#0045BF]/20"
                     >
-                      <User className="w-4 h-4" strokeWidth={1.75} /> {user.name}
+                      <ShieldCheck className="w-4 h-4" strokeWidth={1.75} /> {user.name}
                     </button>
                     <button
                       onClick={() => { setIsMenuOpen(false); handleLogout(); }}
@@ -158,12 +222,15 @@ export function Header() {
                 ) : (
                   <>
                     <button
-                      onClick={() => { setIsMenuOpen(false); handleLoginClick(); }}
-                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left"
+                      onClick={handleClientZone}
+                      className="px-6 py-2.5 text-[#0045BF] hover:bg-[#F7F9FC] rounded-xl transition-all text-left flex items-center gap-2 border border-[#0045BF]/20"
                     >
-                      Přihlásit se
+                      <ShieldCheck className="w-4 h-4" strokeWidth={1.75} /> Klientská zóna
                     </button>
-                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all">
+                    <button
+                      onClick={handleSjednat}
+                      className="px-6 py-2.5 bg-gradient-to-r from-[#0045BF] to-[#001843] text-white rounded-xl hover:shadow-lg transition-all"
+                    >
                       Sjednat online
                     </button>
                   </>
