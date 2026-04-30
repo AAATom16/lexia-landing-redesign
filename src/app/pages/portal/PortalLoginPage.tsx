@@ -160,7 +160,7 @@ export function PortalLoginPage() {
           </div>
 
           <div className="mt-6 text-xs text-center text-muted-foreground">
-            Nejste partner? <Link to="/partnerstvi" className="text-[#0045BF] hover:underline">Stát se VZ →</Link>
+            Nejste partner? <Link to="/portal/registrace" className="text-[#0045BF] hover:underline">Zaregistrovat se →</Link>
           </div>
         </div>
       </div>

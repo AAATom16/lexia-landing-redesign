@@ -1,4 +1,5 @@
 import { ArrowRight, Check, GraduationCap, Wallet, Zap, TrendingUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function CTASection() {
   return (
@@ -27,13 +28,19 @@ export function CTASection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="px-8 py-4 bg-white text-[#0045BF] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] flex items-center justify-center gap-2">
-                Začít vydělávat
+              <Link
+                to="/portal/registrace"
+                className="px-8 py-4 bg-white text-[#0045BF] rounded-xl hover:bg-white/95 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] flex items-center justify-center gap-2"
+              >
+                Zaregistrovat se jako partner
                 <ArrowRight className="w-5 h-5" />
-              </button>
-              <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/20 transition-all duration-200">
-                Demo platformy
-              </button>
+              </Link>
+              <Link
+                to="/portal/prihlaseni"
+                className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl hover:bg-white/20 transition-all duration-200 flex items-center justify-center"
+              >
+                Už mám účet — Přihlásit se
+              </Link>
             </div>
 
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">

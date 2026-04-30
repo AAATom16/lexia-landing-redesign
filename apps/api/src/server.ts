@@ -4,6 +4,8 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { authRoutes } from './routes/auth.js';
 import { draftRoutes } from './routes/drafts.js';
+import { leadRoutes } from './routes/leads.js';
+import { customerRoutes } from './routes/customer.js';
 
 const app = new Hono();
 
@@ -26,6 +28,8 @@ app.get('/healthz', (c) => c.json({ ok: true, service: 'lexia-api', version: '0.
 
 app.route('/auth', authRoutes);
 app.route('/drafts', draftRoutes);
+app.route('/leads', leadRoutes);
+app.route('/customer', customerRoutes);
 
 app.notFound((c) => c.json({ error: 'not_found' }, 404));
 app.onError((err, c) => {

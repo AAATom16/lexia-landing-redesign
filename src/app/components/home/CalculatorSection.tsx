@@ -1,9 +1,12 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Calculator } from 'lucide-react';
 import { CalculatorWidget } from '../calculator/CalculatorWidget';
+import { PublicLeadForm } from '../calculator/PublicLeadForm';
+import type { CalculationResult, CalculatorInput } from '../../domain/types';
 
 export function CalculatorSection() {
-  const navigate = useNavigate();
+  const [snapshot, setSnapshot] = useState<{ result: CalculationResult; input: CalculatorInput } | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
 
   return (
     <section id="kalkulacka" className="py-24 bg-white">
@@ -18,16 +21,27 @@ export function CalculatorSection() {
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground text-pretty">
             Vyberte produkt, pilíře a doplňte parametry. Cena se počítá živě dle oficiálních tarifů 2026/04.
+            Po výpočtu vám rádi pošleme nezávaznou nabídku na míru.
           </p>
         </div>
 
         <div className="max-w-6xl mx-auto">
           <CalculatorWidget
             variant="public"
-            ctaLabel="Pokračovat ke sjednání"
-            onCta={() => navigate('/prihlaseni')}
+            ctaLabel="Chci nezávaznou nabídku"
+            onCalculation={(result, input) => setSnapshot({ result, input })}
+            onCta={(result, input) => { setSnapshot({ result, input }); setFormOpen(true); }}
           />
         </div>
+
+        {snapshot && (
+          <PublicLeadForm
+            open={formOpen}
+            onClose={() => setFormOpen(false)}
+            result={snapshot.result}
+            input={snapshot.input}
+          />
+        )}
       </div>
     </section>
   );
