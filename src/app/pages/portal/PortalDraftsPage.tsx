@@ -11,10 +11,17 @@ export function PortalDraftsPage() {
   const [drafts, setDrafts] = useState<ContractDraft[]>([]);
 
   useEffect(() => {
-    const refresh = () => setDrafts(listDrafts({ source: 'distributor', createdBy: user?.email }));
+    let cancelled = false;
+    const refresh = async () => {
+      const data = await listDrafts({ source: 'distributor', createdBy: user?.email });
+      if (!cancelled) setDrafts(data);
+    };
     refresh();
     window.addEventListener('lexia-drafts-change', refresh);
-    return () => window.removeEventListener('lexia-drafts-change', refresh);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('lexia-drafts-change', refresh);
+    };
   }, [user?.email]);
 
   return (
@@ -83,8 +90,8 @@ export function PortalDraftsPage() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => {
-                        if (confirm('Smazat návrh?')) deleteDraft(d.id);
+                      onClick={async () => {
+                        if (confirm('Smazat návrh?')) await deleteDraft(d.id);
                       }}
                       className="p-1.5 text-muted-foreground hover:text-red-600 rounded-lg hover:bg-red-50"
                       title="Smazat"

@@ -18,28 +18,40 @@ export function CrmCalculatorPage() {
   const [drafts, setDrafts] = useState<ContractDraft[]>([]);
 
   useEffect(() => {
-    const refresh = () => setDrafts(listDrafts());
+    let cancelled = false;
+    const refresh = async () => {
+      const data = await listDrafts();
+      if (!cancelled) setDrafts(data);
+    };
     refresh();
     window.addEventListener('lexia-drafts-change', refresh);
-    return () => window.removeEventListener('lexia-drafts-change', refresh);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('lexia-drafts-change', refresh);
+    };
   }, []);
 
   const commission = snapshot ? previewCommission(snapshot.result.yearly, model, includeStartup) : null;
 
-  function handleSave(status: ContractDraft['status']) {
+  async function handleSave(status: ContractDraft['status']) {
     if (!snapshot || !user) return;
-    const d = saveDraft({
-      createdBy: user.email,
-      source: 'crm',
-      status,
-      clientName: clientName || undefined,
-      clientEmail: clientEmail || undefined,
-      input: snapshot.input,
-      result: snapshot.result,
-      commissionModel: model,
-    });
-    setSavedToast(`Uloženo jako ${status} (${d.id})`);
-    setTimeout(() => setSavedToast(null), 4000);
+    try {
+      const d = await saveDraft({
+        createdBy: user.email,
+        source: 'crm',
+        status,
+        clientName: clientName || undefined,
+        clientEmail: clientEmail || undefined,
+        input: snapshot.input,
+        result: snapshot.result,
+        commissionModel: model,
+      });
+      setSavedToast(`Uloženo jako ${status} (${d.id})`);
+      setTimeout(() => setSavedToast(null), 4000);
+    } catch {
+      setSavedToast('Uložení selhalo — zkuste znovu');
+      setTimeout(() => setSavedToast(null), 4000);
+    }
   }
 
   return (
@@ -189,7 +201,7 @@ export function CrmCalculatorPage() {
                   <td className="px-4 py-3 text-sm">{d.status}</td>
                   <td className="px-4 py-3 text-right">
                     <button
-                      onClick={() => { if (confirm('Smazat?')) deleteDraft(d.id); }}
+                      onClick={async () => { if (confirm('Smazat?')) await deleteDraft(d.id); }}
                       className="p-1.5 text-muted-foreground hover:text-red-600 rounded-lg hover:bg-red-50"
                     >
                       <Trash2 className="w-4 h-4" />

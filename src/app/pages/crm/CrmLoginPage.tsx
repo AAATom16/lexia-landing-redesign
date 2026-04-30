@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, Lock, Mail, ShieldCheck, Sparkles } from 'lucide-react';
-import { login } from '../../lib/auth';
+import { authenticate, LoginError } from '../../lib/auth';
 
 const DEMO_USERS = [
   { email: 'jana.dvorakova@lexia.cz', name: 'Jana Dvořáková' },
@@ -19,7 +19,7 @@ export function CrmLoginPage() {
 
   const redirectTo = (location.state as { from?: string })?.from ?? '/crm';
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     if (!email.endsWith('@lexia.cz')) {
@@ -31,16 +31,42 @@ export function CrmLoginPage() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
+    try {
       const known = DEMO_USERS.find((u) => u.email === email);
-      login(email, 'admin', { name: known?.name });
+      await authenticate(email, password, {
+        expectedRole: 'admin',
+        fallback: { role: 'admin', name: known?.name },
+      });
       navigate(redirectTo);
-    }, 500);
+    } catch (err) {
+      if (err instanceof LoginError) {
+        if (err.code === 'invalid_credentials') setError('Špatný email nebo heslo');
+        else if (err.code === 'forbidden_role') setError('Účet není v roli admina');
+        else setError('Server nedostupný');
+      } else {
+        setError('Přihlášení selhalo');
+      }
+      setLoading(false);
+    }
   }
 
-  function quick(u: typeof DEMO_USERS[number]) {
-    login(u.email, 'admin', { name: u.name });
-    navigate('/crm');
+  async function quick(u: typeof DEMO_USERS[number]) {
+    setError('');
+    setLoading(true);
+    try {
+      await authenticate(u.email, 'lexia123', {
+        expectedRole: 'admin',
+        fallback: { role: 'admin', name: u.name },
+      });
+      navigate('/crm');
+    } catch (err) {
+      if (err instanceof LoginError && err.code === 'invalid_credentials') {
+        setError('Demo účet zatím není seedovaný v API');
+      } else {
+        setError('Přihlášení selhalo');
+      }
+      setLoading(false);
+    }
   }
 
   return (

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
-import { login } from '../lib/auth';
+import { authenticate, LoginError } from '../lib/auth';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     if (!email.includes('@')) {
@@ -22,10 +22,19 @@ export function LoginPage() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      login(email);
+    try {
+      await authenticate(email, password, { expectedRole: 'customer' });
       navigate('/ucet');
-    }, 600);
+    } catch (err) {
+      if (err instanceof LoginError) {
+        if (err.code === 'invalid_credentials') setError('Špatný email nebo heslo');
+        else if (err.code === 'forbidden_role') setError('Tento účet nemá oprávnění klientské zóny');
+        else setError('Server nedostupný — zkuste to prosím za chvíli');
+      } else {
+        setError('Přihlášení selhalo');
+      }
+      setLoading(false);
+    }
   }
 
   return (
