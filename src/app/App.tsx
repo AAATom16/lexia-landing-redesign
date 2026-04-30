@@ -18,6 +18,7 @@ import { CrmCalculatorPage } from './pages/crm/CrmCalculatorPage';
 import { CrmDraftDetailPage } from './pages/crm/CrmDraftDetailPage';
 import { PortalLayout } from './pages/portal/PortalLayout';
 import { PortalLoginPage } from './pages/portal/PortalLoginPage';
+import { PortalRegisterPage } from './pages/portal/PortalRegisterPage';
 import { PortalDashboardPage } from './pages/portal/PortalDashboardPage';
 import { PortalCalculatorPage } from './pages/portal/PortalCalculatorPage';
 import { PortalDraftsPage } from './pages/portal/PortalDraftsPage';
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/ucet" element={<AccountPage />} />
 
           <Route path="/portal/prihlaseni" element={<PortalLoginPage />} />
+          <Route path="/portal/registrace" element={<PortalRegisterPage />} />
           <Route path="/portal" element={<PortalLayout />}>
             <Route index element={<PortalDashboardPage />} />
             <Route path="kalkulacka" element={<PortalCalculatorPage />} />

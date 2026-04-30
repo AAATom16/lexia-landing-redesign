@@ -15,20 +15,37 @@ import {
   Plus
 } from 'lucide-react';
 import { getUser, logout } from '../lib/auth';
+import { api, isApiEnabled, type ApiDraft } from '../lib/api';
+import { getPillar, getProduct } from '../domain/products';
+import { formatCzk } from '../domain/calculator';
 
 type Tab = 'smlouvy' | 'udalosti' | 'platby' | 'dokumenty';
 
 export function AccountPage() {
   const user = getUser();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<Tab>('udalosti');
+  const [activeTab, setActiveTab] = useState<Tab>('smlouvy');
   const [showReport, setShowReport] = useState(false);
+  const [contracts, setContracts] = useState<ApiDraft[]>([]);
+  const [loadingContracts, setLoadingContracts] = useState(false);
 
   useEffect(() => {
     document.title = 'Můj účet — Lexia';
-  }, []);
+    if (!isApiEnabled() || !user) return;
+    let cancelled = false;
+    setLoadingContracts(true);
+    api.customer.contracts()
+      .then((data) => { if (!cancelled) setContracts(data); })
+      .catch(() => { /* keep empty */ })
+      .finally(() => { if (!cancelled) setLoadingContracts(false); });
+    return () => { cancelled = true; };
+  }, [user?.email]);
 
   if (!user) return <Navigate to="/prihlaseni" replace />;
+
+  const activeContracts = contracts.filter((c) => c.status === 'SIGNED');
+  const pendingContracts = contracts.filter((c) => c.status === 'SENT_TO_CLIENT');
+  const monthlyTotal = activeContracts.reduce((s, c) => s + c.premiumMonthly, 0);
 
   function handleLogout() {
     logout();
@@ -61,10 +78,10 @@ export function AccountPage() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <Stat icon={ShieldCheck} label="Aktivní smlouvy" value="2" tone="blue" />
-          <Stat icon={Clock} label="Otevřené případy" value="1" tone="amber" />
-          <Stat icon={Check} label="Vyřešeno (12m)" value="4" tone="green" />
-          <Stat icon={CreditCard} label="Příští platba" value="15. 5." tone="slate" />
+          <Stat icon={ShieldCheck} label="Aktivní smlouvy" value={activeContracts.length.toString()} tone="blue" />
+          <Stat icon={Clock} label="Návrhy k podpisu" value={pendingContracts.length.toString()} tone="amber" />
+          <Stat icon={CreditCard} label="Měsíční pojistné" value={monthlyTotal > 0 ? formatCzk(monthlyTotal) : '—'} tone="slate" />
+          <Stat icon={Check} label="Vyřešené případy" value="—" tone="green" />
         </div>
 
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
@@ -75,10 +92,10 @@ export function AccountPage() {
             <TabBtn id="dokumenty" active={activeTab} onClick={setActiveTab} icon={FileText} label="Dokumenty" />
           </div>
           <div className="p-6 md:p-8">
-            {activeTab === 'smlouvy' && <PoliciesPanel />}
+            {activeTab === 'smlouvy' && <PoliciesPanel contracts={contracts} loading={loadingContracts} />}
             {activeTab === 'udalosti' && <ClaimsPanel onReport={() => setShowReport(true)} />}
             {activeTab === 'platby' && <PaymentsPanel />}
-            {activeTab === 'dokumenty' && <DocumentsPanel />}
+            {activeTab === 'dokumenty' && <DocumentsPanel contracts={contracts} />}
           </div>
         </div>
       </div>
@@ -123,30 +140,62 @@ function TabBtn({ id, active, onClick, icon: Icon, label }: { id: Tab; active: T
   );
 }
 
-function PoliciesPanel() {
-  const policies = [
-    { id: 'LX-2026-04812', name: 'Domácnost Premium', status: 'Aktivní', from: '01. 02. 2026', price: '349 Kč/měsíc' },
-    { id: 'LX-2025-11203', name: 'Auto Komplet', status: 'Aktivní', from: '14. 11. 2025', price: '599 Kč/měsíc' }
-  ];
+function PoliciesPanel({ contracts, loading }: { contracts: ApiDraft[]; loading: boolean }) {
+  if (loading) {
+    return <div className="text-sm text-muted-foreground">Načítám smlouvy…</div>;
+  }
+  if (contracts.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <FileText className="w-10 h-10 mx-auto mb-3 text-[#0045BF]/40" />
+        <p className="text-foreground mb-2">Zatím nemáte žádné aktivní smlouvy ani návrhy.</p>
+        <p className="text-sm text-muted-foreground">
+          Až vám partner nebo Lexia odešle návrh, objeví se zde.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      {policies.map((p) => (
-        <div key={p.id} className="p-5 rounded-xl border border-border hover:border-[#0045BF]/40 transition-all">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-              <div className="text-xs text-muted-foreground">{p.id}</div>
-              <div className="text-lg text-foreground">{p.name}</div>
-              <div className="text-sm text-muted-foreground">Platná od {p.from}</div>
+      {contracts.map((p) => {
+        const product = getProduct(p.productCode);
+        const signed = p.status === 'SIGNED';
+        return (
+          <div key={p.id} className="p-5 rounded-xl border border-border hover:border-[#0045BF]/40 transition-all">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
+              <div className="min-w-0">
+                <div className="text-xs text-muted-foreground">{p.number ?? p.id.slice(0, 12)}</div>
+                <div className="text-lg text-foreground truncate">{product?.shortName ?? p.productCode}</div>
+                <div className="text-sm text-muted-foreground">
+                  Platná od {new Date(p.createdAt).toLocaleDateString('cs-CZ')} · Územní rozsah {p.territorialScope}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className={`px-3 py-1 rounded-full text-xs inline-flex items-center gap-1 ${
+                  signed ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                }`}>
+                  {signed ? <><Check className="w-3 h-3" strokeWidth={3} /> Aktivní</> : <><Clock className="w-3 h-3" strokeWidth={2} /> Návrh k podpisu</>}
+                </span>
+                <span className="text-foreground tabular-nums">{formatCzk(p.premiumMonthly)}/měs</span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full text-xs bg-green-100 text-green-700 inline-flex items-center gap-1">
-                <Check className="w-3 h-3" strokeWidth={3} /> {p.status}
-              </span>
-              <span className="text-foreground">{p.price}</span>
+            <div className="border-t border-border pt-3">
+              <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Sjednané pilíře</div>
+              <div className="flex flex-wrap gap-1.5">
+                {p.pillars.map((code) => {
+                  const pp = getPillar(code);
+                  return (
+                    <span key={code} className="px-2.5 py-1 rounded-full bg-[#0045BF]/10 text-[#0045BF] text-xs">
+                      {pp?.shortName ?? code}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -229,11 +278,15 @@ function PaymentsPanel() {
   );
 }
 
-function DocumentsPanel() {
+function DocumentsPanel({ contracts }: { contracts: ApiDraft[] }) {
+  const contractDocs = contracts.map((c) => ({
+    name: `Pojistná smlouva ${c.number ?? c.id.slice(0, 12)}.pdf`,
+    size: '— kB',
+  }));
   const docs = [
-    { name: 'Smlouva LX-2026-04812.pdf', size: '184 kB' },
-    { name: 'VPP Domácnost Premium.pdf', size: '412 kB' },
-    { name: 'Potvrzení o platbě 04/2026.pdf', size: '92 kB' }
+    ...contractDocs,
+    { name: 'Lexia VPP — pojistné podmínky 2026/03.pdf', size: '412 kB' },
+    { name: 'Lexia tarify 2026/04.pdf', size: '210 kB' },
   ];
   return (
     <div className="space-y-3">

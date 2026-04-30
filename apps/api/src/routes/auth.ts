@@ -17,6 +17,7 @@ const registerSchema = loginSchema.extend({
   name: z.string().min(2),
   role: z.nativeEnum(UserRole).optional(),
   ico: z.string().optional(),
+  distributorType: z.enum(['SZ_PM', 'SZ_PA', 'DJ', 'VZ', 'DPZ', 'TIPAR']).optional(),
 });
 
 authRoutes.post('/login', zValidator('json', loginSchema), async (c) => {
@@ -47,13 +48,16 @@ authRoutes.post('/register', zValidator('json', registerSchema), async (c) => {
   if (exists) return c.json({ error: 'email_taken' }, 409);
 
   const passwordHash = await hashPassword(body.password);
+  const safeRole =
+    body.role === UserRole.ADMIN ? UserRole.CUSTOMER : (body.role ?? UserRole.CUSTOMER);
   const user = await prisma.user.create({
     data: {
       email: body.email.toLowerCase(),
       name: body.name,
       passwordHash,
-      role: body.role ?? UserRole.CUSTOMER,
+      role: safeRole,
       ico: body.ico,
+      distributorType: safeRole === UserRole.DISTRIBUTOR ? body.distributorType ?? 'VZ' : null,
     },
   });
 

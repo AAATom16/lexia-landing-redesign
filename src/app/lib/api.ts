@@ -89,13 +89,48 @@ export class ApiError extends Error {
   }
 }
 
+export type LeadInput = {
+  clientName: string;
+  clientEmail: string;
+  clientPhone?: string;
+  productCode: string;
+  pillars: string[];
+  segment?: string;
+  premiumMonthly: number;
+  premiumYearly: number;
+  inputJson: CalculatorInput;
+  resultJson: CalculationResult;
+  notes?: string;
+};
+
+export type RegisterInput = {
+  email: string;
+  password: string;
+  name: string;
+  role?: 'CUSTOMER' | 'DISTRIBUTOR';
+  distributorType?: 'SZ_PM' | 'SZ_PA' | 'DJ' | 'VZ' | 'DPZ' | 'TIPAR';
+  ico?: string;
+};
+
 export const api = {
   login: (email: string, password: string) =>
     request<{ token: string; user: ApiUser }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
+  register: (body: RegisterInput) =>
+    request<{ token: string; user: ApiUser }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    }),
   me: () => request<ApiUser>('/auth/me'),
+  leads: {
+    create: (body: LeadInput) =>
+      request<{ ok: true; id: string }>('/leads', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+  },
   drafts: {
     list: () => request<ApiDraft[]>('/drafts'),
     get: (id: string) => request<ApiDraft>(`/drafts/${id}`),
@@ -105,5 +140,8 @@ export const api = {
       request<ApiDraft>(`/drafts/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
     remove: (id: string) =>
       request<{ ok: true }>(`/drafts/${id}`, { method: 'DELETE' }),
+  },
+  customer: {
+    contracts: () => request<ApiDraft[]>('/customer/contracts'),
   },
 };
