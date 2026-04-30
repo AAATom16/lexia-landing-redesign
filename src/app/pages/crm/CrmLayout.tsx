@@ -13,6 +13,7 @@ import {
   Globe,
   ShieldCheck,
   Calculator,
+  Briefcase,
   LogOut,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -24,6 +25,7 @@ const navItems = [
   { to: '/crm/leady', label: 'Leady', icon: Sparkles },
   { to: '/crm/klienti', label: 'Klienti', icon: Users },
   { to: '/crm/smlouvy', label: 'Smlouvy', icon: FileText },
+  { to: '/crm/pripady', label: 'Právní případy', icon: Briefcase },
   { to: '/crm/kalkulacka', label: 'Kalkulačka', icon: Calculator },
   { to: '/crm/dokumenty', label: 'Dokumenty', icon: FolderOpen },
   { to: '/crm/ukoly', label: 'Úkoly', icon: CheckSquare },
@@ -37,6 +39,7 @@ const breadcrumbMap: Record<string, string> = {
   ukoly: 'Úkoly',
   leady: 'Leady',
   kalkulacka: 'Kalkulačka',
+  pripady: 'Právní případy',
 };
 
 export function CrmLayout() {

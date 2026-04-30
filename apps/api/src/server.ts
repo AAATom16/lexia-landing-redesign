@@ -6,6 +6,7 @@ import { authRoutes } from './routes/auth.js';
 import { draftRoutes } from './routes/drafts.js';
 import { leadRoutes } from './routes/leads.js';
 import { customerRoutes } from './routes/customer.js';
+import { legalCaseRoutes } from './routes/legalCases.js';
 
 const app = new Hono();
 
@@ -30,6 +31,7 @@ app.route('/auth', authRoutes);
 app.route('/drafts', draftRoutes);
 app.route('/leads', leadRoutes);
 app.route('/customer', customerRoutes);
+app.route('/legal-cases', legalCaseRoutes);
 
 app.notFound((c) => c.json({ error: 'not_found' }, 404));
 app.onError((err, c) => {

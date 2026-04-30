@@ -16,6 +16,7 @@ import { CrmTasksPage } from './pages/crm/CrmTasksPage';
 import { CrmLeadsPage } from './pages/crm/CrmLeadsPage';
 import { CrmCalculatorPage } from './pages/crm/CrmCalculatorPage';
 import { CrmDraftDetailPage } from './pages/crm/CrmDraftDetailPage';
+import { CrmLegalCasesPage } from './pages/crm/CrmLegalCasesPage';
 import { PortalLayout } from './pages/portal/PortalLayout';
 import { PortalLoginPage } from './pages/portal/PortalLoginPage';
 import { PortalRegisterPage } from './pages/portal/PortalRegisterPage';
@@ -67,6 +68,7 @@ export default function App() {
             <Route path="smlouvy" element={<CrmContractsPage />} />
             <Route path="smlouvy/:id" element={<CrmDraftDetailPage />} />
             <Route path="kalkulacka" element={<CrmCalculatorPage />} />
+            <Route path="pripady" element={<CrmLegalCasesPage />} />
             <Route path="dokumenty" element={<CrmDocumentsPage />} />
             <Route path="ukoly" element={<CrmTasksPage />} />
             <Route path="leady" element={<CrmLeadsPage />} />

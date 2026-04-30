@@ -15,11 +15,11 @@ import {
   Plus
 } from 'lucide-react';
 import { getUser, logout } from '../lib/auth';
-import { api, isApiEnabled, type ApiDraft } from '../lib/api';
+import { api, isApiEnabled, type ApiDraft, type ApiLegalCase, type LegalCaseStatus } from '../lib/api';
 import { getPillar, getProduct } from '../domain/products';
 import { formatCzk } from '../domain/calculator';
 
-type Tab = 'smlouvy' | 'udalosti' | 'platby' | 'dokumenty';
+type Tab = 'smlouvy' | 'pripady' | 'platby' | 'dokumenty';
 
 export function AccountPage() {
   const user = getUser();
@@ -28,16 +28,23 @@ export function AccountPage() {
   const [showReport, setShowReport] = useState(false);
   const [contracts, setContracts] = useState<ApiDraft[]>([]);
   const [loadingContracts, setLoadingContracts] = useState(false);
+  const [cases, setCases] = useState<ApiLegalCase[]>([]);
+  const [loadingCases, setLoadingCases] = useState(false);
 
   useEffect(() => {
     document.title = 'Můj účet — Lexia';
     if (!isApiEnabled() || !user) return;
     let cancelled = false;
     setLoadingContracts(true);
+    setLoadingCases(true);
     api.customer.contracts()
       .then((data) => { if (!cancelled) setContracts(data); })
       .catch(() => { /* keep empty */ })
       .finally(() => { if (!cancelled) setLoadingContracts(false); });
+    api.legalCases.list()
+      .then((data) => { if (!cancelled) setCases(data); })
+      .catch(() => { /* keep empty */ })
+      .finally(() => { if (!cancelled) setLoadingCases(false); });
     return () => { cancelled = true; };
   }, [user?.email]);
 
@@ -46,6 +53,8 @@ export function AccountPage() {
   const activeContracts = contracts.filter((c) => c.status === 'SIGNED');
   const pendingContracts = contracts.filter((c) => c.status === 'SENT_TO_CLIENT');
   const monthlyTotal = activeContracts.reduce((s, c) => s + c.premiumMonthly, 0);
+  const openCases = cases.filter((c) => ['REGISTROVANO', 'V_SETRENI'].includes(c.status)).length;
+  const resolvedCases = cases.filter((c) => ['UKONCENO', 'KRYTO'].includes(c.status)).length;
 
   function handleLogout() {
     logout();
@@ -79,21 +88,21 @@ export function AccountPage() {
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           <Stat icon={ShieldCheck} label="Aktivní smlouvy" value={activeContracts.length.toString()} tone="blue" />
-          <Stat icon={Clock} label="Návrhy k podpisu" value={pendingContracts.length.toString()} tone="amber" />
+          <Stat icon={Clock} label="Otevřené případy" value={openCases.toString()} tone="amber" />
+          <Stat icon={Check} label="Vyřešené případy" value={resolvedCases.toString()} tone="green" />
           <Stat icon={CreditCard} label="Měsíční pojistné" value={monthlyTotal > 0 ? formatCzk(monthlyTotal) : '—'} tone="slate" />
-          <Stat icon={Check} label="Vyřešené případy" value="—" tone="green" />
         </div>
 
         <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
           <div className="flex border-b border-border overflow-x-auto">
             <TabBtn id="smlouvy" active={activeTab} onClick={setActiveTab} icon={FileText} label="Smlouvy" />
-            <TabBtn id="udalosti" active={activeTab} onClick={setActiveTab} icon={Bell} label="Pojistné události" />
+            <TabBtn id="pripady" active={activeTab} onClick={setActiveTab} icon={Bell} label="Právní případy" />
             <TabBtn id="platby" active={activeTab} onClick={setActiveTab} icon={CreditCard} label="Platby" />
             <TabBtn id="dokumenty" active={activeTab} onClick={setActiveTab} icon={FileText} label="Dokumenty" />
           </div>
           <div className="p-6 md:p-8">
             {activeTab === 'smlouvy' && <PoliciesPanel contracts={contracts} loading={loadingContracts} />}
-            {activeTab === 'udalosti' && <ClaimsPanel onReport={() => setShowReport(true)} />}
+            {activeTab === 'pripady' && <CasesPanel cases={cases} loading={loadingCases} onReport={() => setShowReport(true)} />}
             {activeTab === 'platby' && <PaymentsPanel />}
             {activeTab === 'dokumenty' && <DocumentsPanel contracts={contracts} />}
           </div>
@@ -200,44 +209,80 @@ function PoliciesPanel({ contracts, loading }: { contracts: ApiDraft[]; loading:
   );
 }
 
-function ClaimsPanel({ onReport }: { onReport: () => void }) {
-  const claims = [
-    { id: 'PU-2026-0142', title: 'Spor s pronajímatelem', status: 'V řešení', progress: 60, updated: 'Před 2 hodinami' },
-    { id: 'PU-2026-0098', title: 'Reklamace zboží', status: 'Vyřešeno', progress: 100, updated: 'Před 3 dny' }
-  ];
+const CASE_STATUS_LABELS: Record<LegalCaseStatus, string> = {
+  REGISTROVANO: 'Registrováno',
+  V_SETRENI: 'V šetření',
+  KRYTO: 'Kryto',
+  ZAMITNUTO: 'Zamítnuto',
+  UKONCENO: 'Ukončeno',
+};
+
+const CASE_PROGRESS: Record<LegalCaseStatus, number> = {
+  REGISTROVANO: 20,
+  V_SETRENI: 50,
+  KRYTO: 75,
+  ZAMITNUTO: 100,
+  UKONCENO: 100,
+};
+
+function CasesPanel({ cases, loading, onReport }: { cases: ApiLegalCase[]; loading: boolean; onReport: () => void }) {
+  if (loading) {
+    return <div className="text-sm text-muted-foreground">Načítám případy…</div>;
+  }
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="text-sm text-muted-foreground">
+          Forma plnění: telefonická porada (10 000 Kč) nebo právní zastoupení (až 50 000 Kč) dle pojistné smlouvy.
+        </div>
         <button onClick={onReport} className="text-sm text-[#0045BF] hover:underline inline-flex items-center gap-1">
-          <Plus className="w-4 h-4" strokeWidth={2} /> Nová událost
+          <Plus className="w-4 h-4" strokeWidth={2} /> Nahlásit nový případ
         </button>
       </div>
-      {claims.map((c) => (
-        <div key={c.id} className="p-5 rounded-xl border border-border">
-          <div className="flex items-start justify-between mb-3">
-            <div>
-              <div className="text-xs text-muted-foreground">{c.id}</div>
-              <div className="text-lg text-foreground">{c.title}</div>
-            </div>
-            <span
-              className={`px-3 py-1 rounded-full text-xs ${
-                c.progress === 100 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-              }`}
-            >
-              {c.status}
-            </span>
-          </div>
-          <div className="h-2 bg-[#F7F9FC] rounded-full overflow-hidden mb-2">
-            <div className="h-full bg-gradient-to-r from-[#0045BF] to-[#001843]" style={{ width: `${c.progress}%` }} />
-          </div>
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Aktualizováno: {c.updated}</span>
-            <button className="text-[#0045BF] hover:underline inline-flex items-center gap-1">
-              <MessageSquare className="w-3 h-3" strokeWidth={1.75} /> Komunikovat
-            </button>
-          </div>
+      {cases.length === 0 ? (
+        <div className="p-8 text-center border border-dashed border-border rounded-xl">
+          <Bell className="w-10 h-10 mx-auto mb-3 text-[#0045BF]/40" />
+          <p className="text-foreground mb-1">Zatím žádné právní případy</p>
+          <p className="text-sm text-muted-foreground">Pokud nastane situace, na kterou se vztahuje vaše smlouva, klikněte na „Nahlásit nový případ".</p>
         </div>
-      ))}
+      ) : (
+        cases.map((c) => {
+          const progress = CASE_PROGRESS[c.status];
+          const isResolved = c.status === 'UKONCENO' || c.status === 'KRYTO';
+          return (
+            <div key={c.id} className="p-5 rounded-xl border border-border">
+              <div className="flex items-start justify-between mb-3 gap-3">
+                <div className="min-w-0">
+                  <div className="text-xs text-muted-foreground">{c.caseNumber}</div>
+                  <div className="text-lg text-foreground truncate">{c.claimType ?? 'Právní případ'}</div>
+                  {c.description && <div className="text-sm text-muted-foreground mt-1 line-clamp-2">{c.description}</div>}
+                </div>
+                <span
+                  className={`shrink-0 px-3 py-1 rounded-full text-xs ${
+                    c.status === 'ZAMITNUTO' ? 'bg-red-100 text-red-700' :
+                    isResolved ? 'bg-green-100 text-green-700' :
+                    'bg-amber-100 text-amber-700'
+                  }`}
+                >
+                  {CASE_STATUS_LABELS[c.status]}
+                </span>
+              </div>
+              <div className="h-2 bg-[#F7F9FC] rounded-full overflow-hidden mb-2">
+                <div
+                  className={`h-full ${c.status === 'ZAMITNUTO' ? 'bg-red-500' : 'bg-gradient-to-r from-[#0045BF] to-[#001843]'}`}
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>Vznik {new Date(c.caseDate).toLocaleDateString('cs-CZ')} · Nahlášeno {new Date(c.reportedDate).toLocaleDateString('cs-CZ')}</span>
+                <button className="text-[#0045BF] hover:underline inline-flex items-center gap-1">
+                  <MessageSquare className="w-3 h-3" strokeWidth={1.75} /> Komunikovat
+                </button>
+              </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }
