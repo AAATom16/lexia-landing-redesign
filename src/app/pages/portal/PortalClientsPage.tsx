@@ -9,10 +9,17 @@ export function PortalClientsPage() {
   const [drafts, setDrafts] = useState<ContractDraft[]>([]);
 
   useEffect(() => {
-    const refresh = () => setDrafts(listDrafts({ source: 'distributor', createdBy: user?.email }));
+    let cancelled = false;
+    const refresh = async () => {
+      const data = await listDrafts({ source: 'distributor', createdBy: user?.email });
+      if (!cancelled) setDrafts(data);
+    };
     refresh();
     window.addEventListener('lexia-drafts-change', refresh);
-    return () => window.removeEventListener('lexia-drafts-change', refresh);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('lexia-drafts-change', refresh);
+    };
   }, [user?.email]);
 
   const clients = useMemo(() => {

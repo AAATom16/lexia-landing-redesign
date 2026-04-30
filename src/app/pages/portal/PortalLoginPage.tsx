@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowRight, Building2, Lock, Mail, ShieldCheck, Users } from 'lucide-react';
-import { login } from '../../lib/auth';
+import { authenticate, LoginError } from '../../lib/auth';
 
 const DEMO_PARTNERS = [
   { email: 'info@frenkee.cz', name: 'Frenkee s.r.o.', type: 'VZ' as const, ico: '12345678' },
@@ -18,7 +18,7 @@ export function PortalLoginPage() {
 
   const redirectTo = (location.state as { from?: string })?.from ?? '/portal';
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
     if (!email.includes('@')) {
@@ -30,20 +30,47 @@ export function PortalLoginPage() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
+    try {
       const known = DEMO_PARTNERS.find((p) => p.email === email);
-      login(email, 'distributor', {
-        name: known?.name,
-        distributorType: known?.type ?? 'VZ',
-        ico: known?.ico,
+      await authenticate(email, password, {
+        expectedRole: 'distributor',
+        fallback: {
+          role: 'distributor',
+          name: known?.name,
+          distributorType: known?.type ?? 'VZ',
+          ico: known?.ico,
+        },
       });
       navigate(redirectTo);
-    }, 500);
+    } catch (err) {
+      if (err instanceof LoginError) {
+        if (err.code === 'invalid_credentials') setError('Špatný email nebo heslo');
+        else if (err.code === 'forbidden_role') setError('Účet není v roli partnera');
+        else setError('Server nedostupný');
+      } else {
+        setError('Přihlášení selhalo');
+      }
+      setLoading(false);
+    }
   }
 
-  function quickLogin(p: typeof DEMO_PARTNERS[number]) {
-    login(p.email, 'distributor', { name: p.name, distributorType: p.type, ico: p.ico });
-    navigate('/portal');
+  async function quickLogin(p: typeof DEMO_PARTNERS[number]) {
+    setError('');
+    setLoading(true);
+    try {
+      await authenticate(p.email, 'partner123', {
+        expectedRole: 'distributor',
+        fallback: { role: 'distributor', name: p.name, distributorType: p.type, ico: p.ico },
+      });
+      navigate('/portal');
+    } catch (err) {
+      if (err instanceof LoginError && err.code === 'invalid_credentials') {
+        setError('Demo účet zatím není seedovaný v API');
+      } else {
+        setError('Přihlášení selhalo');
+      }
+      setLoading(false);
+    }
   }
 
   return (

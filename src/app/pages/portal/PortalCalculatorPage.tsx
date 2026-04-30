@@ -18,9 +18,9 @@ export function PortalCalculatorPage() {
 
   const commission = snapshot ? previewCommission(snapshot.result.yearly, commissionModel, true) : null;
 
-  function handleSave() {
+  async function handleSave() {
     if (!snapshot || !user) return;
-    const draft = saveDraft({
+    const draft = await saveDraft({
       createdBy: user.email,
       source: 'distributor',
       status: 'Návrh',
@@ -33,9 +33,9 @@ export function PortalCalculatorPage() {
     setSavedId(draft.id);
   }
 
-  function handleSendToClient() {
+  async function handleSendToClient() {
     if (!snapshot || !user) return;
-    saveDraft({
+    await saveDraft({
       createdBy: user.email,
       source: 'distributor',
       status: 'Odesláno klientovi',
