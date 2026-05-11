@@ -5,6 +5,7 @@ import { DraftSource, DraftStatus, DiscountStatus, DiscountKind } from '@prisma/
 import { prisma } from '../../lib/db.js';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
 import { sha256 } from '../../lib/apiKeys.js';
+import { onDraftCreated } from '../../lib/draftLifecycle.js';
 
 export const v1LeadsRoutes = new Hono<AppEnv>();
 
@@ -220,6 +221,9 @@ v1LeadsRoutes.post('/', zValidator('json', v1LeadSchema), async (c) => {
       },
     });
   }
+
+  // Fire DRAFT_CREATED webhook (best-effort, non-blocking).
+  onDraftCreated(draft).catch((e) => console.error('[lead.lifecycle]', e));
 
   return c.json(responseBody, 201);
 });

@@ -12,6 +12,8 @@ import {
   UserPlus,
   AlertTriangle,
   CheckCircle2,
+  Webhook as WebhookIcon,
+  Coins,
   X,
 } from 'lucide-react';
 import {
@@ -22,9 +24,13 @@ import {
   type ApiKeyCreated,
   type ApiPartnerDetail,
   type ApiSalesperson,
+  type ApiWebhook,
+  type ApiWebhookCreated,
+  type ApiCommissionEntry,
+  type WebhookEvent,
 } from '../../lib/api';
 
-type Tab = 'profile' | 'salespeople' | 'keys' | 'discounts';
+type Tab = 'profile' | 'salespeople' | 'keys' | 'discounts' | 'webhooks' | 'commissions';
 
 export function CrmPartnerDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
@@ -110,12 +116,14 @@ export function CrmPartnerDetailPage() {
         </div>
       </div>
 
-      <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border overflow-x-auto">
         {([
           ['profile', 'Profil'],
           ['salespeople', `Obchodníci (${data.salespeople.length})`],
           ['keys', `API klíče (${data.apiKeys.filter((k) => !k.revokedAt).length})`],
           ['discounts', `Slevové kódy (${data.discountCodes.length})`],
+          ['webhooks', 'Webhooky'],
+          ['commissions', 'Provize'],
         ] as const).map(([k, l]) => (
           <button
             key={k}
@@ -152,6 +160,8 @@ export function CrmPartnerDetailPage() {
       {tab === 'discounts' && (
         <DiscountsTab data={data} onAdd={() => setDiscountModalOpen(true)} onChange={load} />
       )}
+      {tab === 'webhooks' && <WebhooksTab partnerId={data.id} />}
+      {tab === 'commissions' && <CommissionsTab partnerId={data.id} />}
 
       {keyModalOpen && (
         <ApiKeyCreateModal
@@ -783,6 +793,353 @@ function SalespersonCreateModal({
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+// ---- Webhooks tab ----
+
+const WEBHOOK_EVENTS: { value: WebhookEvent; label: string }[] = [
+  { value: 'DRAFT_CREATED', label: 'Lead vytvořen' },
+  { value: 'DRAFT_SENT_TO_CLIENT', label: 'Návrh odeslán klientovi' },
+  { value: 'DRAFT_SIGNED', label: 'Smlouva podepsaná' },
+  { value: 'DRAFT_CANCELLED', label: 'Návrh stornován' },
+];
+
+function WebhooksTab({ partnerId }: { partnerId: string }) {
+  const [items, setItems] = useState<ApiWebhook[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [created, setCreated] = useState<ApiWebhookCreated | null>(null);
+
+  async function load() {
+    setLoading(true);
+    try {
+      setItems(await api.partners.listWebhooks(partnerId));
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [partnerId]);
+
+  async function remove(id: string) {
+    if (!confirm('Opravdu smazat webhook?')) return;
+    await api.partners.deleteWebhook(partnerId, id);
+    load();
+  }
+
+  return (
+    <div className="rounded-2xl bg-white border border-border">
+      <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="text-sm text-muted-foreground">
+          Lexia POSTuje JSON na partnerovu URL při změně životního cyklu draftu. HMAC-SHA256 podpis v
+          hlavičce <code className="px-1 py-0.5 rounded bg-[#F7F9FC] font-mono text-xs">X-Lexia-Signature</code>.
+        </div>
+        <button
+          onClick={() => {
+            setCreated(null);
+            setCreateOpen(true);
+          }}
+          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-xs flex items-center gap-1.5"
+        >
+          <Plus className="w-3.5 h-3.5" /> Přidat webhook
+        </button>
+      </div>
+      {loading ? (
+        <div className="p-8 text-center text-sm text-muted-foreground">
+          <Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Načítání…
+        </div>
+      ) : items.length === 0 ? (
+        <div className="p-12 text-center text-sm text-muted-foreground">Žádné webhooky.</div>
+      ) : (
+        <table className="w-full text-sm">
+          <thead className="text-xs uppercase tracking-wider text-muted-foreground text-left">
+            <tr className="border-b border-border">
+              <th className="px-4 py-3 font-medium">URL</th>
+              <th className="px-4 py-3 font-medium">Eventy</th>
+              <th className="px-4 py-3 font-medium">Stav</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((wh) => (
+              <tr key={wh.id} className="border-b border-border last:border-b-0 hover:bg-[#F7F9FC]">
+                <td className="px-4 py-3 font-mono text-xs break-all max-w-md">
+                  <WebhookIcon className="w-3.5 h-3.5 inline mr-1.5 text-muted-foreground" />
+                  {wh.url}
+                </td>
+                <td className="px-4 py-3 text-xs">
+                  {wh.events.map((e) => (
+                    <span key={e} className="inline-block px-1.5 py-0.5 mr-1 mb-1 rounded bg-[#0045BF]/10 text-[#0045BF]">
+                      {e}
+                    </span>
+                  ))}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-xs ${
+                      wh.enabled ? 'bg-[#008EA5]/10 text-[#008EA5]' : 'bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    {wh.enabled ? 'Aktivní' : 'Vypnutý'}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <button onClick={() => remove(wh.id)} className="text-xs text-red-600 hover:underline">
+                    <Trash2 className="w-3 h-3 inline mr-1" />
+                    Smazat
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {createOpen && (
+        <WebhookCreateModal
+          partnerId={partnerId}
+          created={created}
+          onCreated={(w) => {
+            setCreated(w);
+            load();
+          }}
+          onClose={() => {
+            setCreateOpen(false);
+            setCreated(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function WebhookCreateModal({
+  partnerId,
+  created,
+  onCreated,
+  onClose,
+}: {
+  partnerId: string;
+  created: ApiWebhookCreated | null;
+  onCreated: (w: ApiWebhookCreated) => void;
+  onClose: () => void;
+}) {
+  const [url, setUrl] = useState('');
+  const [events, setEvents] = useState<WebhookEvent[]>(['DRAFT_SIGNED']);
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  function toggle(e: WebhookEvent) {
+    setEvents((prev) => (prev.includes(e) ? prev.filter((x) => x !== e) : [...prev, e]));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!url || events.length === 0) return setErr('Vyplň URL a vyber alespoň jeden event.');
+    setSubmitting(true);
+    setErr(null);
+    try {
+      const w = await api.partners.createWebhook(partnerId, { url, events });
+      onCreated(w);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Vytvoření selhalo.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-[#001843]/40 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-[#F7F9FC] z-10">
+          <X className="w-4 h-4" />
+        </button>
+        {created ? (
+          <div className="p-7 space-y-4">
+            <div className="inline-flex w-12 h-12 rounded-2xl bg-amber-100 items-center justify-center">
+              <AlertTriangle className="w-6 h-6 text-amber-600" />
+            </div>
+            <h3 className="text-2xl tracking-tight">Webhook vytvořen</h3>
+            <p className="text-sm text-muted-foreground">
+              Tento secret už nikdy neuvidíte. Předejte ho partnerovi bezpečným kanálem — bude potřeba pro
+              ověření HMAC podpisu na příchozím requestu.
+            </p>
+            <div className="rounded-xl bg-[#001843] p-4 font-mono text-xs text-white break-all">
+              {created.secret}
+            </div>
+            <button
+              onClick={async () => {
+                await navigator.clipboard.writeText(created.secret);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="w-full px-4 py-2.5 rounded-xl border border-border text-sm hover:bg-[#F7F9FC] flex items-center justify-center gap-2"
+            >
+              {copied ? <CheckCircle2 className="w-4 h-4 text-[#008EA5]" /> : <Copy className="w-4 h-4" />}
+              {copied ? 'Zkopírováno' : 'Zkopírovat secret'}
+            </button>
+            <button
+              onClick={onClose}
+              className="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md mt-2"
+            >
+              Hotovo
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="p-7 space-y-4">
+            <div className="inline-flex w-12 h-12 rounded-2xl bg-[#0045BF]/10 items-center justify-center">
+              <WebhookIcon className="w-6 h-6 text-[#0045BF]" />
+            </div>
+            <h3 className="text-2xl tracking-tight">Nový webhook</h3>
+            <label className="block text-sm">
+              <span className="text-muted-foreground">Cílová URL (HTTPS)</span>
+              <input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://api.partner.cz/lexia/webhook"
+                className="mt-1 w-full px-3 py-2.5 rounded-xl border border-border focus:border-[#0045BF] outline-none font-mono text-xs"
+              />
+            </label>
+            <div className="block text-sm">
+              <span className="text-muted-foreground">Eventy (alespoň jeden)</span>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {WEBHOOK_EVENTS.map((e) => (
+                  <label
+                    key={e.value}
+                    className={`px-3 py-2 rounded-xl border text-xs cursor-pointer transition-colors ${
+                      events.includes(e.value)
+                        ? 'border-[#0045BF] bg-[#0045BF]/5'
+                        : 'border-border hover:bg-[#F7F9FC]'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={events.includes(e.value)}
+                      onChange={() => toggle(e.value)}
+                      className="mr-2 accent-[#0045BF]"
+                    />
+                    {e.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+            {err && (
+              <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">{err}</div>
+            )}
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm hover:bg-[#F7F9FC]"
+              >
+                Zrušit
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md disabled:opacity-60"
+              >
+                {submitting ? 'Vytvářím…' : 'Vytvořit'}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---- Commissions tab ----
+
+function CommissionsTab({ partnerId }: { partnerId: string }) {
+  const [data, setData] = useState<{ total: number; entries: ApiCommissionEntry[] } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function load() {
+    setLoading(true);
+    try {
+      setData(await api.partners.listCommissions(partnerId));
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [partnerId]);
+
+  if (loading || !data) {
+    return (
+      <div className="p-8 text-center text-sm text-muted-foreground">
+        <Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Načítání…
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl bg-white border border-border p-6 flex items-center gap-6">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#008EA5]/10 to-[#0045BF]/10 flex items-center justify-center">
+          <Coins className="w-6 h-6 text-[#008EA5]" />
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground uppercase tracking-wider">Celková provize</div>
+          <div className="text-3xl font-semibold">
+            {new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(data.total)}
+          </div>
+          <div className="text-xs text-muted-foreground mt-0.5">{data.entries.length} záznamů</div>
+        </div>
+      </div>
+      <div className="rounded-2xl bg-white border border-border">
+        {data.entries.length === 0 ? (
+          <div className="p-12 text-center text-sm text-muted-foreground">
+            Žádné provize. Vznikají automaticky po podpisu smlouvy (status = SIGNED).
+          </div>
+        ) : (
+          <table className="w-full text-sm">
+            <thead className="text-xs uppercase tracking-wider text-muted-foreground text-left">
+              <tr className="border-b border-border">
+                <th className="px-4 py-3 font-medium">Klient</th>
+                <th className="px-4 py-3 font-medium">Produkt</th>
+                <th className="px-4 py-3 font-medium">Typ</th>
+                <th className="px-4 py-3 font-medium text-right">Roční pojistné</th>
+                <th className="px-4 py-3 font-medium text-right">%</th>
+                <th className="px-4 py-3 font-medium text-right">Provize</th>
+                <th className="px-4 py-3 font-medium">Datum</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.entries.map((e) => (
+                <tr key={e.id} className="border-b border-border last:border-b-0 hover:bg-[#F7F9FC]">
+                  <td className="px-4 py-3">{e.contractDraft?.clientName ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs">{e.contractDraft?.productCode ?? '—'}</td>
+                  <td className="px-4 py-3 text-xs">{e.kind}</td>
+                  <td className="px-4 py-3 text-right">
+                    {new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(e.yearlyPremium)}
+                  </td>
+                  <td className="px-4 py-3 text-right">{e.percent} %</td>
+                  <td className="px-4 py-3 text-right font-medium">
+                    {new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(e.amount)}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">
+                    {new Date(e.createdAt).toLocaleDateString('cs-CZ')}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

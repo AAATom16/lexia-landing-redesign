@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
-import { DiscountKind, DiscountStatus, PartnerStatus, SalespersonStatus, UserRole } from '@prisma/client';
+import crypto from 'node:crypto';
+import { DiscountKind, DiscountStatus, PartnerStatus, SalespersonStatus, UserRole, WebhookEvent } from '@prisma/client';
 import { prisma } from '../lib/db.js';
 import { authRequired, type AppEnv } from '../lib/middleware.js';
 import { generateApiKey } from '../lib/apiKeys.js';
@@ -301,4 +302,102 @@ crmPartnerRoutes.patch('/:id/discount-codes/:dcId', zValidator('json', discountU
     },
   });
   return c.json(updated);
+});
+
+// --- Webhook management ---
+
+const webhookCreateSchema = z.object({
+  url: z.string().url(),
+  events: z.array(z.nativeEnum(WebhookEvent)).min(1),
+  enabled: z.boolean().default(true),
+});
+
+const webhookUpdateSchema = webhookCreateSchema.partial();
+
+crmPartnerRoutes.get('/:id/webhooks', async (c) => {
+  const partnerId = c.req.param('id');
+  const webhooks = await prisma.webhook.findMany({
+    where: { partnerId },
+    orderBy: { createdAt: 'desc' },
+  });
+  // Never expose secret again after creation.
+  return c.json(webhooks.map(({ secret: _s, ...rest }) => rest));
+});
+
+crmPartnerRoutes.post('/:id/webhooks', zValidator('json', webhookCreateSchema), async (c) => {
+  const partnerId = c.req.param('id');
+  const body = c.req.valid('json');
+  const partner = await prisma.partner.findUnique({ where: { id: partnerId } });
+  if (!partner) return c.json({ error: 'not_found' }, 404);
+
+  const secret = `whsec_${crypto.randomBytes(24).toString('base64url')}`;
+  const wh = await prisma.webhook.create({
+    data: {
+      partnerId,
+      url: body.url,
+      events: body.events,
+      enabled: body.enabled,
+      secret,
+    },
+  });
+  await prisma.auditLog.create({
+    data: {
+      actorId: c.get('user').sub,
+      action: 'webhook.create',
+      entityType: 'Webhook',
+      entityId: wh.id,
+      payload: { partnerId, url: body.url, events: body.events },
+    },
+  });
+  return c.json({ ...wh, secret }, 201);
+});
+
+crmPartnerRoutes.patch('/:id/webhooks/:whId', zValidator('json', webhookUpdateSchema), async (c) => {
+  const partnerId = c.req.param('id');
+  const whId = c.req.param('whId');
+  const wh = await prisma.webhook.findUnique({ where: { id: whId } });
+  if (!wh || wh.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  const updated = await prisma.webhook.update({ where: { id: whId }, data: c.req.valid('json') });
+  const { secret: _s, ...rest } = updated;
+  return c.json(rest);
+});
+
+crmPartnerRoutes.delete('/:id/webhooks/:whId', async (c) => {
+  const partnerId = c.req.param('id');
+  const whId = c.req.param('whId');
+  const wh = await prisma.webhook.findUnique({ where: { id: whId } });
+  if (!wh || wh.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  await prisma.webhook.delete({ where: { id: whId } });
+  return c.json({ ok: true });
+});
+
+crmPartnerRoutes.get('/:id/webhooks/:whId/deliveries', async (c) => {
+  const partnerId = c.req.param('id');
+  const whId = c.req.param('whId');
+  const wh = await prisma.webhook.findUnique({ where: { id: whId } });
+  if (!wh || wh.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  const deliveries = await prisma.webhookDelivery.findMany({
+    where: { webhookId: whId },
+    orderBy: { createdAt: 'desc' },
+    take: 50,
+  });
+  return c.json(deliveries);
+});
+
+// --- Commission listing ---
+
+crmPartnerRoutes.get('/:id/commissions', async (c) => {
+  const partnerId = c.req.param('id');
+  const commissions = await prisma.commissionEntry.findMany({
+    where: { partnerId },
+    orderBy: { createdAt: 'desc' },
+    take: 200,
+    include: {
+      contractDraft: {
+        select: { id: true, productCode: true, clientName: true, premiumYearly: true, signedAt: true },
+      },
+    },
+  });
+  const total = commissions.reduce((s, e) => s + e.amount, 0);
+  return c.json({ total, entries: commissions });
 });

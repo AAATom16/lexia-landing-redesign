@@ -59,6 +59,20 @@ enum DiscountStatus {
   REVOKED
 }
 
+enum WebhookEvent {
+  DRAFT_CREATED
+  DRAFT_SENT_TO_CLIENT
+  DRAFT_SIGNED
+  DRAFT_CANCELLED
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  DEAD
+}
+
 enum LegalCaseStatus {
   REGISTROVANO
   V_SETRENI
@@ -136,7 +150,10 @@ model ContractDraft {
   discountCode     DiscountCode?  @relation(fields: [discountCodeId], references: [id])
   discountSnapshot Json?
   partnerRefId     String?
+  signedAt         DateTime?
+  cancelledAt      DateTime?
   legalCases       LegalCase[]
+  commissions      CommissionEntry[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
@@ -164,11 +181,65 @@ model Partner {
   apiKeys                       ApiKey[]
   discountCodes                 DiscountCode[]
   drafts                        ContractDraft[]
+  webhooks                      Webhook[]
+  commissions                   CommissionEntry[]
   createdAt                     DateTime      @default(now())
   updatedAt                     DateTime      @updatedAt
 
   @@index([brokerCode])
   @@index([status])
+}
+
+model Webhook {
+  id          String              @id @default(cuid())
+  partnerId   String
+  partner     Partner             @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  url         String
+  secret      String
+  events      WebhookEvent[]
+  enabled     Boolean             @default(true)
+  deliveries  WebhookDelivery[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([partnerId])
+}
+
+model WebhookDelivery {
+  id                 String                @id @default(cuid())
+  webhookId          String
+  webhook            Webhook               @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event              WebhookEvent
+  payload            Json
+  signature          String
+  status             WebhookDeliveryStatus @default(PENDING)
+  attempts           Int                   @default(0)
+  lastResponseStatus Int?
+  lastResponseBody   String?
+  scheduledAt        DateTime              @default(now())
+  deliveredAt        DateTime?
+  createdAt          DateTime              @default(now())
+
+  @@index([status, scheduledAt])
+  @@index([webhookId])
+}
+
+model CommissionEntry {
+  id              String   @id @default(cuid())
+  partnerId       String
+  partner         Partner  @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  contractDraftId String
+  contractDraft   ContractDraft @relation(fields: [contractDraftId], references: [id], onDelete: Cascade)
+  model           Int
+  kind            String                                  // "ziskatelska" | "nasledna" | "prubezna"
+  yearlyPremium   Int
+  percent         Int
+  amount          Int
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  @@index([partnerId])
+  @@index([contractDraftId])
 }
 
 model Salesperson {

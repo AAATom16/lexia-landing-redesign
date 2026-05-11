@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { DraftSource, DraftStatus, UserRole } from '@prisma/client';
 import { prisma } from '../lib/db.js';
 import { authRequired, type AppEnv } from '../lib/middleware.js';
+import { onDraftStatusChanged } from '../lib/draftLifecycle.js';
 
 export const draftRoutes = new Hono<AppEnv>();
 
@@ -101,6 +102,8 @@ draftRoutes.patch('/:id', zValidator('json', draftUpdateSchema), async (c) => {
       payload: body as object,
     },
   });
+  // Lifecycle: emit webhook + create commissions on status change. Best-effort.
+  onDraftStatusChanged(existing, draft).catch((e) => console.error('[draft.lifecycle]', e));
   return c.json(draft);
 });
 

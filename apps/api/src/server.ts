@@ -11,6 +11,7 @@ import { v1LeadsRoutes } from './routes/v1/leads.js';
 import { v1CalculatorRoutes } from './routes/v1/calculator.js';
 import { v1CatalogRoutes } from './routes/v1/catalog.js';
 import { crmPartnerRoutes } from './routes/crmPartners.js';
+import { startWebhookWorker } from './lib/webhooks.js';
 
 const app = new Hono();
 
@@ -52,3 +53,8 @@ const port = Number(process.env.PORT ?? 3001);
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`[lexia-api] listening on http://localhost:${info.port}`);
 });
+
+if (process.env.WEBHOOKS_DISABLED !== '1') {
+  startWebhookWorker(30_000);
+  console.log('[webhook-worker] started, polling every 30s');
+}

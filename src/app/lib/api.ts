@@ -244,6 +244,53 @@ export type ApiPartnerDetail = ApiPartner & {
 
 export type ApiKeyCreated = ApiKey & { plainKey: string };
 
+export type WebhookEvent = 'DRAFT_CREATED' | 'DRAFT_SENT_TO_CLIENT' | 'DRAFT_SIGNED' | 'DRAFT_CANCELLED';
+
+export type ApiWebhook = {
+  id: string;
+  partnerId: string;
+  url: string;
+  events: WebhookEvent[];
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiWebhookCreated = ApiWebhook & { secret: string };
+
+export type ApiWebhookDelivery = {
+  id: string;
+  webhookId: string;
+  event: WebhookEvent;
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'DEAD';
+  attempts: number;
+  lastResponseStatus: number | null;
+  lastResponseBody: string | null;
+  scheduledAt: string;
+  deliveredAt: string | null;
+  createdAt: string;
+};
+
+export type ApiCommissionEntry = {
+  id: string;
+  partnerId: string;
+  contractDraftId: string;
+  model: number;
+  kind: string;
+  yearlyPremium: number;
+  percent: number;
+  amount: number;
+  notes: string | null;
+  createdAt: string;
+  contractDraft?: {
+    id: string;
+    productCode: string;
+    clientName: string | null;
+    premiumYearly: number;
+    signedAt: string | null;
+  };
+};
+
 export const api = {
   login: (email: string, password: string) =>
     request<{ token: string; user: ApiUser }>('/auth/login', {
@@ -347,5 +394,23 @@ export const api = {
         method: 'PATCH',
         body: JSON.stringify(body),
       }),
+    listWebhooks: (partnerId: string) =>
+      request<ApiWebhook[]>(`/crm/partners/${partnerId}/webhooks`),
+    createWebhook: (partnerId: string, body: { url: string; events: WebhookEvent[]; enabled?: boolean }) =>
+      request<ApiWebhookCreated>(`/crm/partners/${partnerId}/webhooks`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    updateWebhook: (partnerId: string, whId: string, body: Partial<ApiWebhook>) =>
+      request<ApiWebhook>(`/crm/partners/${partnerId}/webhooks/${whId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    deleteWebhook: (partnerId: string, whId: string) =>
+      request<{ ok: true }>(`/crm/partners/${partnerId}/webhooks/${whId}`, { method: 'DELETE' }),
+    listDeliveries: (partnerId: string, whId: string) =>
+      request<ApiWebhookDelivery[]>(`/crm/partners/${partnerId}/webhooks/${whId}/deliveries`),
+    listCommissions: (partnerId: string) =>
+      request<{ total: number; entries: ApiCommissionEntry[] }>(`/crm/partners/${partnerId}/commissions`),
   },
 };
