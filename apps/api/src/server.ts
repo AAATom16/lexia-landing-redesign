@@ -10,6 +10,7 @@ import { legalCaseRoutes } from './routes/legalCases.js';
 import { v1LeadsRoutes } from './routes/v1/leads.js';
 import { v1CalculatorRoutes } from './routes/v1/calculator.js';
 import { v1CatalogRoutes } from './routes/v1/catalog.js';
+import { v1AccountRoutes } from './routes/v1/account.js';
 import { crmPartnerRoutes } from './routes/crmPartners.js';
 import { startWebhookWorker } from './lib/webhooks.js';
 
@@ -39,6 +40,7 @@ app.route('/customer', customerRoutes);
 app.route('/legal-cases', legalCaseRoutes);
 app.route('/v1/leads', v1LeadsRoutes);
 app.route('/v1/calculator', v1CalculatorRoutes);
+app.route('/v1/account', v1AccountRoutes);
 app.route('/v1', v1CatalogRoutes);
 app.route('/crm/partners', crmPartnerRoutes);
 

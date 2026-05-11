@@ -115,7 +115,7 @@ crmPartnerRoutes.patch('/:id', zValidator('json', partnerUpdateSchema), async (c
 const apiKeyCreateSchema = z.object({
   label: z.string().min(2),
   environment: z.enum(['live', 'test']).default('live'),
-  scopes: z.array(z.string()).default(['leads:write', 'calculator:read']),
+  scopes: z.array(z.string()).default(['leads:write', 'calculator:read', 'account:read']),
   expiresAt: z.string().datetime().optional(),
 });
 

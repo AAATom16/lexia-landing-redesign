@@ -174,7 +174,7 @@ async function main() {
         prefix: DEV_API_KEY_PREFIX,
         hash: sha256(DEV_API_KEY_PLAIN),
         label: 'Dev test key (seeded)',
-        scopes: ['leads:write', 'calculator:read'],
+        scopes: ['leads:write', 'calculator:read', 'account:read'],
       },
     });
     console.log(`  ✓ ApiKey ${DEV_API_KEY_PREFIX}`);
