@@ -146,8 +146,10 @@ v1LeadsRoutes.post('/', leadsWriteLimit, zValidator('json', v1LeadSchema), async
   }
 
   const sysUser = await ensureSystemUser();
+  const isTestKey = apiKey.prefix.startsWith('lxa_test_');
+  const testTag = isTestKey ? '[TEST] ' : '';
   const phone = body.clientPhone ? `Telefon: ${body.clientPhone}\n` : '';
-  const partnerTag = `Partner: ${partner.brokerCode}${body.salespersonCode ? ` / ${body.salespersonCode}` : ''}\n`;
+  const partnerTag = `${testTag}Partner: ${partner.brokerCode}${body.salespersonCode ? ` / ${body.salespersonCode}` : ''}\n`;
   const refTag = body.partnerRefId ? `PartnerRef: ${body.partnerRefId}\n` : '';
   const noteCombined = [partnerTag + refTag + phone, body.notes].filter(Boolean).join('').trim();
 
@@ -201,6 +203,7 @@ v1LeadsRoutes.post('/', leadsWriteLimit, zValidator('json', v1LeadSchema), async
         partnerId: partner.id,
         brokerCode: partner.brokerCode,
         apiKeyId: apiKey.id,
+        environment: isTestKey ? 'test' : 'live',
         salespersonCode: body.salespersonCode ?? null,
         discountCode: body.discountCode ?? null,
         partnerRefId: body.partnerRefId ?? null,

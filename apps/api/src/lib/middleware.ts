@@ -63,6 +63,14 @@ export function apiKeyAuth(requiredScopes: string[] = []) {
     if (key.partner.status !== 'ACTIVE') {
       return c.json({ error: { code: 'partner_inactive', message: `Partner status: ${key.partner.status}.` } }, 403);
     }
+    // Optional environment gating (set BLOCK_TEST_KEYS=1 in live API,
+    // BLOCK_LIVE_KEYS=1 in sandbox API for defense-in-depth).
+    if (parsed.environment === 'test' && process.env.BLOCK_TEST_KEYS === '1') {
+      return c.json({ error: { code: 'test_key_blocked', message: 'Test keys are not allowed on this environment.' } }, 403);
+    }
+    if (parsed.environment === 'live' && process.env.BLOCK_LIVE_KEYS === '1') {
+      return c.json({ error: { code: 'live_key_blocked', message: 'Live keys are not allowed on this environment.' } }, 403);
+    }
 
     for (const scope of requiredScopes) {
       if (!key.scopes.includes(scope)) {

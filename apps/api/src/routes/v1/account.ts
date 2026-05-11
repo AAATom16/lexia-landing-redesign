@@ -32,13 +32,21 @@ v1AccountRoutes.use(
 // calling this endpoint (e.g. magic link, OTP, signed-in account).
 v1AccountRoutes.get('/', zValidator('query', lookupSchema), async (c) => {
   const partner = c.get('partner');
+  const apiKey = c.get('apiKey');
   const { email, includeStatuses } = c.req.valid('query');
+  const isTestKey = apiKey.prefix.startsWith('lxa_test_');
 
+  // Test keys see only test-attributed drafts; live keys see only live drafts.
+  // Test drafts are tagged with the "[TEST]" notes prefix at /v1/leads creation time.
+  const envFilter = isTestKey
+    ? { notes: { startsWith: '[TEST]' } }
+    : { NOT: { notes: { startsWith: '[TEST]' } } };
   const drafts = await prisma.contractDraft.findMany({
     where: {
       partnerId: partner.id,
       clientEmail: email.toLowerCase(),
       status: { in: includeStatuses },
+      ...envFilter,
     },
     orderBy: { createdAt: 'desc' },
     take: 50,
