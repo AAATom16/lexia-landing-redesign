@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
 import { rateLimit } from '../../lib/rateLimit.js';
-import { products, pillars, getProductPillars } from '../../domain/products.js';
+import { products, pillars, getProductPillars } from '@lexia/domain';
 import {
   individualTariffs,
   businessBaseTariffs,
@@ -23,7 +23,7 @@ import {
   PREMISES_LAND_PLOT_BASE,
   PREMISES_LAND_PLOT_PER_10K,
   PREMISES_LAND_PLOT_BASE_SQM,
-} from '../../domain/tariffs.js';
+} from '@lexia/domain';
 
 export const v1CatalogRoutes = new Hono<AppEnv>();
 

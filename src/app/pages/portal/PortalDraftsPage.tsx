@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Calculator, Trash2, FileText, Mail } from 'lucide-react';
 import { deleteDraft, listDrafts, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
-import { formatCzk } from '../../domain/calculator';
-import { getProduct } from '../../domain/products';
+import { formatCzk } from '@lexia/domain';
+import { getProduct } from '@lexia/domain';
 
 export function PortalDraftsPage() {
   const user = getUser();

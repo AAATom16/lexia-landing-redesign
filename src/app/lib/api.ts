@@ -1,4 +1,4 @@
-import type { CalculatorInput, CalculationResult, CommissionModel } from '../domain/types';
+import type { CalculatorInput, CalculationResult, CommissionModel } from '@lexia/domain';
 
 const TOKEN_KEY = 'lexia_token';
 

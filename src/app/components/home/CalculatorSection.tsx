@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Calculator } from 'lucide-react';
 import { CalculatorWidget } from '../calculator/CalculatorWidget';
 import { PublicLeadForm } from '../calculator/PublicLeadForm';
-import type { CalculationResult, CalculatorInput } from '../../domain/types';
+import type { CalculationResult, CalculatorInput } from '@lexia/domain';
 
 export function CalculatorSection() {
   const [snapshot, setSnapshot] = useState<{ result: CalculationResult; input: CalculatorInput } | null>(null);

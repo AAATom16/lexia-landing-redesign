@@ -9,8 +9,8 @@ import {
   type ContractDraft,
   type DraftStatus,
 } from '../../lib/drafts';
-import { formatCzk, previewCommission } from '../../domain/calculator';
-import { getPillar, getProduct } from '../../domain/products';
+import { formatCzk, previewCommission } from '@lexia/domain';
+import { getPillar, getProduct } from '@lexia/domain';
 
 const STATUS_STYLES: Record<DraftStatus, string> = {
   'Návrh': 'bg-blue-50 text-blue-700 border-blue-200',

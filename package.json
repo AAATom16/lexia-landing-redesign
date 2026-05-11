@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite",
+    "build": "pnpm --filter @lexia/domain build && vite build",
+    "dev": "pnpm --filter @lexia/domain build && vite",
     "start": "serve -s dist -l ${PORT:-3000}"
   },
   "dependencies": {
+    "@lexia/domain": "workspace:*",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.5",

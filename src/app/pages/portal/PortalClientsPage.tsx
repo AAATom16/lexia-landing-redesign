@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Mail, Phone, User } from 'lucide-react';
 import { listDrafts, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
-import { formatCzk } from '../../domain/calculator';
+import { formatCzk } from '@lexia/domain';
 
 export function PortalClientsPage() {
   const user = getUser();

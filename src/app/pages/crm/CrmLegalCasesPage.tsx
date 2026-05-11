@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { api, isApiEnabled, type ApiLegalCase, type LegalCaseStatus } from '../../lib/api';
 import { formatCurrency, formatDate } from './mock-data';
-import { getPillar, getProduct } from '../../domain/products';
+import { getPillar, getProduct } from '@lexia/domain';
 import { CaseCreateModal } from '../../components/legalCases/CaseCreateModal';
 
 const STATUS_LABELS: Record<LegalCaseStatus, string> = {

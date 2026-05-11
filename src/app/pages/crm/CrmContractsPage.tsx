@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { contracts, formatCurrency, formatDate } from './mock-data';
 import { listDrafts, type ContractDraft } from '../../lib/drafts';
-import { getProduct } from '../../domain/products';
+import { getProduct } from '@lexia/domain';
 
 const statusColors: Record<string, string> = {
   Aktivní: 'bg-[#008EA5]/10 text-[#008EA5]',

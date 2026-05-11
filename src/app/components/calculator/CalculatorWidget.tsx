@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, Calculator, Check, ShieldCheck } from 'lucide-react';
-import { calculatePremium, formatCzk } from '../../domain/calculator';
-import { getProductPillars, products } from '../../domain/products';
+import { calculatePremium, formatCzk } from '@lexia/domain';
+import { getProductPillars, products } from '@lexia/domain';
 import type {
   CalculatorInput,
   PillarCode,
@@ -9,7 +9,7 @@ import type {
   Segment,
   Variant,
   VehicleType,
-} from '../../domain/types';
+} from '@lexia/domain';
 
 const VEHICLE_TYPES: { value: VehicleType; label: string }[] = [
   { value: 'car_under_3_5t', label: 'Osobní do 3,5 t' },

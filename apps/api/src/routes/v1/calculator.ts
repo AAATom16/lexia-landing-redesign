@@ -3,8 +3,8 @@ import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
 import { rateLimit } from '../../lib/rateLimit.js';
-import { calculatePremium } from '../../domain/calculator.js';
-import type { CalculatorInput } from '../../domain/types.js';
+import { calculatePremium } from '@lexia/domain';
+import type { CalculatorInput } from '@lexia/domain';
 
 export const v1CalculatorRoutes = new Hono<AppEnv>();
 
