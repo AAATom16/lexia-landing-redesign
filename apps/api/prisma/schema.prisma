@@ -73,6 +73,20 @@ enum WebhookDeliveryStatus {
   DEAD
 }
 
+enum CommissionStatus {
+  PENDING_PAYOUT
+  INCLUDED_IN_PAYOUT
+  PAID
+  CANCELLED
+}
+
+enum PayoutStatus {
+  DRAFT
+  READY_TO_PAY
+  PAID
+  CANCELLED
+}
+
 enum LegalCaseStatus {
   REGISTROVANO
   V_SETRENI
@@ -183,6 +197,7 @@ model Partner {
   drafts                        ContractDraft[]
   webhooks                      Webhook[]
   commissions                   CommissionEntry[]
+  payouts                       Payout[]
   createdAt                     DateTime      @default(now())
   updatedAt                     DateTime      @updatedAt
 
@@ -236,10 +251,35 @@ model CommissionEntry {
   percent         Int
   amount          Int
   notes           String?
+  status          CommissionStatus @default(PENDING_PAYOUT)
+  payoutId        String?
+  payout          Payout?  @relation(fields: [payoutId], references: [id], onDelete: SetNull)
   createdAt       DateTime @default(now())
 
   @@index([partnerId])
   @@index([contractDraftId])
+  @@index([payoutId])
+  @@index([status])
+}
+
+model Payout {
+  id           String            @id @default(cuid())
+  partnerId    String
+  partner      Partner           @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  reference    String            @unique
+  periodFrom   DateTime
+  periodTo     DateTime
+  totalAmount  Int
+  entriesCount Int               @default(0)
+  status       PayoutStatus      @default(DRAFT)
+  paidAt       DateTime?
+  paymentNote  String?
+  entries      CommissionEntry[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([partnerId])
+  @@index([status])
 }
 
 model Salesperson {

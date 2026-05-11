@@ -27,10 +27,11 @@ import {
   type ApiWebhook,
   type ApiWebhookCreated,
   type ApiCommissionEntry,
+  type ApiPayout,
   type WebhookEvent,
 } from '../../lib/api';
 
-type Tab = 'profile' | 'salespeople' | 'keys' | 'discounts' | 'webhooks' | 'commissions';
+type Tab = 'profile' | 'salespeople' | 'keys' | 'discounts' | 'webhooks' | 'commissions' | 'payouts';
 
 export function CrmPartnerDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
@@ -124,6 +125,7 @@ export function CrmPartnerDetailPage() {
           ['discounts', `Slevové kódy (${data.discountCodes.length})`],
           ['webhooks', 'Webhooky'],
           ['commissions', 'Provize'],
+          ['payouts', 'Výplaty'],
         ] as const).map(([k, l]) => (
           <button
             key={k}
@@ -162,6 +164,7 @@ export function CrmPartnerDetailPage() {
       )}
       {tab === 'webhooks' && <WebhooksTab partnerId={data.id} />}
       {tab === 'commissions' && <CommissionsTab partnerId={data.id} />}
+      {tab === 'payouts' && <PayoutsTab partnerId={data.id} />}
 
       {keyModalOpen && (
         <ApiKeyCreateModal
@@ -1294,6 +1297,230 @@ function DiscountCreateModal({
               className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md disabled:opacity-60"
             >
               {submitting ? 'Vytvářím…' : 'Vytvořit slevu'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function PayoutsTab({ partnerId }: { partnerId: string }) {
+  const [items, setItems] = useState<ApiPayout[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+
+  async function load() {
+    setLoading(true);
+    try {
+      setItems(await api.partners.listPayouts(partnerId));
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [partnerId]);
+
+  async function markPaid(pid: string) {
+    if (!confirm('Označit výplatu jako uhrazenou? Provize přejdou na PAID.')) return;
+    await api.partners.markPayoutPaid(partnerId, pid);
+    load();
+  }
+  async function cancel(pid: string) {
+    if (!confirm('Stornovat výplatu? Provize se vrátí do PENDING_PAYOUT.')) return;
+    await api.partners.cancelPayout(partnerId, pid);
+    load();
+  }
+
+  const fmt = (v: number) =>
+    new Intl.NumberFormat('cs-CZ', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(v);
+
+  return (
+    <div className="rounded-2xl bg-white border border-border">
+      <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="text-sm text-muted-foreground">
+          Výplaty seskupují provize partnera za zvolené období. Po označení jako PAID už nelze měnit.
+        </div>
+        <button
+          onClick={() => setCreateOpen(true)}
+          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-xs flex items-center gap-1.5"
+        >
+          <Plus className="w-3.5 h-3.5" /> Nová výplata
+        </button>
+      </div>
+      {loading ? (
+        <div className="p-8 text-center text-sm text-muted-foreground">
+          <Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Načítání…
+        </div>
+      ) : items.length === 0 ? (
+        <div className="p-12 text-center text-sm text-muted-foreground">
+          Žádné výplaty. Vytvořte novou pro vybrané období se všemi PENDING_PAYOUT provizemi.
+        </div>
+      ) : (
+        <table className="w-full text-sm">
+          <thead className="text-xs uppercase tracking-wider text-muted-foreground text-left">
+            <tr className="border-b border-border">
+              <th className="px-4 py-3 font-medium">Reference</th>
+              <th className="px-4 py-3 font-medium">Období</th>
+              <th className="px-4 py-3 font-medium text-right">Provize</th>
+              <th className="px-4 py-3 font-medium text-right">Částka</th>
+              <th className="px-4 py-3 font-medium">Stav</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((p) => (
+              <tr key={p.id} className="border-b border-border last:border-b-0 hover:bg-[#F7F9FC]">
+                <td className="px-4 py-3 font-mono text-xs">{p.reference}</td>
+                <td className="px-4 py-3 text-xs text-muted-foreground">
+                  {new Date(p.periodFrom).toLocaleDateString('cs-CZ')} → {new Date(p.periodTo).toLocaleDateString('cs-CZ')}
+                </td>
+                <td className="px-4 py-3 text-right">{p.entriesCount}</td>
+                <td className="px-4 py-3 text-right font-medium">{fmt(p.totalAmount)}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-xs ${
+                      p.status === 'PAID'
+                        ? 'bg-[#008EA5]/10 text-[#008EA5]'
+                        : p.status === 'CANCELLED'
+                        ? 'bg-muted text-muted-foreground'
+                        : p.status === 'READY_TO_PAY'
+                        ? 'bg-amber-500/10 text-amber-700'
+                        : 'bg-[#0045BF]/10 text-[#0045BF]'
+                    }`}
+                  >
+                    {p.status}
+                  </span>
+                  {p.paidAt && (
+                    <div className="text-[10px] text-muted-foreground mt-0.5">
+                      {new Date(p.paidAt).toLocaleDateString('cs-CZ')}
+                    </div>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
+                  {p.status !== 'PAID' && p.status !== 'CANCELLED' && (
+                    <>
+                      <button onClick={() => markPaid(p.id)} className="text-xs text-[#008EA5] hover:underline">
+                        Označit jako vyplaceno
+                      </button>
+                      <button onClick={() => cancel(p.id)} className="text-xs text-red-600 hover:underline">
+                        Storno
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {createOpen && (
+        <PayoutCreateModal
+          partnerId={partnerId}
+          onClose={() => setCreateOpen(false)}
+          onCreated={() => {
+            setCreateOpen(false);
+            load();
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function PayoutCreateModal({
+  partnerId,
+  onClose,
+  onCreated,
+}: {
+  partnerId: string;
+  onClose: () => void;
+  onCreated: () => void;
+}) {
+  const today = new Date();
+  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const [from, setFrom] = useState(firstOfMonth.toISOString().slice(0, 10));
+  const [to, setTo] = useState(today.toISOString().slice(0, 10));
+  const [note, setNote] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    setErr(null);
+    try {
+      await api.partners.createPayout(partnerId, {
+        periodFrom: new Date(from).toISOString(),
+        periodTo: new Date(`${to}T23:59:59`).toISOString(),
+        paymentNote: note || undefined,
+      });
+      onCreated();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Vytvoření selhalo.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-[#001843]/40 backdrop-blur-sm" />
+      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 p-1.5 rounded-lg hover:bg-[#F7F9FC] z-10">
+          <X className="w-4 h-4" />
+        </button>
+        <form onSubmit={handleSubmit} className="p-7 space-y-4">
+          <h3 className="text-2xl tracking-tight">Nová výplata</h3>
+          <p className="text-sm text-muted-foreground">
+            Zahrne všechny provize ve stavu PENDING_PAYOUT, jejichž datum vzniku je v daném období.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="block text-sm">
+              <span className="text-muted-foreground">Od</span>
+              <input
+                type="date"
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                className="mt-1 w-full px-3 py-2.5 rounded-xl border border-border focus:border-[#0045BF] outline-none"
+              />
+            </label>
+            <label className="block text-sm">
+              <span className="text-muted-foreground">Do</span>
+              <input
+                type="date"
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+                className="mt-1 w-full px-3 py-2.5 rounded-xl border border-border focus:border-[#0045BF] outline-none"
+              />
+            </label>
+          </div>
+          <label className="block text-sm">
+            <span className="text-muted-foreground">Poznámka (volitelné)</span>
+            <input
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="např. variabilní symbol, číslo bank. převodu"
+              className="mt-1 w-full px-3 py-2.5 rounded-xl border border-border focus:border-[#0045BF] outline-none"
+            />
+          </label>
+          {err && (
+            <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">{err}</div>
+          )}
+          <div className="flex gap-2 pt-2">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-border text-sm hover:bg-[#F7F9FC]">
+              Zrušit
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#0045BF] to-[#001843] text-white text-sm hover:shadow-md disabled:opacity-60"
+            >
+              {submitting ? 'Vytvářím…' : 'Vytvořit výplatu'}
             </button>
           </div>
         </form>

@@ -271,6 +271,8 @@ export type ApiWebhookDelivery = {
   createdAt: string;
 };
 
+export type CommissionStatus = 'PENDING_PAYOUT' | 'INCLUDED_IN_PAYOUT' | 'PAID' | 'CANCELLED';
+
 export type ApiCommissionEntry = {
   id: string;
   partnerId: string;
@@ -281,6 +283,8 @@ export type ApiCommissionEntry = {
   percent: number;
   amount: number;
   notes: string | null;
+  status: CommissionStatus;
+  payoutId: string | null;
   createdAt: string;
   contractDraft?: {
     id: string;
@@ -290,6 +294,26 @@ export type ApiCommissionEntry = {
     signedAt: string | null;
   };
 };
+
+export type PayoutStatus = 'DRAFT' | 'READY_TO_PAY' | 'PAID' | 'CANCELLED';
+
+export type ApiPayout = {
+  id: string;
+  partnerId: string;
+  reference: string;
+  periodFrom: string;
+  periodTo: string;
+  totalAmount: number;
+  entriesCount: number;
+  status: PayoutStatus;
+  paidAt: string | null;
+  paymentNote: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { entries: number };
+};
+
+export type ApiPayoutDetail = ApiPayout & { entries: ApiCommissionEntry[] };
 
 export const api = {
   login: (email: string, password: string) =>
@@ -410,7 +434,25 @@ export const api = {
       request<{ ok: true }>(`/crm/partners/${partnerId}/webhooks/${whId}`, { method: 'DELETE' }),
     listDeliveries: (partnerId: string, whId: string) =>
       request<ApiWebhookDelivery[]>(`/crm/partners/${partnerId}/webhooks/${whId}/deliveries`),
-    listCommissions: (partnerId: string) =>
-      request<{ total: number; entries: ApiCommissionEntry[] }>(`/crm/partners/${partnerId}/commissions`),
+    listCommissions: (partnerId: string, status?: CommissionStatus) =>
+      request<{ total: number; totalsByStatus: Record<string, number>; entries: ApiCommissionEntry[] }>(
+        `/crm/partners/${partnerId}/commissions${status ? `?status=${status}` : ''}`,
+      ),
+    listPayouts: (partnerId: string) =>
+      request<ApiPayout[]>(`/crm/partners/${partnerId}/payouts`),
+    createPayout: (partnerId: string, body: { periodFrom: string; periodTo: string; paymentNote?: string }) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    getPayout: (partnerId: string, pid: string) =>
+      request<ApiPayoutDetail>(`/crm/partners/${partnerId}/payouts/${pid}`),
+    markPayoutPaid: (partnerId: string, pid: string) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts/${pid}/mark-paid`, { method: 'POST' }),
+    cancelPayout: (partnerId: string, pid: string) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts/${pid}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'CANCELLED' }),
+      }),
   },
 };

@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import crypto from 'node:crypto';
-import { DiscountKind, DiscountStatus, PartnerStatus, SalespersonStatus, UserRole, WebhookEvent } from '@prisma/client';
+import { CommissionStatus, DiscountKind, DiscountStatus, PartnerStatus, PayoutStatus, SalespersonStatus, UserRole, WebhookEvent } from '@prisma/client';
 import { prisma } from '../lib/db.js';
 import { authRequired, type AppEnv } from '../lib/middleware.js';
 import { generateApiKey } from '../lib/apiKeys.js';
@@ -388,8 +388,9 @@ crmPartnerRoutes.get('/:id/webhooks/:whId/deliveries', async (c) => {
 
 crmPartnerRoutes.get('/:id/commissions', async (c) => {
   const partnerId = c.req.param('id');
+  const status = c.req.query('status') as CommissionStatus | undefined;
   const commissions = await prisma.commissionEntry.findMany({
-    where: { partnerId },
+    where: { partnerId, ...(status ? { status } : {}) },
     orderBy: { createdAt: 'desc' },
     take: 200,
     include: {
@@ -399,5 +400,194 @@ crmPartnerRoutes.get('/:id/commissions', async (c) => {
     },
   });
   const total = commissions.reduce((s, e) => s + e.amount, 0);
-  return c.json({ total, entries: commissions });
+  const totalsByStatus = commissions.reduce<Record<string, number>>((acc, e) => {
+    acc[e.status] = (acc[e.status] ?? 0) + e.amount;
+    return acc;
+  }, {});
+  return c.json({ total, totalsByStatus, entries: commissions });
+});
+
+// --- Payout cycle ---
+
+const payoutCreateSchema = z.object({
+  periodFrom: z.string().datetime(),
+  periodTo: z.string().datetime(),
+  paymentNote: z.string().optional(),
+});
+
+async function nextPayoutReference(brokerCode: string): Promise<string> {
+  const yymm = new Date().toISOString().slice(0, 7).replace('-', '');
+  const prefix = `LX-PAY-${brokerCode.replace('LX-BR-', '')}-${yymm}-`;
+  const latest = await prisma.payout.findFirst({
+    where: { reference: { startsWith: prefix } },
+    orderBy: { reference: 'desc' },
+    select: { reference: true },
+  });
+  const lastNum = latest ? parseInt(latest.reference.split('-').pop() ?? '0', 10) : 0;
+  return `${prefix}${String(lastNum + 1).padStart(3, '0')}`;
+}
+
+crmPartnerRoutes.get('/:id/payouts', async (c) => {
+  const partnerId = c.req.param('id');
+  const payouts = await prisma.payout.findMany({
+    where: { partnerId },
+    orderBy: { createdAt: 'desc' },
+    include: { _count: { select: { entries: true } } },
+  });
+  return c.json(payouts);
+});
+
+crmPartnerRoutes.post('/:id/payouts', zValidator('json', payoutCreateSchema), async (c) => {
+  const partnerId = c.req.param('id');
+  const body = c.req.valid('json');
+  const partner = await prisma.partner.findUnique({ where: { id: partnerId } });
+  if (!partner) return c.json({ error: 'not_found' }, 404);
+
+  const periodFrom = new Date(body.periodFrom);
+  const periodTo = new Date(body.periodTo);
+
+  // Pull all PENDING_PAYOUT entries created within window.
+  const eligible = await prisma.commissionEntry.findMany({
+    where: {
+      partnerId,
+      status: CommissionStatus.PENDING_PAYOUT,
+      createdAt: { gte: periodFrom, lte: periodTo },
+    },
+  });
+  if (eligible.length === 0) {
+    return c.json(
+      { error: { code: 'no_eligible_entries', message: 'No PENDING_PAYOUT commissions in this period.' } },
+      400,
+    );
+  }
+
+  const totalAmount = eligible.reduce((s, e) => s + e.amount, 0);
+  const reference = await nextPayoutReference(partner.brokerCode);
+
+  const payout = await prisma.$transaction(async (tx) => {
+    const p = await tx.payout.create({
+      data: {
+        partnerId,
+        reference,
+        periodFrom,
+        periodTo,
+        totalAmount,
+        entriesCount: eligible.length,
+        paymentNote: body.paymentNote,
+      },
+    });
+    await tx.commissionEntry.updateMany({
+      where: { id: { in: eligible.map((e) => e.id) } },
+      data: { status: CommissionStatus.INCLUDED_IN_PAYOUT, payoutId: p.id },
+    });
+    return p;
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      actorId: c.get('user').sub,
+      action: 'payout.create',
+      entityType: 'Payout',
+      entityId: payout.id,
+      payload: { partnerId, reference, totalAmount, entriesCount: eligible.length },
+    },
+  });
+
+  return c.json(payout, 201);
+});
+
+crmPartnerRoutes.get('/:id/payouts/:pid', async (c) => {
+  const partnerId = c.req.param('id');
+  const pid = c.req.param('pid');
+  const payout = await prisma.payout.findUnique({
+    where: { id: pid },
+    include: {
+      entries: {
+        include: {
+          contractDraft: {
+            select: { id: true, productCode: true, clientName: true, premiumYearly: true, signedAt: true },
+          },
+        },
+      },
+    },
+  });
+  if (!payout || payout.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  return c.json(payout);
+});
+
+const payoutUpdateSchema = z.object({
+  status: z.enum(['DRAFT', 'READY_TO_PAY', 'CANCELLED']).optional(),
+  paymentNote: z.string().optional(),
+});
+
+crmPartnerRoutes.patch('/:id/payouts/:pid', zValidator('json', payoutUpdateSchema), async (c) => {
+  const partnerId = c.req.param('id');
+  const pid = c.req.param('pid');
+  const body = c.req.valid('json');
+  const payout = await prisma.payout.findUnique({ where: { id: pid } });
+  if (!payout || payout.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  if (payout.status === PayoutStatus.PAID) {
+    return c.json({ error: { code: 'already_paid', message: 'PAID payouts cannot be edited.' } }, 409);
+  }
+
+  if (body.status === 'CANCELLED') {
+    // Releases entries back to PENDING_PAYOUT.
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.commissionEntry.updateMany({
+        where: { payoutId: pid },
+        data: { status: CommissionStatus.PENDING_PAYOUT, payoutId: null },
+      });
+      return tx.payout.update({
+        where: { id: pid },
+        data: { status: PayoutStatus.CANCELLED, paymentNote: body.paymentNote },
+      });
+    });
+    return c.json(updated);
+  }
+
+  const updated = await prisma.payout.update({
+    where: { id: pid },
+    data: {
+      status: body.status as PayoutStatus | undefined,
+      paymentNote: body.paymentNote,
+    },
+  });
+  return c.json(updated);
+});
+
+crmPartnerRoutes.post('/:id/payouts/:pid/mark-paid', async (c) => {
+  const partnerId = c.req.param('id');
+  const pid = c.req.param('pid');
+  const payout = await prisma.payout.findUnique({ where: { id: pid } });
+  if (!payout || payout.partnerId !== partnerId) return c.json({ error: 'not_found' }, 404);
+  if (payout.status === PayoutStatus.PAID) {
+    return c.json({ error: { code: 'already_paid', message: 'Payout already marked as paid.' } }, 409);
+  }
+  if (payout.status === PayoutStatus.CANCELLED) {
+    return c.json({ error: { code: 'cancelled', message: 'Cancelled payouts cannot be paid.' } }, 409);
+  }
+
+  const now = new Date();
+  const updated = await prisma.$transaction(async (tx) => {
+    await tx.commissionEntry.updateMany({
+      where: { payoutId: pid },
+      data: { status: CommissionStatus.PAID },
+    });
+    return tx.payout.update({
+      where: { id: pid },
+      data: { status: PayoutStatus.PAID, paidAt: now },
+    });
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      actorId: c.get('user').sub,
+      action: 'payout.mark_paid',
+      entityType: 'Payout',
+      entityId: pid,
+      payload: { paidAt: now.toISOString() },
+    },
+  });
+
+  return c.json(updated);
 });
