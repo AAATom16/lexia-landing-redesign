@@ -6,6 +6,7 @@ import { prisma } from '../../lib/db.js';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
 import { sha256 } from '../../lib/apiKeys.js';
 import { onDraftCreated } from '../../lib/draftLifecycle.js';
+import { rateLimitMulti } from '../../lib/rateLimit.js';
 
 export const v1LeadsRoutes = new Hono<AppEnv>();
 
@@ -46,7 +47,16 @@ async function ensureSystemUser() {
 
 v1LeadsRoutes.use('*', apiKeyAuth(['leads:write']));
 
-v1LeadsRoutes.post('/', zValidator('json', v1LeadSchema), async (c) => {
+const leadsWriteLimit = rateLimitMulti([
+  { routeKey: 'v1.leads.write.minute', windowSeconds: 60, max: 60 },
+  { routeKey: 'v1.leads.write.day', windowSeconds: 86400, max: 5000 },
+]);
+
+const leadsReadLimit = rateLimitMulti([
+  { routeKey: 'v1.leads.read.minute', windowSeconds: 60, max: 300 },
+]);
+
+v1LeadsRoutes.post('/', leadsWriteLimit, zValidator('json', v1LeadSchema), async (c) => {
   const body = c.req.valid('json');
   const partner = c.get('partner');
   const apiKey = c.get('apiKey');
@@ -228,7 +238,7 @@ v1LeadsRoutes.post('/', zValidator('json', v1LeadSchema), async (c) => {
   return c.json(responseBody, 201);
 });
 
-v1LeadsRoutes.get('/:id', async (c) => {
+v1LeadsRoutes.get('/:id', leadsReadLimit, async (c) => {
   const partner = c.get('partner');
   const id = c.req.param('id');
   const draft = await prisma.contractDraft.findUnique({ where: { id } });

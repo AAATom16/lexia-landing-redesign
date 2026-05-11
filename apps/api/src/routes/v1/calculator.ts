@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
+import { rateLimit } from '../../lib/rateLimit.js';
 import { calculatePremium } from '../../domain/calculator.js';
 import type { CalculatorInput } from '../../domain/types.js';
 
@@ -69,7 +70,9 @@ const previewSchema = z.object({
 
 v1CalculatorRoutes.use('*', apiKeyAuth(['calculator:read']));
 
-v1CalculatorRoutes.post('/preview', zValidator('json', previewSchema), async (c) => {
+const calculatorLimit = rateLimit({ routeKey: 'v1.calculator.preview.minute', windowSeconds: 60, max: 600 });
+
+v1CalculatorRoutes.post('/preview', calculatorLimit, zValidator('json', previewSchema), async (c) => {
   const { input, tariffsVersion } = c.req.valid('json');
   if (tariffsVersion && tariffsVersion !== TARIFFS_VERSION) {
     return c.json(

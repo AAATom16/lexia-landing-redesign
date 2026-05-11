@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { apiKeyAuth, type AppEnv } from '../../lib/middleware.js';
+import { rateLimit } from '../../lib/rateLimit.js';
 import { products, pillars, getProductPillars } from '../../domain/products.js';
 import {
   individualTariffs,
@@ -39,6 +40,10 @@ const VEHICLE_TYPES = [
 ];
 
 v1CatalogRoutes.use('*', apiKeyAuth(['calculator:read']));
+v1CatalogRoutes.use(
+  '*',
+  rateLimit({ routeKey: 'v1.catalog.minute', windowSeconds: 60, max: 3600 }),
+);
 
 v1CatalogRoutes.get('/products', (c) => {
   const productCode = c.req.query('productCode');
