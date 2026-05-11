@@ -33,6 +33,30 @@ enum DraftSource {
   PUBLIC
   DISTRIBUTOR
   CRM
+  PARTNER_API
+}
+
+enum PartnerStatus {
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+}
+
+enum SalespersonStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum DiscountKind {
+  PERMANENT
+  ONE_TIME
+}
+
+enum DiscountStatus {
+  ACTIVE
+  EXHAUSTED
+  EXPIRED
+  REVOKED
 }
 
 enum LegalCaseStatus {
@@ -103,6 +127,15 @@ model ContractDraft {
   inputJson        Json
   resultJson       Json
   notes            String?
+  // Partner API attribution
+  partnerId        String?
+  partner          Partner?       @relation(fields: [partnerId], references: [id])
+  salespersonId    String?
+  salesperson      Salesperson?   @relation(fields: [salespersonId], references: [id])
+  discountCodeId   String?
+  discountCode     DiscountCode?  @relation(fields: [discountCodeId], references: [id])
+  discountSnapshot Json?
+  partnerRefId     String?
   legalCases       LegalCase[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
@@ -110,6 +143,104 @@ model ContractDraft {
   @@index([createdById])
   @@index([status])
   @@index([source])
+  @@index([partnerId])
+  @@index([salespersonId])
+}
+
+model Partner {
+  id                            String        @id @default(cuid())
+  brokerCode                    String        @unique
+  name                          String
+  ico                           String?
+  contactEmail                  String
+  contactPhone                  String?
+  commissionModel               Int           @default(1)
+  commissionRateZiskatelska     Int?
+  commissionRateNasledna        Int?
+  commissionRatePrubezna        Int?
+  status                        PartnerStatus @default(ACTIVE)
+  contractedAt                  DateTime?
+  salespeople                   Salesperson[]
+  apiKeys                       ApiKey[]
+  discountCodes                 DiscountCode[]
+  drafts                        ContractDraft[]
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  @@index([brokerCode])
+  @@index([status])
+}
+
+model Salesperson {
+  id              String            @id @default(cuid())
+  partnerId       String
+  partner         Partner           @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  salespersonCode String            @unique
+  name            String
+  email           String?
+  phone           String?
+  cnbReg          String?
+  cnbCategory     DistributorType?
+  status          SalespersonStatus @default(ACTIVE)
+  drafts          ContractDraft[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([partnerId, salespersonCode])
+  @@index([partnerId])
+}
+
+model ApiKey {
+  id              String              @id @default(cuid())
+  partnerId       String
+  partner         Partner             @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  prefix          String              @unique
+  hash            String
+  label           String
+  scopes          String[]
+  lastUsedAt      DateTime?
+  expiresAt       DateTime?
+  revokedAt       DateTime?
+  createdAt       DateTime            @default(now())
+  idempotencyKeys IdempotencyRecord[]
+
+  @@index([partnerId])
+}
+
+model IdempotencyRecord {
+  id             String   @id @default(cuid())
+  apiKeyId       String
+  apiKey         ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  key            String
+  payloadHash    String
+  responseStatus Int
+  responseBody   Json
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  @@unique([apiKeyId, key])
+  @@index([expiresAt])
+}
+
+model DiscountCode {
+  id          String          @id @default(cuid())
+  partnerId   String
+  partner     Partner         @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  code        String          @unique
+  label       String
+  kind        DiscountKind
+  percent     Int
+  validFrom   DateTime?
+  validUntil  DateTime?
+  maxUses     Int?
+  usedCount   Int             @default(0)
+  status      DiscountStatus  @default(ACTIVE)
+  drafts      ContractDraft[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([code])
+  @@index([partnerId])
 }
 
 model LegalCase {

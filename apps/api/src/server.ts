@@ -7,6 +7,10 @@ import { draftRoutes } from './routes/drafts.js';
 import { leadRoutes } from './routes/leads.js';
 import { customerRoutes } from './routes/customer.js';
 import { legalCaseRoutes } from './routes/legalCases.js';
+import { v1LeadsRoutes } from './routes/v1/leads.js';
+import { v1CalculatorRoutes } from './routes/v1/calculator.js';
+import { v1CatalogRoutes } from './routes/v1/catalog.js';
+import { crmPartnerRoutes } from './routes/crmPartners.js';
 
 const app = new Hono();
 
@@ -32,6 +36,10 @@ app.route('/drafts', draftRoutes);
 app.route('/leads', leadRoutes);
 app.route('/customer', customerRoutes);
 app.route('/legal-cases', legalCaseRoutes);
+app.route('/v1/leads', v1LeadsRoutes);
+app.route('/v1/calculator', v1CalculatorRoutes);
+app.route('/v1', v1CatalogRoutes);
+app.route('/crm/partners', crmPartnerRoutes);
 
 app.notFound((c) => c.json({ error: 'not_found' }, 404));
 app.onError((err, c) => {

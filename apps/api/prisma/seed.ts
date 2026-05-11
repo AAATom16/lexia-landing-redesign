@@ -1,7 +1,12 @@
-import { PrismaClient, UserRole, DistributorType, LegalCaseStatus, LegalCaseModel } from '@prisma/client';
+import { PrismaClient, UserRole, DistributorType, LegalCaseStatus, LegalCaseModel, PartnerStatus, SalespersonStatus, DiscountKind, DiscountStatus } from '@prisma/client';
+import crypto from 'node:crypto';
 import { hashPassword } from '../src/lib/auth.js';
 
 const prisma = new PrismaClient();
+
+function sha256(input: string): string {
+  return crypto.createHash('sha256').update(input).digest('hex');
+}
 
 const users = [
   // Admins (CRM)
@@ -110,6 +115,101 @@ async function main() {
       create: lc,
     });
     console.log(`  ✓ ${lc.caseNumber} — ${lc.claimType}`);
+  }
+
+  console.log('Seeding partner system...');
+
+  const partner = await prisma.partner.upsert({
+    where: { brokerCode: 'LX-BR-00001' },
+    update: {},
+    create: {
+      brokerCode: 'LX-BR-00001',
+      name: 'Frenkee s.r.o.',
+      ico: '12345678',
+      contactEmail: 'info@frenkee.cz',
+      contactPhone: '+420 777 000 001',
+      commissionModel: 1,
+      status: PartnerStatus.ACTIVE,
+      contractedAt: new Date('2026-04-01'),
+    },
+  });
+  console.log(`  ✓ Partner ${partner.brokerCode} (${partner.name})`);
+
+  const salespeople = [
+    {
+      salespersonCode: 'LX-BR-00001-OB01',
+      name: 'Petr Novotný',
+      email: 'petr.novotny@frenkee.cz',
+      phone: '+420 777 000 011',
+      cnbReg: '178421',
+      cnbCategory: DistributorType.VZ,
+    },
+    {
+      salespersonCode: 'LX-BR-00001-OB02',
+      name: 'Markéta Krátká',
+      email: 'marketa.kratka@frenkee.cz',
+      phone: '+420 777 000 012',
+      cnbReg: '184902',
+      cnbCategory: DistributorType.SZ_PA,
+    },
+  ];
+  for (const sp of salespeople) {
+    await prisma.salesperson.upsert({
+      where: { salespersonCode: sp.salespersonCode },
+      update: {},
+      create: { ...sp, partnerId: partner.id, status: SalespersonStatus.ACTIVE },
+    });
+    console.log(`  ✓ Salesperson ${sp.salespersonCode} — ${sp.name}`);
+  }
+
+  // Deterministic dev API key — DO NOT use in production.
+  // Plain key is printed below; only sha256 hash is stored.
+  const DEV_API_KEY_PLAIN = 'lxa_live_deadbeef_FrenkeeDevTestKey0000000000000000';
+  const DEV_API_KEY_PREFIX = 'lxa_live_deadbeef';
+  const existingKey = await prisma.apiKey.findUnique({ where: { prefix: DEV_API_KEY_PREFIX } });
+  if (!existingKey) {
+    await prisma.apiKey.create({
+      data: {
+        partnerId: partner.id,
+        prefix: DEV_API_KEY_PREFIX,
+        hash: sha256(DEV_API_KEY_PLAIN),
+        label: 'Dev test key (seeded)',
+        scopes: ['leads:write', 'calculator:read'],
+      },
+    });
+    console.log(`  ✓ ApiKey ${DEV_API_KEY_PREFIX}`);
+    console.log(`    PLAIN KEY (only printed at first seed): ${DEV_API_KEY_PLAIN}`);
+  } else {
+    console.log(`  ✓ ApiKey ${DEV_API_KEY_PREFIX} (already seeded, plain key not re-shown)`);
+  }
+
+  const discounts = [
+    {
+      code: 'FRENKEE-FRIENDS-26',
+      label: 'Trvalá sleva pro klienty Frenkee — 10 %',
+      kind: DiscountKind.PERMANENT,
+      percent: 10,
+      validFrom: new Date('2026-04-01'),
+      validUntil: null,
+      maxUses: null,
+    },
+    {
+      code: 'FRENKEE-WELCOME-A8K2P3',
+      label: 'Jednorázový uvítací bonus — 15 %',
+      kind: DiscountKind.ONE_TIME,
+      percent: 15,
+      validFrom: new Date('2026-05-01'),
+      validUntil: new Date('2026-08-31'),
+      maxUses: 1,
+    },
+  ];
+  for (const d of discounts) {
+    await prisma.discountCode.upsert({
+      where: { code: d.code },
+      update: {},
+      create: { ...d, partnerId: partner.id, status: DiscountStatus.ACTIVE },
+    });
+    console.log(`  ✓ DiscountCode ${d.code} (${d.kind}, ${d.percent}%)`);
   }
 
   console.log('Done.');
