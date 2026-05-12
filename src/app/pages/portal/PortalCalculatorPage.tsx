@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, FileSignature, Wallet, Check } from 'lucide-react';
 import { CalculatorWidget } from '../../components/calculator/CalculatorWidget';
-import { previewCommission, formatCzk } from '../../domain/calculator';
-import type { CalculationResult, CalculatorInput, CommissionModel } from '../../domain/types';
+import { previewCommission, formatCzk } from '@lexia/domain';
+import type { CalculationResult, CalculatorInput, CommissionModel } from '@lexia/domain';
 import { saveDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
 

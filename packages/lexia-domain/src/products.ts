@@ -1,4 +1,4 @@
-import type { Pillar, Product } from './types';
+import type { Pillar, Product } from './types.js';
 
 export const products: Product[] = [
   {

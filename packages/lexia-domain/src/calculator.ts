@@ -1,4 +1,4 @@
-import { getPillar, getProduct } from './products';
+import { getPillar, getProduct } from './products.js';
 import {
   EXTRA_BUILDING_PLOT_PER_SQM,
   EXTRA_LAND_PLOT_PER_SQM,
@@ -12,7 +12,7 @@ import {
   lookupContractDispute,
   lookupVolumeDiscount,
   vehicleTariffs,
-} from './tariffs';
+} from './tariffs.js';
 import type {
   CalculationResult,
   CalculatorInput,
@@ -20,7 +20,7 @@ import type {
   CommissionPreview,
   LineItem,
   PillarCode,
-} from './types';
+} from './types.js';
 
 export function calculatePremium(input: CalculatorInput): CalculationResult {
   const product = getProduct(input.productCode);

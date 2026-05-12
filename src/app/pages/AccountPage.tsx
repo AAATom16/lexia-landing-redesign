@@ -16,8 +16,8 @@ import {
 } from 'lucide-react';
 import { getUser, logout } from '../lib/auth';
 import { api, isApiEnabled, type ApiDraft, type ApiLegalCase, type LegalCaseStatus } from '../lib/api';
-import { getPillar, getProduct } from '../domain/products';
-import { formatCzk } from '../domain/calculator';
+import { getPillar, getProduct } from '@lexia/domain';
+import { formatCzk } from '@lexia/domain';
 
 type Tab = 'smlouvy' | 'pripady' | 'platby' | 'dokumenty';
 

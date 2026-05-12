@@ -1,4 +1,4 @@
-import type { CalculatorInput, CalculationResult, CommissionModel } from '../domain/types';
+import type { CalculatorInput, CalculationResult, CommissionModel } from '@lexia/domain';
 
 const TOKEN_KEY = 'lexia_token';
 
@@ -177,6 +177,144 @@ export type RegisterInput = {
   ico?: string;
 };
 
+export type ApiPartner = {
+  id: string;
+  brokerCode: string;
+  name: string;
+  ico: string | null;
+  contactEmail: string;
+  contactPhone: string | null;
+  commissionModel: number;
+  commissionRateZiskatelska: number | null;
+  commissionRateNasledna: number | null;
+  commissionRatePrubezna: number | null;
+  status: 'ACTIVE' | 'SUSPENDED' | 'TERMINATED';
+  contractedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { salespeople: number; apiKeys: number; discountCodes: number; drafts: number };
+};
+
+export type ApiSalesperson = {
+  id: string;
+  partnerId: string;
+  salespersonCode: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  cnbReg: string | null;
+  cnbCategory: 'SZ_PM' | 'SZ_PA' | 'DJ' | 'VZ' | 'DPZ' | 'TIPAR' | null;
+  status: 'ACTIVE' | 'INACTIVE';
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiKey = {
+  id: string;
+  prefix: string;
+  label: string;
+  scopes: string[];
+  lastUsedAt: string | null;
+  expiresAt: string | null;
+  revokedAt: string | null;
+  createdAt: string;
+};
+
+export type ApiDiscountCode = {
+  id: string;
+  partnerId: string;
+  code: string;
+  label: string;
+  kind: 'PERMANENT' | 'ONE_TIME';
+  percent: number;
+  validFrom: string | null;
+  validUntil: string | null;
+  maxUses: number | null;
+  usedCount: number;
+  status: 'ACTIVE' | 'EXHAUSTED' | 'EXPIRED' | 'REVOKED';
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiPartnerDetail = ApiPartner & {
+  salespeople: ApiSalesperson[];
+  apiKeys: ApiKey[];
+  discountCodes: ApiDiscountCode[];
+};
+
+export type ApiKeyCreated = ApiKey & { plainKey: string };
+
+export type WebhookEvent = 'DRAFT_CREATED' | 'DRAFT_SENT_TO_CLIENT' | 'DRAFT_SIGNED' | 'DRAFT_CANCELLED';
+
+export type ApiWebhook = {
+  id: string;
+  partnerId: string;
+  url: string;
+  events: WebhookEvent[];
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ApiWebhookCreated = ApiWebhook & { secret: string };
+
+export type ApiWebhookDelivery = {
+  id: string;
+  webhookId: string;
+  event: WebhookEvent;
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'DEAD';
+  attempts: number;
+  lastResponseStatus: number | null;
+  lastResponseBody: string | null;
+  scheduledAt: string;
+  deliveredAt: string | null;
+  createdAt: string;
+};
+
+export type CommissionStatus = 'PENDING_PAYOUT' | 'INCLUDED_IN_PAYOUT' | 'PAID' | 'CANCELLED';
+
+export type ApiCommissionEntry = {
+  id: string;
+  partnerId: string;
+  contractDraftId: string;
+  model: number;
+  kind: string;
+  yearlyPremium: number;
+  percent: number;
+  amount: number;
+  notes: string | null;
+  status: CommissionStatus;
+  payoutId: string | null;
+  createdAt: string;
+  contractDraft?: {
+    id: string;
+    productCode: string;
+    clientName: string | null;
+    premiumYearly: number;
+    signedAt: string | null;
+  };
+};
+
+export type PayoutStatus = 'DRAFT' | 'READY_TO_PAY' | 'PAID' | 'CANCELLED';
+
+export type ApiPayout = {
+  id: string;
+  partnerId: string;
+  reference: string;
+  periodFrom: string;
+  periodTo: string;
+  totalAmount: number;
+  entriesCount: number;
+  status: PayoutStatus;
+  paidAt: string | null;
+  paymentNote: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { entries: number };
+};
+
+export type ApiPayoutDetail = ApiPayout & { entries: ApiCommissionEntry[] };
+
 export const api = {
   login: (email: string, password: string) =>
     request<{ token: string; user: ApiUser }>('/auth/login', {
@@ -216,5 +354,105 @@ export const api = {
       request<ApiLegalCase>('/legal-cases', { method: 'POST', body: JSON.stringify(body) }),
     update: (id: string, body: Partial<LegalCaseInput>) =>
       request<ApiLegalCase>(`/legal-cases/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  },
+  partners: {
+    list: (status?: 'ACTIVE' | 'SUSPENDED' | 'TERMINATED') =>
+      request<ApiPartner[]>(`/crm/partners${status ? `?status=${status}` : ''}`),
+    get: (id: string) => request<ApiPartnerDetail>(`/crm/partners/${id}`),
+    create: (body: {
+      name: string;
+      contactEmail: string;
+      contactPhone?: string;
+      ico?: string;
+      commissionModel?: 1 | 2;
+    }) =>
+      request<ApiPartner>('/crm/partners', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    update: (id: string, body: Partial<ApiPartner>) =>
+      request<ApiPartner>(`/crm/partners/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+    createApiKey: (
+      partnerId: string,
+      body: { label: string; environment?: 'live' | 'test'; scopes?: string[]; expiresAt?: string },
+    ) =>
+      request<ApiKeyCreated>(`/crm/partners/${partnerId}/api-keys`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    revokeApiKey: (partnerId: string, keyId: string) =>
+      request<{ ok: true; revokedAt: string }>(`/crm/partners/${partnerId}/api-keys/${keyId}`, {
+        method: 'DELETE',
+      }),
+    createSalesperson: (
+      partnerId: string,
+      body: { name: string; email?: string; phone?: string; cnbReg?: string; cnbCategory?: string },
+    ) =>
+      request<ApiSalesperson>(`/crm/partners/${partnerId}/salespeople`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    updateSalesperson: (partnerId: string, spId: string, body: Partial<ApiSalesperson>) =>
+      request<ApiSalesperson>(`/crm/partners/${partnerId}/salespeople/${spId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    createDiscount: (
+      partnerId: string,
+      body: {
+        code: string;
+        label: string;
+        kind: 'PERMANENT' | 'ONE_TIME';
+        percent: number;
+        validFrom?: string;
+        validUntil?: string;
+        maxUses?: number;
+      },
+    ) =>
+      request<ApiDiscountCode>(`/crm/partners/${partnerId}/discount-codes`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    updateDiscount: (partnerId: string, dcId: string, body: Partial<ApiDiscountCode>) =>
+      request<ApiDiscountCode>(`/crm/partners/${partnerId}/discount-codes/${dcId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    listWebhooks: (partnerId: string) =>
+      request<ApiWebhook[]>(`/crm/partners/${partnerId}/webhooks`),
+    createWebhook: (partnerId: string, body: { url: string; events: WebhookEvent[]; enabled?: boolean }) =>
+      request<ApiWebhookCreated>(`/crm/partners/${partnerId}/webhooks`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    updateWebhook: (partnerId: string, whId: string, body: Partial<ApiWebhook>) =>
+      request<ApiWebhook>(`/crm/partners/${partnerId}/webhooks/${whId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }),
+    deleteWebhook: (partnerId: string, whId: string) =>
+      request<{ ok: true }>(`/crm/partners/${partnerId}/webhooks/${whId}`, { method: 'DELETE' }),
+    listDeliveries: (partnerId: string, whId: string) =>
+      request<ApiWebhookDelivery[]>(`/crm/partners/${partnerId}/webhooks/${whId}/deliveries`),
+    listCommissions: (partnerId: string, status?: CommissionStatus) =>
+      request<{ total: number; totalsByStatus: Record<string, number>; entries: ApiCommissionEntry[] }>(
+        `/crm/partners/${partnerId}/commissions${status ? `?status=${status}` : ''}`,
+      ),
+    listPayouts: (partnerId: string) =>
+      request<ApiPayout[]>(`/crm/partners/${partnerId}/payouts`),
+    createPayout: (partnerId: string, body: { periodFrom: string; periodTo: string; paymentNote?: string }) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    getPayout: (partnerId: string, pid: string) =>
+      request<ApiPayoutDetail>(`/crm/partners/${partnerId}/payouts/${pid}`),
+    markPayoutPaid: (partnerId: string, pid: string) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts/${pid}/mark-paid`, { method: 'POST' }),
+    cancelPayout: (partnerId: string, pid: string) =>
+      request<ApiPayout>(`/crm/partners/${partnerId}/payouts/${pid}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'CANCELLED' }),
+      }),
   },
 };

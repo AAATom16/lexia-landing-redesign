@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Check, Mail, Phone, Send, ShieldCheck, User, X } from 'lucide-react';
 import { api, isApiEnabled } from '../../lib/api';
-import type { CalculationResult, CalculatorInput } from '../../domain/types';
-import { formatCzk } from '../../domain/calculator';
+import type { CalculationResult, CalculatorInput } from '@lexia/domain';
+import { formatCzk } from '@lexia/domain';
 
 export type PublicLeadFormProps = {
   result: CalculationResult;

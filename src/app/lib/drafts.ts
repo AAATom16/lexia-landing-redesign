@@ -1,4 +1,4 @@
-import type { CalculationResult, CalculatorInput, CommissionModel } from '../domain/types';
+import type { CalculationResult, CalculatorInput, CommissionModel } from '@lexia/domain';
 import { ApiError, api, getToken, isApiEnabled, type ApiDraft } from './api';
 
 const KEY = 'lexia_drafts';

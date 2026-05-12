@@ -17,6 +17,9 @@ importers:
       '@emotion/styled':
         specifier: 11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@18.3.1))(@types/react@19.2.14)(react@18.3.1)
+      '@lexia/domain':
+        specifier: workspace:*
+        version: link:packages/lexia-domain
       '@mui/icons-material':
         specifier: 7.3.5
         version: 7.3.5(@mui/material@7.3.5(@emotion/react@11.14.0(@types/react@19.2.14)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.2.14)(react@18.3.1))(@types/react@19.2.14)(react@18.3.1))(@types/react@19.2.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@19.2.14)(react@18.3.1)
@@ -210,6 +213,9 @@ importers:
       '@hono/zod-validator':
         specifier: 0.4.1
         version: 0.4.1(hono@4.6.13)(zod@3.24.1)
+      '@lexia/domain':
+        specifier: workspace:*
+        version: link:../../packages/lexia-domain
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -240,6 +246,12 @@ importers:
       zod:
         specifier: 3.24.1
         version: 3.24.1
+
+  packages/lexia-domain:
+    devDependencies:
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
 
 packages:
 

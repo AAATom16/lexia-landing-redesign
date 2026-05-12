@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "prisma generate && tsx watch src/server.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
+    "dev": "pnpm --filter @lexia/domain build && prisma generate && tsx watch src/server.ts",
+    "build": "pnpm --filter @lexia/domain build && prisma generate && tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@hono/node-server": "1.13.7",
     "@hono/zod-validator": "0.4.1",
+    "@lexia/domain": "workspace:*",
     "@prisma/client": "5.22.0",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.10.2",

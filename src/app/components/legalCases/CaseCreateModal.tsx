@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Briefcase, Phone, Save, Search, ShieldCheck, X } from 'lucide-react';
 import { ApiError, api, isApiEnabled, type ApiDraft, type ApiLegalCase, type LegalCaseModel } from '../../lib/api';
-import { getProductPillars, products } from '../../domain/products';
+import { getProductPillars, products } from '@lexia/domain';
 
 type Props = {
   open: boolean;

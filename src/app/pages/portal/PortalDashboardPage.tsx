@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calculator, FileText, TrendingUp, Wallet, Users, ArrowRight, Sparkles } from 'lucide-react';
 import { listDrafts, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
-import { previewCommission, formatCzk } from '../../domain/calculator';
+import { previewCommission, formatCzk } from '@lexia/domain';
 import { OnboardingBanner } from '../../components/onboarding/OnboardingBanner';
 
 export function PortalDashboardPage() {

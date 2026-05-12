@@ -6,7 +6,7 @@ import type {
   IndividualPillarTariff,
   VehicleTariff,
   VolumeDiscountStep,
-} from './types';
+} from './types.js';
 
 // Source: Lexia_tarify_pojistneho_202604.pdf (verze 2026/04)
 

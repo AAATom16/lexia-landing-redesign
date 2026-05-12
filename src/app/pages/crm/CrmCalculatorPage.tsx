@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Calculator, Wallet, Save, Trash2, Check, ExternalLink } from 'lucide-react';
 import { CalculatorWidget } from '../../components/calculator/CalculatorWidget';
-import { previewCommission, formatCzk } from '../../domain/calculator';
-import { getProduct } from '../../domain/products';
-import type { CalculationResult, CalculatorInput, CommissionModel } from '../../domain/types';
+import { previewCommission, formatCzk } from '@lexia/domain';
+import { getProduct } from '@lexia/domain';
+import type { CalculationResult, CalculatorInput, CommissionModel } from '@lexia/domain';
 import { saveDraft, listDrafts, deleteDraft, type ContractDraft } from '../../lib/drafts';
 import { getUser } from '../../lib/auth';
 

@@ -33,6 +33,58 @@ enum DraftSource {
   PUBLIC
   DISTRIBUTOR
   CRM
+  PARTNER_API
+}
+
+enum PartnerStatus {
+  ACTIVE
+  SUSPENDED
+  TERMINATED
+}
+
+enum SalespersonStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum DiscountKind {
+  PERMANENT
+  ONE_TIME
+}
+
+enum DiscountStatus {
+  ACTIVE
+  EXHAUSTED
+  EXPIRED
+  REVOKED
+}
+
+enum WebhookEvent {
+  DRAFT_CREATED
+  DRAFT_SENT_TO_CLIENT
+  DRAFT_SIGNED
+  DRAFT_CANCELLED
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  DEAD
+}
+
+enum CommissionStatus {
+  PENDING_PAYOUT
+  INCLUDED_IN_PAYOUT
+  PAID
+  CANCELLED
+}
+
+enum PayoutStatus {
+  DRAFT
+  READY_TO_PAY
+  PAID
+  CANCELLED
 }
 
 enum LegalCaseStatus {
@@ -103,13 +155,203 @@ model ContractDraft {
   inputJson        Json
   resultJson       Json
   notes            String?
+  // Partner API attribution
+  partnerId        String?
+  partner          Partner?       @relation(fields: [partnerId], references: [id])
+  salespersonId    String?
+  salesperson      Salesperson?   @relation(fields: [salespersonId], references: [id])
+  discountCodeId   String?
+  discountCode     DiscountCode?  @relation(fields: [discountCodeId], references: [id])
+  discountSnapshot Json?
+  partnerRefId     String?
+  signedAt         DateTime?
+  cancelledAt      DateTime?
   legalCases       LegalCase[]
+  commissions      CommissionEntry[]
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
   @@index([createdById])
   @@index([status])
   @@index([source])
+  @@index([partnerId])
+  @@index([salespersonId])
+}
+
+model Partner {
+  id                            String        @id @default(cuid())
+  brokerCode                    String        @unique
+  name                          String
+  ico                           String?
+  contactEmail                  String
+  contactPhone                  String?
+  commissionModel               Int           @default(1)
+  commissionRateZiskatelska     Int?
+  commissionRateNasledna        Int?
+  commissionRatePrubezna        Int?
+  status                        PartnerStatus @default(ACTIVE)
+  contractedAt                  DateTime?
+  salespeople                   Salesperson[]
+  apiKeys                       ApiKey[]
+  discountCodes                 DiscountCode[]
+  drafts                        ContractDraft[]
+  webhooks                      Webhook[]
+  commissions                   CommissionEntry[]
+  payouts                       Payout[]
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  @@index([brokerCode])
+  @@index([status])
+}
+
+model Webhook {
+  id          String              @id @default(cuid())
+  partnerId   String
+  partner     Partner             @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  url         String
+  secret      String
+  events      WebhookEvent[]
+  enabled     Boolean             @default(true)
+  deliveries  WebhookDelivery[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([partnerId])
+}
+
+model WebhookDelivery {
+  id                 String                @id @default(cuid())
+  webhookId          String
+  webhook            Webhook               @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event              WebhookEvent
+  payload            Json
+  signature          String
+  status             WebhookDeliveryStatus @default(PENDING)
+  attempts           Int                   @default(0)
+  lastResponseStatus Int?
+  lastResponseBody   String?
+  scheduledAt        DateTime              @default(now())
+  deliveredAt        DateTime?
+  createdAt          DateTime              @default(now())
+
+  @@index([status, scheduledAt])
+  @@index([webhookId])
+}
+
+model CommissionEntry {
+  id              String   @id @default(cuid())
+  partnerId       String
+  partner         Partner  @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  contractDraftId String
+  contractDraft   ContractDraft @relation(fields: [contractDraftId], references: [id], onDelete: Cascade)
+  model           Int
+  kind            String                                  // "ziskatelska" | "nasledna" | "prubezna"
+  yearlyPremium   Int
+  percent         Int
+  amount          Int
+  notes           String?
+  status          CommissionStatus @default(PENDING_PAYOUT)
+  payoutId        String?
+  payout          Payout?  @relation(fields: [payoutId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+
+  @@index([partnerId])
+  @@index([contractDraftId])
+  @@index([payoutId])
+  @@index([status])
+}
+
+model Payout {
+  id           String            @id @default(cuid())
+  partnerId    String
+  partner      Partner           @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  reference    String            @unique
+  periodFrom   DateTime
+  periodTo     DateTime
+  totalAmount  Int
+  entriesCount Int               @default(0)
+  status       PayoutStatus      @default(DRAFT)
+  paidAt       DateTime?
+  paymentNote  String?
+  entries      CommissionEntry[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([partnerId])
+  @@index([status])
+}
+
+model Salesperson {
+  id              String            @id @default(cuid())
+  partnerId       String
+  partner         Partner           @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  salespersonCode String            @unique
+  name            String
+  email           String?
+  phone           String?
+  cnbReg          String?
+  cnbCategory     DistributorType?
+  status          SalespersonStatus @default(ACTIVE)
+  drafts          ContractDraft[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([partnerId, salespersonCode])
+  @@index([partnerId])
+}
+
+model ApiKey {
+  id              String              @id @default(cuid())
+  partnerId       String
+  partner         Partner             @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  prefix          String              @unique
+  hash            String
+  label           String
+  scopes          String[]
+  lastUsedAt      DateTime?
+  expiresAt       DateTime?
+  revokedAt       DateTime?
+  createdAt       DateTime            @default(now())
+  idempotencyKeys IdempotencyRecord[]
+
+  @@index([partnerId])
+}
+
+model IdempotencyRecord {
+  id             String   @id @default(cuid())
+  apiKeyId       String
+  apiKey         ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  key            String
+  payloadHash    String
+  responseStatus Int
+  responseBody   Json
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  @@unique([apiKeyId, key])
+  @@index([expiresAt])
+}
+
+model DiscountCode {
+  id          String          @id @default(cuid())
+  partnerId   String
+  partner     Partner         @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  code        String          @unique
+  label       String
+  kind        DiscountKind
+  percent     Int
+  validFrom   DateTime?
+  validUntil  DateTime?
+  maxUses     Int?
+  usedCount   Int             @default(0)
+  status      DiscountStatus  @default(ACTIVE)
+  drafts      ContractDraft[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([code])
+  @@index([partnerId])
 }
 
 model LegalCase {
