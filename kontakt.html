@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt a podpora | Lexia</title>
+<meta name="description" content="Kontaktujte tým Lexia - telefonem, e-mailem, online formulářem nebo osobně v Praze.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html" class="active">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<!-- CONTACT HERO: 3 options + form side-by-side -->
+<section class="contact-hero">
+  <div class="container">
+    <div class="contact-hero-head">
+      <h1>Jak vám můžeme <span style="color: var(--primary);">pomoct?</span></h1>
+      <p class="hero-lead">Vyberte si situaci, která se vás týká. Reagujeme rychle.</p>
+    </div>
+
+    <!-- THREE PATHS: urgent · nahlásit případ · dotaz -->
+    <div class="contact-split contact-split--three">
+      <a href="tel:+420465465465" class="contact-split-card contact-split-card--urgent">
+        <div class="split-icon"><i class="icon" data-icon="emergency"></i></div>
+        <div class="split-content">
+          <span class="split-tag">Urgentní problém · 24/7</span>
+          <h3>Mám naléhavou situaci</h3>
+          <p>Dopravní nehoda, zadržení, exekuce, hrozící žaloba — okamžitá pomoc právníka.</p>
+          <div class="split-action">
+            <strong><i class="icon" data-icon="phone"></i> +420 465 465 465</strong>
+            <span>Volejte ihned, ozve se právník</span>
+          </div>
+        </div>
+      </a>
+      <a href="klient.html" class="contact-split-card contact-split-card--report">
+        <div class="split-icon"><i class="icon" data-icon="clipboard"></i></div>
+        <div class="split-content">
+          <span class="split-tag">Klient · Hlášení případu</span>
+          <h3>Nahlásit případ</h3>
+          <p>Mám pojištění a chci založit nový případ nebo zkontrolovat průběh stávajícího.</p>
+          <div class="split-action">
+            <strong>Přejít do klientské zóny</strong>
+            <span>Přehled smluv a případů</span>
+          </div>
+        </div>
+      </a>
+      <a href="#contact-form" class="contact-split-card contact-split-card--ask">
+        <div class="split-icon"><i class="icon" data-icon="chat"></i></div>
+        <div class="split-content">
+          <span class="split-tag">Dotaz nebo zájem o pojištění</span>
+          <h3>Chci se nezávazně zeptat</h3>
+          <p>Mám dotaz na pojištění, potřebuji poradit s výběrem nebo cenovou nabídkou.</p>
+          <div class="split-action">
+            <strong>Vyplnit formulář ↓</strong>
+            <span>Odpovíme do 24 hodin</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="contact-divider" id="contact-form">
+      <span>nebo nás kontaktujte jinak</span>
+    </div>
+
+    <div class="contact-hero-grid">
+      <!-- LEFT: 3 contact options stacked -->
+      <div class="contact-options">
+        <a href="tel:+420465465465" class="contact-option">
+          <div class="contact-option-icon"><i class="icon" data-icon="phone"></i></div>
+          <div class="contact-option-info">
+            <span class="contact-option-label">Zavolejte 24/7</span>
+            <strong>+420 465 465 465</strong>
+            <span class="contact-option-sub">Bezplatná linka pro klienty i zájemce</span>
+          </div>
+        </a>
+        <a href="mailto:info@lexia.cz" class="contact-option">
+          <div class="contact-option-icon"><i class="icon" data-icon="mail"></i></div>
+          <div class="contact-option-info">
+            <span class="contact-option-label">Napište e-mail</span>
+            <strong>info@lexia.cz</strong>
+            <span class="contact-option-sub">Odpovídáme do 24 hodin v pracovní dny</span>
+          </div>
+        </a>
+        <a href="#" class="contact-option" onclick="alert('Chat: Zde by se otevřel chat widget'); return false;">
+          <div class="contact-option-icon"><i class="icon" data-icon="chat"></i></div>
+          <div class="contact-option-info">
+            <span class="contact-option-label">Online chat</span>
+            <strong>Spojíme vás do 4 minut</strong>
+            <span class="contact-option-sub">Po–Pá 8:00–18:00</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- RIGHT: contact form -->
+      <div class="contact-form-card">
+        <div style="margin-bottom: 20px;">
+          <span class="section-eyebrow">Poptávka</span>
+          <h3 style="margin: 8px 0 4px;">Nezávazně se zeptat</h3>
+          <p style="font-size: 0.92rem;">Vyplňte formulář a do 24 hodin se vám ozveme s nabídkou.</p>
+        </div>
+        <form class="form" data-demo>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Jméno a příjmení <span class="req">*</span></label>
+              <input type="text" class="form-input" required placeholder="Jan Novák">
+            </div>
+            <div class="form-group">
+              <label>Telefon <span class="req">*</span></label>
+              <input type="tel" class="form-input" required placeholder="+420 ...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>E-mail <span class="req">*</span></label>
+            <input type="email" class="form-input" required placeholder="jan.novak@email.cz">
+          </div>
+          <div class="form-group">
+            <label>Mám zájem o pojištění pro</label>
+            <select class="form-select">
+              <option>Sebe (jednotlivec)</option>
+              <option>Rodinu</option>
+              <option>Firmu nebo OSVČ</option>
+              <option>Řidičské pojištění</option>
+              <option>Pojištění zastupitele</option>
+              <option>Zatím nevím, potřebuji poradit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Vaše situace nebo dotaz</label>
+            <textarea class="form-textarea" placeholder="Napište nám, s čím vám můžeme pomoct..."></textarea>
+          </div>
+          <label class="form-checkbox">
+            <input type="checkbox" required>
+            <span>Souhlasím se zpracováním osobních údajů dle <a href="#">zásad GDPR</a>.</span>
+          </label>
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Odeslat poptávku</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO BLOCKS: sídlo + krizová linka -->
+<section style="padding-top: 60px;">
+  <div class="container">
+    <div class="grid grid-2" style="max-width: 1000px; margin: 0 auto;">
+      <div class="card">
+        <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="location"></i> Sídlo společnosti</h4>
+        <p style="margin-bottom: 4px;"><strong>LEXIA Legal Protection a.s.</strong></p>
+        <p style="margin-bottom: 4px;">Želetavská 1525/1</p>
+        <p style="margin-bottom: 4px;">140 00 Praha 4</p>
+        <p style="margin-top: 12px; font-size: 0.9rem;">IČO: 22189432 • Datová schránka: gdzpx9r</p>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="emergency"></i> Krizová linka (nehoda, zadržení)</h4>
+        <p style="margin-bottom: 8px;">Pro klienty Lexia nonstop 24/7:</p>
+        <strong style="font-size: 1.2rem; color: var(--danger);">+420 465 465 465</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Podpora pro klienty</span>
+      <h2>Potřebujete pomoct?</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="book"></i></div>
+        <h3>Nápověda a návody</h3>
+        <p>Detailní průvodci, jak smlouvu uzavřít, nahlásit případ nebo aktualizovat údaje.</p>
+        <a href="jak-funguje.html" class="card-link">Otevřít nápovědu</a>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="lock"></i></div>
+        <h3>Klientská zóna</h3>
+        <p>Přihlaste se a spravujte své smlouvy, nahlašujte případy a sledujte jejich průběh.</p>
+        <a href="klient.html" class="card-link">Přihlásit se</a>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="warning"></i></div>
+        <h3>Reklamace</h3>
+        <p>Nejste spokojeni? Pošlete nám reklamaci nebo si stěžujte u finančního arbitra.</p>
+        <a href="#" class="card-link">Více informací</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

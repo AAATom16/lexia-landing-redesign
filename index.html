@@ -1,16 +1,414 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lexia | Pojištění právní ochrany - Limit 2,5 mil. Kč</title>
+<meta name="description" content="Hodíme vám záchranný kruh, když budete potřebovat. Nejlepší pojištění právní ochrany s nejvyššími limity na českém trhu, ALL-RISK garancí a minimem výluk. Od 179 Kč měsíčně.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Lexia — Právní ochrana, která má smysl</title>
-      <style>html, body { margin: 0; } body { min-height: 100vh; }</style>
-    </head>
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <!-- Záchranný kruh -->
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+</head>
+<body>
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+<!-- TOP PROMO BANNER — cobalt blue (sjednoceno s ostatními stránkami) -->
+<div class="promo-banner" id="promo-banner">
+  <div class="promo-banner-content">
+    <span class="promo-pill"><i class="icon" data-icon="trophy"></i> Soutěž</span>
+    <span>Sjednejte pojištění do <strong>30. 6.</strong> a vyhrajte <strong>iPhone 16 Pro</strong></span>
+    <a href="akce.html">Zjistit více</a>
+  </div>
+  <button class="promo-banner-close" aria-label="Zavřít" onclick="document.getElementById('promo-banner').hidden=true">×</button>
+</div>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- HERO — Ocean photo background s čistou bílou kartou (jako aktuální web) -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <!-- LEFT: text přímo na ocean foto (tmavé texty na světlém overlay) -->
+      <div class="hero-content">
+        <span class="hero-badge"><i class="icon" data-icon="star"></i> 97 % úspěšnost vyřešených případů</span>
+        <h1 class="hero-title">
+          <span class="hero-title-accent">Nejlepší</span> pojištění<br>
+          právní ochrany<br>
+          <span class="hero-title-price">Od 179 Kč měsíčně</span>
+        </h1>
+        <p class="hero-lead">
+          Hodíme vám záchranný kruh, když budete potřebovat. Nastavte si pojištění přesně podle vaší situace a kdykoliv si ho upravte.<br><strong>Od 179 Kč měsíčně.</strong>
+        </p>
+        <div class="hero-actions">
+          <a href="kalkulacka.html" class="btn btn-primary btn-lg">Chci právní ochranu</a>
+          <a href="jak-funguje.html" class="btn btn-outline btn-lg" style="width: 210px">Jak to funguje</a>
+        </div>
+        <span class="cta-microbenefit" style="text-align: left"><i class="icon" data-icon="check_circle"></i> Hotovo do 2 minut, žádné dokumenty</span>
+
+        <!-- Stats: jednoduchý textový stack s ikonami (mobile: karty s ikonami) -->
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <i class="icon hero-stat-icon" data-icon="scales"></i>
+            <strong>2,5 mil. Kč</strong>
+            <span>nejvyšší limit na trhu</span>
+          </div>
+          <div class="hero-stat">
+            <i class="icon hero-stat-icon" data-icon="shield"></i>
+            <strong>ALL-RISK</strong>
+            <span>garance s minimem výluk</span>
+          </div>
+          <div class="hero-stat">
+            <i class="icon hero-stat-icon" data-icon="phone"></i>
+            <strong>24/7</strong>
+            <span style="color: rgb(74, 84, 104)">klientská linka</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: chat karta — menší, posazená nad tabletem jako bublinka -->
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-header">
+            <div class="hero-card-avatar">
+              JN
+              <span class="avatar-status" aria-hidden="true"></span>
+            </div>
+            <div class="hero-card-info">
+              <strong>JUDr. Jana Nováková</strong>
+              <span><span class="status-dot"></span> Advokátka • online teď</span>
+            </div>
+            <span class="hero-card-tag">Zdarma</span>
+          </div>
+          <div class="hero-chat-msg">Dobrý den, dostala jsem výpověď bez udání důvodu. Mám právo se bránit?<span class="msg-time">12:04</span></div>
+          <div class="hero-chat-msg own">Určitě ano. Pošlete mi kopii výpovědi — připravím podání zdarma.<span class="msg-time">12:06</span></div>
+          <div class="hero-chat-msg typing" aria-label="Píše odpověď">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inward curve dolů na bílou -->
+  <svg class="hero-inward-curve" viewBox="0 0 1920 110" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,110 L0,30 Q1300,130 1920,40 L1920,110 Z"/>
+  </svg>
+</section>
+
+<!-- TARGET GROUPS -->
+<section class="bg-section has-glyph has-glyph--left" data-glyph="scales">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Naše právní ochrana se hodí všem</span>
+      <h2>Řešení pro každou životní situaci</h2>
+      <p>Pojištění právní ochrany má smysl pro každého člověka, firmu i celou řadu různých institucí.</p>
+    </div>
+    <div class="grid grid-5">
+      <div class="target-card">
+        <div class="target-icon"><i class="icon" data-icon="user"></i></div>
+        <h3>Jednotlivci a domácnosti</h3>
+        <p>Pomáhá v situacích souvisejících s běžným občanským životem.</p>
+      </div>
+      <div class="target-card">
+        <div class="target-icon"><i class="icon" data-icon="briefcase"></i></div>
+        <h3>Podnikatelé a firmy</h3>
+        <p>Pomáhá v situacích spojených s podnikáním.</p>
+      </div>
+      <div class="target-card">
+        <div class="target-icon"><i class="icon" data-icon="car"></i></div>
+        <h3>Řidiči a vozidla</h3>
+        <p>Dopravní nehody, pokuty, spory s pojišťovnami i servisy.</p>
+      </div>
+      <div class="target-card">
+        <div class="target-icon"><i class="icon" data-icon="bank"></i></div>
+        <h3>Zastupitelé</h3>
+        <p>Ochrana zastupitelů, SVJ, bytových družstev, spolků a odborů.</p>
+      </div>
+      <div class="target-card" style="opacity: 0.85;">
+        <div class="target-icon"><i class="icon" data-icon="school"></i></div>
+        <h3>Již brzy</h3>
+        <p>Garance Plus, Obce a města, Školy a školky.</p>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="pro-koho.html" class="btn btn-outline">Zjistit více o pojištění pro vás</a>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="has-glyph" data-glyph="shield">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Proč si sjednat právní ochranu u nás?</span>
+      <h2>Tři důvody, které dělají rozdíl</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card card--cobalt">
+        <div class="card-icon"><i class="icon" data-icon="shield"></i></div>
+        <h3>Nejvyšší pojistné limity na českém trhu</h3>
+        <p>Zajišťujeme, že i v těch nejtěžších situacích budete mít k dispozici dostatek finančních prostředků na pokrytí nákladů. Limit až 2,5 mil. Kč.</p>
+      </div>
+      <div class="card card--teal">
+        <div class="card-icon"><i class="icon" data-icon="target"></i></div>
+        <h3>Krytí oblastí, které jinde nenajdete</h3>
+        <p>Nabízíme ochranu i v oblastech, které pojištění běžně nepokrývají. Díky tomu jste chráněni i v nečekaných situacích.</p>
+      </div>
+      <div class="card card--baby">
+        <div class="card-icon"><i class="icon" data-icon="check_circle"></i></div>
+        <h3>ALL-RISK garance s minimem výluk</h3>
+        <p>Garantujeme ochranu před většinou rizik, přičemž výluky jsou omezeny na naprosté minimum. Na nás se můžete spolehnout.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="bg-section has-glyph has-glyph--left" data-glyph="gavel">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Jak to celé funguje?</span>
+      <h2>Jednoduše a transparentně</h2>
+      <p>Platíte pojistné a získáváte komplexní právní ochranu. Pojištění kryje náklady na advokáty, znalce i soudní poplatky. V případě problému se nám ozvete a případ ihned přebírá právník.</p>
+    </div>
+    <div class="steps steps--workflow">
+      <div class="step step--workflow" data-step="1">
+        <div class="step-num">1</div>
+        <h3>Voláte naši klientskou linku</h3>
+        <p>Když nastane právní problém, ozvete se nám na 24/7 linku +420 465 465 465.</p>
+      </div>
+      <div class="step step--workflow" data-step="2">
+        <div class="step-num">2</div>
+        <h3>Požádáte nás o právní pomoc</h3>
+        <p>Popíšete situaci. Posoudíme, zda se na váš případ vztahuje sjednané pojištění.</p>
+      </div>
+      <div class="step step--workflow" data-step="3">
+        <div class="step-num">3</div>
+        <h3>Lexia platí veškeré náklady</h3>
+        <p>Hradíme advokáta, soudní poplatky, znalecké posudky i náklady protistrany.</p>
+      </div>
+      <div class="step step--workflow" data-step="4">
+        <div class="step-num">4</div>
+        <h3>Vy máte přehled o případu online</h3>
+        <p>Sledujte stav, vkládejte dokumenty a komunikujte s právníkem v náhledu na případ.</p>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="jak-funguje.html" class="btn btn-outline">Detaily procesu</a>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PROMO SEKCE — AKTUÁLNÍ AKCE
+     ---------------------------------------------------------------------
+     TEMPLATE pro editaci aktuálních akcí na landing page.
+
+     Pro úpravu akce stačí změnit obsah uvnitř .promo-card (text, badge, link).
+     Pro skrytí akce stačí odebrat celý <article class="promo-card">.
+     Pro přidání nové akce duplikuj existující <article class="promo-card"> blok.
+
+     Pole, která lze editovat:
+     • .promo-card-media style="background: ..."  → barva gradientu pozadí karty
+     • .promo-card-tag                            → text badge (např. "−50 %", "Soutěž")
+     • promo-card-tag--discount|bonus|gift        → varianta barvy badge
+     • h3                                          → název akce
+     • p                                           → popis (1–2 věty)
+     • .promo-card-meta span                       → platnost / podmínka
+     • .card-link href                             → kam akce vede (kalkulačka, kontakt, akce.html…)
+     ===================================================================== -->
+<section class="bg-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow"><i class="icon" data-icon="sparkle"></i> Aktuální nabídky</span>
+      <h2>Akce a soutěže pro nové klienty</h2>
+      <p>Vyberte si benefit, který vám usnadní rozhodnutí. Akce platí pro nové i stávající klienty.</p>
+    </div>
+
+    <div class="grid grid-3">
+
+      <!-- AKCE 1: iPhone soutěž (FEATURED) -->
+      <article class="promo-card">
+        <div class="promo-card-media" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+          <span class="promo-card-tag"><i class="icon" data-icon="trophy"></i> Soutěž</span>
+        </div>
+        <div class="promo-card-body">
+          <h3>Vyhrajte iPhone 16 Pro</h3>
+          <p>Při sjednání pojištění do 30. 6. 2026 vás automaticky zařadíme do losování o iPhone 16 Pro.</p>
+          <div class="promo-card-meta">
+            <span><i class="icon" data-icon="clock"></i> Platí do 30. 6. 2026</span>
+          </div>
+          <a href="akce.html" class="card-link">Detail soutěže</a>
+        </div>
+      </article>
+
+      <!-- AKCE 2: Sleva 50 % -->
+      <article class="promo-card">
+        <div class="promo-card-media">
+          <span class="promo-card-tag promo-card-tag--discount">−50 % první rok</span>
+        </div>
+        <div class="promo-card-body">
+          <h3>Sleva 50 % na první rok</h3>
+          <p>Noví klienti: první rok pojištění za polovinu. Platí pro Jednotlivce i Domácnost.</p>
+          <div class="promo-card-meta">
+            <span><i class="icon" data-icon="clock"></i> Platí do 30. 6. 2026</span>
+          </div>
+          <a href="kalkulacka.html" class="card-link">Uplatnit slevu</a>
+        </div>
+      </article>
+
+      <!-- AKCE 3: Doporučovací bonus -->
+      <article class="promo-card">
+        <div class="promo-card-media" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);">
+          <span class="promo-card-tag promo-card-tag--bonus">500 Kč bonus</span>
+        </div>
+        <div class="promo-card-body">
+          <h3>Doporučte známého</h3>
+          <p>Za každého doporučeného klienta, který si sjedná pojištění, dostanete 500 Kč.</p>
+          <div class="promo-card-meta">
+            <span><i class="icon" data-icon="users"></i> Stálá nabídka, bez limitu</span>
+          </div>
+          <a href="klient.html" class="card-link">Získat odkaz</a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="akce.html" class="btn btn-outline">Zobrazit všechny akce</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Chci pojištění právní ochrany</h2>
+      <p>Kontaktujte nás a zjistěte, jak se můžete nejlépe chránit. Od <strong>179 Kč měsíčně</strong>.</p>
+      <div class="hero-actions" style="justify-content: center;">
+        <a href="kalkulacka.html" class="btn btn-primary btn-lg">Spočítat cenu</a>
+        <a href="tel:+420465465465" class="btn btn-outline-light btn-lg"><i class="icon" data-icon="phone"></i> +420 465 465 465</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll companion: Záchranný kruh -->
+<div class="scroll-companion" aria-hidden="true">
+  <div class="ring-wrapper">
+    <svg viewBox="0 0 100 100" class="ring-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Pozadí ringu (světle šedé) -->
+      <circle class="ring-bg" cx="50" cy="50" r="40" fill="none" stroke-width="14"/>
+      <!-- Progress ring - vyplňuje se podle scrollu -->
+      <circle class="progress-ring" cx="50" cy="50" r="40" fill="none" stroke="#0045bf"
+              stroke-width="14" stroke-linecap="round"
+              stroke-dasharray="251.3" stroke-dashoffset="251.3"
+              transform="rotate(-90 50 50)"/>
+      <!-- 4 bílé segmenty (klasický záchranný kruh) -->
+      <rect x="46" y="0" width="8" height="16" fill="white"/>
+      <rect x="46" y="84" width="8" height="16" fill="white"/>
+      <rect x="0" y="46" width="16" height="8" fill="white"/>
+      <rect x="84" y="46" width="16" height="8" fill="white"/>
+      <!-- Vnitřní bílý kruh -->
+      <circle cx="50" cy="50" r="22" fill="white"/>
+      <!-- Check uvnitř, animuje se na konci -->
+      <path class="check-mark" d="M40 50l6 6 14-14" fill="none" stroke="#0045bf"
+            stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"
+            stroke-dasharray="40" stroke-dashoffset="40"/>
+    </svg>
+  </div>
+  <span class="label">POJIŠTĚNO</span>
+</div>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

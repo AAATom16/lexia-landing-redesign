@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klientská zóna | Lexia</title>
+<meta name="description" content="Klientská zóna Lexia - správa smluv, nahlášení případu, sledování průběhu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#dashboard" class="btn btn-ghost" onclick="showDashboard()">Demo dashboard</a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<!-- LOGIN -->
+<div id="login-view" class="auth-wrapper">
+  <div class="auth-card">
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+      <img src="assets/lexia-logo.svg" alt="Lexia" style="height: 44px;">
+    </div>
+    <h1 style="font-size: 1.75rem;">Klientská zóna</h1>
+    <p class="lead">První pomoc v právu — přihlaste se ke správě vašich smluv a případů.</p>
+
+    <form class="form" onsubmit="event.preventDefault(); showDashboard();">
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" class="form-input" required placeholder="vas@email.cz">
+      </div>
+      <div class="form-group">
+        <label>Heslo</label>
+        <input type="password" class="form-input" required placeholder="Vaše heslo">
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+        <label class="form-checkbox" style="margin: 0;">
+          <input type="checkbox">
+          <span>Pamatovat si přihlášení</span>
+        </label>
+        <a href="#" style="font-weight: 600;">Zapomněli jste heslo?</a>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Přihlásit se</button>
+    </form>
+
+    <div style="text-align: center; margin: 24px 0; position: relative;">
+      <span style="background: white; padding: 0 12px; color: var(--text-muted); font-size: 0.88rem; position: relative; z-index: 1;">nebo</span>
+      <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border);"></div>
+    </div>
+
+    <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;" onclick="showDashboard()"><i class="icon" data-icon="lock"></i> Přihlásit přes BankID</button>
+    <button class="btn btn-outline" style="width: 100%;" onclick="showDashboard()"><i class="icon" data-icon="phone"></i> Přihlásit přes Mobilní klíč eGovernment</button>
+
+    <p style="text-align: center; margin-top: 24px; font-size: 0.92rem; color: var(--text-muted);">
+      Ještě nemáte účet? <a href="kalkulacka.html" style="font-weight: 600;">Sjednejte si pojištění</a>
+    </p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-view" style="display: none;">
+  <div class="container">
+    <div class="dash-wrapper">
+      <!-- SIDEBAR -->
+      <aside class="dash-sidebar">
+        <div style="padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-light); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 700; font-size: 0.85rem;">JN</div>
+            <div>
+              <strong style="font-size: 0.95rem;">Jan Novák</strong>
+              <span style="display: block; font-size: 0.82rem; color: var(--text-muted);">Klient od 2024</span>
+            </div>
+          </div>
+        </div>
+        <ul class="dash-nav">
+          <li><a href="#" class="active"><i class="icon" data-icon="chart"></i> Přehled</a></li>
+          <li><a href="#"><i class="icon" data-icon="document"></i> Mé smlouvy</a></li>
+          <li><a href="#"><i class="icon" data-icon="scales"></i> Mé případy</a></li>
+          <li><a href="#"><i class="icon" data-icon="chat"></i> Zpráva právníkovi</a></li>
+          <li><a href="#"><i class="icon" data-icon="briefcase"></i> Platby a faktury</a></li>
+          <li><a href="#"><i class="icon" data-icon="settings"></i> Nastavení účtu</a></li>
+          <li style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">
+            <a href="#" onclick="showLogin()"><i class="icon" data-icon="logout"></i> Odhlásit se</a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px;">
+          <div>
+            <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Dobré ráno, Jane</h1>
+            <p>Tady máte přehled vašeho pojištění a aktivních případů.</p>
+          </div>
+          <button class="btn btn-primary">+ Nahlásit nový případ</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="dash-stats">
+          <div class="stat-card">
+            <div class="label">Aktivní smlouva</div>
+            <div class="value" style="font-size: 1.4rem; color: var(--primary);">Rodinný Premium</div>
+            <div class="trend">Platná do 31.12.2026</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Krytí v tomto roce</div>
+            <div class="value">2 500 000 Kč</div>
+            <div class="trend">Zbývá 2 485 000 Kč</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Otevřené případy</div>
+            <div class="value">2</div>
+            <div class="trend" style="color: var(--text-muted);">1 řeší advokát</div>
+          </div>
+        </div>
+
+        <!-- ACTIVE CASES -->
+        <div style="margin-bottom: 32px;">
+          <h3 style="margin-bottom: 16px;">Aktivní případy</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Případ</th>
+                  <th>Typ</th>
+                  <th>Advokát</th>
+                  <th>Stav</th>
+                  <th>Akce</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>#2026-0142</strong><br><span style="font-size: 0.85rem; color: var(--text-muted);">Reklamace ledničky</span></td>
+                  <td>Spotřebitelské</td>
+                  <td>Mgr. P. Dvořák</td>
+                  <td><span class="badge badge-info">U právníka</span></td>
+                  <td><a href="#" style="font-weight: 600;">Detail</a></td>
+                </tr>
+                <tr>
+                  <td><strong>#2026-0098</strong><br><span style="font-size: 0.85rem; color: var(--text-muted);">Sousedský spor o plot</span></td>
+                  <td>Občanské</td>
+                  <td>JUDr. J. Nováková</td>
+                  <td><span class="badge badge-warning">Čeká na podpis</span></td>
+                  <td><a href="#" style="font-weight: 600;">Detail</a></td>
+                </tr>
+                <tr>
+                  <td><strong>#2025-0312</strong><br><span style="font-size: 0.85rem; color: var(--text-muted);">Výpověď - mimosoudní vyrovnání</span></td>
+                  <td>Pracovní</td>
+                  <td>JUDr. M. Veselý</td>
+                  <td><span class="badge badge-success">Vyřešeno</span></td>
+                  <td><a href="#" style="font-weight: 600;">Detail</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div style="margin-bottom: 32px;">
+          <h3 style="margin-bottom: 16px;">Rychlé akce</h3>
+          <div class="grid grid-3">
+            <div class="card" style="cursor: pointer;">
+              <div class="card-icon"><i class="icon" data-icon="phone"></i></div>
+              <h3>Zavolat právníka</h3>
+              <p style="font-size: 0.9rem;">Spojení s advokátem do 4 minut.</p>
+            </div>
+            <div class="card" style="cursor: pointer;">
+              <div class="card-icon"></div>
+              <h3>Kontrola smlouvy</h3>
+              <p style="font-size: 0.9rem;">Pošlete nám smlouvu k posouzení.</p>
+            </div>
+            <div class="card" style="cursor: pointer;">
+              <div class="card-icon"><i class="icon" data-icon="arrow_down"></i></div>
+              <h3>Stáhnout pojistku</h3>
+              <p style="font-size: 0.9rem;">PDF vaší aktuální smlouvy.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENTS -->
+        <div>
+          <h3 style="margin-bottom: 16px;">Poslední platby</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Datum</th>
+                  <th>Popis</th>
+                  <th>Částka</th>
+                  <th>Stav</th>
+                  <th>Doklad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1.5.2026</td>
+                  <td>Pojistné - květen 2026</td>
+                  <td>549 Kč</td>
+                  <td><span class="badge badge-success">Zaplaceno</span></td>
+                  <td><a href="#" style="font-weight: 600;">PDF</a></td>
+                </tr>
+                <tr>
+                  <td>1.4.2026</td>
+                  <td>Pojistné - duben 2026</td>
+                  <td>549 Kč</td>
+                  <td><span class="badge badge-success">Zaplaceno</span></td>
+                  <td><a href="#" style="font-weight: 600;">PDF</a></td>
+                </tr>
+                <tr>
+                  <td>1.3.2026</td>
+                  <td>Pojistné - březen 2026</td>
+                  <td>549 Kč</td>
+                  <td><span class="badge badge-success">Zaplaceno</span></td>
+                  <td><a href="#" style="font-weight: 600;">PDF</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+<script>
+function showDashboard() {
+  document.getElementById('login-view').style.display = 'none';
+  document.getElementById('dashboard-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function showLogin() {
+  document.getElementById('login-view').style.display = 'flex';
+  document.getElementById('dashboard-view').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrace | Lexia CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <a href="index.html" class="logo" style="padding: 4px 0 20px; display: block;">
+      <img src="assets/lexia-logo.svg" alt="Lexia" style="height: 32px;">
+    </a>
+    <p style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; margin: 12px 0 6px;">CMS administrace</p>
+    <nav class="admin-nav">
+      <a href="#dashboard" data-view="dashboard" class="active"><i class="icon" data-icon="chart"></i> Dashboard</a>
+      <a href="#akce" data-view="akce"><i class="icon" data-icon="sparkle"></i> Akce a soutěže <span class="admin-nav-badge">6</span></a>
+      <a href="#blog" data-view="blog"><i class="icon" data-icon="book"></i> Blog</a>
+      <a href="#stranky" data-view="stranky"><i class="icon" data-icon="document"></i> Stránky a obsah</a>
+      <a href="#cenik" data-view="cenik"><i class="icon" data-icon="bank"></i> Ceník pojištění</a>
+      <a href="#klienti" data-view="klienti"><i class="icon" data-icon="users"></i> Klienti <span class="admin-nav-badge">2 481</span></a>
+      <a href="#media" data-view="media"><i class="icon" data-icon="house"></i> Mediální knihovna</a>
+      <a href="#nastaveni" data-view="nastaveni"><i class="icon" data-icon="settings"></i> Nastavení</a>
+    </nav>
+    <div class="admin-sidebar-bottom">
+      <a href="klient.html" class="admin-user">
+        <div class="admin-user-avatar">AD</div>
+        <div class="admin-user-info">
+          <strong>Anna Dvořáková</strong>
+          <span>Admin · marketing</span>
+        </div>
+        <i class="icon" data-icon="logout" style="margin-left: auto; color: var(--text-muted);"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- TOPBAR -->
+    <div class="admin-topbar">
+      <div>
+        <h2 id="admin-page-title">Dashboard</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">Přehled aktivit a klíčových metrik</p>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn btn-outline"><i class="icon" data-icon="mail"></i> Notifikace <span class="admin-nav-badge" style="background: var(--danger);">3</span></button>
+        <a href="index.html" target="_blank" class="btn btn-primary"><i class="icon" data-icon="arrow_right"></i> Zobrazit web</a>
+      </div>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <section class="admin-view" data-view-content="dashboard">
+
+      <!-- Stats cards -->
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div class="label">Aktivní akce</div>
+          <div class="value">6</div>
+          <div class="trend">+2 oproti minulému měsíci</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Sjednání tento měsíc</div>
+          <div class="value">128</div>
+          <div class="trend">+24 % vs. minulý měsíc</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Účastníci soutěže</div>
+          <div class="value">87</div>
+          <div class="trend">iPhone 16 Pro · do 30. 6.</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Doporučení (bonus 500 Kč)</div>
+          <div class="value">42</div>
+          <div class="trend">Vyplaceno: 21 000 Kč</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="admin-section">
+        <h3>Rychlé akce</h3>
+        <div class="admin-quick-grid">
+          <a href="#akce" data-view="akce" class="admin-quick-card">
+            <div class="admin-quick-icon" style="background: rgba(0, 69, 191, 0.1); color: var(--primary);"><i class="icon" data-icon="sparkle"></i></div>
+            <strong>Nová akce</strong>
+            <span>Vytvořit slevu nebo soutěž</span>
+          </a>
+          <a href="#blog" data-view="blog" class="admin-quick-card">
+            <div class="admin-quick-icon" style="background: rgba(0, 165, 191, 0.1); color: var(--accent);"><i class="icon" data-icon="book"></i></div>
+            <strong>Nový článek</strong>
+            <span>Publikovat na blog</span>
+          </a>
+          <a href="#cenik" data-view="cenik" class="admin-quick-card">
+            <div class="admin-quick-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="icon" data-icon="chart"></i></div>
+            <strong>Upravit ceník</strong>
+            <span>Změnit ceny pilířů</span>
+          </a>
+          <a href="#stranky" data-view="stranky" class="admin-quick-card">
+            <div class="admin-quick-icon" style="background: rgba(125, 160, 220, 0.15); color: var(--primary);"><i class="icon" data-icon="document"></i></div>
+            <strong>Texty na webu</strong>
+            <span>Upravit copy a obsah</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="admin-section">
+        <h3>Poslední aktivita</h3>
+        <ul class="admin-activity">
+          <li><span class="admin-activity-time">před 14 min</span> Nový klient se zapojil do soutěže iPhone 16 Pro (Jan Novák)</li>
+          <li><span class="admin-activity-time">před 1 h</span> Akce „Sleva 50 % první rok" — uplatněno (Petra Svobodová)</li>
+          <li><span class="admin-activity-time">před 3 h</span> Anna Dvořáková publikovala článek „Co dělat při dopravní nehodě"</li>
+          <li><span class="admin-activity-time">včera</span> Upravena cena pilíře „Vozidla a řidiči" z 119 Kč na 129 Kč</li>
+          <li><span class="admin-activity-time">včera</span> Doporučovací bonus vyplacen 4 klientům</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- AKCE VIEW -->
+    <section class="admin-view" data-view-content="akce" hidden>
+
+      <div class="admin-section-header">
+        <div>
+          <h3 style="margin: 0;">Akce a soutěže</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">Spravujte aktuální nabídky zobrazené na webu</p>
+        </div>
+        <button class="btn btn-primary"><i class="icon" data-icon="plus"></i> Nová akce</button>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Název</th>
+            <th>Typ</th>
+            <th>Platnost</th>
+            <th>Stav</th>
+            <th>Sjednání</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Soutěž o iPhone 16 Pro</strong><br><span style="color: var(--text-muted); font-size: 0.85rem;">Featured · Hlavní akce</span></td>
+            <td><span class="admin-pill admin-pill--primary">Soutěž</span></td>
+            <td>1. 5. – 30. 6. 2026</td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+            <td>87</td>
+            <td>
+              <button class="admin-icon-btn" title="Upravit"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn" title="Smazat"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Sleva 50 % první rok</strong></td>
+            <td><span class="admin-pill admin-pill--accent">Sleva</span></td>
+            <td>1. 4. – 30. 6. 2026</td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+            <td>34</td>
+            <td>
+              <button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Doporučte známého — 500 Kč</strong></td>
+            <td><span class="admin-pill admin-pill--accent">Bonus</span></td>
+            <td>Stálá nabídka</td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+            <td>42</td>
+            <td>
+              <button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Konzultace s právníkem zdarma</strong></td>
+            <td><span class="admin-pill admin-pill--primary">Benefit</span></td>
+            <td>1. 5. – 31. 8. 2026</td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+            <td>19</td>
+            <td>
+              <button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Rodinný plán 1+1</strong></td>
+            <td><span class="admin-pill admin-pill--accent">Sleva</span></td>
+            <td>1. 5. – 30. 9. 2026</td>
+            <td><span class="admin-pill admin-pill--warning">Plánováno</span></td>
+            <td>0</td>
+            <td>
+              <button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Vánoční sleva 25 %</strong></td>
+            <td><span class="admin-pill admin-pill--accent">Sleva</span></td>
+            <td>1. 12. 2025 – 6. 1. 2026</td>
+            <td><span class="admin-pill admin-pill--muted">Skončilo</span></td>
+            <td>156</td>
+            <td>
+              <button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button>
+              <button class="admin-icon-btn"><i class="icon" data-icon="logout"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Form pro novou akci (inline ukázka) -->
+      <div class="admin-section">
+        <h3>Vytvořit novou akci</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Vyplňte parametry akce. Po publikování se zobrazí na webu v sekci „Akce".</p>
+        <div class="admin-form-grid">
+          <div class="form-group">
+            <label>Název akce <span class="req">*</span></label>
+            <input type="text" class="form-input" placeholder="např. Letní sleva 30 %">
+          </div>
+          <div class="form-group">
+            <label>Typ akce <span class="req">*</span></label>
+            <select class="form-select">
+              <option>Sleva</option>
+              <option>Soutěž</option>
+              <option>Bonus</option>
+              <option>Benefit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Platnost od <span class="req">*</span></label>
+            <input type="date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Platnost do</label>
+            <input type="date" class="form-input">
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Popis akce <span class="req">*</span></label>
+            <textarea class="form-textarea" placeholder="Krátký popis benefitu pro klienta..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>CTA tlačítko</label>
+            <input type="text" class="form-input" placeholder="např. Uplatnit slevu">
+          </div>
+          <div class="form-group">
+            <label>Odkaz CTA</label>
+            <input type="text" class="form-input" placeholder="/kalkulacka.html">
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Obrázek akce</label>
+            <div class="admin-upload">
+              <i class="icon" data-icon="house" style="width: 28px; height: 28px;"></i>
+              <strong>Klikněte nebo přetáhněte obrázek</strong>
+              <span style="font-size: 0.85rem; color: var(--text-muted);">PNG, JPG, max. 2 MB</span>
+            </div>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-checkbox" style="margin: 0;">
+              <input type="checkbox">
+              <span>Označit jako hlavní (featured) akci</span>
+            </label>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button class="btn btn-primary btn-lg">Publikovat akci</button>
+          <button class="btn btn-outline btn-lg">Uložit jako koncept</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG VIEW -->
+    <section class="admin-view" data-view-content="blog" hidden>
+      <div class="admin-section-header">
+        <div>
+          <h3 style="margin: 0;">Blog</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">Články pro klienty a SEO obsah</p>
+        </div>
+        <button class="btn btn-primary"><i class="icon" data-icon="plus"></i> Nový článek</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Název</th><th>Autor</th><th>Kategorie</th><th>Stav</th><th>Publikováno</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Co dělat při dopravní nehodě</strong></td>
+            <td>Anna Dvořáková</td>
+            <td><span class="admin-pill admin-pill--primary">Auto</span></td>
+            <td><span class="admin-pill admin-pill--success">Publikováno</span></td>
+            <td>22. 5. 2026</td>
+            <td><button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button></td>
+          </tr>
+          <tr>
+            <td><strong>Jak se bránit nelegální výpovědi</strong></td>
+            <td>Roman Flek</td>
+            <td><span class="admin-pill admin-pill--accent">Práce</span></td>
+            <td><span class="admin-pill admin-pill--success">Publikováno</span></td>
+            <td>15. 5. 2026</td>
+            <td><button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button></td>
+          </tr>
+          <tr>
+            <td><strong>Reklamace vady novostavby</strong></td>
+            <td>Petr Čepa</td>
+            <td><span class="admin-pill admin-pill--primary">Bydlení</span></td>
+            <td><span class="admin-pill admin-pill--warning">Koncept</span></td>
+            <td>—</td>
+            <td><button class="admin-icon-btn"><i class="icon" data-icon="settings"></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CENÍK VIEW -->
+    <section class="admin-view" data-view-content="cenik" hidden>
+      <div class="admin-section-header">
+        <div>
+          <h3 style="margin: 0;">Ceník pojištění</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">Změna se automaticky promítne v kalkulačce</p>
+        </div>
+        <button class="btn btn-outline">Uložit změny</button>
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Pilíř</th><th>Jednotlivec (Kč/měsíc)</th><th>Domácnost (Kč/měsíc)</th><th>Stav</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong><i class="icon" data-icon="shield"></i> Základní právní ochrana</strong></td>
+            <td><input type="number" class="form-input" value="179" style="max-width: 120px;"></td>
+            <td><input type="number" class="form-input" value="269" style="max-width: 120px;"></td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+          </tr>
+          <tr>
+            <td><strong><i class="icon" data-icon="car"></i> Vozidla a řidiči</strong></td>
+            <td><input type="number" class="form-input" value="129" style="max-width: 120px;"></td>
+            <td><input type="number" class="form-input" value="169" style="max-width: 120px;"></td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+          </tr>
+          <tr>
+            <td><strong><i class="icon" data-icon="briefcase"></i> Pracovněprávní ochrana</strong></td>
+            <td><input type="number" class="form-input" value="79" style="max-width: 120px;"></td>
+            <td><input type="number" class="form-input" value="99" style="max-width: 120px;"></td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+          </tr>
+          <tr>
+            <td><strong><i class="icon" data-icon="house"></i> Dům, byt, chata</strong></td>
+            <td><input type="number" class="form-input" value="139" style="max-width: 120px;"></td>
+            <td><input type="number" class="form-input" value="159" style="max-width: 120px;"></td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+          </tr>
+          <tr>
+            <td><strong><i class="icon" data-icon="construction"></i> Nemovitost ve výstavbě</strong></td>
+            <td colspan="2"><input type="number" class="form-input" value="819" style="max-width: 120px;"> Kč/měsíc (pevná sazba)</td>
+            <td><span class="admin-pill admin-pill--success">Aktivní</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- STRÁNKY VIEW -->
+    <section class="admin-view" data-view-content="stranky" hidden>
+      <div class="admin-section-header">
+        <div>
+          <h3 style="margin: 0;">Stránky a obsah</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">Upravte texty na jednotlivých stránkách webu</p>
+        </div>
+      </div>
+      <div class="admin-pages-list">
+        <a href="#" class="admin-page-item">
+          <strong>Hlavní stránka</strong>
+          <span>index.html · Aktualizováno před 2 dny</span>
+        </a>
+        <a href="#" class="admin-page-item">
+          <strong>Pro koho</strong>
+          <span>pro-koho.html · 5 sekcí (Jednotlivci, Firmy, Garance Plus, Řidiči, Zastupitelé)</span>
+        </a>
+        <a href="#" class="admin-page-item">
+          <strong>Jak funguje</strong>
+          <span>jak-funguje.html · 4 kroky, FAQ</span>
+        </a>
+        <a href="#" class="admin-page-item">
+          <strong>Služby a ceník</strong>
+          <span>sluzby.html · 3 varianty produktu</span>
+        </a>
+        <a href="#" class="admin-page-item">
+          <strong>O nás</strong>
+          <span>o-nas.html · Mise, tým, Colonnade partnerství</span>
+        </a>
+        <a href="#" class="admin-page-item">
+          <strong>Kontakt</strong>
+          <span>kontakt.html · 3 cesty, formulář</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- KLIENTI VIEW -->
+    <section class="admin-view" data-view-content="klienti" hidden>
+      <div class="admin-section-header">
+        <div>
+          <h3 style="margin: 0;">Klienti</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin: 4px 0 0;">2 481 aktivních smluv</p>
+        </div>
+        <input type="search" class="form-input" placeholder="Hledat klienta..." style="max-width: 280px;">
+      </div>
+      <p style="color: var(--text-muted);">Detail klienta zobrazuje smlouvy, otevřené případy a komunikační historii. Funkce je v demu zjednodušená.</p>
+    </section>
+
+    <!-- MEDIA / SETTINGS placeholdery -->
+    <section class="admin-view" data-view-content="media" hidden>
+      <h3>Mediální knihovna</h3>
+      <p style="color: var(--text-muted);">Fotky, ilustrace a soubory ke stažení.</p>
+    </section>
+
+    <section class="admin-view" data-view-content="nastaveni" hidden>
+      <h3>Nastavení</h3>
+      <p style="color: var(--text-muted);">Globální nastavení webu, integrace, SEO, GDPR.</p>
+    </section>
+
+  </main>
+</div>
+
+<script src="assets/icons.js"></script>
+<script src="assets/datepicker.js"></script>
+<script>
+// Simple view switcher
+document.querySelectorAll('[data-view]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const view = link.dataset.view;
+    document.querySelectorAll('.admin-nav a').forEach(a => a.classList.toggle('active', a.dataset.view === view));
+    document.querySelectorAll('.admin-view').forEach(v => v.hidden = v.dataset.viewContent !== view);
+    const titles = {
+      dashboard: 'Dashboard',
+      akce: 'Akce a soutěže',
+      blog: 'Blog',
+      stranky: 'Stránky a obsah',
+      cenik: 'Ceník pojištění',
+      klienti: 'Klienti',
+      media: 'Mediální knihovna',
+      nastaveni: 'Nastavení'
+    };
+    document.getElementById('admin-page-title').textContent = titles[view] || 'Admin';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
+</script>
+</body>
+</html>

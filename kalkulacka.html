@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulačka ceny pojištění právní ochrany | Lexia</title>
+<meta name="description" content="Spočítejte si cenu pojištění právní ochrany Lexia online. Jednotlivec, domácnost, 4 pilíře + doplňky.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Spočítejte si <span style="color: var(--primary);">vaši cenu</span></h1>
+    <p>Produkt <strong>Jednotlivci a domácnosti</strong>. Vyberte variantu a sestavte si pojištění z pilířů a doplňků. Cena se počítá automaticky.</p>
+  </div>
+</section>
+
+<section style="padding-top: 30px;">
+  <div class="container">
+
+    <!-- ============= STEPPER ============= -->
+    <ol class="calc-stepper" aria-label="Postup kalkulace">
+      <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Pojištění</span></li>
+      <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Vaše údaje</span></li>
+      <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Rekapitulace</span></li>
+      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Platba</span></li>
+      <li class="step" data-step="5"><span class="step-num">5</span><span class="step-label">Hotovo</span></li>
+    </ol>
+
+    <!-- ============= STEP 1: Kalkulace ============= -->
+    <div class="calc-step is-active" data-step-panel="1">
+    <div class="calc-wrapper">
+      <!-- LEFT - FORM -->
+      <form class="calc-form" id="calc-form">
+
+        <!-- VARIANT -->
+        <div class="calc-section">
+          <h4>1. Varianta a počátek pojištění</h4>
+          <div class="calc-options">
+            <label class="calc-option selected">
+              <input type="radio" name="variant" value="jednotlivec" data-label="Jednotlivec" checked>
+              <strong>Jednotlivec</strong>
+              <span>Vy + děti do 26 let bez výdělku</span>
+            </label>
+            <label class="calc-option">
+              <input type="radio" name="variant" value="domacnost" data-label="Domácnost">
+              <strong>Domácnost</strong>
+              <span>Všechny osoby ve společné domácnosti</span>
+            </label>
+          </div>
+          <div class="form-group" style="margin-top: 20px; max-width: 320px;">
+            <label>Datum počátku pojištění <span class="req">*</span></label>
+            <input type="date" class="form-input" id="start-date" name="start-date">
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Pojištění začíná platit dnem zaplacení a nejdříve od zvoleného data.</p>
+          </div>
+        </div>
+
+        <!-- BASIC PILLARS -->
+        <div class="calc-section">
+          <h4>2. Pilíře pojištění</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">Základní právní ochrana je povinná, ostatní pilíře jsou volitelné.</p>
+          <div class="calc-options" style="grid-template-columns: 1fr 1fr;">
+            <label class="calc-option selected" style="cursor: not-allowed; opacity: 0.95;">
+              <input type="checkbox" name="pillar_zakladni" checked disabled>
+              <strong><i class="icon" data-icon="shield"></i> Základní právní ochrana</strong>
+              <span class="px-label" data-j="179 Kč/měsíc" data-d="269 Kč/měsíc">179 Kč/měsíc</span>
+              <span style="display: inline-block; padding: 2px 8px; background: var(--primary); color: white; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px;">POVINNÝ</span>
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" name="pillar_vozidla">
+              <strong><i class="icon" data-icon="car"></i> Vozidla a řidiči</strong>
+              <span class="px-label" data-j="129 Kč/měsíc" data-d="169 Kč/měsíc">129 Kč/měsíc</span>
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" name="pillar_prace">
+              <strong><i class="icon" data-icon="briefcase"></i> Pracovněprávní ochrana</strong>
+              <span class="px-label" data-j="79 Kč/měsíc" data-d="99 Kč/měsíc">79 Kč/měsíc</span>
+            </label>
+            <label class="calc-option">
+              <input type="checkbox" name="pillar_nemovitost">
+              <strong><i class="icon" data-icon="house"></i> Dům, byt, chata</strong>
+              <span class="px-label" data-j="139 Kč/měsíc" data-d="159 Kč/měsíc">139 Kč/měsíc</span>
+            </label>
+          </div>
+
+          <!-- Spory s nájemci - příplatek -->
+          <div id="najemci-box" style="display: none; margin-top: 14px; padding: 14px 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
+            <label class="form-checkbox" style="margin: 0;">
+              <input type="checkbox" name="najemci" id="najemci-check">
+              <span><strong>Příplatek za "Spory s nájemci"</strong> (+20 % z pilíře Dům/byt/chata) — pokud byt/dům pronajímáte</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ADDITIONAL PILLARS -->
+        <div class="calc-section">
+          <h4>3. Doplňkové pilíře (volitelné)</h4>
+          <div class="addon-stack">
+
+          <!-- Výkon funkce -->
+          <label class="addon-option">
+            <input type="checkbox" name="addon_vykon" id="addon-vykon">
+            <div class="addon-info">
+              <strong><i class="icon" data-icon="scales"></i> Právní ochrana při výkonu funkce</strong>
+              <span>Pro starosty, jednatele, členy SVJ, představenstev, spolků...</span>
+            </div>
+          </label>
+          <div id="vykon-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 12px;">
+            <div class="form-row" style="grid-template-columns: 1.5fr 1fr; align-items: end;">
+              <div class="form-group">
+                <label>Funkce <span class="req">*</span></label>
+                <select class="form-select" id="vykon-funkce">
+                  <option value="">— Vyberte funkci —</option>
+                  <optgroup label="Soukromý sektor – obchodní korporace">
+                    <option value="399">Jednatel (s.r.o.)</option>
+                    <option value="399">Člen představenstva nebo správní rady (a.s., družstvo)</option>
+                    <option value="199">Člen dozorčí rady</option>
+                    <option value="399">Prokurista</option>
+                    <option value="399">Likvidátor</option>
+                  </optgroup>
+                  <optgroup label="SVJ">
+                    <option value="39">Předseda výboru SVJ</option>
+                    <option value="29">Člen výboru SVJ</option>
+                    <option value="9">Člen kontrolní komise SVJ</option>
+                  </optgroup>
+                  <optgroup label="Neziskový a spolkový sektor">
+                    <option value="39">Předseda spolku / výboru</option>
+                    <option value="29">Člen rady spolku, výboru</option>
+                    <option value="299">Správce nadace / nadačního fondu</option>
+                    <option value="199">Člen správní rady (nadace, ústav)</option>
+                    <option value="99">Člen dozorčí rady (nadace)</option>
+                    <option value="299">Ředitel ústavu</option>
+                  </optgroup>
+                  <optgroup label="Veřejný sektor – státní správa">
+                    <option value="399">Ředitel státního podniku</option>
+                    <option value="199">Člen dozorčí rady státního podniku</option>
+                    <option value="99">Ředitel příspěvkové organizace</option>
+                    <option value="99">Vedoucí správního úřadu</option>
+                    <option value="199">Člen Rady regulátora</option>
+                    <option value="399">Člen představenstva veřejné instituce</option>
+                  </optgroup>
+                  <optgroup label="Veřejný sektor – samospráva">
+                    <option value="199">Primátor</option>
+                    <option value="99">Starosta</option>
+                    <option value="199">Hejtman kraje</option>
+                    <option value="69">Člen rady</option>
+                    <option value="49">Člen zastupitelstva</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Roční odměna za výkon funkce (Kč)</label>
+                <input type="number" class="form-input" id="vykon-odmena" placeholder="např. 240000" min="0" step="1000">
+              </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Pojistné = 0,25 % z roční odměny, minimálně dle vybrané funkce. Příklad: 240 000 Kč × 0,25 % = 600 Kč ročně.</p>
+          </div>
+
+          <!-- Nemovitost ve výstavbě -->
+          <label class="addon-option">
+            <input type="checkbox" name="addon_vystavba">
+            <div class="addon-info">
+              <strong><i class="icon" data-icon="construction"></i> Pojištění domu/bytu/chaty ve výstavbě</strong>
+              <span>819 Kč/měsíc — pevná sazba pro J i D</span>
+            </div>
+          </label>
+
+          <!-- Samostatné objekty -->
+          <label class="addon-option">
+            <input type="checkbox" name="addon_objekty" id="addon-objekty">
+            <div class="addon-info">
+              <strong><i class="icon" data-icon="building"></i> Pojištění samostatných objektů</strong>
+              <span>Bytové domy, smíšené objekty s bytovými i nebytovými prostorami</span>
+            </div>
+          </label>
+          <div id="objekty-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 12px;">
+            <div class="form-group">
+              <label>Velikost objektu</label>
+              <div class="calc-options" style="grid-template-columns: repeat(3, 1fr);">
+                <label class="calc-option">
+                  <input type="radio" name="objekty_size" value="100">
+                  <strong>do 100 m²</strong>
+                  <span class="px-label" data-j="49 Kč/měsíc" data-d="59 Kč/měsíc">49 Kč/měsíc</span>
+                </label>
+                <label class="calc-option">
+                  <input type="radio" name="objekty_size" value="500">
+                  <strong>do 500 m²</strong>
+                  <span class="px-label" data-j="139 Kč/měsíc" data-d="159 Kč/měsíc">139 Kč/měsíc</span>
+                </label>
+                <label class="calc-option">
+                  <input type="radio" name="objekty_size" value="500plus">
+                  <strong>nad 500 m²</strong>
+                  <span>Individuální kalkulace</span>
+                </label>
+              </div>
+            </div>
+            <label class="form-checkbox" style="margin-top: 12px;">
+              <input type="checkbox" name="objekty_najemci">
+              <span>Příplatek za "Spory s nájemci" (+20 %)</span>
+            </label>
+          </div>
+
+          <!-- Samostatné parcely -->
+          <label class="addon-option">
+            <input type="checkbox" name="addon_parcely" id="addon-parcely">
+            <div class="addon-info">
+              <strong><i class="icon" data-icon="tree"></i> Pojištění samostatných parcel</strong>
+              <span>Stavební parcely a pozemky</span>
+            </div>
+          </label>
+          <div id="parcely-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm);">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Typ parcely</label>
+                <select class="form-select" id="parcela-typ">
+                  <option value="" selected>— Vyberte —</option>
+                  <option value="0.04">Stavební parcela (0,04 Kč/m²/měsíc)</option>
+                  <option value="0.02">Pozemková (orná půda, sad, les...) (0,02 Kč/m²/měsíc)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Výměra parcely (m²)</label>
+                <input type="number" class="form-input" id="parcela-m2" placeholder="např. 1000" min="0">
+              </div>
+            </div>
+            <label class="form-checkbox" style="margin-top: 12px;">
+              <input type="checkbox" name="parcely_najemci">
+              <span>Příplatek za "Spory s nájemci" (+20 %)</span>
+            </label>
+          </div>
+
+          </div><!-- /addon-stack -->
+        </div>
+
+        <!-- PERIOD -->
+        <div class="calc-section" style="border-bottom: none;">
+          <h4>4. Frekvence platby</h4>
+          <div class="calc-options">
+            <label class="calc-option selected">
+              <input type="radio" name="period" value="mesicni" checked>
+              <strong>Měsíčně</strong>
+              <span>Standardní platba každý měsíc</span>
+            </label>
+            <label class="calc-option" style="position: relative;">
+              <span class="discount-badge">SLEVA 8 %</span>
+              <input type="radio" name="period" value="rocni">
+              <strong>Ročně</strong>
+              <span>Ušetřete jednu měsíční platbu (12. měsíc zdarma)</span>
+            </label>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--success); margin-top: 12px; font-weight: 600;"><i class="icon" data-icon="check_circle" style="width: 14px; height: 14px;"></i> Roční platba = výhodnější o 1 měsíc pojistného</p>
+        </div>
+      </form>
+
+      <!-- RIGHT - SUMMARY -->
+      <div class="calc-summary">
+        <h3>Vaše nabídka</h3>
+        <div class="calc-summary-row">
+          <span>Varianta</span>
+          <strong id="sum-variant">Jednotlivec</strong>
+        </div>
+        <div id="sum-pillars-wrapper" style="margin: 14px 0; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.2); border-bottom: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 8px;">Vybrané pilíře:</div>
+          <ul id="sum-pillars" style="list-style: none; padding: 0; font-size: 0.92rem;">
+            <li>Základní právní ochrana <span style="float: right; opacity: 0.9;">179 Kč</span></li>
+          </ul>
+        </div>
+        <div class="calc-summary-row" style="border-bottom: none;">
+          <span>Frekvence</span>
+          <strong id="sum-period">měsíčně</strong>
+        </div>
+        <div class="calc-total">
+          <span>Celkem k úhradě <span id="sum-period-label">měsíčně</span>:</span>
+          <strong id="sum-total">179 Kč</strong>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat ke smlouvě</button>
+      </div>
+    </div>
+    </div><!-- /step-panel 1 -->
+
+    <!-- ============= STEP 2: Vaše údaje pro smlouvu ============= -->
+    <div class="calc-step" data-step-panel="2" hidden>
+      <div class="calc-single">
+        <form class="calc-form" id="contract-form">
+          <div class="calc-section">
+            <h4>1. Osobní údaje</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Jméno <span class="req">*</span></label>
+                <input type="text" class="form-input" name="firstName" placeholder="Jan">
+              </div>
+              <div class="form-group">
+                <label>Příjmení <span class="req">*</span></label>
+                <input type="text" class="form-input" name="lastName" placeholder="Novák">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Datum narození <span class="req">*</span></label>
+                <input type="date" class="form-input" name="birthDate">
+              </div>
+              <div class="form-group">
+                <label>Rodné číslo</label>
+                <input type="text" class="form-input" name="rc" placeholder="123456/7890" pattern="[0-9]{6}/[0-9]{3,4}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>E-mail <span class="req">*</span></label>
+                <input type="email" class="form-input" name="email" placeholder="jan.novak@email.cz">
+              </div>
+              <div class="form-group">
+                <label>Telefon <span class="req">*</span></label>
+                <input type="tel" class="form-input" name="phone" placeholder="+420 600 000 000">
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-section" style="border-bottom: none;">
+            <h4>2. Trvalá adresa</h4>
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Ulice <span class="req">*</span></label>
+                <input type="text" class="form-input" name="street" placeholder="Praha 4">
+              </div>
+              <div class="form-group">
+                <label>Číslo popisné <span class="req">*</span></label>
+                <input type="text" class="form-input" name="houseNum" placeholder="1525/1">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Obec <span class="req">*</span></label>
+                <input type="text" class="form-input" name="city" placeholder="Praha">
+              </div>
+              <div class="form-group">
+                <label>PSČ <span class="req">*</span></label>
+                <input type="text" class="form-input" name="zip" placeholder="140 00">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Stát</label>
+              <input type="text" class="form-input" name="country" value="Česká republika">
+            </div>
+
+            <label class="form-checkbox" id="diff-address-toggle" style="margin-top: 16px;">
+              <input type="checkbox" id="diff-address-check">
+              <span>Korespondenční adresa je jiná než trvalá</span>
+            </label>
+            <div id="corr-address-fields" hidden style="margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm);">
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Korespondenční ulice</label>
+                  <input type="text" class="form-input" name="corrStreet">
+                </div>
+                <div class="form-group">
+                  <label>Číslo popisné</label>
+                  <input type="text" class="form-input" name="corrHouseNum">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Obec</label>
+                  <input type="text" class="form-input" name="corrCity">
+                </div>
+                <div class="form-group">
+                  <label>PSČ</label>
+                  <input type="text" class="form-input" name="corrZip">
+                </div>
+              </div>
+            </div>
+            <div id="household-confirm" hidden style="margin-top: 16px; padding: 14px 18px; background: var(--bg-light); border-radius: var(--radius-sm); border-left: 3px solid var(--primary);">
+              <label class="form-checkbox" style="margin: 0;">
+                <input type="checkbox" id="household-check">
+                <span>Potvrzuji, že pojištění sjednávám pro osoby žijící ve společné domácnosti.</span>
+              </label>
+            </div>
+            <div class="calc-nav">
+              <button type="button" class="btn btn-outline btn-lg" data-step-back="1">Zpět ke kalkulaci</button>
+              <button type="button" class="btn btn-primary btn-lg" data-step-next="3">Pokračovat na rekapitulaci</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============= STEP 3: Rekapitulace nabídky ============= -->
+    <div class="calc-step" data-step-panel="3" hidden>
+      <div class="calc-single">
+        <div style="text-align: center; margin-bottom: 8px;">
+          <h2 style="margin: 0;">Rekapitulace nabídky</h2>
+          <p style="color: var(--text-muted); margin-top: 8px;">Před dokončením si prosím zkontrolujte všechny údaje.</p>
+        </div>
+
+        <!-- HERO SUMMARY CARD (cobalt gradient) -->
+        <div class="recap-hero">
+          <div class="recap-hero-stats">
+            <div class="recap-hero-stat">
+              <span class="label"><i class="icon" data-icon="user"></i> Varianta</span>
+              <strong data-echo="variant">Jednotlivec</strong>
+            </div>
+            <div class="recap-hero-stat">
+              <span class="label"><i class="icon" data-icon="clock"></i> Počátek</span>
+              <strong data-echo="startDate">—</strong>
+            </div>
+            <div class="recap-hero-stat">
+              <span class="label"><i class="icon" data-icon="check_circle"></i> Frekvence</span>
+              <strong data-echo="period">měsíčně</strong>
+            </div>
+          </div>
+          <div class="recap-hero-price">
+            <div>
+              <span class="recap-hero-price-label">Celkem k úhradě (<span data-echo="period-label">měsíčně</span>)</span>
+              <span class="recap-hero-price-sub">Ročně: <strong data-echo="year-total">2 148 Kč</strong></span>
+            </div>
+            <strong class="recap-hero-price-value" data-echo="total">179 Kč</strong>
+          </div>
+        </div>
+
+        <!-- Vybraná právní ochrana -->
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="shield"></i> Vybraná právní ochrana</h4>
+          <ul class="recap-protection-list" data-echo="pillars-list">
+            <li><i class="icon" data-icon="check"></i> Základní právní ochrana <span class="recap-price-tag">179 Kč</span></li>
+          </ul>
+        </div>
+
+        <!-- Vaše údaje -->
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="user"></i> Vaše údaje</h4>
+          <div class="recap-data-grid">
+            <div class="recap-data-item">
+              <span class="label">Jméno a příjmení</span>
+              <strong data-echo="fullName">Jan Novák</strong>
+            </div>
+            <div class="recap-data-item">
+              <span class="label">Datum narození</span>
+              <strong data-echo="birthDate">—</strong>
+            </div>
+            <div class="recap-data-item">
+              <span class="label">E-mail</span>
+              <strong data-echo="email">—</strong>
+            </div>
+            <div class="recap-data-item">
+              <span class="label">Telefon</span>
+              <strong data-echo="phone">—</strong>
+            </div>
+            <div class="recap-data-item recap-data-item--wide">
+              <span class="label">Trvalá adresa</span>
+              <strong data-echo="fullAddress">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Co pojištění obsahuje -->
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="check_circle"></i> Co pojištění obsahuje</h4>
+          <div class="recap-accordion">
+            <details>
+              <summary>Právní poradenství 24/7</summary>
+              <p>Telefonické a chatové poradenství kdykoliv potřebujete radu od advokáta.</p>
+            </details>
+            <details>
+              <summary>Zastoupení advokátem v soudních i mimosoudních sporech</summary>
+              <p>Hradíme honorář advokáta podle advokátního tarifu — i v případě prohraného sporu.</p>
+            </details>
+            <details>
+              <summary>Soudní poplatky, znalecké posudky, mediace</summary>
+              <p>Pokrýváme kompletní agendu spojenou s vaším případem.</p>
+            </details>
+            <details>
+              <summary>Kontrola smluv</summary>
+              <p>Roční limit 10 000 Kč pro soukromé a 25 000 Kč pro podnikatelské smlouvy.</p>
+            </details>
+            <details>
+              <summary>ALL-RISK garance</summary>
+              <p>Pomůžeme i v oblastech, které nejsou výslovně vyloučeny v pojistných podmínkách.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Souhlasy</h4>
+          <label class="form-checkbox"><input type="checkbox" required><span>Souhlasím s rekapitulací zvoleného pojištění. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required><span>Potvrzuji pravdivost a úplnost uvedených údajů. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a>, informacemi o pojištění a dokumenty k produktu. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
+          <label class="form-checkbox" style="margin-top: 12px;"><input type="checkbox"><span>Souhlasím se zasíláním marketingové komunikace. <em style="color: var(--text-muted); font-weight: 400;">(volitelné)</em></span></label>
+        </div>
+
+        <div class="calc-nav">
+          <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="4">Přejít k platbě</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= STEP 4: Platba ============= -->
+    <div class="calc-step" data-step-panel="4" hidden>
+      <div class="calc-single">
+        <h2 style="margin-bottom: 24px; text-align: center;">Platba pojištění</h2>
+
+        <div class="recap-card recap-card--price">
+          <h4 class="recap-card-title" style="color: var(--white);">K úhradě</h4>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong>Pojištění právní ochrany</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Zvolená varianta</span><strong data-echo="variant">Jednotlivec</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong data-echo="period">měsíčně</strong></div>
+          <div class="recap-row" style="border-bottom: none; padding-top: 14px;"><span style="font-size: 1.05rem;">Částka k úhradě</span><strong data-echo="total" style="font-size: 1.6rem;">179 Kč</strong></div>
+        </div>
+
+        <div class="recap-card">
+          <h4 class="recap-card-title">Způsob platby</h4>
+          <div class="calc-options" style="grid-template-columns: 1fr; gap: 12px;">
+            <label class="calc-option selected">
+              <input type="radio" name="payMethod" value="card" checked>
+              <strong><i class="icon" data-icon="check_circle"></i> Platební karta</strong>
+              <span>Okamžitá platba, sjednání během minuty</span>
+            </label>
+            <label class="calc-option">
+              <input type="radio" name="payMethod" value="transfer">
+              <strong><i class="icon" data-icon="bank"></i> Bankovní převod</strong>
+              <span>Platební instrukce a variabilní symbol vám pošleme e-mailem</span>
+            </label>
+            <label class="calc-option">
+              <input type="radio" name="payMethod" value="recurring">
+              <strong><i class="icon" data-icon="clock"></i> Opakovaná platba kartou / inkaso</strong>
+              <span>Automatická platba každý měsíc/rok, jednoduché zrušení</span>
+            </label>
+          </div>
+          <label class="form-checkbox" id="recurring-consent" style="margin-top: 14px;">
+            <input type="checkbox">
+            <span>Souhlasím s opakovanou platbou.</span>
+          </label>
+        </div>
+
+        <div class="calc-nav">
+          <button type="button" class="btn btn-outline btn-lg" data-step-back="3">Zpět na rekapitulaci</button>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="5"><i class="icon" data-icon="lock"></i> Zaplatit a sjednat</button>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 14px; text-align: center;"><i class="icon" data-icon="lock"></i> Platba je zabezpečena PCI DSS certifikovanou platební bránou</p>
+      </div>
+    </div>
+
+    <!-- ============= STEP 5: Dokončení ============= -->
+    <div class="calc-step" data-step-panel="5" hidden>
+      <!-- Variant switcher - design states -->
+      <div class="state-switcher" style="margin-bottom: 30px; text-align: center;">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Stav (demo):</span>
+        <button type="button" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;" data-state-show="success">Sjednáno</button>
+        <button type="button" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;" data-state-show="pending">Čekáme na platbu</button>
+        <button type="button" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px;" data-state-show="custom">Individuální nacenění</button>
+      </div>
+
+      <!-- STATE 1: SUCCESS -->
+      <div class="state-card" data-state="success">
+        <div class="state-icon state-icon--success">
+          <i class="icon" data-icon="check_circle"></i>
+        </div>
+        <h2>Pojištění bylo sjednáno</h2>
+        <p>Děkujeme. Vaše právní pojištění bylo úspěšně sjednáno. Potvrzení a dokumenty jsme odeslali na váš e-mail.</p>
+        <div class="state-details">
+          <div class="recap-row"><span>Číslo smlouvy</span><strong>LX-2026-0042817</strong></div>
+          <div class="recap-row"><span>Datum počátku pojištění</span><strong data-echo="startDate">—</strong></div>
+          <div class="recap-row" style="border-bottom: none;"><span>Zaplaceno</span><strong style="color: var(--success);" data-echo="total">179 Kč</strong></div>
+        </div>
+        <div class="state-actions">
+          <a href="#" class="btn btn-primary btn-lg"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
+          <a href="index.html" class="btn btn-outline btn-lg">Zpět na hlavní stránku</a>
+        </div>
+      </div>
+
+      <!-- STATE 2: PENDING PAYMENT -->
+      <div class="state-card" data-state="pending" hidden>
+        <div class="state-icon state-icon--pending">
+          <i class="icon" data-icon="clock"></i>
+        </div>
+        <h2>Čekáme na platbu</h2>
+        <p>Vaši žádost evidujeme. Po přijetí platby vám zašleme potvrzení a dokumenty.</p>
+        <div class="state-details">
+          <div class="recap-row"><span>Číslo objednávky</span><strong>LX-2026-0042817</strong></div>
+          <div class="recap-row"><span>Číslo účtu</span><strong>2113322110/0800</strong></div>
+          <div class="recap-row"><span>Variabilní symbol</span><strong>2026042817</strong></div>
+          <div class="recap-row" style="border-bottom: none;"><span>Částka</span><strong data-echo="total">179 Kč</strong></div>
+        </div>
+        <div class="state-actions">
+          <a href="#" class="btn btn-primary btn-lg">Zopakovat platbu</a>
+          <a href="index.html" class="btn btn-outline btn-lg">Zpět na hlavní stránku</a>
+        </div>
+      </div>
+
+      <!-- STATE 3: CUSTOM QUOTE -->
+      <div class="state-card" data-state="custom" hidden>
+        <div class="state-icon state-icon--custom">
+          <i class="icon" data-icon="chat"></i>
+        </div>
+        <h2>Individuální nacenění</h2>
+        <p>Tento případ vyžaduje individuální posouzení. Vaše údaje jsme uložili a náš specialista vás bude kontaktovat do 24 hodin.</p>
+        <div class="state-details">
+          <div class="recap-row"><span>Vybrané pojištění</span><strong>Pojištění právní ochrany</strong></div>
+          <div class="recap-row"><span>Důvod individuálního nacenění</span><strong>Překročen limit nemovitosti</strong></div>
+          <div class="recap-row" style="border-bottom: none;"><span>Kontakt</span><strong>info@lexia.cz · +420 465 465 465</strong></div>
+        </div>
+        <div class="state-actions">
+          <a href="#" class="btn btn-primary btn-lg">Odeslat poptávku</a>
+          <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL AREAS -->
+<section class="bg-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Co je v pojištění</span>
+      <h2>30 pojištěných právních oblastí</h2>
+      <p>Lexia kryje 30 právních oblastí (rizik) napříč pilíři. Limit pojistného plnění až 2,5 mil. Kč na jednu pojistnou událost.</p>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 6%;">#</th>
+            <th>Právní oblast</th>
+            <th style="width: 16%;">Limit plnění</th>
+            <th style="width: 16%;">Územní rozsah</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
+          <tr><td>2</td><td>Vymáhání náhrady újmy</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
+          <tr><td>3</td><td>Obrana proti vymáhání náhrady újmy</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
+          <tr><td>4</td><td>Smluvní spory v rámci soukromého života</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>5</td><td>Smluvní spory v rámci podnikání</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>6</td><td>Smluvní spory v rámci jiné činnosti</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>7</td><td>Spory s pojišťovnami</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>8</td><td>Spory s odpovědnostními pojišťovnami</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
+          <tr><td>9</td><td>Spory s ostatními finančními institucemi</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>10</td><td>Spory se zaměstnavateli</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>11</td><td>Spory se zaměstnanci</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>12</td><td>Spory ze smluv o výkonu funkce</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>13</td><td>Spory s pronajímateli</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>14</td><td>Spory s nájemci</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>15</td><td>Sousedské spory</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>16</td><td>Ochrana vlastnického práva</td><td>2 500 000 Kč</td><td>ČR</td></tr>
+          <tr><td>17</td><td>Spory v oblasti rodinného práva</td><td>100 000 Kč</td><td>ČR</td></tr>
+          <tr><td>18</td><td>Spory v oblasti dědického práva</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>19</td><td>Spory v oblasti veřejného zdravotního pojištění</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>20</td><td>Spory v oblasti nemocenského a důchodového pojištění</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>21</td><td>Spory v souvislosti s daňovou kontrolou</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>22</td><td>Spory v oblasti práva na ochranu osobnosti</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>23</td><td>Spory v oblasti ochrany osobních údajů a internet. bezpečnosti</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>24</td><td>Právní pomoc v insolvenčním řízení</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>25</td><td>Právní pomoc ve správním řízení</td><td>250 000 Kč</td><td>ČR</td></tr>
+          <tr><td>26</td><td>Právní pomoc při kontrole</td><td>250 000 Kč</td><td>Evropa</td></tr>
+          <tr><td>27</td><td>Kontrola smluv – soukromí</td><td>10 000 Kč ročně</td><td>ČR</td></tr>
+          <tr><td>28</td><td>Kontrola smluv – podnikání</td><td>25 000 Kč ročně</td><td>ČR</td></tr>
+          <tr><td>29</td><td>All-risk garance – Právní poradenství</td><td>10 000 Kč</td><td>ČR</td></tr>
+          <tr><td>30</td><td>All-risk garance – Zastoupení</td><td>50 000 Kč</td><td>ČR</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted);">
+      Konkrétní oblasti jsou pokryty podle vybraných pilířů. Detaily v <a href="#" style="font-weight: 600;">pojistných podmínkách</a>.
+    </p>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section>
+  <div class="container">
+    <div class="grid grid-4" style="text-align: center;">
+      <div>
+        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="shield"></i></div>
+        <strong style="display: block; margin-bottom: 4px;">Limit až 2,5 mil. Kč</strong>
+        <p style="font-size: 0.9rem;">Nejvyšší na českém trhu</p>
+      </div>
+      <div>
+        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="check_circle"></i></div>
+        <strong style="display: block; margin-bottom: 4px;">ALL-RISK garance</strong>
+        <p style="font-size: 0.9rem;">Minimum výluk v podmínkách</p>
+      </div>
+      <div>
+        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="settings"></i></div>
+        <strong style="display: block; margin-bottom: 4px;">Flexibilní úpravy</strong>
+        <p style="font-size: 0.9rem;">Kdykoli upravte podle situace</p>
+      </div>
+      <div>
+        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="phone"></i></div>
+        <strong style="display: block; margin-bottom: 4px;">Poradíme zdarma</strong>
+        <p style="font-size: 0.9rem;">+420 465 465 465</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+<script src="assets/datepicker.js"></script>
+</body>
+</html>

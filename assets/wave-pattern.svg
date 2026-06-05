@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" fill="none" preserveAspectRatio="none">
+  
+  <path d="M0,180 Q200,140 400,180 T800,180 T1200,180 T1600,180" stroke="#7da0dc" stroke-opacity="0.14" stroke-width="1.5" fill="none"></path>
+  <path d="M0,250 Q200,200 400,250 T800,250 T1200,250 T1600,250" stroke="#00a5bf" stroke-opacity="0.10" stroke-width="1.5" fill="none"></path>
+  <path d="M0,330 Q220,270 440,330 T880,330 T1320,330 T1600,330" stroke="#7da0dc" stroke-opacity="0.12" stroke-width="1.5" fill="none"></path>
+  <path d="M0,410 Q200,360 400,410 T800,410 T1200,410 T1600,410" stroke="#00a5bf" stroke-opacity="0.08" stroke-width="1.5" fill="none"></path>
+  <path d="M0,490 Q220,440 440,490 T880,490 T1320,490 T1600,490" stroke="#7da0dc" stroke-opacity="0.10" stroke-width="1.5" fill="none"></path>
+</svg>

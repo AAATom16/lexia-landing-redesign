@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Služby a ceník | Lexia</title>
+<meta name="description" content="Kompletní přehled balíčků právního pojištění Lexia s aktuálním ceníkem.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="sluzby.html" class="active">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Služby a <span style="color: var(--primary);">ceník</span></h1>
+    <p>Vyberte si balíček podle svých potřeb. Všechny ceny jsou konečné, žádné skryté poplatky ani aktivační příplatky.</p>
+  </div>
+</section>
+
+<!-- PRICING PLANS -->
+<section class="has-glyph" style="padding-top: 30px; padding-bottom: 60px;" data-glyph="scales">
+  <div class="container">
+    <div class="grid grid-3" style="margin-top: 0;">
+      <!-- ZAKLADNI -->
+      <div class="price-card price-card--basic">
+        <div class="price-name">Základní</div>
+        <div class="price-desc">Pro běžné životní situace</div>
+        <div class="price-amount">
+          <strong>179</strong>
+          <span>Kč / měsíc</span>
+        </div>
+        <ul class="price-list">
+          <li>Telefonní poradenství 24/7</li>
+          <li>Krytí do 250 000 Kč ročně</li>
+          <li>Pracovní právo</li>
+          <li>Spotřebitelské spory</li>
+          <li>Sousedské spory</li>
+          <li class="muted">Trestní řízení</li>
+          <li class="muted">Spory v zahraničí</li>
+          <li class="muted">Daňové spory</li>
+        </ul>
+        <a href="kalkulacka.html?balicek=zakladni" class="btn btn-outline" style="width: 100%;">Vybrat základní</a>
+      </div>
+
+      <!-- ROZSIRENY -->
+      <div class="price-card featured">
+        <div class="price-name">Rozšířený</div>
+        <div class="price-desc">Nejoblíbenější volba</div>
+        <div class="price-amount">
+          <strong>299</strong>
+          <span>Kč / měsíc</span>
+        </div>
+        <ul class="price-list">
+          <li>Vše ze Základního</li>
+          <li>Krytí do 500 000 Kč ročně</li>
+          <li>Občanské spory (do 500k Kč)</li>
+          <li>Nájemní a bytové právo</li>
+          <li>Rodinné právo</li>
+          <li>Trestní řízení (obhajoba)</li>
+          <li>Dědické řízení</li>
+          <li class="muted">Spory v zahraničí</li>
+        </ul>
+        <a href="kalkulacka.html?balicek=rozsireny" class="btn btn-primary" style="width: 100%;">Vybrat rozšířený</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="price-card price-card--premium">
+        <div class="price-name">Premium</div>
+        <div class="price-desc">Maximální ochrana</div>
+        <div class="price-amount">
+          <strong>549</strong>
+          <span>Kč / měsíc</span>
+        </div>
+        <ul class="price-list">
+          <li>Vše z Rozšířeného</li>
+          <li>Krytí do 2 500 000 Kč ročně</li>
+          <li>Spory v zemích EU</li>
+          <li>Daňové a kontrolní řízení</li>
+          <li>Mediální právo</li>
+          <li>Vlastní advokát na výběr</li>
+          <li>Karence pouze 1 měsíc</li>
+          <li>Prioritní vyřízení do 2 hodin</li>
+        </ul>
+        <a href="kalkulacka.html?balicek=premium" class="btn btn-outline" style="width: 100%;">Vybrat Premium</a>
+      </div>
+    </div>
+    <p style="text-align: center; color: var(--text-muted); margin-top: 24px; font-size: 0.92rem;">
+      Při ročním předplatném získáte slevu 17 % (= 2 měsíce zdarma).
+    </p>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="bg-section has-glyph has-glyph--left" data-glyph="briefcase">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Doplňkové služby</span>
+      <h2>Rozšíření a benefity</h2>
+      <p>K základnímu pojištění můžete přidat doplňkové moduly podle vašich potřeb.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card card--cobalt">
+        <div class="card-icon"><i class="icon" data-icon="briefcase"></i></div>
+        <h3>Modul Pracovní právo+</h3>
+        <p style="margin-bottom: 14px;">Rozšířené krytí pracovních sporů včetně diskriminace, šikany a mobbingu.</p>
+        <strong class="addon-price addon-price--cobalt">+89 Kč/měsíc</strong>
+      </div>
+      <div class="card card--teal">
+        <div class="card-icon"><i class="icon" data-icon="house"></i></div>
+        <h3>Modul Nemovitosti</h3>
+        <p style="margin-bottom: 14px;">Spory ohledně koupě, pronájmu, hypotéky a katastrálních záležitostí.</p>
+        <strong class="addon-price addon-price--teal">+119 Kč/měsíc</strong>
+      </div>
+      <div class="card card--baby">
+        <div class="card-icon"><i class="icon" data-icon="scales"></i></div>
+        <h3>Modul Trestní právo</h3>
+        <p style="margin-bottom: 14px;">Plná obhajoba v trestním řízení, včetně přípravného řízení.</p>
+        <strong class="addon-price addon-price--baby">+129 Kč/měsíc</strong>
+      </div>
+      <div class="card card--cobalt">
+        <div class="card-icon"><i class="icon" data-icon="users"></i></div>
+        <h3>Modul Rodinné právo</h3>
+        <p style="margin-bottom: 14px;">Rozvod, výživné, péče o děti, majetkové vyrovnání.</p>
+        <strong class="addon-price addon-price--cobalt">+99 Kč/měsíc</strong>
+      </div>
+      <div class="card card--teal">
+        <div class="card-icon"><i class="icon" data-icon="briefcase"></i></div>
+        <h3>Spotřebitelský modul</h3>
+        <p style="margin-bottom: 14px;">Reklamace, vrácení zboží, e-shopy, dovolené, půjčky.</p>
+        <strong class="addon-price addon-price--teal">+79 Kč/měsíc</strong>
+      </div>
+      <div class="card card--baby">
+        <div class="card-icon"><i class="icon" data-icon="sparkle"></i></div>
+        <h3>Mezinárodní krytí</h3>
+        <p style="margin-bottom: 14px;">Spory mimo EU — USA, Velká Británie, Švýcarsko a další.</p>
+        <strong class="addon-price addon-price--baby">+179 Kč/měsíc</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Srovnání</span>
+      <h2>Detailní srovnání balíčků</h2>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40%;">Funkce</th>
+            <th>Základní</th>
+            <th>Rozšířený</th>
+            <th>Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Roční limit krytí</strong></td><td>250 000 Kč</td><td>500 000 Kč</td><td>2 500 000 Kč</td></tr>
+          <tr><td>Telefonní poradenství</td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Pracovní právo</td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Spotřebitelské spory</td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Občanské spory</td><td><span style="color: var(--text-light);">—</span></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Nájemní a bytové právo</td><td><span style="color: var(--text-light);">—</span></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Trestní obhajoba</td><td><span style="color: var(--text-light);">—</span></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Spory v EU</td><td><span style="color: var(--text-light);">—</span></td><td><span style="color: var(--text-light);">—</span></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td>Daňové spory</td><td><span style="color: var(--text-light);">—</span></td><td><span style="color: var(--text-light);">—</span></td><td><i class="icon icon-sm" data-icon="check" style="color: var(--success);"></i></td></tr>
+          <tr><td><strong>Karenční doba</strong></td><td>3 měsíce</td><td>3 měsíce</td><td>1 měsíc</td></tr>
+          <tr><td><strong>Reakční doba</strong></td><td>do 4 hodin</td><td>do 4 hodin</td><td>do 2 hodin</td></tr>
+          <tr><td><strong>Cena měsíčně</strong></td><td>179 Kč</td><td>299 Kč</td><td>549 Kč</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Spočítejte si svou cenu na míru</h2>
+      <p>Interaktivní kalkulačka vám během 2 minut ukáže přesnou cenu podle vašich potřeb.</p>
+      <div class="hero-actions" style="justify-content: center;">
+        <a href="kalkulacka.html" class="btn btn-primary btn-lg">Otevřít kalkulačku</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
