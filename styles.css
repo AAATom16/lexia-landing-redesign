@@ -1209,7 +1209,8 @@ section { padding: 64px 0; }
   border-radius: 0;
 }
 
-.section-eyebrow::before {
+.section-eyebrow::before,
+.section-eyebrow::after {
   content: '';
   width: 18px;
   height: 1px;
@@ -4559,3 +4560,110 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   border-radius: 8px;
 }
 .dp-foot button:hover { background: var(--bg-light); }
+
+/* ============================================
+   CUSTOM SELECT — rozbalovací seznam v brand designu
+   nahrazuje nativní <select class="form-select"> (assets/customselect.js)
+   sdílí vizuální jazyk s datepickerem (.dp)
+   ============================================ */
+
+/* Skryje původní nativní select — zůstává jen jako skrytý nositel hodnoty */
+.ds-native-hidden { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+
+.ds { position: relative; }
+
+/* Viditelné pole — vypadá jako .form-input + ikona šipky */
+.ds-display {
+  width: 100%;
+  padding: 12px 44px 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--white);
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.ds-display.is-placeholder { color: var(--text-light); }
+.ds-display:hover { border-color: var(--primary-light); }
+.ds.is-open .ds-display,
+.ds-display:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 69, 191, 0.14);
+}
+.ds-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+  pointer-events: none;
+  transition: transform 0.18s var(--ease);
+}
+.ds.is-open .ds-icon { transform: translateY(-50%) rotate(180deg); }
+.ds-icon svg { width: 100%; height: 100%; display: block; }
+
+/* Popup se seznamem možností */
+.ds-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  min-width: 100%;
+  max-height: 288px;
+  overflow-y: auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-3);
+  padding: 6px;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top center;
+  pointer-events: none;
+  transition: opacity 0.16s var(--ease), transform 0.16s var(--ease);
+}
+.ds.is-open .ds-pop { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.ds-group-label {
+  padding: 10px 12px 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ds-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.12s var(--ease), color 0.12s var(--ease);
+}
+.ds-option--grouped { padding-left: 22px; }
+.ds-option:hover:not(:disabled),
+.ds-option.is-active:not(:disabled) { background: var(--bg-light); color: var(--primary); }
+.ds-option.is-selected,
+.ds-option.is-selected:hover,
+.ds-option.is-selected.is-active {
+  background: var(--primary);
+  color: var(--white);
+  font-weight: 700;
+}
+.ds-option:disabled { color: var(--border-strong); cursor: not-allowed; opacity: 0.6; }
