@@ -504,7 +504,7 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
   z-index: 1;
   pointer-events: none;
 }
-.hero-inward-curve path { fill: var(--white); }
+.hero-inward-curve path { fill: var(--bg-section); }
 
 /* Promo pill v hero sekci — info o aktuální akci nad kartami */
 .hero-promo {
@@ -3476,6 +3476,17 @@ tbody tr:hover { background: var(--bg-section); }
 /* Dvě bg-section sekce za sebou — vnitřní hranice je gray-to-gray,
    tak nepotřebujeme fade ven/dovnitř */
 .bg-section + .bg-section {
+  background: linear-gradient(180deg,
+    var(--bg-section) 0%,
+    var(--bg-section) calc(100% - 56px),
+    var(--white) 100%
+  );
+}
+
+/* Sekce hned po hero s vlnou — začíná rovnou barvou sekce (bez horního
+   bílého přechodu), aby spodní oblouk hero tvořil jediný předěl a pod ním
+   nevznikal bílý pruh/čára před sekcí */
+.hero + .bg-section {
   background: linear-gradient(180deg,
     var(--bg-section) 0%,
     var(--bg-section) calc(100% - 56px),
