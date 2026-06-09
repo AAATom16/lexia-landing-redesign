@@ -499,12 +499,14 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
   bottom: -1px;
   left: 0;
   width: 100%;
-  height: 110px;
+  height: 130px;
   display: block;
   z-index: 1;
   pointer-events: none;
 }
-.hero-inward-curve path { fill: var(--bg-section); }
+/* Výplň přes svislý gradient definovaný v SVG (#heroCurveFade) → feathered
+   horní hrana, plynulý přechod fotky do sekce bez ostré čáry */
+.hero-inward-curve path { fill: url(#heroCurveFade); }
 
 /* Promo pill v hero sekci — info o aktuální akci nad kartami */
 .hero-promo {

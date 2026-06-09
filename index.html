@@ -124,9 +124,17 @@
     </div>
   </div>
 
-  <!-- Inward curve dolů na bílou -->
-  <svg class="hero-inward-curve" viewBox="0 0 1920 110" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,110 L0,30 Q1300,130 1920,40 L1920,110 Z"/>
+  <!-- Inward curve dolů na sekci — výplň je svislý gradient (nahoře průhledný →
+       dole barva sekce), aby fotka plynule přešla do sekce bez ostré hrany -->
+  <svg class="hero-inward-curve" viewBox="0 0 1920 130" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="heroCurveFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f7f9fc" stop-opacity="0"/>
+        <stop offset="45%" stop-color="#f7f9fc" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#f7f9fc" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,130 L0,20 Q1300,150 1920,30 L1920,130 Z" fill="url(#heroCurveFade)"/>
   </svg>
 </section>
 
