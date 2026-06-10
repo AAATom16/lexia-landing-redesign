@@ -26,6 +26,17 @@
     return isNaN(d) ? null : d;
   }
   function fmtCZ(d) { return d.getDate() + '. ' + (d.getMonth() + 1) + '. ' + d.getFullYear(); }
+  // Parsuje ručně zadané datum: "15.3.1985", "15. 3. 1985", "15/3/85", "15-3-1985"...
+  function parseTyped(str) {
+    var m = String(str).match(/(\d{1,2})\s*[.\/\-\s]\s*(\d{1,2})\s*[.\/\-\s]\s*(\d{2,4})/);
+    if (!m) return null;
+    var day = +m[1], mon = +m[2], yr = +m[3];
+    if (yr < 100) yr += (yr <= 30 ? 2000 : 1900);
+    if (mon < 1 || mon > 12 || day < 1 || day > 31) return null;
+    var d = new Date(yr, mon - 1, day);
+    if (d.getFullYear() !== yr || d.getMonth() !== mon - 1 || d.getDate() !== day) return null;
+    return d;
+  }
   function sameDay(a, b) {
     return a && b && a.getFullYear() === b.getFullYear() &&
       a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
@@ -59,9 +70,11 @@
     input.parentNode.insertBefore(wrap, input);
     wrap.appendChild(input);
 
-    var display = document.createElement('button');
-    display.type = 'button';
+    var display = document.createElement('input');
+    display.type = 'text';
     display.className = 'dp-display';
+    display.setAttribute('autocomplete', 'off');
+    display.setAttribute('inputmode', 'numeric');
     display.setAttribute('aria-haspopup', 'dialog');
     wrap.appendChild(display);
 
@@ -79,14 +92,21 @@
     this.display = display;
     this.pop = pop;
     this.placeholder = input.getAttribute('data-placeholder') || 'Vyberte datum';
+    display.placeholder = this.placeholder;
 
     this.renderDisplay();
     this.renderPop();
 
-    display.addEventListener('click', function (e) {
-      e.preventDefault();
-      self.toggle();
+    // Klik i zaměření pole otevře kalendář (lze vybírat myší)
+    display.addEventListener('focus', function () { self.open(); });
+    // Ruční psaní data — průběžně parsujeme a synchronizujeme
+    display.addEventListener('input', function () { self.onType(display.value); });
+    display.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); self.commitTyped(display.value); self.close(); }
+      else if (e.key === 'ArrowDown' && !self.isOpen) { e.preventDefault(); self.open(); }
     });
+    // Po opuštění pole dorovnej / zvaliduj ručně zadaný text
+    display.addEventListener('blur', function () { self.commitTyped(display.value); });
 
     document.addEventListener('click', function (e) {
       if (self.isOpen && !wrap.contains(e.target)) self.close();
@@ -97,12 +117,49 @@
   };
 
   DatePicker.prototype.renderDisplay = function () {
-    if (this.selected) {
-      this.display.textContent = fmtCZ(this.selected);
-      this.display.classList.remove('is-placeholder');
+    this.display.value = this.selected ? fmtCZ(this.selected) : '';
+  };
+
+  // Průběžné parsování při psaní — nepřepisuje text (nepřekáží kurzoru),
+  // jen synchronizuje hodnotu a posune kalendář na zadaný měsíc.
+  DatePicker.prototype.onType = function (str) {
+    var d = parseTyped(str);
+    if (d && !this.disabled(d)) {
+      this.selected = d;
+      this.input.value = toISO(d);
+      this.viewYear = d.getFullYear();
+      this.viewMonth = d.getMonth();
+      this.input.dispatchEvent(new Event('input', { bubbles: true }));
+      this.input.dispatchEvent(new Event('change', { bubbles: true }));
+      if (this.isOpen) this.renderPop();
+    } else if (this.input.value) {
+      // rozepsané / nevalidní datum — dočasně zruš hodnotu
+      this.selected = null;
+      this.input.value = '';
+      this.input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  };
+
+  // Po opuštění pole / Enter — dorovná text na kanonický tvar nebo vrátí poslední platné.
+  DatePicker.prototype.commitTyped = function (str) {
+    if (String(str).trim() === '') {
+      this.selected = null;
+      this.input.value = '';
+      this.display.value = '';
+      this.input.dispatchEvent(new Event('change', { bubbles: true }));
+      return;
+    }
+    var d = parseTyped(str);
+    if (d && !this.disabled(d)) {
+      this.selected = d;
+      this.input.value = toISO(d);
+      this.display.value = fmtCZ(d);
+      this.input.dispatchEvent(new Event('change', { bubbles: true }));
+    } else if (this.selected) {
+      this.display.value = fmtCZ(this.selected);
     } else {
-      this.display.textContent = this.placeholder;
-      this.display.classList.add('is-placeholder');
+      this.display.value = '';
+      this.input.value = '';
     }
   };
 

@@ -7,7 +7,7 @@
 <meta name="description" content="Kontaktujte tým Lexia - telefonem, e-mailem, online formulářem nebo osobně v Praze.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 
 <template id="__bundler_thumbnail" data-bg-color="#0045bf">
@@ -33,7 +33,7 @@
     <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
-      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
       <li><a href="sluzby.html">Služby</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li><a href="kontakt.html" class="active">Kontakt</a></li>
@@ -126,33 +126,44 @@
             <span class="contact-option-sub">Po–Pá 8:00–18:00</span>
           </div>
         </a>
+        <div class="card">
+          <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="location"></i> Sídlo společnosti</h4>
+          <p style="margin-bottom: 4px;"><strong>LEXIA Legal Protection a.s.</strong></p>
+          <p style="margin-bottom: 4px;">Želetavská 1525/1</p>
+          <p style="margin-bottom: 4px;">140 00 Praha 4</p>
+          <p style="margin-top: 12px; font-size: 0.9rem;">IČO: 22189432 • Datová schránka: gdzpx9r</p>
+        </div>
       </div>
 
       <!-- RIGHT: contact form -->
       <div class="contact-form-card">
-        <div style="margin-bottom: 20px;">
-          <span class="section-eyebrow">Poptávka</span>
-          <h3 style="margin: 8px 0 4px;">Nezávazně se zeptat</h3>
-          <p style="font-size: 0.92rem;">Vyplňte formulář a do 24 hodin se vám ozveme s nabídkou.</p>
+        <div style="margin-bottom: 14px;">
+          <h3 style="margin: 0 0 4px; color: var(--primary); font-size: 1.35rem;">Nezávazně se zeptat</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Vyplňte formulář a do 24 hodin se vám ozveme zpět.</p>
         </div>
-        <form class="form" data-demo>
+        <form class="lead-form-card" data-demo>
           <div class="form-row">
             <div class="form-group">
-              <label>Jméno a příjmení <span class="req">*</span></label>
-              <input type="text" class="form-input" required placeholder="Jan Novák">
+              <input type="text" class="form-input" name="firstname" placeholder=" " required>
+              <label>Jméno</label>
             </div>
             <div class="form-group">
-              <label>Telefon <span class="req">*</span></label>
-              <input type="tel" class="form-input" required placeholder="+420 ...">
+              <input type="text" class="form-input" name="lastname" placeholder=" " required>
+              <label>Příjmení</label>
             </div>
           </div>
-          <div class="form-group">
-            <label>E-mail <span class="req">*</span></label>
-            <input type="email" class="form-input" required placeholder="jan.novak@email.cz">
+          <div class="form-group form-group--half">
+            <input type="tel" class="form-input" name="phone" placeholder=" " required>
+            <label>Telefonní číslo</label>
           </div>
           <div class="form-group">
+            <input type="email" class="form-input" name="email" placeholder=" " required>
+            <label>E-mail</label>
+          </div>
+          <div class="form-group form-group--select">
             <label>Mám zájem o pojištění pro</label>
-            <select class="form-select">
+            <select class="form-select" name="topic">
+              <option value=""></option>
               <option>Sebe (jednotlivec)</option>
               <option>Rodinu</option>
               <option>Firmu nebo OSVČ</option>
@@ -162,72 +173,19 @@
             </select>
           </div>
           <div class="form-group">
+            <textarea class="form-textarea" name="message" rows="2" placeholder=" "></textarea>
             <label>Vaše situace nebo dotaz</label>
-            <textarea class="form-textarea" placeholder="Napište nám, s čím vám můžeme pomoct..."></textarea>
           </div>
-          <label class="form-checkbox">
-            <input type="checkbox" required>
-            <span>Souhlasím se zpracováním osobních údajů dle <a href="#">zásad GDPR</a>.</span>
-          </label>
-          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Odeslat poptávku</button>
+          <p class="lead-form-consent">Informace ke zpracování osobních údajů najdete <a href="#">ZDE</a></p>
+          <button type="submit" class="btn btn-primary">Odeslat</button>
         </form>
       </div>
     </div>
   </div>
 </section>
 
-<!-- INFO BLOCKS: sídlo + krizová linka -->
-<section style="padding-top: 60px;">
-  <div class="container">
-    <div class="grid grid-2" style="max-width: 1000px; margin: 0 auto;">
-      <div class="card">
-        <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="location"></i> Sídlo společnosti</h4>
-        <p style="margin-bottom: 4px;"><strong>LEXIA Legal Protection a.s.</strong></p>
-        <p style="margin-bottom: 4px;">Želetavská 1525/1</p>
-        <p style="margin-bottom: 4px;">140 00 Praha 4</p>
-        <p style="margin-top: 12px; font-size: 0.9rem;">IČO: 22189432 • Datová schránka: gdzpx9r</p>
-      </div>
-      <div class="card">
-        <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="emergency"></i> Krizová linka (nehoda, zadržení)</h4>
-        <p style="margin-bottom: 8px;">Pro klienty Lexia nonstop 24/7:</p>
-        <strong style="font-size: 1.2rem; color: var(--danger);">+420 465 465 465</strong>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SUPPORT -->
-<section>
-  <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Podpora pro klienty</span>
-      <h2>Potřebujete pomoct?</h2>
-    </div>
-    <div class="grid grid-3">
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="book"></i></div>
-        <h3>Nápověda a návody</h3>
-        <p>Detailní průvodci, jak smlouvu uzavřít, nahlásit případ nebo aktualizovat údaje.</p>
-        <a href="jak-funguje.html" class="card-link">Otevřít nápovědu</a>
-      </div>
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="lock"></i></div>
-        <h3>Klientská zóna</h3>
-        <p>Přihlaste se a spravujte své smlouvy, nahlašujte případy a sledujte jejich průběh.</p>
-        <a href="klient.html" class="card-link">Přihlásit se</a>
-      </div>
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="warning"></i></div>
-        <h3>Reklamace</h3>
-        <p>Nejste spokojeni? Pošlete nám reklamaci nebo si stěžujte u finančního arbitra.</p>
-        <a href="#" class="card-link">Více informací</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
 </svg>
 <footer class="footer">
   <div class="container">
@@ -251,7 +209,7 @@
       <div>
         <h4>Lexia</h4>
         <ul>
-          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
           <li><a href="o-nas.html">O nás</a></li>
           <li><a href="#">GDPR</a></li>
           <li><a href="#">Postup při podání stížnosti</a></li>
@@ -267,6 +225,8 @@
           <li><a href="kontakt.html">Kontakty</a></li>
           <li><a href="#">Ke stažení</a></li>
           <li><a href="#">Pojistné podmínky</a></li>
+          <li><a href="#">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="#">Brožura - podnikatelé a firmy</a></li>
         </ul>
       </div>
     </div>
@@ -280,5 +240,26 @@
 <script src="assets/icons.js"></script>
 <script src="script.js"></script>
 <script src="assets/customselect.js"></script>
+<script>
+  // Plovoucí popisky v kontaktním formuláři (stejné chování jako na LP).
+  (function () {
+    var card = document.querySelector('.lead-form-card');
+    if (!card) return;
+    card.querySelectorAll('.form-input, .form-textarea').forEach(function (f) {
+      var grp = f.closest('.form-group');
+      var sync = function () {
+        grp.classList.toggle('field-empty', !f.value && document.activeElement !== f);
+      };
+      ['input', 'focus', 'blur'].forEach(function (ev) { f.addEventListener(ev, sync); });
+      sync();
+    });
+    card.querySelectorAll('.form-select').forEach(function (sel) {
+      var grp = sel.closest('.form-group');
+      var sync = function () { grp.classList.toggle('field-empty', !sel.value); };
+      sel.addEventListener('change', sync);
+      sync();
+    });
+  })();
+</script>
 </body>
 </html>

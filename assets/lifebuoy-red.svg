@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <defs>
+    <radialGradient id="lbRed" cx="40%" cy="34%" r="78%">
+      <stop offset="0%" stop-color="#ff5b4e"/>
+      <stop offset="55%" stop-color="#f0392f"/>
+      <stop offset="100%" stop-color="#cf2a22"/>
+    </radialGradient>
+    <radialGradient id="lbShadow" cx="50%" cy="50%" r="50%">
+      <stop offset="55%" stop-color="#0a2a52" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#06203f" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+  <!-- soft splash / water shadow -->
+  <circle cx="200" cy="206" r="190" fill="url(#lbShadow)"/>
+  <!-- white outer rim -->
+  <circle cx="200" cy="200" r="145" fill="none" stroke="#eef2f5" stroke-width="84"/>
+  <!-- red body -->
+  <circle cx="200" cy="200" r="145" fill="none" stroke="url(#lbRed)" stroke-width="70"/>
+  <!-- white cross bands -->
+  <g fill="#eef2f5">
+    <rect x="182" y="18"  width="36" height="74" rx="6"/>
+    <rect x="182" y="308" width="36" height="74" rx="6"/>
+    <rect x="18"  y="182" width="74" height="36" rx="6"/>
+    <rect x="308" y="182" width="74" height="36" rx="6"/>
+  </g>
+  <!-- subtle highlight on the red tube -->
+  <circle cx="200" cy="200" r="145" fill="none" stroke="#ffffff" stroke-width="6" stroke-opacity="0.18"
+          stroke-dasharray="120 600" stroke-dashoffset="-40"/>
+</svg>

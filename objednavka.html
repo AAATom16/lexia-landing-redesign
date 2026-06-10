@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sjednání pojištění online | Lexia</title>
+<meta name="description" content="Sjednejte si právní ochranu Lexia online za pevnou cenu. Vyplňte údaje pojistníka a zaplaťte — hotovo během minuty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Naše produkty</a></li>
+      <li><a href="klient.html">Pro klienty</a></li>
+      <li><a href="#">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li class="nav-mobile-only"><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kontakt.html" class="btn btn-primary">Kontakt <i class="icon" data-icon="mail"></i></a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 id="order-title">Sjednání pojištění online</h1>
+    <p id="order-sub">Pevná cena, žádná konfigurace. Vyplňte údaje pojistníka, zaplaťte a máte hotovo.</p>
+  </div>
+</section>
+
+<section style="padding-top: 30px;">
+  <div class="container">
+
+    <!-- ============= STEPPER ============= -->
+    <ol class="calc-stepper" aria-label="Postup sjednání">
+      <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Pojistník</span></li>
+      <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Platba</span></li>
+      <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Hotovo</span></li>
+    </ol>
+
+    <!-- ============= STEP 1: Údaje pojistníka ============= -->
+    <div class="calc-step is-active" data-step-panel="1">
+      <div class="calc-wrapper">
+        <!-- LEFT - formulář pojistníka -->
+        <form class="calc-form" id="insured-form">
+
+          <div class="calc-section">
+            <h4>Váš vybraný produkt</h4>
+            <div class="fixed-product">
+              <span class="fixed-product-icon"><i class="icon" data-icon="shield" id="fx-icon"></i></span>
+              <div class="fixed-product-body">
+                <strong class="fixed-product-name" id="fx-name">Kompletní balíček</strong>
+                <p class="fixed-product-desc" id="fx-desc">Základní ochrana, bydlení i řidiči v jednom.</p>
+              </div>
+              <span class="fixed-product-price"><strong id="fx-price">499 Kč</strong> <span>/měsíc</span></span>
+            </div>
+            <p class="fixed-note"><i class="icon" data-icon="check_circle" style="width:14px;height:14px;"></i> Pevná finální cena. Stačí vyplnit, pro koho pojištění je, a zaplatit.</p>
+          </div>
+
+          <div class="calc-section">
+            <h4>1. Pojistník — osobní údaje</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Jméno <span class="req">*</span></label>
+                <input type="text" class="form-input" name="firstName" placeholder="Jan" required>
+              </div>
+              <div class="form-group">
+                <label>Příjmení <span class="req">*</span></label>
+                <input type="text" class="form-input" name="lastName" placeholder="Novák" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Datum narození <span class="req">*</span></label>
+                <input type="date" class="form-input" name="birthDate" data-placeholder="Vyberte datum">
+              </div>
+              <div class="form-group">
+                <label>Rodné číslo</label>
+                <input type="text" class="form-input" name="rc" placeholder="123456/7890" pattern="[0-9]{6}/[0-9]{3,4}">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>E-mail <span class="req">*</span></label>
+                <input type="email" class="form-input" name="email" placeholder="jan.novak@email.cz" required>
+              </div>
+              <div class="form-group">
+                <label>Telefon <span class="req">*</span></label>
+                <input type="tel" class="form-input" name="phone" placeholder="+420 600 000 000" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <h4>2. Trvalá adresa</h4>
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Ulice <span class="req">*</span></label>
+                <input type="text" class="form-input" name="street" placeholder="Želetavská" required>
+              </div>
+              <div class="form-group">
+                <label>Číslo popisné <span class="req">*</span></label>
+                <input type="text" class="form-input" name="houseNum" placeholder="1525/1" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="flex: 2;">
+                <label>Obec <span class="req">*</span></label>
+                <input type="text" class="form-input" name="city" placeholder="Praha" required>
+              </div>
+              <div class="form-group">
+                <label>PSČ <span class="req">*</span></label>
+                <input type="text" class="form-input" name="zip" placeholder="140 00" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Stát</label>
+              <input type="text" class="form-input" name="country" value="Česká republika">
+            </div>
+          </div>
+
+          <div class="calc-section" style="border-bottom: none;">
+            <h4>3. Počátek pojištění</h4>
+            <div class="form-group" style="max-width: 220px;">
+              <label>Datum počátku pojištění <span class="req">*</span></label>
+              <input type="date" class="form-input" name="startDate" id="start-date" data-placeholder="Vyberte datum">
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Pojištění začíná platit dnem zaplacení a nejdříve od zvoleného data.</p>
+            </div>
+          </div>
+        </form>
+
+        <!-- RIGHT - shrnutí objednávky -->
+        <div class="calc-summary">
+          <h3>Vaše objednávka</h3>
+          <div class="calc-summary-row">
+            <span>Produkt</span>
+            <strong data-echo="product">Kompletní balíček</strong>
+          </div>
+          <div class="calc-summary-row">
+            <span>Pojistník</span>
+            <strong data-echo="fullName">—</strong>
+          </div>
+          <div class="calc-summary-row" style="border-bottom: none;">
+            <span>Frekvence</span>
+            <strong>měsíčně</strong>
+          </div>
+          <div class="calc-total">
+            <span>Celkem k úhradě měsíčně:</span>
+            <strong data-echo="total">499 Kč</strong>
+          </div>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat k platbě</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============= STEP 2: Platba ============= -->
+    <div class="calc-step" data-step-panel="2" hidden>
+      <div class="calc-single">
+        <h2 style="margin-bottom: 24px; text-align: center;">Platba pojištění</h2>
+
+        <div class="recap-card recap-card--price">
+          <h4 class="recap-card-title" style="color: var(--white);">K úhradě</h4>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong data-echo="product">Kompletní balíček</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong>měsíčně</strong></div>
+          <div class="recap-row" style="border-bottom: none; padding-top: 14px;"><span style="font-size: 1.05rem;">Částka k úhradě</span><strong data-echo="total" style="font-size: 1.6rem;">499 Kč</strong></div>
+        </div>
+
+        <div class="recap-card">
+          <h4 class="recap-card-title">Způsob platby</h4>
+          <div class="calc-options" style="grid-template-columns: 1fr; gap: 12px;">
+            <label class="calc-option selected">
+              <input type="radio" name="payMethod" value="card" checked>
+              <strong><i class="icon" data-icon="check_circle"></i> Platební karta</strong>
+              <span>Okamžitá platba, sjednání během minuty</span>
+            </label>
+            <label class="calc-option">
+              <input type="radio" name="payMethod" value="transfer">
+              <strong><i class="icon" data-icon="bank"></i> Bankovní převod</strong>
+              <span>Platební instrukce a variabilní symbol vám pošleme e-mailem</span>
+            </label>
+            <label class="calc-option">
+              <input type="radio" name="payMethod" value="recurring">
+              <strong><i class="icon" data-icon="clock"></i> Opakovaná platba kartou / inkaso</strong>
+              <span>Automatická platba každý měsíc, jednoduché zrušení</span>
+            </label>
+          </div>
+          <label class="form-checkbox" id="recurring-consent" hidden style="margin-top: 14px;">
+            <input type="checkbox">
+            <span>Souhlasím s opakovanou platbou.</span>
+          </label>
+        </div>
+
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Souhlasy</h4>
+          <label class="form-checkbox"><input type="checkbox" class="consent" required><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a> a informacemi o pojištění. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" class="consent" required><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
+        </div>
+
+        <div class="calc-nav">
+          <button type="button" class="btn btn-outline btn-lg" data-step-back="1">Zpět na údaje</button>
+          <button type="button" class="btn btn-primary btn-lg" id="pay-btn"><i class="icon" data-icon="lock"></i> Zaplatit a sjednat</button>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 14px; text-align: center;"><i class="icon" data-icon="lock"></i> Platba je zabezpečena PCI DSS certifikovanou platební bránou</p>
+      </div>
+    </div>
+
+    <!-- ============= STEP 3: Hotovo ============= -->
+    <div class="calc-step" data-step-panel="3" hidden>
+      <div class="calc-single">
+        <div class="state-card" data-state="success">
+          <div class="state-icon state-icon--success">
+            <i class="icon" data-icon="check_circle"></i>
+          </div>
+          <h2>Pojištění bylo sjednáno</h2>
+          <p>Děkujeme. Vaše právní pojištění bylo úspěšně sjednáno. Potvrzení a dokumenty jsme odeslali na váš e-mail.</p>
+          <div class="state-details">
+            <div class="recap-row"><span>Produkt</span><strong data-echo="product">Kompletní balíček</strong></div>
+            <div class="recap-row"><span>Číslo smlouvy</span><strong data-echo="contractNo">LX-2026-000000</strong></div>
+            <div class="recap-row"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
+            <div class="recap-row"><span>Datum počátku pojištění</span><strong data-echo="startDate">—</strong></div>
+            <div class="recap-row" style="border-bottom: none;"><span>Zaplaceno (měsíčně)</span><strong style="color: var(--success);" data-echo="total">499 Kč</strong></div>
+          </div>
+          <div class="state-actions">
+            <a href="#" class="btn btn-primary btn-lg"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
+            <a href="index.html" class="btn btn-outline btn-lg">Zpět na hlavní stránku</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="assets/datepicker.js"></script>
+<script>
+/* ============================================
+   LEXIA — Online objednávka pevného produktu
+   Samostatná kalkulačka: Pojistník → Platba → Hotovo
+   Cena je pevná (jak na e-shopu), odpovídá ceně na LP.
+   ============================================ */
+(function () {
+  // Mobilní menu
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  }
+
+  // Produkty s PEVNOU cenou (musí odpovídat cenám v hero sekci na index.html)
+  const FIXED_PRODUCTS = {
+    vozidlo: { name: 'Právní ochrana vozidla', desc: 'Pro řidiče i posádku, doplněk k povinnému ručení.', icon: 'car', price: 159 },
+    bydleni: { name: 'Právní ochrana bydlení', desc: 'Sousedské spory, vady nemovitosti i pronájem.',     icon: 'house', price: 199 },
+    balicek: { name: 'Kompletní balíček',       desc: 'Základní ochrana, bydlení i řidiči v jednom.',       icon: 'shield', price: 499 },
+  };
+
+  const key = new URLSearchParams(location.search).get('produkt');
+  const product = FIXED_PRODUCTS[key] || FIXED_PRODUCTS.balicek;
+  const priceText = product.price.toLocaleString('cs-CZ') + ' Kč';
+
+  // Náhodné číslo smlouvy pro demo
+  const contractNo = 'LX-2026-' + String(Math.floor(Math.random() * 9000000) + 1000000);
+
+  // --- Naplň kartu produktu ---
+  const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  setText('fx-name', product.name);
+  setText('fx-desc', product.desc);
+  setText('fx-price', priceText);
+
+  const fxIcon = document.getElementById('fx-icon');
+  if (fxIcon) {
+    fxIcon.setAttribute('data-icon', product.icon);
+    fxIcon.innerHTML = '';
+    if (typeof injectIcons === 'function') injectIcons();
+  }
+
+  // Hero
+  setText('order-title', 'Sjednání: ' + product.name);
+
+  // --- Echo (název produktu, cena, pojistník, datum, číslo smlouvy) ---
+  const form = document.getElementById('insured-form');
+  function syncEcho() {
+    const get = n => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value.trim() : ''; };
+    const fullName = [get('firstName'), get('lastName')].filter(Boolean).join(' ') || '—';
+    const sd = get('startDate');
+    const startDate = sd
+      ? new Date(sd).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
+      : '—';
+
+    const map = {
+      product: product.name,
+      total: priceText,
+      fullName: fullName,
+      startDate: startDate,
+      contractNo: contractNo,
+    };
+    Object.keys(map).forEach(name => {
+      document.querySelectorAll(`[data-echo="${name}"]`).forEach(el => { el.textContent = map[name]; });
+    });
+  }
+  form.querySelectorAll('input').forEach(el => {
+    el.addEventListener('input', syncEcho);
+    el.addEventListener('change', syncEcho);
+  });
+  syncEcho();
+
+  // --- Přepínání kroků ---
+  const panels = document.querySelectorAll('[data-step-panel]');
+  const steps = document.querySelectorAll('.calc-stepper .step');
+  function showStep(num) {
+    num = parseInt(num, 10);
+    panels.forEach(p => { p.hidden = parseInt(p.dataset.stepPanel, 10) !== num; });
+    steps.forEach(s => {
+      const n = parseInt(s.dataset.step, 10);
+      s.classList.toggle('is-active', n === num);
+      s.classList.toggle('is-completed', n < num);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Validace pojistníka: nejdřív viditelná textová pole (nativně),
+  // pak povinná data (skrytá nativní pole nejdou nativně validovat — otevřeme kalendář).
+  function openDatePicker(input) {
+    const dp = input.closest('.dp');
+    const target = dp ? dp.querySelector('.dp-display') : input;
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Odložíme za aktuální klik (na tlačítko Pokračovat), jinak by ho datepicker
+    // vyhodnotil jako "klik mimo" a kalendář hned zase zavřel.
+    setTimeout(() => {
+      target.focus();
+      if (dp) target.click(); // rozbalí kalendář jako výzvu k výběru
+    }, 0);
+  }
+  function validateInsured() {
+    if (!form.reportValidity()) return false;
+    for (const n of ['birthDate', 'startDate']) {
+      const inp = form.querySelector(`[name="${n}"]`);
+      if (inp && !inp.value) { openDatePicker(inp); return false; }
+    }
+    return true;
+  }
+
+  document.querySelectorAll('[data-step-next]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      // Validace formuláře pojistníka před přechodem na platbu
+      if (btn.dataset.stepNext === '2' && !validateInsured()) return;
+      syncEcho();
+      showStep(btn.dataset.stepNext);
+    });
+  });
+  document.querySelectorAll('[data-step-back]').forEach(btn => {
+    btn.addEventListener('click', e => { e.preventDefault(); showStep(btn.dataset.stepBack); });
+  });
+
+  // --- Platba: styl vybrané metody + souhlas s opakovanou platbou ---
+  const recurringConsent = document.getElementById('recurring-consent');
+  document.querySelectorAll('input[name="payMethod"]').forEach(r => {
+    r.addEventListener('change', () => {
+      document.querySelectorAll('input[name="payMethod"]').forEach(i => {
+        i.closest('.calc-option').classList.toggle('selected', i.checked);
+      });
+      if (recurringConsent) recurringConsent.hidden = document.querySelector('input[name="payMethod"]:checked').value !== 'recurring';
+    });
+  });
+
+  // --- "Zaplatit a sjednat" → krok Hotovo ---
+  const payBtn = document.getElementById('pay-btn');
+  if (payBtn) {
+    payBtn.addEventListener('click', () => {
+      // Povinné souhlasy
+      const consents = [...document.querySelectorAll('.consent')];
+      const missing = consents.find(c => !c.checked);
+      if (missing) { missing.reportValidity(); return; }
+      const recBox = recurringConsent && !recurringConsent.hidden ? recurringConsent.querySelector('input') : null;
+      if (recBox && !recBox.checked) { recBox.reportValidity(); return; }
+      syncEcho();
+      showStep(3);
+    });
+  }
+})();
+</script>
+</body>
+</html>

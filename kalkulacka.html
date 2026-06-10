@@ -7,7 +7,7 @@
 <meta name="description" content="Spočítejte si cenu pojištění právní ochrany Lexia online. Jednotlivec, domácnost, 4 pilíře + doplňky.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 
 <template id="__bundler_thumbnail" data-bg-color="#0045bf">
@@ -30,17 +30,17 @@
 
 <header class="header">
   <nav class="nav">
-    <a href="index.html" class="logo" aria-label="Lexia"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
-      <li><a href="pro-koho.html">Pro koho</a></li>
-      <li><a href="jak-funguje.html">Jak funguje</a></li>
-      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="pro-koho.html">Naše produkty</a></li>
+      <li><a href="klient.html">Pro klienty</a></li>
+      <li><a href="#">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
-      <li><a href="kontakt.html">Kontakt</a></li>
-      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+      <li class="nav-mobile-only"><a href="kontakt.html">Kontakt</a></li>
     </ul>
     <div class="nav-actions">
       <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kontakt.html" class="btn btn-primary">Kontakt <i class="icon" data-icon="mail"></i></a>
     </div>
     <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
@@ -540,7 +540,7 @@
 
         <div class="recap-card recap-card--price">
           <h4 class="recap-card-title" style="color: var(--white);">K úhradě</h4>
-          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong>Pojištění právní ochrany</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong data-echo="product">Pojištění právní ochrany</strong></div>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Zvolená varianta</span><strong data-echo="variant">Jednotlivec</strong></div>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong data-echo="period">měsíčně</strong></div>
           <div class="recap-row" style="border-bottom: none; padding-top: 14px;"><span style="font-size: 1.05rem;">Částka k úhradě</span><strong data-echo="total" style="font-size: 1.6rem;">179 Kč</strong></div>
@@ -634,7 +634,7 @@
         <h2>Individuální nacenění</h2>
         <p>Tento případ vyžaduje individuální posouzení. Vaše údaje jsme uložili a náš specialista vás bude kontaktovat do 24 hodin.</p>
         <div class="state-details">
-          <div class="recap-row"><span>Vybrané pojištění</span><strong>Pojištění právní ochrany</strong></div>
+          <div class="recap-row"><span>Vybrané pojištění</span><strong data-echo="product">Pojištění právní ochrany</strong></div>
           <div class="recap-row"><span>Důvod individuálního nacenění</span><strong>Překročen limit nemovitosti</strong></div>
           <div class="recap-row" style="border-bottom: none;"><span>Kontakt</span><strong>info@lexia.cz · +420 465 465 465</strong></div>
         </div>
@@ -733,8 +733,8 @@
   </div>
 </section>
 
-<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
 </svg>
 <footer class="footer">
   <div class="container">
@@ -758,7 +758,7 @@
       <div>
         <h4>Lexia</h4>
         <ul>
-          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
           <li><a href="o-nas.html">O nás</a></li>
           <li><a href="#">GDPR</a></li>
           <li><a href="#">Postup při podání stížnosti</a></li>
@@ -774,6 +774,8 @@
           <li><a href="kontakt.html">Kontakty</a></li>
           <li><a href="#">Ke stažení</a></li>
           <li><a href="#">Pojistné podmínky</a></li>
+          <li><a href="#">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="#">Brožura - podnikatelé a firmy</a></li>
         </ul>
       </div>
     </div>

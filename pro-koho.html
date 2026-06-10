@@ -7,7 +7,7 @@
 <meta name="description" content="Právní pojištění Lexia pro jednotlivce, rodiny, firmy, řidiče a zastupitele. Najděte řešení pro vaši situaci.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 
 <template id="__bundler_thumbnail" data-bg-color="#0045bf">
@@ -33,7 +33,7 @@
     <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
       <li><a href="pro-koho.html" class="active">Pro koho</a></li>
-      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
       <li><a href="sluzby.html">Služby</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
@@ -62,44 +62,162 @@
     <!-- ============================================================
          JEDNOTLIVCI A DOMÁCNOSTI
          ============================================================ -->
-    <div id="jednotlivci" class="product-block">
-      <div class="product-block__grid">
-        <!-- LEVÝ sloupec: head + pilíře + note box (vyplní prostor) -->
-        <div class="product-block__col-left">
+    <div id="jednotlivci" class="product-card">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
           <h2>Jednotlivci a domácnosti</h2>
-          <p class="product-block__lead">Právní ochrana v situacích souvisejících s běžným občanským životem. <strong>5 pilířů</strong> komplexní ochrany pro vás i celou rodinu.</p>
-          <div class="product-block__buttons">
-            <a href="kalkulacka.html?profil=jednotlivec" class="btn btn-primary">Od 179 Kč/měsíc</a>
-            <a href="sluzby.html" class="btn btn-outline">Detail služby</a>
-          </div>
-          <h4 class="product-block__h4">Co všechno pokrýváme</h4>
-          <ul class="product-pilire">
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Základní právní ochrana (reklamace, spotřebitelské spory, odškodnění)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní ochrana bydlení (reklamace nemovitosti, sousedské spory)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Pracovněprávní ochrana (výpověď, mzda, pracovní úraz)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní ochrana vozidel (reklamace, opravy, pojišťovny)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní ochrana řidičů (nehody, přestupky, ŘP)</li>
-          </ul>
-          <div class="product-block__info-box">
-            <h4 class="product-block__h4">Možnost sjednat ve 2 variantách</h4>
-            <p><strong>Jednotlivec</strong> — vy + děti do 26 let bez výdělku.<br><strong>Domácnost</strong> — všechny osoby žijící ve společné domácnosti.</p>
+          <p class="product-card__lead">Právní ochrana v situacích běžného občanského života. <strong>5 pilířů</strong> komplexní ochrany pro vás i celou rodinu.</p>
+          <div class="product-card__buttons">
+            <a href="kalkulacka.html?profil=jednotlivec" class="btn btn-primary">Spočítat nabídku</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="jednotlivci-detail" aria-expanded="false" aria-controls="jednotlivci-detail">Zobrazit detail</button>
           </div>
         </div>
-        <!-- PRAVÝ sloupec: image + příklady -->
-        <div class="product-block__col-right">
+        <div class="product-card__col-right">
           <div class="image-frame image-frame--3x2 image-frame--tinted">
             <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Osoba kontroluje smlouvu a dokumenty u stolu" loading="lazy">
             <span class="image-tag"><i class="icon" data-icon="document"></i> Reklamace, smlouvy, spory v rodině</span>
           </div>
-          <h4 class="product-block__h4">Příklady situací, ve kterých chráníme</h4>
-          <ul class="product-examples-list">
-            <li>Srážka při lyžování v zahraničí</li>
-            <li>Reklamace vady novostavby</li>
-            <li>Neoprávněná výpověď</li>
-            <li>Spor s pojišťovnou po dopravní nehodě</li>
-            <li>Odškodnění za chybný lékařský zákrok</li>
-            <li>Vykradení domu a spor o plnění</li>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: 5 pilířů právní ochrany -->
+      <div id="jednotlivci-detail" class="product-detail" hidden>
+        <!-- Úvod -->
+        <div class="pd-intro">
+          <h3 class="pd-intro__title">5 pilířů <span>právní ochrany</span></h3>
+          <ul class="pd-checklist pd-intro__list">
+            <li><span class="pd-check"><i class="icon" data-icon="check"></i></span><span><strong>Pilíře představují konkrétní oblasti</strong> života, ve kterých je nejčastěji potřeba právní pomoc. Každý pilíř kryje specifické situace a dohromady vytvářejí systém komplexní ochrany.</span></li>
+            <li><span class="pd-check"><i class="icon" data-icon="check"></i></span><span>Pojištění jednotlivců a domácností se vztahuje na situace související s běžným občanským životem. Na problémy související s podnikatelskou činností se vztahuje <a href="pro-koho.html#rodiny">pojištění podnikatelů a firem</a>.</span></li>
           </ul>
+        </div>
+
+        <h4 class="pd-section-title">V jakých situacích chrání pojištění právní ochrany jednotlivce a domácnosti</h4>
+
+        <!-- Pilíř 1: Základní právní ochrana (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Rodina relaxuje doma na pohovce" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Základní právní ochrana</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Srážka při lyžování v zahraničí.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Napadení psa.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace spotřebního zboží, zájezdu nebo služeb.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o vrácení zápůjčky.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pojišťovnou o výplatu z úrazového či životního pojištění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o zbrojní průkaz, lovecký nebo rybářský lístek.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Odškodnění za chybně provedený lékařský zákrok.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Varianty pojištění -->
+        <div class="pd-variants">
+          <h5 class="pd-variants__title">Pojištění je možné sjednat ve 2 variantách</h5>
+          <div class="pd-variants__grid">
+            <div class="pd-variant">
+              <strong>Jednotlivec</strong>
+              <span class="pd-variant__sub">Pojištěné osoby jsou:</span>
+              <ul class="pd-checklist">
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vy jako hlavní pojištěná osoba.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vaše děti do 26 let bez pravidelného výdělku.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Děti v opatrovnické nebo pěstounské péči.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Starší děti závislé na péči.</li>
+              </ul>
+            </div>
+            <div class="pd-variant">
+              <strong>Domácnost</strong>
+              <span class="pd-variant__sub">Pojištěné osoby jsou:</span>
+              <ul class="pd-checklist">
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vy jako hlavní pojištěná osoba.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Osoby, které s Vámi žijí ve společné domácnosti a podílejí se na jejím chodu.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Svobodné děti do 26 let bez pravidelného výdělku, bydlící v jiné domácnosti.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilíř 2: Právní ochrana bydlení (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Moderní rodinný dům" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana bydlení</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace vady novostavby.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Skrytá vada starší nemovitosti.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vykradení domu a spor s pojišťovnou o plnění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Odškodnění kvůli vytopení bytu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o přesah větví, hluk, stavební úpravy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Stavební úřad a nařízení stavební změny.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Praskliny v domě po opravě přilehlé silnice.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 3: Pracovněprávní ochrana (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Lidé na pracovní poradě v kanceláři" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Pracovněprávní ochrana</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Neoprávněná výpověď.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Krácení mzdy nebo cestovních náhrad.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Neoprávněná změna pracovní pozice.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pracovní úraz a vymáhání odškodnění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Trestní řízení za porušení bezpečnosti práce.</li>
+            </ul>
+            <div class="pd-addon">
+              <strong>Pojištění manažerské právní ochrany navíc kryje</strong>
+              <ul class="pd-checklist">
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor ohledně konkurenční doložky.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Odpovědnost při sporech pro porušení povinnosti péče řádného hospodáře.</li>
+                <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajobu při obvinění z porušení povinností při správě cizího majetku.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilíř 4: Právní ochrana vozidel (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Automobil na silnici" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana vozidel</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace nového nebo ojetého vozidla.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace opravy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pojišťovnou po dopravní nehodě.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Nárok na odškodnění z povinného ručení jiného účastníka.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Přestupek nebo trestní řízení po nehodě.</li>
+            </ul>
+            <p class="pd-note-inline">Oprávnění řidiči pojištěných vozidel jsou pojištěni automaticky.</p>
+          </div>
+        </div>
+
+        <!-- Pilíř 5: Právní ochrana řidičů (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Silnice z pohledu řidiče" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana řidičů</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Dopravní nehoda s obviněním z přestupku.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Trestní řízení po nehodě se zraněním.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Odebrání řidičského oprávnění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obecné ohrožení při řízení veřejného dopravního prostředku.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="product-block__note">
+          <strong>Dobré vědět:</strong> Pojištění je možné sjednat také pro jinou osobu (např. rodiče) — pojistník je pak jiný než hlavní pojištěná osoba.
         </div>
       </div>
     </div>
@@ -107,43 +225,140 @@
     <!-- ============================================================
          PODNIKATELÉ A FIRMY
          ============================================================ -->
-    <div id="rodiny" class="product-block product-block--bg">
-      <div class="product-block__grid">
-        <div class="product-block__col-left">
+    <div id="rodiny" class="product-card product-card--bg product-card--reverse">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
           <h2>Podnikatelé a firmy</h2>
-          <p class="product-block__lead">Právní ochrana v situacích souvisejících s podnikáním. <strong>6 pilířů</strong> pokrývajících klíčové oblasti pro OSVČ, malé i střední firmy.</p>
-          <div class="product-block__buttons">
-            <a href="kalkulacka.html?profil=firma" class="btn btn-primary">Od 549 Kč/měsíc</a>
-            <a href="sluzby.html" class="btn btn-outline">Detail služby</a>
-          </div>
-          <h4 class="product-block__h4">Co všechno pokrýváme</h4>
-          <ul class="product-pilire">
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Základní právní ochrana (úřady, GDPR, zákazníci)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Pracovněprávní spory</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Pojištění komerčních prostor</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Smluvní spory a vymáhání pohledávek</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní ochrana řidičů a vozidel</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Ochrana statutárního orgánu (D&amp;O)</li>
-          </ul>
-          <div class="product-block__info-box">
-            <h4 class="product-block__h4">Pro koho je vhodné</h4>
-            <p>OSVČ, malé a střední firmy, e-shopy, řemeslníci, konzultanti — všichni, kdo nechtějí být odkázáni na drahé advokátní kanceláře.</p>
+          <p class="product-card__lead">Právní ochrana v situacích souvisejících s podnikáním. <strong>6 pilířů</strong> pokrývajících klíčové oblasti pro OSVČ, malé i střední firmy.</p>
+          <div class="product-card__buttons">
+            <a href="kalkulacka.html?profil=firma" class="btn btn-primary">Spočítat nabídku</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="firmy-detail" aria-expanded="false" aria-controls="firmy-detail">Zobrazit detail</button>
           </div>
         </div>
-        <div class="product-block__col-right">
+        <div class="product-card__col-right">
           <div class="image-frame image-frame--3x2 image-frame--tinted">
             <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Obchodní jednání a podpis smlouvy" loading="lazy">
             <span class="image-tag"><i class="icon" data-icon="briefcase"></i> Spory s úřady, smlouvy, vymáhání pohledávek</span>
           </div>
-          <h4 class="product-block__h4">Příklady situací, které pokrýváme</h4>
-          <ul class="product-examples-list">
-            <li>Pokuta od hygieny nebo živnostenského úřadu</li>
-            <li>Spor s finančním úřadem o výklad nákladů</li>
-            <li>Obvinění z porušení GDPR</li>
-            <li>Nezaplacená faktura</li>
-            <li>Navýšení nájemného komerčních prostor</li>
-            <li>Pojišťovna odmítla vyplatit škodu</li>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: 6 pilířů právní ochrany -->
+      <div id="firmy-detail" class="product-detail product-detail--feature" hidden>
+        <div class="product-detail__intro">
+          <h3 class="product-detail__title">6 pilířů <span>právní ochrany</span></h3>
+          <ul class="pd-intro-checks">
+            <li>Naše <strong>právní ochrana</strong> stojí na šesti pilířích, které pokrývají <strong>klíčové oblasti podnikání</strong>. Každý pilíř chrání jiný typ právních situací a když je dobře zkombinujete, máte pod sebou opravdu pevné základy.</li>
+            <li>Každý pilíř má své specifické podmínky. Názorné příklady vám ukážou, kdy pojištění opravdu podrží. Vše funguje přehledně a sjednání je otázkou několika minut.</li>
           </ul>
+        </div>
+
+        <h4 class="product-detail__heading">V jakých situacích chrání pojištění právní ochrany podnikatele a firmy</h4>
+
+        <div class="pd-feature-rows">
+          <!-- Pilíř 1 -->
+          <div class="pd-feature-row">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Majitelka květinářství ve své provozovně" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Základní právní ochrana</h5>
+              <ul class="pd-checks">
+                <li>Pokuta od hygieny nebo živnostenského úřadu.</li>
+                <li>Spor s finančním úřadem o výklad nákladů.</li>
+                <li>Zranění zákazníka v areálu.</li>
+                <li>Pojišťovna odmítla vyplatit škodu z přerušení provozu.</li>
+                <li>Obvinění z porušení GDPR.</li>
+                <li>Někdo zneužil logo firmy.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pilíř 2 -->
+          <div class="pd-feature-row pd-feature-row--reverse">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Pracovní porada týmu v kanceláři" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Pracovněprávní spory</h5>
+              <ul class="pd-checks">
+                <li>Spor o ukončení pracovního poměru.</li>
+                <li>Výtka problémovému zaměstnanci.</li>
+                <li>Nárok firmy na odškodnění od zaměstnance.</li>
+                <li>Porušení konkurenční doložky.</li>
+                <li>Obvinění z porušení bezpečnosti práce.</li>
+                <li>Právní pomoc po kontrole inspekce práce.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pilíř 3 -->
+          <div class="pd-feature-row">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Komerční prostor – prodejna s oblečením" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Pojištění komerčních prostor</h5>
+              <ul class="pd-checks">
+                <li>Navýšení nájemného ze strany majitele.</li>
+                <li>Zatékání do prostor, reklamace práce stavební firmy.</li>
+                <li>Nefunkční klimatizace.</li>
+                <li>Blokování rekonstrukce nebo užívání příjezdové cesty.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pilíř 4 -->
+          <div class="pd-feature-row pd-feature-row--reverse">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Podpis obchodní smlouvy" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Pojištění smluvních sporů</h5>
+              <ul class="pd-checks">
+                <li>Nezaplacená faktura.</li>
+                <li>Spor o kvalitu či včasnost dodávky.</li>
+                <li>Neuznaná reklamace.</li>
+                <li>Zrušení smlouvy ze strany dodavatele.</li>
+                <li>Nedodržení smlouvy o přepravě.</li>
+                <li>Problém s provizí či odměnou.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pilíř 5 -->
+          <div class="pd-feature-row">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Řidič za volantem vozidla" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Právní ochrana řidičů</h5>
+              <ul class="pd-checks">
+                <li>Dopravní nehoda s obviněním z ublížení na zdraví.</li>
+                <li>Obhajoba v případě pokuty a ztráty bodů.</li>
+                <li>Neoprávněné obvinění z ujetí od nehody.</li>
+                <li>Spor s pojišťovnou o plnění z úrazového pojištění.</li>
+                <li>Vymáhání odškodnění po dopravní nehodě.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pilíř 6 -->
+          <div class="pd-feature-row pd-feature-row--reverse">
+            <div class="pd-feature-row__media">
+              <img src="https://images.unsplash.com/photo-1486006920555-c77dcf18193c?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Servis a oprava vozidla" loading="lazy">
+            </div>
+            <div class="pd-feature-row__body">
+              <h5 class="pd-feature-row__title">Právní ochrana vozidel</h5>
+              <ul class="pd-checks">
+                <li>Pojištění právní ochrany řidičů a dalších cestujících ve vozidle.</li>
+                <li>Pojišťovna odmítla plnit z havarijního pojištění.</li>
+                <li>Vymáhání škody a ušlého zisku po nehodě.</li>
+                <li>Spor se servisem o špatně provedenou opravu.</li>
+                <li>Problémy s leasingovou společností při vracení auta.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -151,116 +366,478 @@
     <!-- ============================================================
          GARANCE PLUS
          ============================================================ -->
-    <div id="firmy" class="product-block">
-      <div class="product-block__grid">
-        <div class="product-block__col-left">
+    <div id="firmy" class="product-card">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
           <span class="product-block__badge">Již brzy</span>
           <h2>Garance Plus</h2>
-          <p class="product-block__lead">Unikátní spojení pojištění právní ochrany a know-how EUCS. Maximální ochrana pro nejnáročnější klienty.</p>
-          <div class="product-block__buttons">
-            <a href="kontakt.html" class="btn btn-outline">Nechte si dát vědět</a>
+          <p class="product-card__lead">Unikátní spojení pojištění právní ochrany a know-how EUCS. Maximální ochrana pro nejnáročnější klienty.</p>
+          <div class="product-card__buttons">
+            <a href="kontakt.html" class="btn btn-primary">Nechte si dát vědět</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="garance-plus-detail" aria-expanded="false" aria-controls="garance-plus-detail">Zobrazit detail</button>
           </div>
-          <h4 class="product-block__h4">Co všechno získáte</h4>
-          <ul class="product-pilire">
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Vše z pojištění právní ochrany</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Expertní know-how EUCS</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Prémiový osobní přístup</li>
-          </ul>
         </div>
-        <div class="product-block__col-right">
+        <div class="product-card__col-right">
           <div class="image-frame image-frame--3x2 image-frame--tinted">
             <img src="https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Detail advokátního stolu, právní knihy a váhy spravedlnosti" loading="lazy">
             <span class="image-tag"><i class="icon" data-icon="sparkle"></i> Prémiové krytí pro nejnáročnější klienty</span>
           </div>
-          <h4 class="product-block__h4">Připravujeme i další produkty</h4>
-          <ul class="product-coming-list">
-            <li>
-              <span class="product-coming-icon"><i class="icon" data-icon="bank"></i></span>
-              <div><strong>Obce a města</strong><span>Komplexní právní pomoc při sporech v rámci vedení obce</span></div>
-            </li>
-            <li>
-              <span class="product-coming-icon"><i class="icon" data-icon="school"></i></span>
-              <div><strong>Školy a školky</strong><span>Pojištění právní ochrany pro vzdělávací instituce</span></div>
-            </li>
-          </ul>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: Garance Plus -->
+      <div id="garance-plus-detail" class="product-detail product-detail--showcase" hidden>
+        <div class="product-detail__intro">
+          <h3 class="product-detail__title">Unikátní produkt <span style="color: var(--primary);">na trhu</span></h3>
+          <p><strong>Kombinace profesionálního vyčíslení a uplatnění nároků vůči pojišťovnám</strong> s pojištěním právní ochrany ve sporech s pojišťovnami, při vymáhání náhrady újmy od pojišťoven viníků a ve sporech s finančními institucemi (banky, penzijní společnosti, investiční společnosti, úvěrové společnosti).</p>
+        </div>
+
+        <div class="product-showcase">
+          <!-- Garance EUCS -->
+          <div class="product-showcase-row product-showcase-row--media-left">
+            <div class="product-showcase-row__media">
+              <div class="image-frame image-frame--3x2 image-frame--tinted">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Profesionální vyčíslení a uplatnění nároků vůči pojišťovnám" loading="lazy">
+              </div>
+            </div>
+            <div class="product-showcase-row__body">
+              <h4 class="product-showcase-row__title">Garance EUCS</h4>
+              <ul class="product-pilire product-showcase-row__list">
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Profesionální pomoc s vyčíslením všech nároků vůči pojišťovnám.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Srozumitelné a důrazné uplatnění nároků.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Spolupráce s nejlepšími znalci z oboru.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Zázemí zkušeného týmu.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Spory s pojišťovnami -->
+          <div class="product-showcase-row">
+            <div class="product-showcase-row__body">
+              <h4 class="product-showcase-row__title">Pojištění právní ochrany ve sporech s pojišťovnami</h4>
+              <ul class="product-pilire product-showcase-row__list">
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Refinancování sporů s pojišťovnou.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní pomoc při krácení pojistného plnění.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Právní pomoc při odmítnutí plnění ze strany pojišťovny.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Obhajoba při obvinění ze spoluviny.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Obrana proti regresu uplatněnému vůči nám.</li>
+              </ul>
+            </div>
+            <div class="product-showcase-row__media">
+              <div class="image-frame image-frame--3x2 image-frame--tinted">
+                <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Jednání a spory s pojišťovnami" loading="lazy">
+              </div>
+            </div>
+          </div>
+
+          <!-- Spory s finančními institucemi -->
+          <div class="product-showcase-row product-showcase-row--media-left">
+            <div class="product-showcase-row__media">
+              <div class="image-frame image-frame--3x2 image-frame--tinted">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Spory s bankami a finančními institucemi" loading="lazy">
+              </div>
+            </div>
+            <div class="product-showcase-row__body">
+              <h4 class="product-showcase-row__title">Pojištění právní ochrany ve sporech s finančními institucemi</h4>
+              <ul class="product-pilire product-showcase-row__list">
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Neoprávněné naúčtování bankovních poplatků.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Krádež prostředků z účtu po zneužití identity.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Spor ohledně zesplatnění úvěru.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Nesprávné provedení pokynu k nákupu/prodeji cenného papíru.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Nesprávně vypočtená dávka z penzijního připojištění.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Právní ochrana řidiče -->
+          <div class="product-showcase-row">
+            <div class="product-showcase-row__body">
+              <h4 class="product-showcase-row__title">Pojištění právní ochrany řidiče</h4>
+              <ul class="product-pilire product-showcase-row__list">
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Dopravní nehoda s obviněním z přestupku.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Trestní řízení po nehodě se zraněním.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Odebrání řidičského oprávnění.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Vymáhání odškodnění po nehodě.</li>
+                <li><span class="check"><i class="icon" data-icon="check"></i></span> Obecné ohrožení při řízení veřejného dopravního prostředku.</li>
+              </ul>
+            </div>
+            <div class="product-showcase-row__media">
+              <div class="image-frame image-frame--3x2 image-frame--tinted">
+                <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Právní ochrana řidiče za volantem" loading="lazy">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ============================================================
-         ŘIDIČI A VOZIDLA
+         OBCE A MĚSTA
          ============================================================ -->
-    <div id="ridici" class="product-block product-block--bg">
-      <div class="product-block__grid">
-        <div class="product-block__col-left">
-          <h2>Řidiči a vozidla</h2>
-          <p class="product-block__lead">Právní ochrana řidičů a vozidel je součástí produktů pro jednotlivce i podnikatele. Komplexní pomoc při sporech souvisejících s vozidlem.</p>
-          <div class="product-block__buttons">
-            <a href="kalkulacka.html?profil=ridic" class="btn btn-primary">Spočítat cenu</a>
-            <a href="sluzby.html" class="btn btn-outline">Detail služby</a>
-          </div>
-          <h4 class="product-block__h4">Co všechno pokrýváme</h4>
-          <ul class="product-pilire">
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Zastoupení po dopravní nehodě</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Obhajoba v případě pokuty a ztráty bodů</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Spory s pojišťovnami o plnění</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Reklamace nového/ojetého vozidla či opravy</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Problémy s leasingovou společností</li>
-          </ul>
-          <div class="product-block__info-box">
-            <h4 class="product-block__h4">Důležité</h4>
-            <p>Oprávnění řidiči pojištěných vozidel jsou pojištěni automaticky. Krytí funguje doplňkově k povinnému ručení i havarijnímu pojištění.</p>
+    <div id="obce" class="product-card product-card--bg product-card--reverse">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
+          <span class="product-block__badge">Již brzy</span>
+          <h2>Obce a města</h2>
+          <p class="product-card__lead">Pojištění právní ochrany obcí postavené na <strong>5 pilířích</strong>, které pokrývají vybrané právní oblasti ze života obce. Komplexní pomoc pro vedení obce, zaměstnance i obecní majetek.</p>
+          <div class="product-card__buttons">
+            <a href="kontakt.html" class="btn btn-primary">Individuální nabídka</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="obce-detail" aria-expanded="false" aria-controls="obce-detail">Zobrazit detail</button>
           </div>
         </div>
-        <div class="product-block__col-right">
+        <div class="product-card__col-right">
           <div class="image-frame image-frame--3x2 image-frame--tinted">
-            <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Auto na silnici po dopravní nehodě" loading="lazy">
-            <span class="image-tag"><i class="icon" data-icon="car"></i> Nehody, pokuty, spory s pojišťovnou</span>
+            <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Barevné historické centrum města" loading="lazy">
+            <span class="image-tag"><i class="icon" data-icon="bank"></i> Vedení obce, zaměstnanci, smlouvy, majetek</span>
           </div>
-          <h4 class="product-block__h4">Příklady situací, ve kterých chráníme</h4>
-          <ul class="product-examples-list">
-            <li>Dopravní nehoda s obviněním z přestupku</li>
-            <li>Trestní řízení po nehodě se zraněním</li>
-            <li>Odebrání řidičského oprávnění</li>
-            <li>Obecné ohrožení při řízení dopravního prostředku</li>
-            <li>Vymáhání odškodnění z povinného ručení jiného účastníka</li>
-          </ul>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: 5 pilířů právní ochrany -->
+      <div id="obce-detail" class="product-detail" hidden>
+        <!-- Úvod -->
+        <div class="pd-intro">
+          <h3 class="pd-intro__title">5 pilířů <span>právní ochrany</span></h3>
+          <p>Pojištění právní ochrany obcí je postavené na pěti pilířích, které pokrývají vybrané právní oblasti ze života obce. Vyberete si z nich také, které vyhovují právě vám.</p>
+        </div>
+
+        <!-- Pilíř 1: Základní právní ochrana (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Historické náměstí a radniční věž" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Základní právní ochrana</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Komplexní právní poradenství pro vedení obce.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana starosty, radních a zastupitelů proti falešným obviněním.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba starosty, radních a zastupitelů v trestním a přestupkovém řízení.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pomoc ve sporech s pojišťovnami.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Mimosoudní vymáhání nároků na náhradu újmy na obecním majetku.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Mimosoudní obrana proti neoprávněním nárokům na odškodnění.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 2: Pracovněprávní spory (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Pracovní porada v kanceláři" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Pracovněprávní spory</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor ohledně ukončení pracovního poměru zaměstnance obce.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pomoc při řešení situace s problémovým zaměstnancem.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Odškodnění vůči zaměstnanci pro porušení jeho povinností.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti neoprávněným nárokům zaměstnance na odškodnění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba zaměstnanců v trestním a přestupkovém řízení.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 3: Smluvní spory (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Podpis smlouvy" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Smluvní spory</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor ze smlouvy o dodávkách IT služeb.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace zakoupeného vybavení obecního úřadu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Problémy s firmou, která obstarává údržbu veřejné zeleně.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Svoz komunálního odpadu nefunguje, jak by podle smlouvy fungovat měl.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Úklidová firma porušuje smlouvu při úklidu obecního úřadu.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 4: Právní ochrana řidičů (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Automobil na silnici" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana řidičů</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vymáhání odškodnění po nehodě.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Dopravní nehoda s obviněním z ublížení na zdraví.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba v případě pokuty a ztráty bodů.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Neoprávněné obvinění z ujetí od nehody.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pojišťovnou o plnění z úrazového pojištění po nehodě.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 5: Právní ochrana vozidel (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Zaparkovaná vozidla" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana vozidel</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pojištění právní ochrany řidičů a dalších cestujících ve vozidle.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pojišťovna odmítla plnit z havarijního pojištění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vymáhání škody po nehodě.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor se servisem o špatně provedenou opravu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Problémy s leasingovou společností při vracení auta.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ============================================================
-         ZASTUPITELÉ A OSTATNÍ
+         ŠKOLY A ŠKOLKY
          ============================================================ -->
-    <div id="zastupitele" class="product-block">
-      <div class="product-block__grid">
-        <div class="product-block__col-left">
-          <h2>Zastupitelé a ostatní</h2>
-          <p class="product-block__lead">Řešení pro zastupitele, SVJ, bytová družstva, spolky a odbory. Pojištění právní ochrany šité na míru veřejné a kolektivní sféry.</p>
-          <div class="product-block__buttons">
-            <a href="kalkulacka.html?profil=zastupitel" class="btn btn-primary">Spočítat cenu</a>
-            <a href="kontakt.html" class="btn btn-outline">Individuální nabídka</a>
-          </div>
-          <h4 class="product-block__h4">Pro koho je produkt určen</h4>
-          <ul class="product-pilire">
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Zastupitelé obcí a měst</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> SVJ (Společenství vlastníků jednotek)</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Bytová družstva</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Spolky a neziskové organizace</li>
-            <li><span class="check"><i class="icon" data-icon="check"></i></span> Odbory</li>
-          </ul>
-          <div class="product-block__info-box">
-            <h4 class="product-block__h4">Náš servis</h4>
-            <p>Síť špičkových specialistů s pokrytím po celé ČR i v Evropě. Využíváme několik nezávislých právnických sítí, abychom pro vás vždy našli toho nejlepšího advokáta.</p>
+    <div id="skoly" class="product-card">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
+          <span class="product-block__badge">Již brzy</span>
+          <h2>Školy a školky</h2>
+          <p class="product-card__lead">Pojištění právní ochrany škol a školek postavené na <strong>5 pilířích</strong>, které pokrývají vybrané právní oblasti ze života školských zařízení. Komplexní pomoc pro vedení školy, zaměstnance i školní majetek.</p>
+          <div class="product-card__buttons">
+            <a href="kontakt.html" class="btn btn-primary">Individuální nabídka</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="skoly-detail" aria-expanded="false" aria-controls="skoly-detail">Zobrazit detail</button>
           </div>
         </div>
-        <div class="product-block__col-right">
+        <div class="product-card__col-right">
           <div class="image-frame image-frame--3x2 image-frame--tinted">
-            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Moderní bytový dům a městská architektura" loading="lazy">
-            <span class="image-tag"><i class="icon" data-icon="bank"></i> Zastupitelé, SVJ, družstva, spolky</span>
+            <img src="assets/lx-tg-skoly.png" alt="Učitelka s dětmi ve třídě" loading="lazy">
+            <span class="image-tag"><i class="icon" data-icon="school"></i> Vedení školy, zaměstnanci, smlouvy, majetek</span>
           </div>
-          <h4 class="product-block__h4">Komu je pojištění určeno</h4>
-          <p>Volení i jmenovaní funkcionáři, statutární orgány SVJ a družstev, výbory spolků a odborů. Pojištění lze hradit i z prostředků organizace.</p>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: 5 pilířů právní ochrany -->
+      <div id="skoly-detail" class="product-detail" hidden>
+        <!-- Úvod -->
+        <div class="pd-intro">
+          <h3 class="pd-intro__title">5 pilířů <span>právní ochrany</span></h3>
+          <p>Pojištění právní ochrany škol a školek je postavené na pěti pilířích, které pokrývají vybrané právní oblasti ze života školských zařízení. Vyberete si z nich také, které vyhovují právě vám.</p>
+        </div>
+
+        <!-- Pilíř 1: Základní právní ochrana (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Ředitel školy v knihovně" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Základní právní ochrana</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Komplexní právní poradenství pro vedení školy a školky.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana školského zařízení proti nepodloženým stížnostem.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba ředitele v trestním a přestupkovém řízení.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pomoc ve sporech s pojišťovnami.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Mimosoudní vymáhání nároků na náhradu újmy na školním majetku.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Mimosoudní obrana proti neoprávněným nárokům na odškodnění.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 2: Pracovněprávní spory (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Učitelka ve třídě s dětmi" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Pracovněprávní spory</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor ohledně ukončení pracovního poměru zaměstnance školy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pomoc při řešení situace s problémovým zaměstnancem.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vymáhání odškodnění vůči zaměstnanci při porušení jeho povinností.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti neoprávněným nárokům zaměstnance na odškodnění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba zaměstnanců v trestním a přestupkovém řízení.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 3: Smluvní spory (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Školní třída se školními lavicemi" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Smluvní spory</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace zakoupeného školního vybavení.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Nasmlouvaný externí lektor neplní závazky ze smlouvy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Dopravce nezajistil smluvenou přepravu dětí.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Úklidová firma nedodržuje podmínky smlouvy o úklidu školy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Provozovatel rekreačního zařízení pro školu v přírodě vybral zálohy, a odmítl děti ubytovat.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 4: Právní ochrana vozidel (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Školní autobus" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana vozidel</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pojištění právní ochrany řidičů a dalších cestujících ve vozidle.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pojišťovna odmítla plnit z havarijního pojištění.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vymáhání škody po nehodě.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor se servisem o špatně provedenou opravu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Problémy s leasingovou společností při vracení auta.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pilíř 5: Právní ochrana řidičů (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Řidič za volantem" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Právní ochrana řidičů</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Vymáhání odškodnění po dopravní nehodě.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Dopravní nehoda s obviněním z ublížení na zdraví.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obhajoba při pokutě a ztrátě bodů.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Neoprávněné obvinění z ujetí od nehody.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pojišťovnou o plnění z úrazového pojištění po nehodě.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         OSTATNÍ POJIŠTĚNÍ
+         ============================================================ -->
+    <div id="ostatni" class="product-card product-card--bg product-card--reverse">
+      <div class="product-card__grid">
+        <div class="product-card__col-left">
+          <span class="product-block__badge">Již brzy</span>
+          <h2>Ostatní pojištění</h2>
+          <p class="product-card__lead">Právní ochrana pro další specifické organizace a profese. Vyberte oblast, která se týká právě vás.</p>
+          <div class="product-card__buttons">
+            <a href="kontakt.html" class="btn btn-primary">Individuální nabídka</a>
+            <button type="button" class="btn btn-outline" data-detail-toggle="ostatni-detail" aria-expanded="false" aria-controls="ostatni-detail">Zobrazit detail</button>
+          </div>
+        </div>
+        <div class="product-card__col-right">
+          <div class="image-frame image-frame--3x2 image-frame--tinted">
+            <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Další organizace a profese" loading="lazy">
+            <span class="image-tag"><i class="icon" data-icon="bank"></i> Specifické organizace a profese</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROZBALOVACÍ DETAIL: ostatní organizace a profese -->
+      <div id="ostatni-detail" class="product-detail" hidden>
+        <!-- Úvod -->
+        <div class="pd-intro">
+          <h3 class="pd-intro__title">Další organizace <span>a profese</span></h3>
+          <p>Právní ochrana pro další specifické organizace a profese. Vyberte oblast, která se týká právě vás.</p>
+        </div>
+
+        <!-- Zdravotnická zařízení a lékařské praxe (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Zdravotnická zařízení a lékařské praxe" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Zdravotnická zařízení a lékařské praxe</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Zastoupení v trestním řízení při podezření z ublížení na zdraví z nedbalosti.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s dodavatelem zdravotnické techniky nebo materiálu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní pomoc při vymáhání pohledávek za neuhrazenou péči.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti nárokům pacientů na náhradu újmy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana v přestupkovém řízení kvůli pravidlům nakládání s léčivy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní pomoc při správním řízení o odebrání či omezení licence k poskytování zdravotní péče.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Spolky a neziskové organizace (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Spolky a neziskové organizace" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Spolky a neziskové organizace</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pronajímatelem prostor pro spolkovou činnost.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Reklamace dodávky sportovního nebo kulturního vybavení.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Řešení odpovědnosti za škodu při pořádané akci.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti žalobě bývalého člena spolku.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s dodavatelem služeb (např. zvuková nebo světelná technika na akci).</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Správní řízení kvůli udělení pokuty za porušení hygienických či bezpečnostních předpisů.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Odborové organizace (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Odborové organizace" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Odborové organizace</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní pomoc členovi při sporu o nevyplacenou mzdu či odměnu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti výpovědi, kterou zaměstnanec považuje za neplatnou.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Zastoupení při vymáhání nároků z pracovního úrazu nebo nemoci z povolání.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o uznání nároku na dovolenou či náhradu mzdy při překážkách v práci.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti neoprávněnému převedení na jinou práci nebo místo výkonu práce.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní zastoupení člena v řízení o diskriminaci nebo nerovném zacházení na pracovišti.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Profesionální sportovci (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Profesionální sportovci" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Profesionální sportovci</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s klubem o vyplácení mzdy nebo smluvních bonusů.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní pomoc při ukončení či změně hráčské smlouvy.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Řešení reklamace vadného sportovního vybavení.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana v disciplinárním řízení sportovního svazu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor s pořadatelem akce o vyplacení honoráře či startovného.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Obecní zastupitelé (obrázek vlevo) -->
+        <div class="pd-row">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Obecní zastupitelé" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">Obecní zastupitelé</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Obrana proti nároku na náhradu škody související s rozhodnutím zastupitele.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Právní pomoc při trestním řízení v souvislosti s výkonem mandátu.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o odměnu nebo náhradu nákladů zastupitele.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Spor o ochranu osobnosti při nepravdivých tvrzeních v médiích.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Řešení odpovědnosti za hlasování o sporném obecním záměru.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- A spousty dalších (obrázek vpravo) -->
+        <div class="pd-row pd-row--reverse">
+          <div class="pd-row__media">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="A spousty dalších" loading="lazy">
+          </div>
+          <div class="pd-row__body">
+            <h5 class="pd-row__title">A spousty dalších!</h5>
+            <ul class="pd-checklist">
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Pojištění právní ochrany je služba pro každého.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Naší nabídku budeme postupně rozšiřovat o další specifické organizace a profese.</li>
+              <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> V případě zájmu vytvoříme nabídku pojištění právní ochrany na míru.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -281,8 +858,8 @@
   </div>
 </section>
 
-<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
 </svg>
 <footer class="footer">
   <div class="container">
@@ -306,7 +883,7 @@
       <div>
         <h4>Lexia</h4>
         <ul>
-          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
           <li><a href="o-nas.html">O nás</a></li>
           <li><a href="#">GDPR</a></li>
           <li><a href="#">Postup při podání stížnosti</a></li>
@@ -322,6 +899,8 @@
           <li><a href="kontakt.html">Kontakty</a></li>
           <li><a href="#">Ke stažení</a></li>
           <li><a href="#">Pojistné podmínky</a></li>
+          <li><a href="#">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="#">Brožura - podnikatelé a firmy</a></li>
         </ul>
       </div>
     </div>

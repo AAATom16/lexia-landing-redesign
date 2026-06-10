@@ -16,6 +16,67 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => btn.parentElement.classList.toggle('active'));
   });
 
+  // Rozbalovací detail produktu (pro-koho.html) — "Zobrazit detail"
+  document.querySelectorAll('[data-detail-toggle]').forEach(btn => {
+    const panel = document.getElementById(btn.getAttribute('data-detail-toggle'));
+    if (!panel) return;
+
+    // Jednorázová úprava struktury panelu: obsah obalíme do __body
+    // a nahoru vložíme lepkavou titulní lištu s tlačítkem pro skrytí.
+    if (!panel.dataset.enhanced) {
+      const card = btn.closest('.product-card');
+      const label = card ? (card.querySelector('h2')?.textContent || 'Detail produktu') : 'Detail produktu';
+
+      const body = document.createElement('div');
+      body.className = 'product-detail__body';
+      while (panel.firstChild) body.appendChild(panel.firstChild);
+
+      const bar = document.createElement('div');
+      bar.className = 'product-detail__bar';
+      bar.innerHTML =
+        '<span class="product-detail__bar-label"><i class="icon" data-icon="document"></i>' + label + '</span>' +
+        '<button type="button" class="product-detail__bar-close">' +
+        '<span class="product-detail__bar-x" aria-hidden="true">&times;</span> Skrýt detail</button>';
+
+      panel.appendChild(bar);
+      panel.appendChild(body);
+      panel.dataset.enhanced = '1';
+
+      bar.querySelector('.product-detail__bar-close').addEventListener('click', () => closeDetail(btn, panel));
+    }
+
+    btn.addEventListener('click', () => {
+      if (panel.hasAttribute('hidden')) {
+        openDetail(btn, panel);
+      } else {
+        closeDetail(btn, panel);
+      }
+    });
+  });
+
+  function openDetail(btn, panel) {
+    panel.removeAttribute('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.textContent = 'Skrýt detail';
+    const card = btn.closest('.product-card');
+    if (card) card.classList.add('is-open');
+    // Scroll na úplný začátek (úvod) panelu. Odsazení pod lepkavou hlavičku
+    // řeší CSS vlastnost scroll-margin-top na .product-detail, aby uživatel
+    // vždy viděl úvodní věty detailu.
+    requestAnimationFrame(() => {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  function closeDetail(btn, panel) {
+    panel.setAttribute('hidden', '');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = 'Zobrazit detail';
+    const card = btn.closest('.product-card');
+    if (card) card.classList.remove('is-open');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   // Form submit demo
   document.querySelectorAll('form[data-demo]').forEach(form => {
     form.addEventListener('submit', e => {
@@ -205,6 +266,57 @@ function initCalcWizard() {
     el.addEventListener('input', syncEcho);
   });
   syncEcho();
+
+  // ============================================
+  // DEEP-LINK Z LANDING PAGE — ?produkt=...
+  // Předvybere pilíře pro daný produkt a skočí rovnou na krok 2 (Vaše údaje).
+  // Zákazník už jen vyplní svoje údaje; rozsah a cenu může upravit přes "Zpět ke kalkulaci".
+  // ============================================
+  const PRODUCTS = {
+    vozidlo: {
+      name: 'Právní ochrana vozidla',
+      title: 'Sjednání právní ochrany vozidla',
+      sub: 'Ochrana řidiče i posádky, doplněk k povinnému ručení a havarijnímu pojištění. Vyplňte své údaje a sjednejte si pojištění online. Rozsah krytí i cenu můžete kdykoliv upravit přes <strong>Zpět ke kalkulaci</strong>.',
+      pillars: ['pillar_vozidla'],
+    },
+    bydleni: {
+      name: 'Právní ochrana bydlení',
+      title: 'Sjednání právní ochrany bydlení',
+      sub: 'Doplněk k pojištění domácnosti i nemovitosti. Vyplňte své údaje a sjednejte si pojištění online. Rozsah krytí i cenu můžete kdykoliv upravit přes <strong>Zpět ke kalkulaci</strong>.',
+      pillars: ['pillar_nemovitost'],
+    },
+    balicek: {
+      name: 'Kompletní balíček',
+      title: 'Sjednání kompletního balíčku',
+      sub: 'Základní právní ochrana, bydlení i řidiči v jednom — nejvýhodnější kombinace. Vyplňte své údaje a sjednejte si pojištění online. Rozsah krytí i cenu můžete kdykoliv upravit přes <strong>Zpět ke kalkulaci</strong>.',
+      pillars: ['pillar_vozidla', 'pillar_nemovitost'],
+    },
+  };
+
+  const productKey = new URLSearchParams(window.location.search).get('produkt');
+  const product = productKey ? PRODUCTS[productKey] : null;
+  if (product) {
+    // Předvyber relevantní pilíře (vyvolá přepočet ceny i .selected styly)
+    product.pillars.forEach(name => {
+      const cb = document.querySelector(`#calc-form input[name="${name}"]`);
+      if (cb && !cb.checked) {
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+
+    // Přepiš název produktu v rekapitulaci, platbě i dokončení
+    document.querySelectorAll('[data-echo="product"]').forEach(el => { el.textContent = product.name; });
+
+    // Přizpůsob hero kalkulačky
+    const heroTitle = document.querySelector('.page-hero h1');
+    const heroSub = document.querySelector('.page-hero p');
+    if (heroTitle) heroTitle.textContent = product.title;
+    if (heroSub) heroSub.innerHTML = product.sub;
+
+    // Skoč rovnou na krok 2 — Vaše údaje
+    showStep(2);
+  }
 }
 
 /* ============================================

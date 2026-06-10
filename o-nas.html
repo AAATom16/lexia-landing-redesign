@@ -7,7 +7,7 @@
 <meta name="description" content="Lexia je moderní právní pojišťovna. Od roku 2019 chráníme práva tisíců klientů v České republice.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 
 <template id="__bundler_thumbnail" data-bg-color="#0045bf">
@@ -25,6 +25,32 @@
   </svg>
 </template>
 
+<style>
+/* O nás – rozložení dle předlohy */
+.onas-ic{display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid var(--primary);color:var(--primary);flex-shrink:0}
+.onas-ic--card{width:104px;height:104px;margin:0 auto 22px}
+.onas-ic--card svg{width:48px;height:48px}
+.onas-ic--sm{width:64px;height:64px}
+.onas-ic--sm svg{width:30px;height:30px}
+.onas-ic--xl{width:280px;height:280px;margin:24px auto 0}
+.onas-ic--xl svg{width:150px;height:150px}
+.onas-values .card{text-align:center}
+.onas-values .card h3{color:var(--primary)}
+.onas-split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;max-width:1100px;margin:0 auto}
+.onas-feature{display:flex;gap:22px;margin-bottom:40px}
+.onas-feature:last-child{margin-bottom:0}
+.onas-feature h3{color:var(--primary);margin-bottom:8px}
+.onas-mv{position:relative;border-radius:22px;overflow:hidden;background:#2b4f7e;background-size:cover;background-position:center;padding:48px}
+.onas-mv-card{position:relative;background:#fff;border-radius:16px;padding:34px 40px;max-width:560px;box-shadow:var(--shadow-3)}
+.onas-mv-card+.onas-mv-card{margin-left:auto;margin-top:56px}
+.onas-team{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;max-width:1100px;margin:40px auto 0}
+.onas-team-photo{position:relative;border-radius:18px;overflow:hidden;height:440px;background:linear-gradient(135deg,#2b62b6,#16335b);display:flex;align-items:center;justify-content:center}
+.onas-team-photo img.lx-ph{width:120px;opacity:.5;position:absolute}
+.onas-team-photo img.lx-real{position:relative;width:100%;height:100%;object-fit:cover}
+.onas-team h3{color:var(--primary);margin:0 0 12px}
+.onas-bio + .onas-bio{margin-top:32px}
+@media(max-width:860px){.onas-split,.onas-team{grid-template-columns:1fr;gap:32px}.onas-ic--xl{width:200px;height:200px}.onas-ic--xl svg{width:110px;height:110px}.onas-mv-card{max-width:none}.onas-mv-card+.onas-mv-card{margin-top:24px}.onas-team-photo{height:300px}}
+</style>
 </head>
 <body>
 
@@ -33,7 +59,7 @@
     <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
-      <li><a href="jak-funguje.html">Jak funguje</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
       <li><a href="sluzby.html">Služby</a></li>
       <li><a href="o-nas.html" class="active">O nás</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
@@ -47,75 +73,90 @@
   </nav>
 </header>
 
-<section class="page-hero">
+<section class="page-hero page-hero--onas" style="background-image: url('assets/o-nas-majak.jpg');">
   <div class="container">
-    <h1>Právní ochrana, <span style="color: var(--primary);">která má smysl</span></h1>
-    <p>V Lexii měníme způsob, jak lidé a firmy přistupují k právním problémům. Děláme právo dostupnější, srozumitelnější a férovější.</p>
-  </div>
-</section>
-
-<!-- MISSION -->
-<section>
-  <div class="container">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto;">
-      <div>
-        <span class="section-eyebrow">Naše mise a vize</span>
-        <h2 style="margin: 12px 0 20px;">Každý si zaslouží právní jistotu</h2>
-        <p style="margin-bottom: 16px; font-size: 1.05rem;">V Lexii věříme, že <strong>každý člověk a každá firma si zaslouží právní jistotu</strong>. Chceme, aby se naši klienti mohli plně soustředit na svůj život a podnikání, aniž by se museli obávat právních sporů, drahých soudů nebo složitých právních procesů.</p>
-        <p style="margin-bottom: 16px; font-size: 1.05rem;">Naším posláním je <strong>chránit práva a zájmy klientů ve všech životních situacích</strong>. Nabízíme nejlepší právní ochranu, která šetří nervy, čas i peníze — rychle, profesionálně a s lidským přístupem.</p>
-        <p style="font-size: 1.05rem;"><strong>Naše vize:</strong> Staneme se lídrem trhu pojištění právní ochrany v regionu, s nejlepšími podmínkami, krytím, servisem a podporou 24/7.</p>
-      </div>
-      <div class="stats-illustration" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: var(--radius-lg); padding: 50px 40px; color: white; text-align: center; position: relative; overflow: hidden;">
-        <div style="position: relative; z-index: 1;">
-          <div style="font-size: 3.2rem; margin-bottom: 8px; font-weight: 800;">2,5 mil. Kč</div>
-          <p style="color: white; opacity: 0.9; margin-bottom: 24px;">Nejvyšší limit na trhu</p>
-          <div style="font-size: 3.2rem; margin-bottom: 8px; font-weight: 800;">ALL-RISK</div>
-          <p style="color: white; opacity: 0.9; margin-bottom: 24px;">Garance s minimem výluk</p>
-          <div style="font-size: 3.2rem; margin-bottom: 8px; font-weight: 800;">20+ let</div>
-          <p style="color: white; opacity: 0.9;">Zkušeností týmu</p>
-        </div>
-      </div>
+    <div class="onas-hero-card">
+      <h1>Právní <span style="color: var(--primary);">ochrana</span>,<br>která má smysl</h1>
+      <p>V Lexii měníme způsob, jak lidé a firmy přistupují k právním problémům. Děláme právo dostupnější, srozumitelnější a férovější.</p>
+      <a href="#mise" class="btn btn-primary btn-lg onas-hero-btn">Naše mise a vize <span aria-hidden="true">&rarr;</span></a>
     </div>
   </div>
+  <svg class="hero-inward-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 L0,12 Q960,300 1920,12 L1920,190 Z"/>
+  </svg>
 </section>
 
 <!-- VALUES -->
-<section class="bg-section has-glyph" data-glyph="building">
+<section class="bg-section onas-values">
   <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">V čem jsme jiní</span>
-      <h2>Zakládáme si na osobním přístupu</h2>
-    </div>
     <div class="grid grid-3">
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="handshake"></i></div>
-        <h3>Jsme nezávislí a féroví</h3>
+        <div class="onas-ic onas-ic--card"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="10.5" r="1.6"/><path d="M24 12.1V38"/><path d="M11 16h26"/><path d="M11 16 6 26a5 3 0 0 0 10 0z"/><path d="M37 16l-5 10a5 3 0 0 0 10 0z"/><path d="M18.5 38h11l2.5 4h-16z"/></svg></div>
+        <h3>Jsme nezávislí a féroví.</h3>
         <p>Nejsme součástí žádného velkého korporátu. To nám umožňuje stát na straně našich klientů a přistupovat k jejich problémům férově a s osobním přístupem.</p>
       </div>
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="graduation"></i></div>
-        <h3>Máme špičkové know-how</h3>
+        <div class="onas-ic onas-ic--card"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7c.5 2 1.1 2.6 3 3-1.9.4-2.5 1-3 3-.5-2-1.1-2.6-3-3 1.9-.4 2.5-1 3-3z" fill="currentColor"/><path d="M24 4c.6 2.3 1.3 3 3.6 3.6-2.3.6-3 1.3-3.6 3.6-.6-2.3-1.3-3-3.6-3.6 2.3-.6 3-1.3 3.6-3.6z" fill="currentColor"/><path d="M32 7c.5 2 1.1 2.6 3 3-1.9.4-2.5 1-3 3-.5-2-1.1-2.6-3-3 1.9-.4 2.5-1 3-3z" fill="currentColor"/><circle cx="24" cy="26" r="6"/><path d="M13 42a11 11 0 0 1 22 0"/></svg></div>
+        <h3>Máme špičkové know-how.</h3>
         <p>Spojujeme více než 20 let zkušeností z pojišťovnictví, práva a managementu. Lidé v Lexii jsou skuteční experti, kteří znají pojištění právní ochrany ze všech stran.</p>
       </div>
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="trophy"></i></div>
-        <h3>Nejlepší produkt na trhu</h3>
-        <p>Naše pojištění má nejvyšší limity pojistného plnění, nejširší rozsah krytí a nejméně výluk. Navíc nabízíme unikátní ALL-RISK garanci.</p>
+        <div class="onas-ic onas-ic--card"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7l4.5 12M29 7l-4.5 12"/><circle cx="24" cy="32" r="11"/><text x="24" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" stroke="none" font-family="Arial, sans-serif">1</text></svg></div>
+        <h3>Přinášíme nejlepší produkt na trhu.</h3>
+        <p>Naše pojištění má nejvyšší limity pojistného plnění, nejširší rozsah krytí a nejméně výluk. Navíc nabízíme unikátní all risk garanci, která chrání klienty i v situacích, které by jiná pojišťovna nekryla.</p>
       </div>
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="road"></i></div>
-        <h3>Jdeme svou cestou</h3>
-        <p>Nechceme po klientech, aby si platili za balíčky, které nikdy nevyužijí. U nás platíte jen za to, co skutečně potřebujete, a pojištění si můžete kdykoliv upravit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION & VISION -->
+<section id="mise">
+  <div class="container">
+    <div class="onas-mv" style="background-image: linear-gradient(160deg, rgba(20,45,80,.25), rgba(20,45,80,.4)), url('assets/o-nas-majak.jpg');">
+      <div class="onas-mv-card">
+        <h2 style="margin-bottom: 16px;">Naše <span style="color: var(--primary-light, #6f9bff);">mise</span></h2>
+        <p style="margin-bottom: 16px;">V Lexii věříme, že <strong>každý člověk a každá firma si zaslouží právní jistotu</strong>. Chceme, aby se naši klienti mohli plně soustředit na svůj život a podnikání, aniž by se museli obávat právních sporů, drahých soudů nebo složitých právních procesů.</p>
+        <p>Naším posláním je <strong>chránit</strong> práva a zájmy klientů <strong>ve všech životních situacích</strong>. Nabízíme <strong>nejlepší právní ochranu</strong>, která šetří nervy, čas i peníze - <strong>rychle, profesionálně a s lidským přístupem</strong>.</p>
       </div>
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="book"></i></div>
-        <h3>Jsme srozumitelní</h3>
-        <p>Naše pojistné podmínky nejsou dlouhé desítky stran plné právnických kliček. Jsou stručné, jasné a čitelné, takže přesně víte, na co máte nárok.</p>
+      <div class="onas-mv-card">
+        <h2 style="margin-bottom: 16px;">Naše <span style="color: var(--primary-light, #6f9bff);">vize</span></h2>
+        <p style="margin-bottom: 16px;">Staneme se <strong>lídrem trhu pojištění právní ochrany</strong> v regionu, s nejlepšími podmínkami, krytím, servisem a podporou 24/7.</p>
+        <p>Věříme, že i v <strong>pojištění právní ochrany je prostor pro změnu</strong> – a my jsme tu, abychom ji přinesli.</p>
       </div>
-      <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="monitor"></i></div>
-        <h3>Moderní technologie</h3>
-        <p>Pojištění sjednáte během několika minut, pojistné události hlásíte digitálně a máte okamžitý přehled o průběhu řešení případu. Za technologiemi je vždy specialista Lexie.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAL APPROACH -->
+<section>
+  <div class="container">
+    <div class="onas-split">
+      <div>
+        <h2 style="color: var(--primary);">Zakládáme si na osobním přístupu</h2>
+        <div class="onas-ic onas-ic--xl"><svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="38" cy="52" r="9"/><path d="M22 84a17 18 0 0 1 32 0"/><circle cx="82" cy="52" r="9"/><path d="M66 84a17 18 0 0 1 32 0"/><circle cx="60" cy="46" r="12"/><path d="M39 88a21 20 0 0 1 42 0"/></svg></div>
+      </div>
+      <div>
+        <div class="onas-feature">
+          <div class="onas-ic onas-ic--sm"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="13" r="3.5"/><circle cx="35" cy="35" r="3.5"/><path d="M13 16.5v3a6 6 0 0 0 6 6h6a6 6 0 0 1 6 6v0.5" stroke-dasharray="0.5 4.5"/></svg></div>
+          <div>
+            <h3>Jdeme svou cestou</h3>
+            <p>Nechceme po klientech, aby si platili za balíčky, které nikdy nevyužijí. U nás platíte jen za to, co skutečně potřebujete, a pojištění si můžete kdykoliv upravit podle aktuální situace. Naší filozofií je jednoduchost, transparentnost a přátelský přístup – to je Lexia.</p>
+          </div>
+        </div>
+        <div class="onas-feature">
+          <div class="onas-ic onas-ic--sm"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h11l7 7v25a2 2 0 0 1-2 2H15a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/><path d="M26 7v7h7"/><path d="M19 29l3.2 3.2 6.3-6.4"/></svg></div>
+          <div>
+            <h3>Jsme srozumitelní</h3>
+            <p>Naše pojistné podmínky nejsou dlouhé desítky stran plné právnických kliček. Jsou stručné, jasné a čitelné, takže přesně víte, na co máte nárok.</p>
+          </div>
+        </div>
+        <div class="onas-feature">
+          <div class="onas-ic onas-ic--sm"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="11" width="30" height="21" rx="2.5"/><path d="M19 38h10M24 32v6"/><path d="M22 17l8.5 4-3.6 1.3 2.3 4-2 1-2.3-4L22 27z" fill="currentColor" stroke="none"/></svg></div>
+          <div>
+            <h3>Využíváme moderní technologie</h3>
+            <p>V Lexii využíváme moderní technologie, díky nim je možné sjednat pojištění během několika minut, pojistné události hlásit digitálně a mít okamžitý přehled o průběhu řešení případu. Za nimi je ale vždy specialista Lexie, se kterým se můžete spojit, ať už telefonicky nebo e-mailem.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -124,38 +165,24 @@
 <!-- TEAM -->
 <section>
   <div class="container">
-    <div class="image-hero" style="margin-bottom: 60px;">
-      <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&amp;fit=crop&amp;w=1600&amp;q=80" alt="Tým Lexie při společné práci v moderní kanceláři" loading="lazy">
+    <div class="section-header" style="text-align: left; max-width: 1100px; margin: 0 auto 8px;">
+      <h2>Kdo stojí za projektem <span style="color: var(--primary-light, #6f9bff);">Lexia?</span></h2>
+      <p style="margin: 0;">Lexia vznikla díky dvěma profesionálům, kteří se rozhodli změnit trh pojištění právní ochrany.</p>
     </div>
-    <div class="section-header">
-      <span class="section-eyebrow">Kdo stojí za projektem Lexia?</span>
-      <h2>Lexia vznikla díky dvěma profesionálům</h2>
-      <p>...kteří se rozhodli změnit trh pojištění právní ochrany.</p>
-    </div>
-    <div class="grid grid-2" style="max-width: 900px; margin: 0 auto;">
-      <div class="card" style="text-align: center;">
-        <div style="width: 130px; height: 130px; border-radius: 50%; background: var(--bg-light); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 2.4rem; font-weight: 800; font-family: var(--font-heading); border: 1px solid var(--border);">ZS</div>
-        <h3 style="margin-bottom: 4px;">Zdeněk Santler</h3>
-        <span style="display: block; color: var(--primary); font-weight: 600; font-size: 0.95rem; margin-bottom: 14px;">Spoluzakladatel a CEO</span>
-        <p style="font-size: 0.95rem; text-align: left;">Zkušený manažer s více než 20 lety praxe v pojišťovnictví a financích. Stál u zrodu několika úspěšných projektů včetně Santia a EFPA ČR. Získal zkušenosti ve vedoucích pozicích firem Konica Minolta, Deloitte, ING pojišťovna (NN) a Avaya. 8 let působil jako člen představenstva v pojišťovně.</p>
+    <div class="onas-team">
+      <div class="onas-team-photo">
+        <img class="lx-ph" src="assets/lexia-symbol-white.svg" alt="" aria-hidden="true">
+        <img class="lx-real" src="assets/o-nas-zakladatele.jpg" alt="Zakladatelé Lexia – Zdeněk Santler a Roman Flek" onerror="this.remove()">
       </div>
-      <div class="card" style="text-align: center;">
-        <div style="width: 130px; height: 130px; border-radius: 50%; background: var(--bg-light); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 2.4rem; font-weight: 800; font-family: var(--font-heading); border: 1px solid var(--border);">RF</div>
-        <h3 style="margin-bottom: 4px;">Roman Flek</h3>
-        <span style="display: block; color: var(--primary); font-weight: 600; font-size: 0.95rem; margin-bottom: 14px;">Spoluzakladatel a COO</span>
-        <p style="font-size: 0.95rem; text-align: left;">Expert na pojištění právní ochrany. Pracoval na manažerských pozicích v DAS pojišťovně, kde měl na starosti právní oddělení, likvidaci pojistných událostí, obchod a marketing. Ví, jak funguje právní ochrana, a přináší do Lexie hluboké know-how z této oblasti.</p>
-      </div>
-    </div>
-    <div class="grid grid-2" style="max-width: 900px; margin: 30px auto 0;">
-      <div class="card" style="text-align: center;">
-        <div style="width: 90px; height: 90px; border-radius: 50%; background: var(--bg-light); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; font-weight: 800; font-family: var(--font-heading); border: 1px solid var(--border);">PZ</div>
-        <strong style="display: block; margin-bottom: 4px;">Petra Zdráhalová</strong>
-        <span style="color: var(--text-muted); font-size: 0.9rem;">Vedoucí Oddělení správy pojištění</span>
-      </div>
-      <div class="card" style="text-align: center;">
-        <div style="width: 90px; height: 90px; border-radius: 50%; background: var(--bg-light); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; font-weight: 800; font-family: var(--font-heading); border: 1px solid var(--border);">PČ</div>
-        <strong style="display: block; margin-bottom: 4px;">Petr Čepa</strong>
-        <span style="color: var(--text-muted); font-size: 0.9rem;">Vedoucí Oddělení právní pomoci</span>
+      <div>
+        <div class="onas-bio">
+          <h3>Zdeněk Santler</h3>
+          <p>Zdeněk je zkušený manažer s více než 20 lety praxe v pojišťovnictví a financích. Stál u zrodu několika úspěšných projektů, včetně společností Santia a EFPA ČR. Získal zkušenosti ve vedoucích pozicích firem jako Konica Minolta, Deloitte, ING pojišťovna (NN) a Avaya, 8 let působil jako člen představenstva v pojišťovně.</p>
+        </div>
+        <div class="onas-bio">
+          <h3>Roman Flek</h3>
+          <p>Roman je expert na pojištění právní ochrany. Pracoval na manažerských pozicích v DAS pojišťovně, kde měl na starosti právní oddělení, likvidaci pojistných událostí, obchod a marketing. Ví, jak funguje právní ochrana, a přináší do Lexie hluboké know-how z této oblasti.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -164,76 +191,53 @@
 <!-- COLONNADE PARTNERSHIP -->
 <section class="bg-section">
   <div class="container">
-    <div style="max-width: 900px; margin: 0 auto;">
-      <div class="section-header" style="text-align: left; margin-bottom: 30px;">
-        <span class="section-eyebrow">Partnerství s Colonnade Insurance S.A.</span>
-        <h2 style="margin-top: 12px;">Za každým kvalitním pojištěním stojí silná pojišťovna</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; max-width: 1000px; margin: 0 auto;">
+      <div>
+        <h2 style="margin-bottom: 20px; color: var(--text);">Partnerství s Colonnade Insurance S.A.</h2>
+        <p style="margin-bottom: 16px;">Za každým kvalitním pojištěním stojí silná a spolehlivá pojišťovna. My jsme si zvolili partnerství s Colonnade Insurance S.A., moderní pojišťovnou se sídlem v Lucembursku a pobočkami v České republice, Polsku, Maďarsku, Bulharsku, Rumunsku a na Slovensku.</p>
+        <p style="margin-bottom: 16px;">Colonnade je držitelem ratingu finanční síly A-. Její základní kapitál přesahuje 95 000 000 EUR.</p>
+        <p>Colonnade je členem kanadského holdingu Fairfax, který je kótován na torontské burze, sdružuje 28 pojišťoven a zajišťoven na více než 100 trzích. Hrubé předepsané pojistné holdingu činí více než 739 mld. Kč.</p>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
-        <div>
-          <p style="margin-bottom: 16px;">Zvolili jsme si partnerství s <strong>Colonnade Insurance S.A.</strong>, moderní pojišťovnou se sídlem v Lucembursku a pobočkami v České republice, Polsku, Maďarsku, Bulharsku, Rumunsku a na Slovensku.</p>
-          <p style="margin-bottom: 16px;">Colonnade je držitelem ratingu finanční síly <strong>A-</strong>. Její základní kapitál přesahuje <strong>95 000 000 EUR</strong>.</p>
-          <p>Colonnade je členem kanadského holdingu <strong>Fairfax</strong>, který je kótován na torontské burze, sdružuje 28 pojišťoven a zajišťoven na více než 100 trzích. Hrubé předepsané pojistné holdingu činí více než 739 mld. Kč.</p>
-        </div>
-        <div style="background: var(--white); padding: 32px; border-radius: var(--radius); border: 1px solid var(--border);">
-          <h4 style="margin-bottom: 14px; color: var(--primary);">Lexia funguje jako MGA</h4>
-          <p style="margin-bottom: 12px; font-size: 0.95rem;">Lexia funguje jako <strong>Managing General Agent</strong> (v německy mluvících zemích Assekuradeur). Jde o moderní koncept úspěšně používaný v řadě zemí západní Evropy.</p>
-          <p style="font-size: 0.95rem;">Jednoduše řečeno: <strong>Lexia se stará o klienty a zprostředkovatele</strong>, Colonnade garantuje finanční stabilitu a jistotu pro klienty.</p>
+      <div style="text-align: center;">
+        <img src="assets/colonnade-logo.png" alt="Colonnade – A Fairfax Company" style="max-width: 320px; width: 100%; display: block; margin: 0 auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div style="display: none;">
+          <div style="font-family: Georgia, 'Times New Roman', serif; font-weight: 600; font-size: 2.6rem; letter-spacing: 0.04em; color: #111; position: relative; display: inline-block;">COLONNADE<span style="position: absolute; top: -10px; right: -24px; font-size: 1.4rem;">🍁</span></div>
+          <div style="color: #c0392b; font-size: 0.8rem; letter-spacing: 0.16em; margin-top: 6px; font-family: Georgia, serif;">A FAIRFAX COMPANY</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MGA POWERS -->
-<section class="has-glyph has-glyph--left" data-glyph="book">
-  <div class="container">
-    <div style="max-width: 900px; margin: 0 auto;">
-      <div class="section-header" style="margin-bottom: 30px;">
-        <span class="section-eyebrow">Naše oprávnění</span>
-        <h2>Co je Lexia oprávněna dělat</h2>
-        <p>Lexia disponuje od Colonnade širokým zmocněním:</p>
-      </div>
-      <div class="grid grid-2">
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"> Distribuovat pojištění právní ochrany podle zákona č. 170/2018 Sb.</p>
-        </div>
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"><i class="icon" data-icon="scales"></i> Upisovat rizika (underwriting)</p>
-        </div>
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"><i class="icon" data-icon="briefcase"></i> Přijímat pojistné od pojistníků</p>
-        </div>
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"><i class="icon" data-icon="target"></i> Šetřit škodní události a likvidovat pojistné události</p>
-        </div>
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"><i class="icon" data-icon="document"></i> Spravovat pojistné smlouvy</p>
-        </div>
-        <div style="padding: 18px 24px; background: var(--bg-light); border-radius: var(--radius);">
-          <p style="font-size: 0.95rem; margin: 0;"><i class="icon" data-icon="handshake"></i> Jednat se samostatnými zprostředkovateli</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
+<!-- MGA -->
 <section>
   <div class="container">
-    <div class="cta-banner">
-      <h2>Chcete vědět víc?</h2>
-      <p>Zavolejte nám na +420 465 465 465 a my vám rádi poradíme s výběrem právní ochrany.</p>
-      <div class="hero-actions" style="justify-content: center;">
-        <a href="kalkulacka.html" class="btn btn-primary btn-lg">Spočítat cenu</a>
-        <a href="kontakt.html" class="btn btn-ghost btn-lg" style="color: white; border: 1.5px solid rgba(255,255,255,0.4);">Kontaktovat tým</a>
+    <h2 style="margin-bottom: 40px;">Lexia funguje jako <span style="color: var(--primary-light, #6f9bff);">Managing General Agent</span></h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+      <div>
+        <p style="margin-bottom: 16px;">Lexia funguje jako MGA - Managing General Agent (v německy mluvící zemích se používá výraz Assekuradeur). Jde o moderní koncept úspěšně používaný v řadě zemí západní Evropy i jinde po světě. Nejvíce populární je v případě specializovaných pojištění, jako je právě pojištění právní ochrany.</p>
+        <p style="margin-bottom: 16px;">Jednoduše řešeno: <strong>Lexia se stará o klienty a zprostředkovatele</strong>, Colonnade garantuje finanční stabilitu a jistotu pro klienty.</p>
+        <p style="margin-bottom: 12px;"><a href="#">Plná moc - Distribuce pojištění, upisování rizik (underwritting), přijímání pojistného, vymáhání pohledávek</a></p>
+        <p><a href="#">Plná moc - Jednání s pojišťovacími zprostředkovateli</a></p>
+      </div>
+      <div>
+        <p style="margin-bottom: 20px;">Lexia disponuje od Colonnade širokým zmocněním, díky kterému je oprávněna:</p>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Distribuovat pojištění právní ochrany podle zákona č. 170/2018 Sb., o distribuci pojištění a zajištění.</span></li>
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Upisovat rizika (underwriting).</span></li>
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Přijímat pojistné od pojistníků.</span></li>
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Šetřit škodní události a likvidovat pojistné události.</span></li>
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Spravovat pojistné smlouvy.</span></li>
+          <li style="display: flex; gap: 12px; margin-bottom: 16px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Vymáhat pohledávky za pojistníky.</span></li>
+          <li style="display: flex; gap: 12px;"><i class="icon" data-icon="check" style="color: var(--primary); flex-shrink: 0;"></i><span>Jednat se samostatnými zprostředkovateli ohledně distribuce pojištění právní ochrany.</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<svg class="footer-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
-  <path d="M0,140 Q1300,0 1920,0 L1920,160 L0,160 Z"/>
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
 </svg>
 <footer class="footer">
   <div class="container">
@@ -257,7 +261,7 @@
       <div>
         <h4>Lexia</h4>
         <ul>
-          <li><a href="jak-funguje.html">Jak to funguje</a></li>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
           <li><a href="o-nas.html">O nás</a></li>
           <li><a href="#">GDPR</a></li>
           <li><a href="#">Postup při podání stížnosti</a></li>
@@ -273,6 +277,8 @@
           <li><a href="kontakt.html">Kontakty</a></li>
           <li><a href="#">Ke stažení</a></li>
           <li><a href="#">Pojistné podmínky</a></li>
+          <li><a href="#">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="#">Brožura - podnikatelé a firmy</a></li>
         </ul>
       </div>
     </div>
