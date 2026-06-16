@@ -107,7 +107,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Scroll companion - life ring se postupně sestavuje
   initScrollCompanion();
+
+  // Carousel sekce "Lidé Lexia"
+  initTestimonialsCarousel();
+
+  // Šipky pro horizontální posouvání tabulek na mobilu (srovnání balíčků)
+  initTableScroller();
 });
+
+/* ============================================
+   TABLE SCROLLER - šipky pro posun široké tabulky
+   Aktivuje se jen když tabulka horizontálně přetéká (mobil).
+   ============================================ */
+function initTableScroller() {
+  document.querySelectorAll('.table-wrapper').forEach(wrapper => {
+    // obal pro absolutně pozicované šipky
+    const shell = document.createElement('div');
+    shell.className = 'table-scroller';
+    wrapper.parentNode.insertBefore(shell, wrapper);
+    shell.appendChild(wrapper);
+
+    const mkBtn = (dir) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'table-scroll-btn table-scroll-btn--' + dir + ' is-hidden';
+      b.setAttribute('aria-label', dir === 'left' ? 'Posunout tabulku vlevo' : 'Posunout tabulku vpravo');
+      const d = dir === 'left' ? 'M15 18l-6-6 6-6' : 'M9 6l6 6-6 6';
+      b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + d + '"/></svg>';
+      return b;
+    };
+    const left = mkBtn('left');
+    const right = mkBtn('right');
+    shell.appendChild(left);
+    shell.appendChild(right);
+
+    const step = () => Math.max(160, Math.round(wrapper.clientWidth * 0.7));
+    const update = () => {
+      const max = wrapper.scrollWidth - wrapper.clientWidth;
+      const canScroll = max > 4;
+      left.classList.toggle('is-hidden', !canScroll || wrapper.scrollLeft <= 4);
+      right.classList.toggle('is-hidden', !canScroll || wrapper.scrollLeft >= max - 4);
+    };
+
+    const scrollByStep = (delta) => {
+      const max = wrapper.scrollWidth - wrapper.clientWidth;
+      const target = Math.max(0, Math.min(max, wrapper.scrollLeft + delta));
+      // Plynulost řeší CSS (scroll-behavior: smooth na .table-wrapper);
+      // přímé nastavení scrollLeft zaručí posun i tam, kde smooth není.
+      wrapper.scrollLeft = target;
+      update();
+    };
+
+    left.addEventListener('click', () => scrollByStep(-step()));
+    right.addEventListener('click', () => scrollByStep(step()));
+    wrapper.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    // přepočet i po načtení fontů/obrázků (mění šířku tabulky) a s drobným zpožděním
+    window.addEventListener('load', update);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+    setTimeout(update, 300);
+    update();
+  });
+}
 
 /* ============================================
    CALCULATOR WIZARD - kroky 1-5
@@ -377,6 +438,52 @@ function initScrollCompanion() {
 }
 
 /* ============================================
+   TESTIMONIALS CAROUSEL — sekce "Lidé Lexia"
+   Proklikávání mezi jednotlivými lidmi
+   ============================================ */
+function initTestimonialsCarousel() {
+  const carousel = document.querySelector('[data-testimonials]');
+  if (!carousel) return;
+
+  const track = carousel.querySelector('.testimonials-track');
+  const slides = Array.from(carousel.querySelectorAll('.testimonial'));
+  const dotsWrap = carousel.querySelector('[data-testimonials-dots]');
+  const prevBtn = carousel.querySelector('[data-testimonials-prev]');
+  const nextBtn = carousel.querySelector('[data-testimonials-next]');
+  if (!track || slides.length === 0) return;
+
+  let index = 0;
+
+  // Vytvoř tečky podle počtu lidí
+  const dots = slides.map((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'testimonials-dot';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Osoba ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+    return dot;
+  });
+
+  function goTo(i) {
+    index = (i + slides.length) % slides.length;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, di) => {
+      const active = di === index;
+      d.classList.toggle('is-active', active);
+      d.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    slides.forEach((s, si) => s.setAttribute('aria-hidden', si === index ? 'false' : 'true'));
+  }
+
+  prevBtn && prevBtn.addEventListener('click', () => goTo(index - 1));
+  nextBtn && nextBtn.addEventListener('click', () => goTo(index + 1));
+
+  goTo(0);
+}
+
+/* ============================================
    SCROLL REVEAL — IntersectionObserver
    Auto-tagne hlavní bloky a postupně je odhaluje
    ============================================ */
@@ -402,6 +509,8 @@ function initScrollReveal() {
       if (el.classList.contains('reveal') || el.classList.contains('reveal-left') || el.classList.contains('reveal-right')) return;
       // Workflow steps mají vlastní reveal logiku (step--workflow / steps--workflow)
       if (el.classList.contains('step--workflow') || el.classList.contains('steps--workflow')) return;
+      // Carousel slides (Lidé Lexia) jsou off-screen — reveal by je nechal skryté
+      if (el.closest('.testimonials-track')) return;
       el.classList.add('reveal');
       // Stagger pro sourozence ve stejném rodiči
       const delayIdx = Math.min((idx % 6) + 1, 6);

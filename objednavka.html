@@ -16,11 +16,11 @@
   <nav class="nav">
     <a href="index.html" class="logo" aria-label="Lexia"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
-      <li><a href="pro-koho.html">Naše produkty</a></li>
-      <li><a href="klient.html">Pro klienty</a></li>
-      <li><a href="#">Pro partnery</a></li>
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
       <li><a href="o-nas.html">O nás</a></li>
-      <li class="nav-mobile-only"><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
     </ul>
     <div class="nav-actions">
       <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
@@ -341,9 +341,17 @@
       desc: 'Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.', icon: 'car', price: 159, priceYear: 1749,
       plus: { name: 'DRIVE PLUS', desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', price: 199, priceYear: 2189 },
     },
+    driveplus: {
+      name: 'DRIVE PLUS', subtitle: 'Právní ochrana vozidla',
+      desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', icon: 'car', price: 199, priceYear: 2189,
+    },
     home: {
       name: 'HOME', subtitle: 'Právní ochrana bydlení',
       desc: 'Dům, byt i chata/chalupa. Spory se sousedy, řemeslníky i úřady.', icon: 'house', price: 199, priceYear: 2189,
+    },
+    garance: {
+      name: 'GARANCE PLUS', subtitle: 'Vymáhání nároků po pojišťovnách',
+      desc: 'Hlášení a likvidace pojistných událostí, vymáhání nároků po pojišťovnách i právní ochrana řidiče.', icon: 'umbrella', price: 349, priceYear: 3839,
     },
     trio: {
       name: 'TRIO', subtitle: 'Kompletní balíček',
@@ -352,7 +360,9 @@
   };
   // Zpětná kompatibilita se staršími odkazy
   FIXED_PRODUCTS.vozidlo = FIXED_PRODUCTS.drive;
+  FIXED_PRODUCTS['drive-plus'] = FIXED_PRODUCTS.driveplus;
   FIXED_PRODUCTS.bydleni = FIXED_PRODUCTS.home;
+  FIXED_PRODUCTS['garance-plus'] = FIXED_PRODUCTS.garance;
   FIXED_PRODUCTS.balicek = FIXED_PRODUCTS.trio;
 
   const key = new URLSearchParams(location.search).get('produkt');

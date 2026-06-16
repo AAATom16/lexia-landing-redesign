@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detail nabídky | Lexia</title>
+<meta name="description" content="Kompletní rozsah krytí, typické spory a co Lexia hradí u vybraného balíčku právní ochrany.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20260616c">
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html" class="active">Služby</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<!-- DETAIL HERO -->
+<section class="page-hero detail-hero">
+  <div class="container">
+    <a href="sluzby.html" class="detail-back"><i class="icon" data-icon="arrow_right"></i> Zpět na přehled balíčků</a>
+    <div class="detail-head">
+      <span class="detail-icon"><i class="icon" data-icon="shield" id="d-icon"></i></span>
+      <div class="detail-head-text">
+        <h1 id="d-name">TRIO</h1>
+        <p class="detail-sub" id="d-sub">Kompletní balíček</p>
+      </div>
+      <div class="detail-pricing">
+        <div class="detail-price"><strong id="d-price">499</strong><span id="d-price-unit">Kč / měsíc</span></div>
+        <div class="detail-price-year" id="d-year">5 489 Kč / rok</div>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="#" class="btn btn-primary btn-lg" id="d-cta">Sjednat online</a>
+      <a href="sluzby.html#srovnani" class="btn btn-outline btn-lg">Porovnat balíčky</a>
+    </div>
+  </div>
+</section>
+
+<!-- ROZSAH + SPORY -->
+<section class="has-glyph" style="padding-top: 20px;" data-glyph="scales">
+  <div class="container">
+    <div class="card detail-card detail-card--split">
+      <div class="detail-col">
+        <h2 class="detail-card-title"><i class="icon" data-icon="shield"></i> Rozsah krytí</h2>
+        <ul class="price-list" id="d-kryti"></ul>
+      </div>
+      <div class="detail-col">
+        <h2 class="detail-card-title"><i class="icon" data-icon="scales"></i> Typické spory</h2>
+        <ul class="price-list" id="d-spory"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CO LEXIA HRADÍ -->
+<section class="bg-section has-glyph has-glyph--left" data-glyph="briefcase">
+  <div class="container">
+    <div class="section-header">
+      <h2>Co Lexia u tohoto balíčku hradí</h2>
+      <p>Tyto náklady za vás Lexia vždy uhradí, ať řešíte cokoli z výše uvedeného.</p>
+    </div>
+    <ul class="includes-grid">
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Právní poradu a asistenci</li>
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Advokáty</li>
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Soudní poplatky</li>
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Soudní znalce a tlumočníky</li>
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Náklady protistrany v případě prohry</li>
+      <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> ALL-RISK garance s minimem výluk</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-banner">
+      <h2 id="d-cta-title">Sjednejte si TRIO online</h2>
+      <p>Vyplníte jen základní údaje a zaplatíte — pojištění platí ihned. Žádné skryté poplatky.</p>
+      <div class="hero-actions" style="justify-content: center;">
+        <a href="#" class="btn btn-primary btn-lg" id="d-cta2">Sjednat online</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Postup při podání stížnosti</a></li>
+          <li><a href="#">Hlášení porušení právních předpisů</a></li>
+          <li><a href="#">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="klient.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="#">Ke stažení</a></li>
+          <li><a href="#">Pojistné podmínky</a></li>
+          <li><a href="#">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="#">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="#">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+<script>
+/* ===========================================================
+   LEXIA — Detail nabídky balíčku
+   Data 1:1 dle dokumentu „Návrh produktů a balíčků LEXIA".
+   =========================================================== */
+(function () {
+  var OFFERS = {
+    drive: {
+      name: 'DRIVE', sub: 'Právní ochrana vozidla', icon: 'car',
+      price: '159', priceUnit: 'Kč / měsíc', year: '1 749 Kč / rok',
+      cta: 'objednavka?produkt=drive', ctaLabel: 'Sjednat online',
+      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče daného vozidla', 'Právní ochrana posádky'],
+      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
+    },
+    driveplus: {
+      name: 'DRIVE PLUS', sub: 'Právní ochrana vozidla', icon: 'car',
+      price: '199', priceUnit: 'Kč / měsíc', year: '2 189 Kč / rok',
+      cta: 'objednavka?produkt=driveplus', ctaLabel: 'Sjednat online',
+      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče všech vozidel', 'Právní ochrana posádky'],
+      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
+    },
+    home: {
+      name: 'HOME', sub: 'Právní ochrana bydlení', icon: 'house',
+      price: '199', priceUnit: 'Kč / měsíc', year: '2 189 Kč / rok',
+      cta: 'objednavka?produkt=home', ctaLabel: 'Sjednat online',
+      kryti: ['Právní ochrana domu', 'Právní ochrana bytu', 'Právní ochrana chaty / chalupy'],
+      spory: ['S pojišťovnami', 'Se sousedy', 'S řemeslníky', 'S finančním, katastrálním, stavebním úřadem']
+    },
+    trio: {
+      name: 'TRIO', sub: 'Kompletní balíček', icon: 'shield',
+      price: '499', priceUnit: 'Kč / měsíc', year: '5 489 Kč / rok',
+      cta: 'objednavka?produkt=trio', ctaLabel: 'Sjednat online',
+      kryti: ['Základní právní ochrana domácnosti', 'Právní ochrana bydlení', 'Právní ochrana řidičů'],
+      spory: ['Obhajoba v trestním, správním, přestupkovém aj. řízení', 'Reklamace, náhrada újmy, obrana proti vymáhání náhrady újmy', 'Se sousedy, řemeslníky, úřady', 'Dopravní přestupek, dopravní nehoda']
+    },
+    garance: {
+      name: 'GARANCE PLUS', sub: 'Vymáhání nároků po pojišťovnách', icon: 'umbrella',
+      price: '349', priceUnit: 'Kč / měsíc', year: '3 839 Kč / rok',
+      cta: 'objednavka?produkt=garance', ctaLabel: 'Sjednat online',
+      kryti: ['Hlášení a likvidace pojistných událostí', 'Vymáhání nároků po pojišťovnách', 'Právní ochrana řidiče'],
+      spory: ['S pojišťovnami', 'S bankami, hypotečními bankami', 'S investičními, penzijními a úvěrovými společnostmi', 'S policií + přestupkové, správní a trestní řízení']
+    },
+    individual: {
+      name: 'INDIVIDUAL', sub: 'Volba jednotlivec / domácnost', icon: 'users',
+      price: 'od 179', priceUnit: 'Kč / měsíc', year: 'od 1 969 Kč / rok',
+      cta: 'kalkulacka.html', ctaLabel: 'Spočítat cenu',
+      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
+      spory: ['Nejčastější spory napříč životem — bydlení, nemovitosti, vozidlo i práce']
+    }
+  };
+
+  var key = new URLSearchParams(location.search).get('produkt');
+  var o = OFFERS[key] || OFFERS.trio;
+
+  function set(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; }
+  function fill(id, items) {
+    var ul = document.getElementById(id);
+    if (!ul) return;
+    ul.innerHTML = '';
+    items.forEach(function (t) {
+      var li = document.createElement('li');
+      li.textContent = t;
+      ul.appendChild(li);
+    });
+  }
+
+  document.title = o.name + ' — detail nabídky | Lexia';
+  set('d-name', o.name);
+  set('d-sub', o.sub);
+  set('d-price', o.price);
+  set('d-price-unit', o.priceUnit);
+  set('d-year', o.year);
+  set('d-cta-title', 'Sjednejte si ' + o.name + (o.cta.indexOf('kalkulacka') === 0 ? ' na míru' : ' online'));
+  fill('d-kryti', o.kryti);
+  fill('d-spory', o.spory);
+
+  ['d-cta', 'd-cta2'].forEach(function (id) {
+    var a = document.getElementById(id);
+    if (a) { a.setAttribute('href', o.cta); a.textContent = o.ctaLabel; }
+  });
+
+  var icon = document.getElementById('d-icon');
+  if (icon) {
+    icon.setAttribute('data-icon', o.icon);
+    icon.innerHTML = '';
+    if (typeof injectIcons === 'function') injectIcons();
+  }
+})();
+</script>
+</body>
+</html>
