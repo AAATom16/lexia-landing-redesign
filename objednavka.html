@@ -58,12 +58,41 @@
             <div class="fixed-product">
               <span class="fixed-product-icon"><i class="icon" data-icon="shield" id="fx-icon"></i></span>
               <div class="fixed-product-body">
-                <strong class="fixed-product-name" id="fx-name">Kompletní balíček</strong>
-                <p class="fixed-product-desc" id="fx-desc">Základní ochrana, bydlení i řidiči v jednom.</p>
+                <strong class="fixed-product-name" id="fx-name">TRIO</strong>
+                <span class="fixed-product-sub" id="fx-sub">Kompletní balíček</span>
+                <p class="fixed-product-desc" id="fx-desc">Domácnost, bydlení i řidiči v jednom.</p>
               </div>
-              <span class="fixed-product-price"><strong id="fx-price">499 Kč</strong> <span>/měsíc</span></span>
+              <span class="fixed-product-price"><span class="fpp-now"><strong id="fx-price">499 Kč</strong> <span>/měsíc</span></span><span class="fixed-product-year" id="fx-price-year">5 489 Kč / rok</span></span>
             </div>
+
+            <label class="fixed-upsell" id="fx-upsell" hidden>
+              <input type="checkbox" id="fx-upsell-check">
+              <span class="fixed-upsell-body">
+                <strong>Rozšířit na DRIVE PLUS</strong>
+                <span>Právní ochrana řidiče ve všech vozidlech, nejen ve vašem.</span>
+              </span>
+              <span class="fixed-upsell-price">+40 Kč /měs.</span>
+            </label>
+
             <p class="fixed-note"><i class="icon" data-icon="check_circle" style="width:14px;height:14px;"></i> Pevná finální cena. Stačí vyplnit, pro koho pojištění je, a zaplatit.</p>
+          </div>
+
+          <div class="calc-section">
+            <h4>Frekvence platby</h4>
+            <div class="calc-options" style="grid-template-columns: 1fr 1fr; gap: 12px;">
+              <label class="calc-option selected">
+                <input type="radio" name="period" value="mesicni" checked>
+                <strong>Měsíčně</strong>
+                <span>Standardní platba každý měsíc</span>
+              </label>
+              <label class="calc-option" style="position: relative;">
+                <span class="discount-badge">SLEVA 8 %</span>
+                <input type="radio" name="period" value="rocni">
+                <strong>Ročně</strong>
+                <span>Ušetřete jednu měsíční platbu (12. měsíc zdarma)</span>
+              </label>
+            </div>
+            <p class="fixed-note" id="period-note" hidden style="color: var(--success); font-weight: 600;"><i class="icon" data-icon="check_circle" style="width:14px;height:14px;"></i> <span></span></p>
           </div>
 
           <div class="calc-section">
@@ -151,11 +180,12 @@
           </div>
           <div class="calc-summary-row" style="border-bottom: none;">
             <span>Frekvence</span>
-            <strong>měsíčně</strong>
+            <strong data-echo="periodLabel">měsíčně</strong>
           </div>
           <div class="calc-total">
-            <span>Celkem k úhradě měsíčně:</span>
+            <span>Celkem k úhradě <span data-echo="periodLabel">měsíčně</span>:</span>
             <strong data-echo="total">499 Kč</strong>
+            <span id="sum-year-hint" class="calc-year-hint">Ročně to vyjde <strong>5 988 Kč</strong> (bez slevy)</span>
           </div>
           <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat k platbě</button>
         </div>
@@ -171,7 +201,7 @@
           <h4 class="recap-card-title" style="color: var(--white);">K úhradě</h4>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong data-echo="product">Kompletní balíček</strong></div>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
-          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong>měsíčně</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong data-echo="periodLabel">měsíčně</strong></div>
           <div class="recap-row" style="border-bottom: none; padding-top: 14px;"><span style="font-size: 1.05rem;">Částka k úhradě</span><strong data-echo="total" style="font-size: 1.6rem;">499 Kč</strong></div>
         </div>
 
@@ -228,7 +258,7 @@
             <div class="recap-row"><span>Číslo smlouvy</span><strong data-echo="contractNo">LX-2026-000000</strong></div>
             <div class="recap-row"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
             <div class="recap-row"><span>Datum počátku pojištění</span><strong data-echo="startDate">—</strong></div>
-            <div class="recap-row" style="border-bottom: none;"><span>Zaplaceno (měsíčně)</span><strong style="color: var(--success);" data-echo="total">499 Kč</strong></div>
+            <div class="recap-row" style="border-bottom: none;"><span>Zaplaceno (<span data-echo="periodLabel">měsíčně</span>)</span><strong style="color: var(--success);" data-echo="total">499 Kč</strong></div>
           </div>
           <div class="state-actions">
             <a href="#" class="btn btn-primary btn-lg"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
@@ -303,25 +333,88 @@
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
   }
 
-  // Produkty s PEVNOU cenou (musí odpovídat cenám v hero sekci na index.html)
+  // Produkty s PEVNOU cenou (musí odpovídat cenám v hero sekci na index.html).
+  // U DRIVE je volitelné rozšíření na DRIVE PLUS (řidič chráněn ve všech vozidlech).
   const FIXED_PRODUCTS = {
-    vozidlo: { name: 'Právní ochrana vozidla', desc: 'Pro řidiče i posádku, doplněk k povinnému ručení.', icon: 'car', price: 159 },
-    bydleni: { name: 'Právní ochrana bydlení', desc: 'Sousedské spory, vady nemovitosti i pronájem.',     icon: 'house', price: 199 },
-    balicek: { name: 'Kompletní balíček',       desc: 'Základní ochrana, bydlení i řidiči v jednom.',       icon: 'shield', price: 499 },
+    drive: {
+      name: 'DRIVE', subtitle: 'Právní ochrana vozidla',
+      desc: 'Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.', icon: 'car', price: 159, priceYear: 1749,
+      plus: { name: 'DRIVE PLUS', desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', price: 199, priceYear: 2189 },
+    },
+    home: {
+      name: 'HOME', subtitle: 'Právní ochrana bydlení',
+      desc: 'Dům, byt i chata/chalupa. Spory se sousedy, řemeslníky i úřady.', icon: 'house', price: 199, priceYear: 2189,
+    },
+    trio: {
+      name: 'TRIO', subtitle: 'Kompletní balíček',
+      desc: 'Základní ochrana domácnosti, bydlení i řidiči v jednom.', icon: 'shield', price: 499, priceYear: 5489,
+    },
   };
+  // Zpětná kompatibilita se staršími odkazy
+  FIXED_PRODUCTS.vozidlo = FIXED_PRODUCTS.drive;
+  FIXED_PRODUCTS.bydleni = FIXED_PRODUCTS.home;
+  FIXED_PRODUCTS.balicek = FIXED_PRODUCTS.trio;
 
   const key = new URLSearchParams(location.search).get('produkt');
-  const product = FIXED_PRODUCTS[key] || FIXED_PRODUCTS.balicek;
-  const priceText = product.price.toLocaleString('cs-CZ') + ' Kč';
+  const product = FIXED_PRODUCTS[key] || FIXED_PRODUCTS.trio;
 
   // Náhodné číslo smlouvy pro demo
   const contractNo = 'LX-2026-' + String(Math.floor(Math.random() * 9000000) + 1000000);
 
-  // --- Naplň kartu produktu ---
   const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
-  setText('fx-name', product.name);
-  setText('fx-desc', product.desc);
-  setText('fx-price', priceText);
+  const fmtKc = n => n.toLocaleString('cs-CZ') + ' Kč';
+
+  // Aktivní varianta produktu (DRIVE vs DRIVE PLUS) — řízeno upsell přepínačem
+  let usePlus = false;
+  const variant = () => (product.plus && usePlus) ? Object.assign({}, product, product.plus) : product;
+
+  // Frekvence platby — roční pojistné = 11× měsíční (12. měsíc zdarma, sleva ~8 %)
+  let period = 'mesicni';
+  const yearlyPrice = v => v.priceYear || v.price * 11;
+  const currentPrice = () => (period === 'rocni' ? yearlyPrice(variant()) : variant().price);
+  const periodLabel = () => (period === 'rocni' ? 'ročně' : 'měsíčně');
+  let priceText = fmtKc(currentPrice());
+
+  // Poznámka o roční úspoře — viditelná jen při roční platbě
+  function updatePeriodNote() {
+    const note = document.getElementById('period-note');
+    if (!note) return;
+    if (period === 'rocni') {
+      const v = variant();
+      const saving = v.price * 12 - yearlyPrice(v);
+      note.querySelector('span').textContent = 'Při roční platbě ušetříte ' + fmtKc(saving) + ' (12. měsíc zdarma).';
+      note.hidden = false;
+    } else {
+      note.hidden = true;
+    }
+  }
+
+  // Souhrn: u měsíční platby ukáž, kolik to vyjde za rok bez slevy (12× měsíční)
+  function updateYearHint() {
+    const hint = document.getElementById('sum-year-hint');
+    if (!hint) return;
+    if (period === 'mesicni') {
+      hint.querySelector('strong').textContent = fmtKc(variant().price * 12);
+      hint.hidden = false;
+    } else {
+      hint.hidden = true;
+    }
+  }
+
+  // --- Vykresli kartu produktu ---
+  function renderProduct() {
+    const v = variant();
+    priceText = fmtKc(currentPrice());
+    setText('fx-name', v.name);
+    setText('fx-sub', product.subtitle);
+    setText('fx-desc', v.desc);
+    setText('fx-price', fmtKc(v.price));
+    setText('fx-price-year', v.priceYear ? fmtKc(v.priceYear) + ' / rok' : '');
+    setText('order-title', 'Sjednání: ' + v.name);
+    syncEcho();
+    updatePeriodNote();
+    updateYearHint();
+  }
 
   const fxIcon = document.getElementById('fx-icon');
   if (fxIcon) {
@@ -330,8 +423,16 @@
     if (typeof injectIcons === 'function') injectIcons();
   }
 
-  // Hero
-  setText('order-title', 'Sjednání: ' + product.name);
+  // Upsell DRIVE → DRIVE PLUS (jen pokud produkt nabízí plus variantu)
+  const upsell = document.getElementById('fx-upsell');
+  const upsellCheck = document.getElementById('fx-upsell-check');
+  if (product.plus && upsell && upsellCheck) {
+    upsell.hidden = false;
+    const diff = product.plus.price - product.price;
+    const diffEl = upsell.querySelector('.fixed-upsell-price');
+    if (diffEl) diffEl.textContent = '+' + fmtKc(diff) + ' /měs.';
+    upsellCheck.addEventListener('change', () => { usePlus = upsellCheck.checked; renderProduct(); });
+  }
 
   // --- Echo (název produktu, cena, pojistník, datum, číslo smlouvy) ---
   const form = document.getElementById('insured-form');
@@ -344,8 +445,9 @@
       : '—';
 
     const map = {
-      product: product.name,
+      product: variant().name,
       total: priceText,
+      periodLabel: periodLabel(),
       fullName: fullName,
       startDate: startDate,
       contractNo: contractNo,
@@ -358,7 +460,7 @@
     el.addEventListener('input', syncEcho);
     el.addEventListener('change', syncEcho);
   });
-  syncEcho();
+  renderProduct();
 
   // --- Přepínání kroků ---
   const panels = document.querySelectorAll('[data-step-panel]');
@@ -408,6 +510,17 @@
   });
   document.querySelectorAll('[data-step-back]').forEach(btn => {
     btn.addEventListener('click', e => { e.preventDefault(); showStep(btn.dataset.stepBack); });
+  });
+
+  // --- Frekvence platby: styl vybrané volby + přepočet ceny ---
+  document.querySelectorAll('input[name="period"]').forEach(r => {
+    r.addEventListener('change', () => {
+      document.querySelectorAll('input[name="period"]').forEach(i => {
+        i.closest('.calc-option').classList.toggle('selected', i.checked);
+      });
+      period = document.querySelector('input[name="period"]:checked').value;
+      renderProduct();
+    });
   });
 
   // --- Platba: styl vybrané metody + souhlas s opakovanou platbou ---

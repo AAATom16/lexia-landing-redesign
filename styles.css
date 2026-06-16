@@ -1046,7 +1046,7 @@ i.icon.hero-stat-icon {
 }
 
 /* Hlavička karty produktů — pouze nadpis, bez ikon a tagu */
-.hero-card-header--simple { gap: 0; }
+.hero-card-header--simple { gap: 0; flex-direction: column; align-items: stretch; }
 .hero-products-title {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -1065,8 +1065,8 @@ i.icon.hero-stat-icon {
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 2px 6px -3px rgba(0, 35, 96, 0.12);
-  padding: 12px 13px;
-  margin-bottom: 9px;
+  padding: 14px 16px;
+  margin-bottom: 11px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .hero-card--products .hero-product:hover {
@@ -1084,7 +1084,9 @@ i.icon.hero-stat-icon {
   margin: 0;
 }
 .hero-card--products .hero-product-name { flex: 1 1 auto; white-space: nowrap; }
-.hero-card--products .hero-product-desc { padding-left: 0; margin: 3px 0 0; }
+.hero-card--products .hero-product-sub { display: block; font-size: 0.8rem; font-weight: 600; color: var(--primary); margin: 3px 0 0; }
+.hero-card--products .hero-product--featured .hero-product-sub { color: rgba(255, 255, 255, 0.92); }
+.hero-card--products .hero-product-desc { padding-left: 0; margin: 5px 0 0; line-height: 1.42; }
 
 /* Ikona produktu — jemné světle modré pozadí, na hover „naskočí" do plné barvy */
 .hero-card--products .hero-product-icon {
@@ -1168,8 +1170,9 @@ i.icon.hero-stat-icon {
 }
 .hero-card--products .hero-product--featured .hero-product-badge .icon { color: #ffc83d; }
 
-/* Výběžek (cíp) karty níž — karta vizuálně „vychází" z tabletu vlevo dole */
-.hero-card--products::after { top: 260px; }
+/* Výběžek (cíp) karty — na rovné části levé hrany u bestseller karty (jako na
+   předloze), ne až u zaobleného spodního rohu. */
+.hero-card--products::after { top: auto; bottom: 122px; }
 
 .hero-products-eyebrow {
   align-self: flex-start;
@@ -1348,6 +1351,8 @@ i.icon.hero-stat-icon {
   .hero-badge, .hero-title, .hero-lead, .hero-actions, .cta-microbenefit { order: 1; }
   .hero-visual { order: 2; }
   .hero-stats { order: 3; }
+  /* Na mobilu kartu produktů netáhneme nahoru pod tlačítka — ponecháme mezeru */
+  .hero-visual--products { margin-top: 18px; }
 
   /* Badge — užší mezera pod ním */
   .hero-badge { margin-bottom: 10px; }
@@ -4004,6 +4009,38 @@ i.icon svg, span.icon-svg svg {
 
 .calc-total span { font-size: 0.95rem; opacity: 0.9; }
 
+/* Drobný náhled roční částky bez slevy (u měsíční platby) — jen jemný popisek */
+.calc-total .calc-year-hint {
+  display: block;
+  margin-top: -2px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.6;
+}
+.calc-total .calc-year-hint[hidden] { display: none; }
+.calc-total .calc-year-hint strong {
+  display: inline;
+  font-size: inherit;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Řádek s roční úsporou v souhrnu — svítí jen při roční platbě */
+.calc-saving {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+.calc-saving[hidden] { display: none; }
+.calc-saving .icon { width: 16px; height: 16px; flex-shrink: 0; }
+.calc-saving strong { font-weight: 800; }
+
 .calc-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
 .calc-section:last-child { border-bottom: none; }
 .calc-section h4 { margin-bottom: 14px; }
@@ -4031,17 +4068,41 @@ i.icon svg, span.icon-svg svg {
 .fixed-product-icon .icon { width: 26px; height: 26px; }
 .fixed-product-body { flex: 1; min-width: 0; }
 .fixed-product-name { display: block; font-size: 1.15rem; font-weight: 700; }
+.fixed-product-sub { display: block; margin: 1px 0 0; font-size: 0.9rem; font-weight: 600; color: var(--primary); }
 .fixed-product-desc { margin: 4px 0 0; font-size: 0.9rem; color: var(--text-muted); }
 .fixed-product-price {
   flex: none;
   text-align: right;
   display: flex;
-  align-items: baseline;
-  gap: 4px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
   white-space: nowrap;
 }
+.fixed-product-price .fpp-now { display: flex; align-items: baseline; gap: 4px; }
 .fixed-product-price strong { font-size: 1.6rem; font-weight: 800; color: var(--primary); }
 .fixed-product-price span { font-size: 0.85rem; color: var(--text-muted); }
+.fixed-product-year { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); line-height: 1; }
+/* Upsell DRIVE → DRIVE PLUS */
+.fixed-upsell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.fixed-upsell[hidden] { display: none; }
+.fixed-upsell:hover { border-color: var(--primary); }
+.fixed-upsell:has(input:checked) { border-color: var(--primary); background: #eef3fd; }
+.fixed-upsell input { width: 18px; height: 18px; accent-color: var(--primary); flex: none; }
+.fixed-upsell-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.fixed-upsell-body strong { font-size: 0.95rem; font-weight: 700; }
+.fixed-upsell-body span { font-size: 0.82rem; color: var(--text-muted); }
+.fixed-upsell-price { flex: none; font-weight: 700; color: var(--primary); white-space: nowrap; }
 .fixed-note {
   margin-top: 14px;
   font-size: 0.85rem;

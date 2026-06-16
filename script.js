@@ -250,11 +250,12 @@ function initCalcWizard() {
       });
     }
 
-    // Vypočítej měsíční/roční
+    // Vypočítej měsíční/roční (roční = 11× měsíční → 12. měsíc zdarma)
     if (total) {
+      const YEARLY_MONTHS = 11;
       const num = parseInt(totalText.replace(/\D/g, ''), 10) || 0;
-      const monthly = periodValue === 'rocni' ? Math.round(num / 12) : num;
-      const yearly = periodValue === 'rocni' ? num : num * 12;
+      const monthly = periodValue === 'rocni' ? Math.round(num / YEARLY_MONTHS) : num;
+      const yearly = periodValue === 'rocni' ? num : num * YEARLY_MONTHS;
       document.querySelectorAll('[data-echo="month-total"]').forEach(el => el.textContent = monthly.toLocaleString('cs-CZ') + ' Kč');
       document.querySelectorAll('[data-echo="year-total"]').forEach(el => el.textContent = yearly.toLocaleString('cs-CZ') + ' Kč');
     }
@@ -679,9 +680,11 @@ function updateCalculator() {
   }
 
   // === FREKVENCE PLATBY ===
-  // Roční = 12 × měsíční (dle excelu žádná sleva)
-  const periodMultiplier = period === 'rocni' ? 12 : 1;
+  // Roční pojistné = 11 × měsíční → 12. měsíc zdarma (sleva ~8,3 %), dle ceníku LEXIA.
+  const YEARLY_MONTHS = 11;
+  const periodMultiplier = period === 'rocni' ? YEARLY_MONTHS : 1;
   const finalTotal = total * periodMultiplier;
+  const yearlySaving = total;             // ušetřená 1 měsíční platba při roční úhradě
   const periodLabel = period === 'rocni' ? 'ročně' : 'měsíčně';
 
   // === RENDER SOUHRNU ===
@@ -689,6 +692,14 @@ function updateCalculator() {
   document.getElementById('sum-period').textContent = periodLabel;
   document.getElementById('sum-period-label').textContent = periodLabel;
   document.getElementById('sum-total').textContent = finalTotal.toLocaleString('cs-CZ') + ' Kč';
+
+  // Řádek s roční úsporou — viditelný jen při roční platbě
+  const savingEl = document.getElementById('sum-saving');
+  if (savingEl) {
+    savingEl.hidden = period !== 'rocni';
+    const amt = savingEl.querySelector('strong');
+    if (amt) amt.textContent = yearlySaving.toLocaleString('cs-CZ') + ' Kč';
+  }
 
   // Render seznamu pilířů
   const pillarsList = document.getElementById('sum-pillars');
