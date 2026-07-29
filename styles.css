@@ -4451,6 +4451,84 @@ i.icon svg, span.icon-svg svg {
 
 .state-switcher button { font-size: 0.85rem; padding: 6px 14px; }
 
+/* ===== Založení smlouvy — platební blok ===== */
+.state-card--wide { max-width: 720px; }
+
+.pay-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  background: #fffbe6;
+  border: 1px solid #f2d800;
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  font-size: 0.92rem;
+  color: #7a6a00;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.pay-warning .icon { width: 18px; height: 18px; flex: none; margin-top: 2px; color: #b59b00; }
+.pay-warning strong { color: #5c5000; }
+
+.pay-block { margin-bottom: 28px; }
+
+.pay-gateway-btn { width: 100%; }
+
+.pay-secure {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 12px 0 0;
+}
+.pay-secure .icon { width: 13px; height: 13px; vertical-align: -1px; }
+
+.pay-alt { margin-top: 24px; }
+.pay-alt-head {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pay-alt-head::before,
+.pay-alt-head::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.pay-alt-head span { padding: 0 14px; }
+
+.pay-alt-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+  background: var(--bg-light);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  text-align: left;
+}
+.pay-qr {
+  flex: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  line-height: 0;
+}
+.pay-alt-rows { flex: 1; }
+
+@media (max-width: 560px) {
+  .pay-alt-body { flex-direction: column; align-items: stretch; text-align: center; }
+  .pay-alt-rows { text-align: left; }
+}
+
 @media (max-width: 800px) {
   .recap-wrap, .pay-wrap { grid-template-columns: 1fr; }
   .calc-summary--echo { position: static; }
