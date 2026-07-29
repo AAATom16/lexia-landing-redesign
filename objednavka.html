@@ -43,8 +43,8 @@
     <!-- ============= STEPPER ============= -->
     <ol class="calc-stepper" aria-label="Postup sjednání">
       <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Pojistník</span></li>
-      <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Platba</span></li>
-      <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Hotovo</span></li>
+      <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Rekapitulace</span></li>
+      <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Založení smlouvy</span></li>
     </ol>
 
     <!-- ============= STEP 1: Údaje pojistníka ============= -->
@@ -187,82 +187,105 @@
             <strong data-echo="total">499 Kč</strong>
             <span id="sum-year-hint" class="calc-year-hint">Ročně to vyjde <strong>5 988 Kč</strong> (bez slevy)</span>
           </div>
-          <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat k platbě</button>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat na rekapitulaci</button>
         </div>
       </div>
     </div>
 
-    <!-- ============= STEP 2: Platba ============= -->
+    <!-- ============= STEP 2: Rekapitulace ============= -->
     <div class="calc-step" data-step-panel="2" hidden>
       <div class="calc-single">
-        <h2 style="margin-bottom: 24px; text-align: center;">Platba pojištění</h2>
+        <div style="text-align: center; margin-bottom: 8px;">
+          <h2 style="margin: 0;">Rekapitulace</h2>
+          <p style="color: var(--text-muted); margin-top: 8px;">Zkontrolujte prosím údaje před sjednáním pojištění.</p>
+        </div>
 
         <div class="recap-card recap-card--price">
-          <h4 class="recap-card-title" style="color: var(--white);">K úhradě</h4>
+          <h4 class="recap-card-title" style="color: var(--white);">Vaše objednávka</h4>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Produkt</span><strong data-echo="product">Kompletní balíček</strong></div>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
+          <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Počátek pojištění</span><strong data-echo="startDate">—</strong></div>
           <div class="recap-row" style="border-color: rgba(255,255,255,0.2);"><span>Frekvence platby</span><strong data-echo="periodLabel">měsíčně</strong></div>
           <div class="recap-row" style="border-bottom: none; padding-top: 14px;"><span style="font-size: 1.05rem;">Částka k úhradě</span><strong data-echo="total" style="font-size: 1.6rem;">499 Kč</strong></div>
         </div>
 
         <div class="recap-card">
-          <h4 class="recap-card-title">Způsob platby</h4>
-          <div class="calc-options" style="grid-template-columns: 1fr; gap: 12px;">
-            <label class="calc-option selected">
-              <input type="radio" name="payMethod" value="card" checked>
-              <strong><i class="icon" data-icon="check_circle"></i> Platební karta</strong>
-              <span>Okamžitá platba, sjednání během minuty</span>
-            </label>
-            <label class="calc-option">
-              <input type="radio" name="payMethod" value="transfer">
-              <strong><i class="icon" data-icon="bank"></i> Bankovní převod</strong>
-              <span>Platební instrukce a variabilní symbol vám pošleme e-mailem</span>
-            </label>
-            <label class="calc-option">
-              <input type="radio" name="payMethod" value="recurring">
-              <strong><i class="icon" data-icon="clock"></i> Opakovaná platba kartou / inkaso</strong>
-              <span>Automatická platba každý měsíc, jednoduché zrušení</span>
-            </label>
-          </div>
-          <label class="form-checkbox" id="recurring-consent" hidden style="margin-top: 14px;">
-            <input type="checkbox">
-            <span>Souhlasím s opakovanou platbou.</span>
-          </label>
-        </div>
-
-        <div class="recap-card">
           <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Souhlasy</h4>
+          <label class="form-checkbox"><input type="checkbox" class="consent" required><span>Souhlasím s rekapitulací zvoleného pojištění a potvrzuji pravdivost údajů. <span class="req">*</span></span></label>
           <label class="form-checkbox"><input type="checkbox" class="consent" required><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a> a informacemi o pojištění. <span class="req">*</span></span></label>
           <label class="form-checkbox"><input type="checkbox" class="consent" required><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
         </div>
 
         <div class="calc-nav">
           <button type="button" class="btn btn-outline btn-lg" data-step-back="1">Zpět na údaje</button>
-          <button type="button" class="btn btn-primary btn-lg" id="pay-btn"><i class="icon" data-icon="lock"></i> Zaplatit a sjednat</button>
+          <button type="button" class="btn btn-primary btn-lg" id="pay-btn"><i class="icon" data-icon="lock"></i> Sjednat a zaplatit</button>
         </div>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 14px; text-align: center;"><i class="icon" data-icon="lock"></i> Platba je zabezpečena PCI DSS certifikovanou platební bránou</p>
       </div>
     </div>
 
-    <!-- ============= STEP 3: Hotovo ============= -->
+    <!-- ============= STEP 3: Založení smlouvy + platba ============= -->
     <div class="calc-step" data-step-panel="3" hidden>
       <div class="calc-single">
-        <div class="state-card" data-state="success">
+        <div class="state-card state-card--wide" data-state="success">
           <div class="state-icon state-icon--success">
             <i class="icon" data-icon="check_circle"></i>
           </div>
-          <h2>Pojištění bylo sjednáno</h2>
-          <p>Děkujeme. Vaše právní pojištění bylo úspěšně sjednáno. Potvrzení a dokumenty jsme odeslali na váš e-mail.</p>
+          <h2>Smlouva byla založena</h2>
+          <p>Děkujeme za sjednání pojištění právní ochrany Lexia. Smlouvu a všechny dokumenty jsme odeslali na váš e-mail <strong data-echo="email">—</strong>. Pro aktivaci pojištění prosím dokončete platbu.</p>
+
           <div class="state-details">
             <div class="recap-row"><span>Produkt</span><strong data-echo="product">Kompletní balíček</strong></div>
             <div class="recap-row"><span>Číslo smlouvy</span><strong data-echo="contractNo">LX-2026-000000</strong></div>
             <div class="recap-row"><span>Pojistník</span><strong data-echo="fullName">—</strong></div>
             <div class="recap-row"><span>Datum počátku pojištění</span><strong data-echo="startDate">—</strong></div>
-            <div class="recap-row" style="border-bottom: none;"><span>Zaplaceno (<span data-echo="periodLabel">měsíčně</span>)</span><strong style="color: var(--success);" data-echo="total">499 Kč</strong></div>
+            <div class="recap-row" style="border-bottom: none;"><span>Částka k úhradě (<span data-echo="periodLabel">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">499 Kč</strong></div>
           </div>
+
+          <!-- Upozornění: uhradit do 24 h -->
+          <div class="pay-warning">
+            <i class="icon" data-icon="clock"></i>
+            <span>Platbu prosím proveďte do <strong>24 hodin</strong> od sjednání. Při delší prodlevě nemusí pojištění začít platit.</span>
+          </div>
+
+          <!-- Platba -->
+          <div class="pay-block">
+            <!-- Primární: platební brána (příprava na integraci) -->
+            <button type="button" class="btn btn-primary btn-lg pay-gateway-btn" id="pay-gateway" data-gateway="card">
+              <i class="icon" data-icon="lock"></i> Zaplatit platební kartou
+            </button>
+            <p class="pay-secure"><i class="icon" data-icon="lock"></i> Zabezpečeno PCI DSS certifikovanou platební bránou</p>
+
+            <!-- Alternativa: bankovní převod + QR -->
+            <div class="pay-alt">
+              <div class="pay-alt-head"><span>nebo zaplaťte bankovním převodem</span></div>
+              <div class="pay-alt-body">
+                <div class="pay-qr" aria-hidden="true">
+                  <svg width="104" height="104" viewBox="0 0 64 64" role="img" aria-label="QR kód pro platbu">
+                    <rect width="64" height="64" fill="#ffffff"/>
+                    <rect x="4" y="4" width="16" height="16" fill="var(--primary)"/><rect x="8" y="8" width="8" height="8" fill="#fff"/>
+                    <rect x="44" y="4" width="16" height="16" fill="var(--primary)"/><rect x="48" y="8" width="8" height="8" fill="#fff"/>
+                    <rect x="4" y="44" width="16" height="16" fill="var(--primary)"/><rect x="8" y="48" width="8" height="8" fill="#fff"/>
+                    <rect x="28" y="4" width="4" height="4" fill="var(--primary)"/><rect x="36" y="8" width="4" height="4" fill="var(--primary)"/>
+                    <rect x="28" y="16" width="4" height="4" fill="var(--primary)"/><rect x="24" y="28" width="4" height="4" fill="var(--primary)"/>
+                    <rect x="32" y="28" width="8" height="4" fill="var(--primary)"/><rect x="48" y="28" width="8" height="4" fill="var(--primary)"/>
+                    <rect x="28" y="36" width="4" height="4" fill="var(--primary)"/><rect x="40" y="36" width="4" height="4" fill="var(--primary)"/>
+                    <rect x="52" y="40" width="4" height="4" fill="var(--primary)"/><rect x="28" y="48" width="8" height="4" fill="var(--primary)"/>
+                    <rect x="44" y="48" width="4" height="4" fill="var(--primary)"/><rect x="36" y="56" width="8" height="4" fill="var(--primary)"/>
+                    <rect x="52" y="52" width="8" height="8" fill="var(--primary)"/>
+                  </svg>
+                </div>
+                <div class="pay-alt-rows">
+                  <div class="recap-row"><span>Číslo účtu</span><strong>2113322110/0800</strong></div>
+                  <div class="recap-row"><span>Variabilní symbol</span><strong data-echo="vs">—</strong></div>
+                  <div class="recap-row" style="border-bottom: none;"><span>Částka</span><strong data-echo="total">499 Kč</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="state-actions">
-            <a href="#" class="btn btn-primary btn-lg"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
-            <a href="index.html" class="btn btn-outline btn-lg">Zpět na hlavní stránku</a>
+            <a href="#" class="btn btn-outline"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
+            <a href="index.html" class="btn btn-ghost">Zpět na hlavní stránku</a>
           </div>
         </div>
       </div>
@@ -368,8 +391,10 @@
   const key = new URLSearchParams(location.search).get('produkt');
   const product = FIXED_PRODUCTS[key] || FIXED_PRODUCTS.trio;
 
-  // Náhodné číslo smlouvy pro demo
-  const contractNo = 'LX-2026-' + String(Math.floor(Math.random() * 9000000) + 1000000);
+  // Náhodné číslo smlouvy + variabilní symbol pro demo
+  const contractSeq = String(Math.floor(Math.random() * 9000000) + 1000000);
+  const contractNo = 'LX-2026-' + contractSeq;
+  const vs = '2026' + contractSeq.slice(0, 6);
 
   const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   const fmtKc = n => n.toLocaleString('cs-CZ') + ' Kč';
@@ -461,6 +486,8 @@
       fullName: fullName,
       startDate: startDate,
       contractNo: contractNo,
+      vs: vs,
+      email: get('email') || '—',
     };
     Object.keys(map).forEach(name => {
       document.querySelectorAll(`[data-echo="${name}"]`).forEach(el => { el.textContent = map[name]; });
@@ -533,18 +560,7 @@
     });
   });
 
-  // --- Platba: styl vybrané metody + souhlas s opakovanou platbou ---
-  const recurringConsent = document.getElementById('recurring-consent');
-  document.querySelectorAll('input[name="payMethod"]').forEach(r => {
-    r.addEventListener('change', () => {
-      document.querySelectorAll('input[name="payMethod"]').forEach(i => {
-        i.closest('.calc-option').classList.toggle('selected', i.checked);
-      });
-      if (recurringConsent) recurringConsent.hidden = document.querySelector('input[name="payMethod"]:checked').value !== 'recurring';
-    });
-  });
-
-  // --- "Zaplatit a sjednat" → krok Hotovo ---
+  // --- "Sjednat a zaplatit" → založení smlouvy (krok 3) ---
   const payBtn = document.getElementById('pay-btn');
   if (payBtn) {
     payBtn.addEventListener('click', () => {
@@ -552,10 +568,23 @@
       const consents = [...document.querySelectorAll('.consent')];
       const missing = consents.find(c => !c.checked);
       if (missing) { missing.reportValidity(); return; }
-      const recBox = recurringConsent && !recurringConsent.hidden ? recurringConsent.querySelector('input') : null;
-      if (recBox && !recBox.checked) { recBox.reportValidity(); return; }
       syncEcho();
       showStep(3);
+    });
+  }
+
+  // --- Platební brána — příprava na integraci (GoPay / Comgate / Stripe apod.) ---
+  const gatewayBtn = document.getElementById('pay-gateway');
+  if (gatewayBtn) {
+    gatewayBtn.addEventListener('click', () => {
+      // TODO: napojení na platební bránu. Na backendu se vytvoří platba a přesměruje se na URL brány:
+      //   const res = await fetch('/api/payment/create', { method: 'POST', body: JSON.stringify(payload) });
+      //   window.location.href = (await res.json()).gatewayUrl;
+      if (gatewayBtn.disabled) return;
+      const orig = gatewayBtn.innerHTML;
+      gatewayBtn.disabled = true;
+      gatewayBtn.innerHTML = 'Přesměrování na platební bránu…';
+      window.setTimeout(() => { gatewayBtn.disabled = false; gatewayBtn.innerHTML = orig; }, 1200);
     });
   }
 })();
