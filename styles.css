@@ -1101,7 +1101,7 @@ i.icon.hero-stat-icon {
   transform: scale(1.06);
 }
 /* Cena — větší, „/měs." na stejném řádku */
-.hero-card--products .hero-product-price { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.hero-card--products .hero-product-price { display: inline-flex; align-items: baseline; gap: 0; white-space: nowrap; }
 .hero-card--products .hero-product-price strong { display: inline; font-size: 1rem; }
 
 /* Šipka jako kulatý modrý button */

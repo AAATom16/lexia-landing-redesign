@@ -298,7 +298,7 @@ function initCalcWizard() {
     const variantLabel = variant ? (variant.dataset.label || 'Jednotlivec') : 'Jednotlivec';
     const periodValue = period ? period.value : 'mesicni';
     const periodLabel = periodValue === 'rocni' ? 'ročně' : 'měsíčně';
-    const totalText = total ? total.textContent : '159 Kč';
+    const totalText = total ? total.textContent : '179 Kč';
 
     document.querySelectorAll('[data-echo="variant"]').forEach(el => el.textContent = variantLabel);
     document.querySelectorAll('[data-echo="period"]').forEach(el => el.textContent = periodLabel);
@@ -641,7 +641,7 @@ function initParallax() {
 
 // Ceny pilířů: [jednotlivec, domacnost]
 const PILLAR_PRICES = {
-  zakladni:    { j: 159, d: 269, label: 'Základní právní ochrana' },
+  zakladni:    { j: 179, d: 269, label: 'Základní právní ochrana' },
   vozidla:     { j: 129, d: 169, label: 'Vozidla a řidiči' },
   prace:       { j:  79, d:  99, label: 'Pracovněprávní ochrana' },
   nemovitost:  { j: 139, d: 159, label: 'Dům, byt, chata' },

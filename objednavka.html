@@ -62,7 +62,7 @@
                 <span class="fixed-product-sub" id="fx-sub">Kompletní balíček</span>
                 <p class="fixed-product-desc" id="fx-desc">Domácnost, bydlení i řidiči v jednom.</p>
               </div>
-              <span class="fixed-product-price"><span class="fpp-now"><strong id="fx-price">499 Kč</strong> <span>/měsíc</span></span><span class="fixed-product-year" id="fx-price-year">5 489 Kč / rok</span></span>
+              <span class="fixed-product-price"><span class="fpp-now"><strong id="fx-price">499 Kč</strong><span>/měsíc</span></span><span class="fixed-product-year" id="fx-price-year">5 489 Kč/rok</span></span>
             </div>
 
             <label class="fixed-upsell" id="fx-upsell" hidden>
@@ -71,7 +71,7 @@
                 <strong>Rozšířit na DRIVE PLUS</strong>
                 <span>Právní ochrana řidiče ve všech vozidlech, nejen ve vašem.</span>
               </span>
-              <span class="fixed-upsell-price">+40 Kč /měs.</span>
+              <span class="fixed-upsell-price">+40 Kč/měs.</span>
             </label>
 
             <p class="fixed-note"><i class="icon" data-icon="check_circle" style="width:14px;height:14px;"></i> Pevná finální cena. Stačí vyplnit, pro koho pojištění je, a zaplatit.</p>
@@ -444,7 +444,7 @@
     setText('fx-sub', product.subtitle);
     setText('fx-desc', v.desc);
     setText('fx-price', fmtKc(v.price));
-    setText('fx-price-year', v.priceYear ? fmtKc(v.priceYear) + ' / rok' : '');
+    setText('fx-price-year', v.priceYear ? fmtKc(v.priceYear) + '/rok' : '');
     setText('order-title', 'Sjednání: ' + v.name);
     syncEcho();
     updatePeriodNote();
@@ -465,7 +465,7 @@
     upsell.hidden = false;
     const diff = product.plus.price - product.price;
     const diffEl = upsell.querySelector('.fixed-upsell-price');
-    if (diffEl) diffEl.textContent = '+' + fmtKc(diff) + ' /měs.';
+    if (diffEl) diffEl.textContent = '+' + fmtKc(diff) + '/měs.';
     upsellCheck.addEventListener('change', () => { usePlus = upsellCheck.checked; renderProduct(); });
   }
 
