@@ -6962,6 +6962,16 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   color: var(--text-muted);
 }
 
+/* CTA tlačítko uvnitř řádku pilíře (odkaz na microsite) */
+.pd-row__cta { margin-top: 24px; }
+
+/* Stavový štítek nad názvem řádku pilíře */
+.pd-row__body .product-block__badge { margin-bottom: 10px; }
+.product-block__badge--soft {
+  background: var(--bg-light);
+  color: var(--text-muted);
+}
+
 /* Blok variant — přes celou šířku */
 .pd-variants {
   background: var(--bg-light);
