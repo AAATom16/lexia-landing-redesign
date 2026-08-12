@@ -391,7 +391,7 @@ function initCalcWizard() {
     balicek: {
       name: 'Kompletní balíček',
       title: 'Sjednání kompletního balíčku',
-      sub: 'Základní právní ochrana, bydlení i řidiči v jednom — nejvýhodnější kombinace. Vyplňte své údaje a sjednejte si pojištění online. Rozsah krytí i cenu můžete kdykoliv upravit přes <strong>Zpět ke kalkulaci</strong>.',
+      sub: 'Základní právní ochrana, bydlení i řidiči v jednom, nejvýhodnější kombinace. Vyplňte své údaje a sjednejte si pojištění online. Rozsah krytí i cenu můžete kdykoliv upravit přes <strong>Zpět ke kalkulaci</strong>.',
       pillars: ['pillar_vozidla', 'pillar_nemovitost'],
     },
   };
