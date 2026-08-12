@@ -6965,11 +6965,28 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 /* CTA tlačítko uvnitř řádku pilíře (odkaz na microsite) */
 .pd-row__cta { margin-top: 24px; }
 
-/* Stavový štítek nad názvem řádku pilíře */
-.pd-row__body .product-block__badge { margin-bottom: 10px; }
-.product-block__badge--soft {
-  background: var(--bg-light);
+/* Stavový štítek přes fotku řádku pilíře */
+.pd-row__media { position: relative; }
+.pd-row__tag {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text-muted);
+}
+.pd-row__tag--primary {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(0, 69, 191, 0.35);
 }
 
 /* Blok variant — přes celou šířku */
@@ -7242,4 +7259,386 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 }
 .why-card:hover {
   box-shadow: 0 -10px 30px -14px rgba(15, 23, 42, 0.16), 0 22px 44px -14px rgba(15, 23, 42, 0.26), 0 8px 16px -6px rgba(15, 23, 42, 0.12);
+}
+
+/* ============================================================
+   MICROSITE SEGMENTU — právní ochrana pro finanční poradce
+   Prefix `fp-`. Používá se jen na /financni-poradci a v šabloně
+   `_sablona-microsite`. Nezasahuje do žádné existující komponenty.
+   ============================================================ */
+
+/* Výstražný pruh pod hlavičkou */
+.fp-alert {
+  background: var(--danger);
+  color: var(--white);
+  text-align: center;
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.fp-alert strong { font-weight: 700; }
+
+/* Štítek sekce ve tvaru pilulky */
+.fp-eyebrow {
+  display: inline-block;
+  background: var(--bg-light);
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 7px 16px;
+  border-radius: 100px;
+  margin-bottom: 18px;
+}
+.fp-h2 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  line-height: 1.14;
+  color: var(--heading);
+  margin: 0 0 16px;
+}
+.fp-h2 span { color: var(--primary); }
+.fp-lead {
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+  max-width: 780px;
+  margin: 0 0 40px;
+}
+
+/* Cenový blok pod hero */
+.fp-price-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 16px;
+  margin-bottom: 16px;
+}
+.fp-price-now {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--heading);
+  line-height: 1;
+}
+.fp-price-for { color: var(--text-muted); font-size: 1rem; }
+.fp-price-old { display: inline-flex; flex-direction: column; }
+.fp-price-old s { color: var(--text-light); font-weight: 700; }
+.fp-price-old span { font-size: 0.8rem; color: var(--text-light); }
+.fp-discount {
+  background: var(--bg-light);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.fp-badge-driver {
+  display: inline-block;
+  background: #0f9d6e;
+  color: var(--white);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+.fp-price-note { color: var(--text-muted); margin: 0 0 24px; }
+
+/* Řada malých výhod se zaškrtnutím */
+.fp-benefits { margin-top: 40px; }
+.fp-benefit {
+  display: flex;
+  gap: 12px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.fp-benefit__check {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.fp-benefit strong { display: block; color: var(--heading); font-weight: 700; margin-bottom: 4px; }
+.fp-benefit span { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+/* Modrý pruh se statistikami */
+.fp-stats {
+  background: var(--primary);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 48px 44px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.fp-stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.fp-stat span { font-size: 0.92rem; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
+
+/* Zvýrazněný informační rámeček */
+.fp-note {
+  display: flex;
+  gap: 16px;
+  background: var(--bg-light);
+  border-radius: var(--radius-lg);
+  padding: 26px 30px;
+  margin-bottom: 40px;
+}
+.fp-note__icon { flex: 0 0 auto; width: 26px; height: 26px; color: var(--primary); }
+.fp-note strong { color: var(--heading); }
+.fp-note h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--heading);
+  margin: 0 0 8px;
+}
+.fp-note p { margin: 0; color: var(--text-muted); line-height: 1.65; }
+
+/* Karta typické situace */
+.fp-case { display: flex; flex-direction: column; }
+.fp-case__kicker {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-light);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.fp-case__title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--heading);
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+.fp-case p { color: var(--text-muted); font-size: 0.94rem; line-height: 1.6; margin: 0 0 20px; }
+.fp-case__prices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto; }
+.fp-case__price { border-radius: 12px; padding: 12px 14px; }
+.fp-case__price small {
+  display: block;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.fp-case__price b { font-weight: 800; font-size: 1.05rem; }
+.fp-case__price--without { background: #fdecea; }
+.fp-case__price--without small { color: #b03a34; }
+.fp-case__price--without b { color: var(--danger); }
+.fp-case__price--with { background: var(--bg-light); }
+.fp-case__price--with small { color: var(--primary); }
+.fp-case__price--with b { color: var(--primary); }
+.fp-case__covers {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 18px;
+  padding-top: 14px;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.fp-case__covers .icon { flex: 0 0 auto; width: 18px; height: 18px; color: var(--primary); margin-top: 1px; }
+.fp-case__covers b { color: var(--primary); font-weight: 700; }
+.fp-footnote { font-size: 0.82rem; color: var(--text-light); line-height: 1.6; margin: 28px 0 0; }
+
+/* Seznam pojistných oblastí */
+.fp-cover {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+}
+.fp-cover__check {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fp-cover__check .icon { width: 18px; height: 18px; }
+.fp-cover strong { display: block; color: var(--heading); font-weight: 600; line-height: 1.4; margin-bottom: 3px; }
+/* jen popisek s limitem, ne kolečko se zaškrtnutím (to je také <span>) */
+.fp-cover > div > span { color: var(--text-light); font-size: 0.9rem; }
+
+/* Přepínač měsíčně / ročně */
+.fp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px;
+  margin-bottom: 40px;
+}
+.fp-toggle button {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding: 9px 22px;
+  border-radius: 100px;
+  cursor: pointer;
+}
+.fp-toggle button[aria-pressed="true"] { background: var(--primary); color: var(--white); }
+.fp-toggle__hint {
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  color: var(--primary);
+  padding-right: 14px;
+}
+
+/* Závěrečné nabídkové karty */
+.fp-offer {
+  background: var(--primary);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+}
+.fp-offer__kicker {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+.fp-offer p { color: rgba(255, 255, 255, 0.88); line-height: 1.6; }
+.fp-offer__pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin: 18px 0 14px;
+}
+.fp-offer__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; }
+.fp-offer__price b { font-family: var(--font-heading); font-weight: 800; font-size: clamp(2.6rem, 6vw, 4rem); line-height: 1; }
+.fp-offer__price s { color: rgba(255, 255, 255, 0.6); font-weight: 700; font-size: 1.3rem; }
+.fp-offer__disc {
+  background: #0f9d6e;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+.fp-offer h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  margin: 26px 0 14px;
+}
+.fp-offer ul { list-style: none; margin: 0 0 30px; padding: 0; }
+.fp-offer li {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+.fp-offer li .icon { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 3px; }
+.fp-offer .btn-primary {
+  background: var(--white);
+  color: var(--primary);
+  border-color: var(--white);
+}
+.fp-offer .btn-primary:hover { background: rgba(255, 255, 255, 0.9); color: var(--primary); }
+
+.fp-bonus {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+}
+.fp-bonus__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.fp-bonus__kicker { text-transform: uppercase; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--heading); }
+.fp-bonus__gift {
+  background: var(--bg-light);
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+.fp-bonus__pct { display: flex; align-items: baseline; gap: 10px; margin: 26px 0 22px; }
+.fp-bonus__pct b { font-family: var(--font-heading); font-weight: 800; font-size: clamp(2.6rem, 6vw, 4rem); line-height: 1; color: var(--heading); }
+.fp-bonus__pct span { color: var(--text-muted); font-size: 1.05rem; }
+.fp-bonus h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--heading);
+  margin: 0 0 14px;
+}
+.fp-bonus h4 .icon { color: var(--primary); }
+.fp-bonus p { color: var(--text-muted); line-height: 1.65; margin: 0 0 14px; }
+.fp-bonus p a, .fp-bonus strong { color: var(--primary); }
+.fp-bonus__small { font-size: 0.86rem; color: var(--text-light); }
+
+/* Právní poznámka nad patičkou */
+.fp-legal {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  font-size: 0.86rem;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+.fp-legal strong { color: var(--text-muted); }
+
+@media (max-width: 980px) {
+  .fp-stats { grid-template-columns: repeat(2, 1fr); padding: 36px 28px; }
+}
+@media (max-width: 760px) {
+  .fp-stats { grid-template-columns: 1fr; gap: 24px; }
+  .fp-offer, .fp-bonus { padding: 32px 24px; }
+  .fp-case__prices { grid-template-columns: 1fr; }
+  .fp-toggle { flex-wrap: wrap; justify-content: center; }
+  .fp-toggle__hint { padding: 0 0 6px; width: 100%; text-align: center; }
+}
+
+/* Hero microsite: karta je vyšší než na „O nás" (badge + tlačítko),
+   proto vlastní výška a vrstvení nad spodní křivkou. */
+.page-hero--fp { min-height: 660px; padding: 90px 0 150px; }
+.page-hero--fp .onas-hero-card { position: relative; z-index: 2; max-width: 620px; }
+.page-hero--fp .onas-hero-card .product-block__badge { margin-bottom: 18px; }
+@media (max-width: 900px) {
+  .page-hero--fp { min-height: 0; padding: 48px 0 110px; }
 }

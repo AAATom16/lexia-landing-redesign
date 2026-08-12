@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--
   Microsite segmentu — vytvořeno ze šablony `_sablona-microsite/`.
-  Struktura sekcí i pojmenování komentářů odpovídají šabloně; návod
-  na založení další microsite je v `_sablona-microsite/README.md`.
+  Návod na založení další microsite je v `_sablona-microsite/README.md`.
+  Texty jsou přepsané 1:1 z podkladů LP pro finanční poradce.
 -->
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Právní ochrana pro finanční poradce | Lexia</title>
-<meta name="description" content="Komplexní právní ochrana pro finanční poradce a realitní makléře — podnikání (pojištění, úvěry, investice, reality) i ochrana řidiče v ČR i Evropě.">
+<meta name="description" content="Komplexní právní ochrana pro finanční poradce a realitní makléře — podnikání (pojištění, úvěry, investice, reality) i ochrana řidiče v ČR i Evropě. 299 Kč měsíčně.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
     </ul>
     <div class="nav-actions">
       <a href="../klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
-      <a href="../kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+      <a href="../kalkulacka.html" class="btn btn-primary">Sjednat pojištění</a>
     </div>
     <button class="menu-toggle" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -39,55 +39,354 @@
   </nav>
 </header>
 
-<!-- SEKCE: HERO -->
-<section class="page-hero">
+<!-- SEKCE: VÝSTRAŽNÝ PRUH -->
+<div class="fp-alert">
+  Vázaný zástupce odpovídá za své jednání. <strong>Chcete platit 500 000 Kč za obhajobu, nebo chcete LEXII?</strong>
+</div>
+<!-- /SEKCE: VÝSTRAŽNÝ PRUH -->
+
+<!-- SEKCE: HERO
+     Fotka přes celou šířku + bílá karta s textem — stejný tvar jako hero
+     na stránce „O nás".
+     TODO: vyměnit za ../assets/lx-ostatni-poradci.jpg, až bude fotka k dispozici -->
+<section class="page-hero page-hero--onas page-hero--fp" style="background-image: url('../assets/lx-firmy-prace.jpg');">
   <div class="container">
-    <h1>Chráníme vaše podnikání <span style="color: var(--primary);">i vaše práva na silnici.</span></h1>
-    <p>Komplexní právní ochrana — podnikání (pojištění, úvěry, investice, reality) i ochrana řidiče v ČR i Evropě.</p>
+    <div class="onas-hero-card">
+      <span class="product-block__badge">Právní ochrana pro finanční poradce</span>
+      <h1>Chráníme vaše <span style="color: var(--primary);">podnikání</span><br>i vaše <span style="color: var(--primary);">práva na silnici</span>.</h1>
+      <p>Komplexní právní ochrana — podnikání (pojištění, úvěry, investice, reality) i ochrana řidiče v ČR i Evropě.</p>
+      <a href="../kalkulacka.html" class="btn btn-primary btn-lg">Sjednat pojištění <i class="icon" data-icon="arrow_right"></i></a>
+    </div>
   </div>
+  <svg class="hero-inward-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 L0,12 Q960,300 1920,12 L1920,190 Z"/>
+  </svg>
 </section>
 <!-- /SEKCE: HERO -->
 
+<!-- SEKCE: PROČ JE OCHRANA NUTNÁ – ÚVODNÍ TEXT + CENA -->
 <section>
   <div class="container">
 
-    <!-- SEKCE: FOTKA -->
-    <!-- TODO: vyměnit za assets/lx-ostatni-poradci.jpg, až bude fotka k dispozici -->
-    <div class="image-frame image-frame--3x2 image-frame--tinted" style="margin-bottom: 48px;">
-      <img src="../assets/lx-firmy-prace.jpg" alt="Finanční poradci a realitní makléři" loading="lazy">
-      <span class="image-tag"><i class="icon" data-icon="briefcase"></i> Právní ochrana při výkonu profese</span>
+    <p class="fp-lead" style="margin-bottom: 36px;">Jako finanční poradce a vázaný zástupce odpovídáte za své jednání osobně ať už distribuujete pojištění (<strong>zák. 170/2018 Sb.</strong>), spotřebitelské úvěry a hypotéky (<strong>zák. 257/2016 Sb.</strong>) nebo investiční produkty (<strong>zák. 256/2004 Sb.</strong>). Za škodu klientovi sice odpovídá zastoupený (SZ, banka, obchodník s cennými papíry), ten ji ale může <strong>regresivně vymáhat po vás</strong>. <strong>Odpovědnostní pojištění tu nestačí</strong>, kryje škodu klientovi, ne ale vaši obhajobu, trestní řízení, spor o storno provizí, kontrolu ČNB nebo FÚ. To řeší jen právní ochrana.</p>
+
+    <div class="fp-price-head">
+      <span class="fp-price-now">299 Kč</span>
+      <span class="fp-price-for">měsíčně pro finanční poradce</span>
+      <span class="fp-price-old"><s>508 Kč</s><span>standardní cena</span></span>
+      <span class="fp-discount">SLEVA 41 %</span>
     </div>
-    <!-- /SEKCE: FOTKA -->
-
-    <!-- SEKCE: ÚVODNÍ TEXT -->
-    <div class="pd-intro">
-      <h3 class="pd-intro__title">Právní ochrana <span>pro finanční poradce</span></h3>
-      <p>Jako finanční poradce a vázaný zástupce odpovídáte za své jednání osobně ať už distribuujete pojištění (<strong>zák. 170/2018 Sb.</strong>), spotřebitelské úvěry a hypotéky (<strong>zák. 257/2016 Sb.</strong>) nebo investiční produkty (<strong>zák. 256/2004 Sb.</strong>). Za škodu klientovi sice odpovídá zastoupený (SZ, banka, obchodník s cennými papíry), ten ji ale může <strong>regresivně vymáhat po vás</strong>. <strong>Odpovědnostní pojištění tu nestačí</strong>, kryje škodu klientovi, ne ale vaši obhajobu, trestní řízení, spor o storno provizí, kontrolu ČNB nebo FÚ. To řeší jen právní ochrana.</p>
+    <span class="fp-badge-driver">Včetně právní ochrany řidiče v ČR a Evropě</span>
+    <p class="fp-price-note">Exkluzivní nabídka <strong>pouze pro finanční poradce — partnery LEXIA</strong>.</p>
+    <div class="hero-actions">
+      <a href="../kalkulacka.html" class="btn btn-primary btn-lg">Sjednat pojištění <i class="icon" data-icon="arrow_right"></i></a>
+      <a href="#co-je-kryto" class="btn btn-outline btn-lg">Co je kryto?</a>
     </div>
-    <!-- /SEKCE: ÚVODNÍ TEXT -->
 
-    <!-- SEKCE: ODRÁŽKY -->
-    <ul class="pd-checklist">
-      <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Chrání před regresem samostatného zprostředkovatele dle § 16 zák. 170/2018 Sb.</li>
-      <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Limit až 2,5 mil. Kč na každý případ</li>
-      <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Tým advokátů a expertů se specializací na finanční trh</li>
-      <li><span class="pd-check"><i class="icon" data-icon="check"></i></span> Bonus 25 % na domácnost — voucher ke každé smlouvě</li>
-    </ul>
-    <!-- /SEKCE: ODRÁŽKY -->
-
-    <p class="pd-note-inline">Připravujeme pro vás kompletní stránku s nabídkou. Mezitím nás neváhejte kontaktovat.</p>
-
-    <!-- SEKCE: TLAČÍTKA -->
-    <div class="pd-cta">
-      <div class="hero-actions" style="justify-content: center;">
-        <a href="../kontakt.html" class="btn btn-primary btn-lg">Individuální nabídka</a>
-        <a href="../pro-koho.html#ostatni" class="btn btn-outline btn-lg">Zpět na Pro koho</a>
+    <!-- 4 hlavní výhody -->
+    <div class="grid grid-4 fp-benefits">
+      <div class="fp-benefit">
+        <i class="icon fp-benefit__check" data-icon="check"></i>
+        <div><strong>Chrání před regresem</strong><span>samostatného zprostředkovatele dle § 16 zák. 170/2018 Sb.</span></div>
+      </div>
+      <div class="fp-benefit">
+        <i class="icon fp-benefit__check" data-icon="check"></i>
+        <div><strong>Limit až 2,5 mil. Kč</strong><span>na každý případ</span></div>
+      </div>
+      <div class="fp-benefit">
+        <i class="icon fp-benefit__check" data-icon="check"></i>
+        <div><strong>Tým advokátů a expertů</strong><span>se specializací na finanční trh</span></div>
+      </div>
+      <div class="fp-benefit">
+        <i class="icon fp-benefit__check" data-icon="check"></i>
+        <div><strong>Bonus 25 % na domácnost</strong><span>voucher ke každé smlouvě</span></div>
       </div>
     </div>
-    <!-- /SEKCE: TLAČÍTKA -->
-
   </div>
 </section>
+<!-- /SEKCE: CENA -->
+
+<!-- SEKCE: PROČ JE OCHRANA NUTNÁ -->
+<section>
+  <div class="container">
+    <span class="fp-eyebrow">Proč je ochrana nutná</span>
+    <h2 class="fp-h2">Práce vázaného zástupce <span>není bez rizika</span></h2>
+
+    <div class="grid grid-4" style="margin-top: 40px;">
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="briefcase"></i></div>
+        <h3>Regres napříč distribucí (pojištění, úvěry, investice)</h3>
+        <p>Distribuujete pojištění (170/2018), spotřebitelské úvěry a hypotéky (257/2016) i investiční nástroje (256/2004). Za škodu klientovi odpovídá zastoupený — SZ, banka i obchodník s cennými papíry ji ale standardně regresivně vymáhají po vázaném zástupci.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="warning"></i></div>
+        <h3>Odpovědnostní pojištění nestačí</h3>
+        <p>Profesní PI hradí jen prokázanou škodu klientovi. Vaši obhajobu, trestní řízení, spor s ČNB, finanční arbitr, kontrolu FÚ, spor o storno provizí ani ochranu osobnosti PI neřeší — to vše kryje až právní ochrana.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="scales"></i></div>
+        <h3>Vlastní trestní odpovědnost</h3>
+        <p>Trestní odpovědnost (podvod, zpronevěra, neoprávněné podnikání, úvěrový podvod dle § 211 TZ) je vždy osobní — nelze ji přenést na zastoupeného. Stačí jedno trestní oznámení a obhajoba stojí stovky tisíc.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon"><i class="icon" data-icon="bank"></i></div>
+        <h3>Kontrola ČNB, FÚ a vlastní podnikání</h3>
+        <p>Jako OSVČ čelíte kontrole ČNB nad distribucí, kontrole finančního úřadu, sporům ze smluv i útokům na pověst samostatně. Sankce ČNB ani daňové doměrky z provizí za vás nikdo nezaplatí.</p>
+      </div>
+    </div>
+
+    <!-- Modrý pruh se statistikami -->
+    <div class="fp-stats" style="margin-top: 56px;">
+      <div class="fp-stat">
+        <strong>Nejlepší právníci a specialisté</strong>
+        <span>ve službách Lexie pro Vás</span>
+      </div>
+      <div class="fp-stat">
+        <strong>2 500–5 000 Kč/h</strong>
+        <span>stojí hodina specializovaného advokáta. Spor snadno přesáhne 150 hodin práce</span>
+      </div>
+      <div class="fp-stat">
+        <strong>Non-stop linka právní pomoci</strong>
+        <span>24/7 telefonická podpora v případě právního problému</span>
+      </div>
+      <div class="fp-stat">
+        <strong>299 Kč/měsíc</strong>
+        <span>neveřejná cena pro finanční poradce (běžně 508 Kč) – profese + řidič.</span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /SEKCE: PROČ JE OCHRANA NUTNÁ -->
+
+<!-- SEKCE: TYPICKÉ SITUACE -->
+<section class="bg-section">
+  <div class="container">
+    <span class="fp-eyebrow">Typické situace</span>
+    <h2 class="fp-h2">Kdy pojištění <span>využijete</span></h2>
+    <p class="fp-lead">Reálné případy z distribuce pojištění (170/2018), úvěrů a hypoték (257/2016) i investic (256/2004) — a kolik by vás stály bez pojištění.</p>
+
+    <div class="fp-note">
+      <i class="icon fp-note__icon" data-icon="shield"></i>
+      <div>
+        <h3>Proč odpovědnostní pojištění nestačí</h3>
+        <p>Profesní <strong>odpovědnostní pojištění</strong> hradí <strong>prokázanou škodu klientovi</strong> — nic víc. Neřeší vaši <strong>obhajobu v trestním řízení</strong>, kontrolu <strong>ČNB</strong> nad distribucí pojištění, úvěrů a investic, řízení před <strong>finančním arbitrem</strong>, <strong>regres a spor o storno provizí</strong> od zastoupeného (SZ, banka, obchodník s cennými papíry), kontrolu <strong>finančního úřadu</strong> ani útok na vaši <strong>pověst</strong>. To vše kryje až <strong>pojištění právní ochrany</strong> — proto je nutné mít obě.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Investice – nevhodný produkt (MiFID II/256/2004)</span>
+        <h3 class="fp-case__title">Klient žaluje za ztrátu na investičním portfoliu, obchodník regreduje</h3>
+        <p>Doporučil jste klientovi dynamické portfolio podílových fondů. Trh padl, klient tvrdí, že produkt neodpovídal jeho investičnímu profilu dle MiFID II a žaluje obchodníka s cennými papíry o 800 000 Kč. Obchodník (zastoupený) škodu uhradil a nyní ji regresivně vymáhá po vás — odpovědnostní pojištění kryje škodu klientovi, ale ne váš spor s obchodníkem ani vaši obhajobu.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 350 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Obrana proti vymáhání náhrady újmy, smluvní spory v rámci podnikání, limit 2,5 mil. Kč</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Hypotéka/spotřebitelský úvěr (257/2016)</span>
+        <h3 class="fp-case__title">Banka po vás vymáhá ztrátu z nesprávně posouzené úvěruschopnosti</h3>
+        <p>Sjednal jste hypotéku, klient po roce přestal splácet a banka realizovala zástavu se ztrátou. Banka tvrdí, že jste nesprávně posoudil úvěruschopnost dle § 86 zákona č. 257/2016 Sb., a vymáhá ztrátu po vás jako vázaném zástupci. K tomu hrozí kontrola ČNB a v krajním případě i trestní oznámení pro úvěrový podvod dle § 211 TZ.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 400 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Obhajoba v trestním a správním řízení, obrana proti vymáhání náhrady újmy, limit 2,5 mil. Kč</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Kontrola finančního úřadu</span>
+        <h3 class="fp-case__title">Daňová kontrola, nedoplatek a hrozba trestního stíhání</h3>
+        <p>Finanční úřad zahájí daňovou kontrolu vašeho podnikání. Doměří daň, penále a úroky z prodlení — vznikne daňový nedoplatek. Pozor: při zkrácení daně nad 100 000 Kč jde podle § 240 trestního zákoníku o trestný čin zkrácení daně, poplatku a podobné povinné platby. Bez zkušeného advokáta a daňového poradce hrozí nejen vysoký nedoplatek, ale i trestní stíhání.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 200 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Zastupování při daňové kontrole, odvolání i obhajoba v trestním řízení, limit 2,5 mil. Kč</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Kontrola ČNB u vázaného zástupce</span>
+        <h3 class="fp-case__title">ČNB prověřuje záznamy z jednání u pojištění, úvěrů i investic</h3>
+        <p>ČNB v rámci kontroly distribuce na finančním trhu prověřuje záznamy z jednání, testy odbornosti (170/2018, 257/2016, 256/2004) a doporučení vedená přímo pod vaším jménem. Hrozí výmaz z registru, ukončení spolupráce ze strany zastoupeného i osobní sankce. Bez specializovaného advokáta jde o vážné riziko pro vaši kariéru.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 250 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> až 250 000 Kč</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Spor se zastoupeným – storno provizí</span>
+        <h3 class="fp-case__title">SZ/banka/obchodník požaduje vrácení vyplacených provizí</h3>
+        <p>Po hromadných stornech smluv vám zastoupený vystavil vyúčtování na 450 000 Kč k vrácení. Tvrdíte, že storna byla mimo vaši kontrolu. Spor o storno provizí je klasickým konfliktem mezi vázaným zástupcem a jeho zastoupeným — odpovědnostní pojištění tento spor nekryje, řeší ho výhradně právní ochrana.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 250 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Spory ze smluv o výkonu funkce a obchodní spolupráci, limit 2,5 mil. Kč</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Trestní oznámení – podezření z úvěrového podvodu</span>
+        <h3 class="fp-case__title">Klient podal trestní oznámení pro podvod při sjednání úvěru</h3>
+        <p>Klient po neschválené refinanci tvrdí, že jste vědomě zatajil informace v žádosti o úvěr (§ 211 TZ – úvěrový podvod). Policie zahájila prověřování. Vyšetřování trvá měsíce a obhajoba je nutná od první výpovědi — PI obhajobu v trestním řízení nehradí.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 500 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč*</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Obhajoba v trestním řízení; při prokázání neviny zpětná úhrada nákladů obhajoby</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Právní ochrana řidiče (ČR + Evropa)</span>
+        <h3 class="fp-case__title">Nehoda se zraněním – při 7denní pracovní neschopnosti hrozí trestní řízení</h3>
+        <p>Cestou za klientem (v ČR i kdekoli v Evropě) způsobíte dopravní nehodu, při které dojde ke zranění druhé osoby. Pokud pracovní neschopnost poškozeného přesáhne 7 dní, jde automaticky o trestný čin ublížení na zdraví z nedbalosti (§ 148 TZ) a policie zahajuje trestní stíhání řidiče. Hrozí podmínka, zákaz řízení i náhrada újmy nad rámec povinného ručení.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 500 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Obhajoba v trestním a přestupkovém řízení řidiče, vymáhání náhrady újmy, ČR + Evropa</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Řidič – hrozba odebrání řidičského průkazu (body)</span>
+        <h3 class="fp-case__title">Dosažení 12 bodů nebo závažný přestupek – hrozí ztráta řidičáku</h3>
+        <p>Měření rychlosti, jízda na červenou, alkohol za volantem nebo opakované přestupky vás dostanou na hranici 12 bodů. Bez řidičského průkazu ale nemůžete jezdit za klienty a fakticky končíte v profesi. Specializovaný advokát napadá záznamy v bodovém hodnocení, postup policie i samotné měření a v řadě případů řízení odvrátí.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 80 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Zastoupení v řízení o přestupcích, obrana proti zadržení/odebrání řidičského průkazu, ČR + Evropa</span></div>
+      </div>
+
+      <div class="card fp-case">
+        <span class="fp-case__kicker">Řidič – správní řízení (přestupek v dopravě)</span>
+        <h3 class="fp-case__title">Správní řízení po dopravním přestupku – pokuta a zákaz činnosti</h3>
+        <p>Po dopravní nehodě nebo přestupku s vámi obecní úřad zahájí správní řízení. Hrozí pokuta v desítkách tisíc Kč, zákaz řízení až na 2 roky a body. Bez právního zástupce v řízení často projde verze policie bez oponentury — s advokátem se daří zpochybnit důkazy, dosáhnout zastavení řízení nebo výrazně nižší sankce.</p>
+        <div class="fp-case__prices">
+          <div class="fp-case__price fp-case__price--without"><small>Bez Lexie</small><b>až 120 000 Kč</b> za advokáty</div>
+          <div class="fp-case__price fp-case__price--with"><small>S Lexií</small><b>0 Kč</b></div>
+        </div>
+        <div class="fp-case__covers"><i class="icon" data-icon="shield"></i><span><b>Kryje:</b> Zastoupení ve správním řízení, opravné prostředky, správní soudnictví, ČR + Evropa</span></div>
+      </div>
+
+    </div>
+
+    <p class="fp-footnote">* U úmyslných trestných činů hradíte obhajobu nejprve sami; při prokázání neviny Lexia zpětně uhradí náklady až do sjednaného limitu. Uvedené částky jsou orientační odhady reálných nákladů na specializovaného advokáta.</p>
+  </div>
+</section>
+<!-- /SEKCE: TYPICKÉ SITUACE -->
+
+<!-- SEKCE: CO PŘESNĚ POJIŠTĚNÍ KRYJE -->
+<section id="co-je-kryto">
+  <div class="container">
+    <span class="fp-eyebrow">Pojistné oblasti – základní právní ochrana</span>
+    <h2 class="fp-h2">Co přesně pojištění <span>kryje</span></h2>
+    <p class="fp-lead">Smlouva obsahuje <strong>Základní právní ochranu</strong> pro finanční poradce. Limity jsou na pojistnou událost.</p>
+
+    <div class="grid grid-2">
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení</strong><span>2 500 000 Kč · Evropa</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Vymáhání náhrady újmy</strong><span>2 500 000 Kč · Evropa</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Obrana proti vymáhání náhrady újmy klientem</strong><span>2 500 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Smluvní spory v rámci podnikání</strong><span>2 500 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory s pojišťovnami</strong><span>2 500 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory s odpovědnostními pojišťovnami</strong><span>2 500 000 Kč · Evropa</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory s ostatními finančními institucemi</strong><span>2 500 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Ochrana vlastnického práva</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory v oblasti veřejného zdravotního pojištění</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory v oblasti nemocenského pojištění, důchodového pojištění a státní politiky zaměstnanosti</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory v souvislosti s daňovou kontrolou</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory v oblasti práva na ochranu osobnosti</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Spory v oblasti ochrany osobních údajů a internetové bezpečnosti</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Právní pomoc v insolvenčním řízení</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Právní pomoc ve správním řízení</strong><span>250 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Právní pomoc při kontrole smluv</strong><span>25 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>Limit na všechny pojistné události v průběhu jednoho pojistného období</strong><span>25 000 Kč/rok · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>All-risk garance – Právní poradenství</strong><span>10 000 Kč · ČR</span></div></div>
+      <div class="fp-cover"><span class="fp-cover__check"><i class="icon" data-icon="check"></i></span><div><strong>All-risk garance – Právní zastoupení a ostatní formy pojistného plnění</strong><span>50 000 Kč · ČR</span></div></div>
+    </div>
+
+    <div class="fp-note" style="margin-top: 32px; margin-bottom: 0;">
+      <i class="icon fp-note__icon" data-icon="warning"></i>
+      <div><p><strong>Kryjeme Vám i 1 smluvní spor do 100 000 Kč sporné částky.</strong></p></div>
+    </div>
+  </div>
+</section>
+<!-- /SEKCE: CO PŘESNĚ POJIŠTĚNÍ KRYJE -->
+
+<!-- SEKCE: EXKLUZIVNÍ NABÍDKA -->
+<section class="bg-section">
+  <div class="container">
+    <span class="fp-eyebrow">Exkluzivní nabídka 2026</span>
+    <h2 class="fp-h2">Naprostá bomba za <span>299 Kč</span></h2>
+    <p class="fp-lead" style="margin-bottom: 24px;">
+      <strong>Neveřejná nabídka — pouze pro finanční poradce — partnery LEXIA.</strong><br>
+      Komplexní právní ochrana — podnikání (pojištění, úvěry, investice, reality) <strong>+ ochrana řidiče (ČR + Evropa)</strong> za speciální cenu místo standardních 508 Kč — <strong>sleva 41 %</strong>.<br>
+      Při roční platbě <strong>3 499 Kč</strong>. Pojistku můžete kdykoliv zrušit.
+    </p>
+
+    <div class="fp-toggle" role="group" aria-label="Perioda platby">
+      <button type="button" data-fp-period="month" aria-pressed="true">Měsíčně</button>
+      <button type="button" data-fp-period="year" aria-pressed="false">Ročně</button>
+      <span class="fp-toggle__hint">Při roční platbě ještě levněji za 3 499 Kč</span>
+    </div>
+
+    <div class="grid grid-2">
+
+      <div class="fp-offer">
+        <div class="fp-offer__kicker">Právní ochrana pro finanční poradce + řidič</div>
+        <p><strong>Včetně právní ochrany řidiče v ČR a Evropě</strong> — všechna rizika výkonu profese i řízení vozidla</p>
+        <span class="fp-offer__pill">Neveřejná cena</span>
+        <div class="fp-offer__price">
+          <b data-fp-price>299</b>
+          <span data-fp-unit>Kč/měsíc</span>
+          <s>508 Kč</s>
+          <span class="fp-offer__disc">SLEVA 41 %</span>
+        </div>
+        <p style="margin-top: 14px;">Bezprovizně pouze při on-line sjednání.</p>
+        <h4><i class="icon" data-icon="briefcase"></i> Profese</h4>
+        <ul>
+          <li><i class="icon" data-icon="check"></i><span>Obhajoba v trestním, správním a přestupkovém řízení</span></li>
+          <li><i class="icon" data-icon="check"></i><span>Obrana proti vymáhání náhrady újmy klientem</span></li>
+          <li><i class="icon" data-icon="check"></i><span>Smluvní spory v rámci podnikání i spory s pojišťovnami</span></li>
+          <li><i class="icon" data-icon="check"></i><span>Ochrana osobnosti, osobních údajů a internetové bezpečnosti</span></li>
+          <li><i class="icon" data-icon="check"></i><span>Právní pomoc při kontrole ČNB, insolvenci a daňové kontrole</span></li>
+          <li><i class="icon" data-icon="check"></i><span>Právní ochrana řidiče – nehody, trestní řízení (ČR + Evropa)</span></li>
+          <li><i class="icon" data-icon="check"></i><span>All-risk právní poradenství a zastoupení</span></li>
+        </ul>
+        <a href="../kalkulacka.html" class="btn btn-primary btn-lg"><span data-fp-cta>Sjednat za 299 Kč/měsíc</span> <i class="icon" data-icon="arrow_right"></i></a>
+      </div>
+
+      <div class="fp-bonus">
+        <div class="fp-bonus__head">
+          <div>
+            <div class="fp-bonus__kicker">Bonus ke smlouvě</div>
+            <p style="margin: 6px 0 0;">Zdarma k profesnímu pojištění</p>
+          </div>
+          <span class="fp-bonus__gift">Dárek</span>
+        </div>
+        <div class="fp-bonus__pct"><b>25 %</b><span>sleva</span></div>
+        <h4><i class="icon" data-icon="sparkle"></i> Voucher na právní ochranu domácnosti</h4>
+        <p>Po sjednání obdrží voucher na slevu <strong>25 % na pojištění právní ochrany</strong> pro sebe (jednotlivce) nebo svou domácnost.</p>
+        <p>Chraňte si své soukromí – žaloby a vymáhání újmy, trestní řízení, sousedské spory, reklamace zboží a služeb, spory s e-shopy, pracovněprávní spory, spory s pronajímatelem, nájemci či nájemníkem, dědické a rodinné spory, spory s řemeslníky a stavební firmou, problémy s úřady – to vše vyřešíme za vás.</p>
+        <p class="fp-bonus__small">Voucher je nepřenosný a platí 14 dní od sjednání právní ochrany pro finanční poradce.</p>
+      </div>
+
+    </div>
+
+    <div class="hero-actions" style="justify-content: center; margin-top: 44px;">
+      <a href="../kontakt.html" class="btn btn-primary btn-lg">Individuální nabídka</a>
+      <a href="../pro-koho.html#ostatni" class="btn btn-outline btn-lg">Zpět na Pro koho</a>
+    </div>
+
+    <p class="fp-legal" style="margin-top: 44px;">© 2026 Lexia pojišťovna · Produkt <strong>Právní ochrana při výkonu profese</strong>. Pojistné podmínky a výluky jsou k dispozici na <a href="../index.html">www.lexia.cz</a>. Tato stránka má informační charakter a nepředstavuje pojistnou smlouvu.</p>
+  </div>
+</section>
+<!-- /SEKCE: EXKLUZIVNÍ NABÍDKA -->
 
 <!-- PATIČKA — NEUPRAVOVAT (viz šablona) -->
 <svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
@@ -145,5 +444,32 @@
 
 <script src="../assets/icons.js"></script>
 <script src="../script.js"></script>
+<script>
+// Přepínač měsíční / roční platby v sekci Exkluzivní nabídka
+(function () {
+  var buttons = document.querySelectorAll('[data-fp-period]');
+  var price = document.querySelector('[data-fp-price]');
+  var unit = document.querySelector('[data-fp-unit]');
+  var cta = document.querySelector('[data-fp-cta]');
+  if (!buttons.length || !price || !unit || !cta) return;
+
+  var values = {
+    month: { price: '299', unit: 'Kč/měsíc', cta: 'Sjednat za 299 Kč/měsíc' },
+    year: { price: '3 499', unit: 'Kč/rok', cta: 'Sjednat za 3 499 Kč/rok' }
+  };
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var period = btn.getAttribute('data-fp-period');
+      var v = values[period];
+      if (!v) return;
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      price.textContent = v.price;
+      unit.textContent = v.unit;
+      cta.textContent = v.cta;
+    });
+  });
+})();
+</script>
 </body>
 </html>

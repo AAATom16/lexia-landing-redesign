@@ -6,6 +6,12 @@ Kostra samostatné stránky pro jeden segment (finanční poradci, realitní mak
 První hotová instance: [`../financni-poradci/index.html`](../financni-poradci/index.html) — když si nejsi jistá, jak má
 výsledek vypadat, otevři ji vedle šablony a porovnej.
 
+Šablona obsahuje jen základní kostru. Pokud potřebuješ bohatší stránku (cenový blok,
+karty rizik, modrý pruh se statistikami, karty typických situací s částkami, seznam
+pojistných oblastí, přepínač měsíčně/ročně, nabídkové karty), zkopíruj příslušné sekce
+z microsite finančních poradců. Jejich styly jsou v `../styles.css` v bloku
+**„MICROSITE SEGMENTU"** pod prefixem `fp-` a fungují na jakékoli microsite.
+
 ---
 
 ## Postup: nová microsite za 5 minut
@@ -56,8 +62,9 @@ k ostatním `pd-*` komponentám — ne do nové stránky.
 | `pd-note-inline` | Drobná poznámka kurzívou |
 | `pd-cta` | Vycentrovaná patička sekce s tlačítky |
 | `hero-actions` | Obal tlačítek — sám řeší mezery a zalomení na mobilu |
-| `product-block__badge` | Modrý štítek (např. „Nově v nabídce") |
-| `product-block__badge--soft` | Tlumená šedá varianta štítku (např. „Připravujeme") |
+| `product-block__badge` | Modrý štítek nad nadpisem |
+| `pd-row__tag` | Štítek přes fotku, vlevo nahoře — bílý průhledný (např. „Připravujeme"). Patří dovnitř `pd-row__media` |
+| `pd-row__tag--primary` | Modrá varianta téhož štítku (např. „Nově v nabídce") |
 
 ### Tlačítka
 

@@ -62,16 +62,28 @@
 </header>
 
 <!-- ============================================================
-     SEKCE: HERO — hlavní nadpis stránky
+     SEKCE: HERO — fotka přes celou šířku + bílá karta s textem
+     Stejný tvar jako hero na stránce „O nás". Třídy `page-hero--onas`
+     a `onas-hero-card` jsou sdílený vzor pro fotkové hero, název je
+     historický — nepřejmenovávej je, jinak se rozpadne vzhled.
      ============================================================ -->
-<section class="page-hero">
+<!-- ✎ FOTKA na pozadí. Ulož ji do `../assets/` s prefixem `lx-`,
+     na šířku, alespoň 1400 px. Mění se jen cesta v url() níže. -->
+<section class="page-hero page-hero--onas" style="background-image: url('../assets/lx-NAZEV-FOTKY.jpg');">
   <div class="container">
-    <!-- ✎ NADPIS. Modře se obarví jen text uvnitř <span>. Zvýrazni druhou
-         polovinu myšlenky, ne celou větu — jinak zvýraznění ztrácí smysl. -->
-    <h1>První část nadpisu <span style="color: var(--primary);">a zvýrazněný závěr.</span></h1>
-    <!-- ✎ PODTITUL. Jedna věta, co přesně je pojištěno. -->
-    <p>Jedna věta shrnující rozsah ochrany pro tento segment.</p>
+    <div class="onas-hero-card">
+      <!-- ✎ NADPIS. Modře se obarví jen text uvnitř <span>. Zvýrazni druhou
+           polovinu myšlenky, ne celou větu — jinak zvýraznění ztrácí smysl. -->
+      <h1>První část nadpisu <span style="color: var(--primary);">a zvýrazněný závěr.</span></h1>
+      <!-- ✎ PODTITUL. Jedna věta, co přesně je pojištěno. -->
+      <p>Jedna věta shrnující rozsah ochrany pro tento segment.</p>
+      <!-- ✎ TLAČÍTKO hlavní akce. -->
+      <a href="../kontakt.html" class="btn btn-primary btn-lg">Individuální nabídka</a>
+    </div>
   </div>
+  <svg class="hero-inward-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 L0,12 Q960,300 1920,12 L1920,190 Z"/>
+  </svg>
 </section>
 <!-- /SEKCE: HERO -->
 
