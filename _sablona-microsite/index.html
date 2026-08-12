@@ -36,24 +36,27 @@
 <body>
 
 <!-- ============================================================
-     HLAVIČKA — NEUPRAVOVAT
-     Shodná se zbytkem webu. Pokud se změní navigace na hlavních
-     stránkách, překopíruj ji sem z `../pro-koho.html`.
+     HLAVIČKA — vlastní navigace microsite
+     Microsite má vlastní menu odkazující na sekce TÉTO stránky,
+     ne na hlavní web. Logo a klientská zóna vedou zpět na Lexia.cz.
+
+     ✎ Přepiš popisky a kotvy podle sekcí, které na stránce necháš.
+     Každá kotva `#neco` musí mít protějšek v `id="neco"` u některé
+     sekce níže — jinak odkaz nikam nevede a nic tě na to neupozorní.
      ============================================================ -->
 <header class="header">
   <nav class="nav">
     <a href="../index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="../assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
-      <li><a href="../pro-koho.html">Pro koho</a></li>
-      <li><a href="../index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="../sluzby.html">Služby</a></li>
-      <li><a href="../o-nas.html">O nás</a></li>
-      <li><a href="../kontakt.html">Kontakt</a></li>
-      <li class="nav-mobile-only"><a href="../klient.html">Přihlásit se do klientské zóny</a></li>
+      <li><a href="#co-je-kryto">Co je kryto</a></li>
+      <!-- ✎ Další položky přidávej sem. Vzor plné navigace najdeš
+           v `../financni-poradci/index.html`:
+           Právní ochrana | Situace | Co je kryto | Ceník -->
+      <li class="nav-mobile-only"><a href="../pro-koho.html">Zpět na Lexia.cz</a></li>
     </ul>
     <div class="nav-actions">
       <a href="../klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
-      <a href="../kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+      <a href="../kalkulacka.html" class="btn btn-primary">Sjednat pojištění <i class="icon" data-icon="arrow_right"></i></a>
     </div>
     <button class="menu-toggle" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -69,7 +72,7 @@
      ============================================================ -->
 <!-- ✎ FOTKA na pozadí. Ulož ji do `../assets/` s prefixem `lx-`,
      na šířku, alespoň 1400 px. Mění se jen cesta v url() níže. -->
-<section class="page-hero page-hero--onas" style="background-image: url('../assets/lx-NAZEV-FOTKY.jpg');">
+<section class="page-hero page-hero--onas page-hero--fp" style="background-image: url('../assets/lx-NAZEV-FOTKY.jpg');">
   <div class="container">
     <div class="onas-hero-card">
       <!-- ✎ NADPIS. Modře se obarví jen text uvnitř <span>. Zvýrazni druhou
@@ -87,21 +90,11 @@
 </section>
 <!-- /SEKCE: HERO -->
 
-<section>
+<!-- ✎ ID sekce musí odpovídat kotvě v navigaci nahoře.
+     Další sekce (situace, ceník, …) přidávej stejným způsobem:
+     nová <section id="neco"> + nová položka <a href="#neco"> v menu. -->
+<section id="co-je-kryto">
   <div class="container">
-
-    <!-- ============================================================
-         SEKCE: FOTKA
-         ✎ Vyměň `src` a `alt`. Fotku ulož do `../assets/` s prefixem
-         `lx-` a poměrem stran alespoň 3:2 (např. 1400×933).
-         Poměr rámečku lze změnit třídou: --16x9 | --4x3 | --3x2 | --square
-         Ikonu ve štítku vybírej podle názvů v `../assets/icons.js`.
-         ============================================================ -->
-    <div class="image-frame image-frame--3x2 image-frame--tinted" style="margin-bottom: 48px;">
-      <img src="../assets/lx-NAZEV-FOTKY.jpg" alt="Popis fotky pro čtečky obrazovky" loading="lazy">
-      <span class="image-tag"><i class="icon" data-icon="briefcase"></i> Krátký popisek přes fotku</span>
-    </div>
-    <!-- /SEKCE: FOTKA -->
 
     <!-- ============================================================
          SEKCE: ÚVODNÍ TEXT

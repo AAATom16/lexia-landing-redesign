@@ -17,33 +17,29 @@
 </head>
 <body>
 
-<!-- HLAVIČKA — NEUPRAVOVAT (viz šablona) -->
+<!-- HLAVIČKA — vlastní navigace microsite.
+     Odkazy míří na sekce TÉTO stránky, ne na hlavní web. Každá položka
+     musí mít protějšek v `id` některé sekce níže, jinak odkaz nikam nevede.
+     Logo a klientská zóna vedou zpět na hlavní web. -->
 <header class="header">
   <nav class="nav">
     <a href="../index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="../assets/lexia-logo.svg" alt="Lexia"></a>
     <ul class="nav-links">
-      <li><a href="../pro-koho.html">Pro koho</a></li>
-      <li><a href="../index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="../sluzby.html">Služby</a></li>
-      <li><a href="../o-nas.html">O nás</a></li>
-      <li><a href="../kontakt.html">Kontakt</a></li>
-      <li class="nav-mobile-only"><a href="../klient.html">Přihlásit se do klientské zóny</a></li>
+      <li><a href="#pravni-ochrana">Právní ochrana</a></li>
+      <li><a href="#situace">Situace</a></li>
+      <li><a href="#co-je-kryto">Co je kryto</a></li>
+      <li><a href="#cenik">Ceník</a></li>
+      <li class="nav-mobile-only"><a href="../pro-koho.html">Zpět na Lexia.cz</a></li>
     </ul>
     <div class="nav-actions">
       <a href="../klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
-      <a href="../kalkulacka.html" class="btn btn-primary">Sjednat pojištění</a>
+      <a href="../kalkulacka.html" class="btn btn-primary">Sjednat pojištění <i class="icon" data-icon="arrow_right"></i></a>
     </div>
     <button class="menu-toggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
 </header>
-
-<!-- SEKCE: VÝSTRAŽNÝ PRUH -->
-<div class="fp-alert">
-  Vázaný zástupce odpovídá za své jednání. <strong>Chcete platit 500 000 Kč za obhajobu, nebo chcete LEXII?</strong>
-</div>
-<!-- /SEKCE: VÝSTRAŽNÝ PRUH -->
 
 <!-- SEKCE: HERO
      Fotka přes celou šířku + bílá karta s textem — stejný tvar jako hero
@@ -107,7 +103,7 @@
 <!-- /SEKCE: CENA -->
 
 <!-- SEKCE: PROČ JE OCHRANA NUTNÁ -->
-<section>
+<section id="pravni-ochrana">
   <div class="container">
     <span class="fp-eyebrow">Proč je ochrana nutná</span>
     <h2 class="fp-h2">Práce vázaného zástupce <span>není bez rizika</span></h2>
@@ -159,7 +155,7 @@
 <!-- /SEKCE: PROČ JE OCHRANA NUTNÁ -->
 
 <!-- SEKCE: TYPICKÉ SITUACE -->
-<section class="bg-section">
+<section id="situace" class="bg-section">
   <div class="container">
     <span class="fp-eyebrow">Typické situace</span>
     <h2 class="fp-h2">Kdy pojištění <span>využijete</span></h2>
@@ -319,7 +315,7 @@
 <!-- /SEKCE: CO PŘESNĚ POJIŠTĚNÍ KRYJE -->
 
 <!-- SEKCE: EXKLUZIVNÍ NABÍDKA -->
-<section class="bg-section">
+<section id="cenik" class="bg-section">
   <div class="container">
     <span class="fp-eyebrow">Exkluzivní nabídka 2026</span>
     <h2 class="fp-h2">Naprostá bomba za <span>299 Kč</span></h2>

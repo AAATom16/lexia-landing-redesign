@@ -7267,17 +7267,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    `_sablona-microsite`. Nezasahuje do žádné existující komponenty.
    ============================================================ */
 
-/* Výstražný pruh pod hlavičkou */
-.fp-alert {
-  background: var(--danger);
-  color: var(--white);
-  text-align: center;
-  padding: 14px 20px;
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-.fp-alert strong { font-weight: 700; }
-
 /* Štítek sekce ve tvaru pilulky */
 .fp-eyebrow {
   display: inline-block;
@@ -7642,3 +7631,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 @media (max-width: 900px) {
   .page-hero--fp { min-height: 0; padding: 48px 0 110px; }
 }
+
+/* Kotvy ve vlastní navigaci microsite: lepivá hlavička je 79 px vysoká,
+   bez odsazení by po skoku zakryla štítek i nadpis sekce. */
+.page-hero--fp ~ section[id] { scroll-margin-top: 100px; }
