@@ -7280,15 +7280,17 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   border-radius: 100px;
   margin-bottom: 18px;
 }
+/* Barvy podle zbytku webu: nadpis sekce v --primary,
+   zvýrazněná část v --primary-light (stejně jako h2 na hlavních stránkách). */
 .fp-h2 {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: clamp(1.75rem, 3.4vw, 2.75rem);
   line-height: 1.14;
-  color: var(--heading);
+  color: var(--primary);
   margin: 0 0 16px;
 }
-.fp-h2 span { color: var(--primary); }
+.fp-h2 span { color: var(--primary-light); }
 .fp-lead {
   font-size: 1.0625rem;
   color: var(--text-muted);
@@ -7403,21 +7405,31 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
 }
-.fp-stat strong {
+/* barvu je nutné vynutit — globální pravidlo pro nadpisy jinak přebije
+   dědění z .fp-stats a text by byl tmavý na modrém pozadí */
+.fp-stats .fp-stat strong {
   display: block;
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
-  line-height: 1.15;
+  font-size: clamp(1.15rem, 1.75vw, 1.5rem);
+  line-height: 1.25;
   margin-bottom: 10px;
+  color: var(--white);
 }
-.fp-stat span { font-size: 0.92rem; line-height: 1.5; color: rgba(255, 255, 255, 0.85); }
+.fp-stats .fp-stat span {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--white);
+}
 
 /* Zvýrazněný informační rámeček */
+/* Sytější pozadí a rámeček — na světlé sekci by se odstín var(--bg-light)
+   ztratil a blok by nebyl vidět. */
 .fp-note {
   display: flex;
   gap: 16px;
-  background: var(--bg-light);
+  background: #dde7ff;
+  border: 1px solid rgba(0, 69, 191, 0.22);
   border-radius: var(--radius-lg);
   padding: 26px 30px;
   margin-bottom: 40px;
@@ -7450,8 +7462,8 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   margin: 0 0 12px;
   line-height: 1.3;
 }
-.fp-case p { color: var(--text-muted); font-size: 0.94rem; line-height: 1.6; margin: 0 0 20px; }
-.fp-case__prices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto; }
+.fp-case p { color: var(--text-muted); font-size: 0.94rem; line-height: 1.6; margin: 0 0 16px; }
+.fp-case__prices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
 .fp-case__price { border-radius: 12px; padding: 12px 14px; }
 .fp-case__price small {
   display: block;
@@ -7472,7 +7484,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   display: flex;
   gap: 8px;
   border-top: 1px solid var(--border);
-  margin-top: 18px;
+  margin-top: 0;
   padding-top: 14px;
   font-size: 0.86rem;
   color: var(--text-muted);
@@ -7578,6 +7590,8 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   padding: 5px 12px;
   border-radius: 100px;
 }
+/* barvu je nutné vynutit — globální pravidla pro nadpisy a <strong> jinak
+   přebijí dědění z .fp-offer a text by byl tmavý na modrém pozadí */
 .fp-offer h4 {
   display: flex;
   align-items: center;
@@ -7585,7 +7599,9 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   font-family: var(--font-heading);
   font-size: 1.15rem;
   margin: 26px 0 14px;
+  color: var(--white);
 }
+.fp-offer p strong { color: var(--white); }
 .fp-offer ul { list-style: none; margin: 0 0 30px; padding: 0; }
 .fp-offer li {
   display: flex;
@@ -7677,3 +7693,35 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 @media (max-width: 560px) {
   .page-hero--fp .onas-hero-card h1 { font-size: 1.55rem; }
 }
+
+/* Rozbalovací detail karty typické situace: karta ukazuje jen nadpis
+   a porovnání ceny, dlouhý text se dočte až po rozkliknutí. */
+.fp-case__more {
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.fp-case__more::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.18s var(--ease);
+}
+.fp-case__more[aria-expanded="true"]::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+.fp-case__more:hover { text-decoration: underline; }
+.fp-case__detail { margin-top: 16px; }
