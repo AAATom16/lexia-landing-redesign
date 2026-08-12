@@ -7312,9 +7312,15 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   line-height: 1;
 }
 .fp-price-for { color: var(--text-muted); font-size: 1rem; }
-.fp-price-old { display: inline-flex; flex-direction: column; }
-.fp-price-old s { color: var(--text-light); font-weight: 700; }
-.fp-price-old span { font-size: 0.8rem; color: var(--text-light); }
+.fp-price-old {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 6px;
+}
+.fp-price-old s { color: var(--text-light); font-weight: 700; font-size: 1.15rem; }
+.fp-price-old > span:not(.fp-discount) { font-size: 0.85rem; color: var(--text-light); }
 .fp-discount {
   background: var(--bg-light);
   color: var(--primary);
@@ -7341,22 +7347,51 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 /* Řada malých výhod se zaškrtnutím */
 .fp-benefits { margin-top: 40px; }
 .fp-benefit {
+  position: relative;
   display: flex;
-  gap: 12px;
+  flex-direction: column;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px 22px;
+  padding: 28px 26px 30px;
 }
-.fp-benefit__check {
-  flex: 0 0 auto;
-  width: 20px;
-  height: 20px;
+.fp-benefit__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bg-light);
   color: var(--primary);
-  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
 }
-.fp-benefit strong { display: block; color: var(--heading); font-weight: 700; margin-bottom: 4px; }
-.fp-benefit span { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+.fp-benefit__icon .icon { width: 26px; height: 26px; }
+.fp-benefit strong {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: var(--heading);
+  margin-bottom: 12px;
+}
+.fp-benefit > span:not(.fp-benefit__icon) {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-top: auto;
+}
+/* modrá linka u spodní hrany karty */
+.fp-benefit::after {
+  content: "";
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  bottom: 0;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 3px 3px 0 0;
+}
 
 /* Modrý pruh se statistikami */
 .fp-stats {
@@ -7635,3 +7670,10 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 /* Kotvy ve vlastní navigaci microsite: lepivá hlavička je 79 px vysoká,
    bez odsazení by po skoku zakryla štítek i nadpis sekce. */
 .page-hero--fp ~ section[id] { scroll-margin-top: 100px; }
+
+/* Hero microsite: nadpis se musí vejít nejvýš do 3 řádků */
+.page-hero--fp .onas-hero-card { max-width: 660px; }
+.page-hero--fp .onas-hero-card h1 { font-size: clamp(1.9rem, 3.1vw, 2.7rem); }
+@media (max-width: 560px) {
+  .page-hero--fp .onas-hero-card h1 { font-size: 1.55rem; }
+}
