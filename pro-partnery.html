@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro partnery | Lexia</title>
+<meta name="description" content="Staňte se partnerem Lexie. Špičkový produkt právní ochrany, plně digitální sjednání, volitelný provizní model, vzdělávání a marketingová podpora.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+<style>
+/* ===== PRO PARTNERY ===== */
+/* Hero — foto s bílou kartou vlevo */
+.pt-hero{position:relative;background:url('assets/obrazky/Lexia-kruh.jpeg') center/cover no-repeat;padding:80px 0 140px;overflow:hidden}
+.pt-hero-card{background:var(--white);border-radius:22px;box-shadow:var(--shadow-3);padding:44px 48px;max-width:620px}
+.pt-hero-card h1{margin:0 0 20px;line-height:1.15}
+.pt-hero-card h1 span{color:var(--primary)}
+.pt-hero-card p{color:var(--text);margin:0 0 28px;max-width:52ch}
+.pt-hero-actions{display:flex;flex-wrap:wrap;gap:14px}
+.pt-hero-curve{position:absolute;left:0;bottom:-1px;width:100%;height:150px;display:block;fill:var(--white);pointer-events:none}
+
+/* Karty výhod */
+.pt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pt-card{background:var(--white);border-radius:18px;box-shadow:var(--shadow-2);padding:34px 28px;text-align:center}
+.pt-ic{width:92px;height:92px;margin:0 auto 22px;border-radius:50%;border:2px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.pt-ic .icon{width:40px;height:40px}
+.pt-card h3{margin:0 0 12px;font-size:1.3rem}
+.pt-card p{margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
+
+/* Podpora a vzdělávání */
+.pt-support{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center}
+.pt-support-art{display:flex;align-items:center;justify-content:center}
+.pt-support-art svg{width:100%;max-width:340px;height:auto;color:var(--primary-light,#7da0dc)}
+.pt-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:6px;align-items:center}
+.pt-item+.pt-item{margin-top:34px}
+.pt-item-ic{grid-row:1;grid-column:1;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.pt-item-ic .icon{width:22px;height:22px}
+.pt-item h3{grid-row:1;grid-column:2;margin:0;font-size:1.25rem}
+.pt-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
+
+/* Nástroje */
+.pt-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.pt-tools .pt-card p{color:var(--primary);font-weight:600;font-size:1rem}
+.pt-tools .pt-card p em{color:var(--primary-light,#7da0dc);font-style:normal}
+
+/* Formulář */
+.pt-form-wrap{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center}
+.pt-form-intro h2{color:var(--primary);margin:0 0 12px}
+.pt-form-intro p{color:var(--text-muted);margin:0 0 28px}
+.pt-form-art{display:flex;align-items:center;justify-content:center}
+.pt-form-art img{width:100%;max-width:320px;height:auto}
+
+@media(max-width:960px){
+  .pt-grid,.pt-tools{grid-template-columns:1fr 1fr}
+  .pt-support,.pt-form-wrap{grid-template-columns:1fr;gap:32px}
+  .pt-form-art{order:-1}
+}
+@media(max-width:640px){
+  .pt-grid,.pt-tools{grid-template-columns:1fr}
+  .pt-hero{padding:56px 0 110px}
+  .pt-hero-card{padding:30px 24px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="pro-partnery.html" class="active">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="pt-hero">
+  <div class="container">
+    <div class="pt-hero-card">
+      <h1>Staňte se<br><span>partnerem</span> Lexie</h1>
+      <p>Hledáte unikátní produkt, který efektivně doplní vaše stávající portfolio a přinese vám spokojené klienty? Právní ochrana je oblast s obrovským potenciálem a Lexia je váš ideální partner.</p>
+      <div class="pt-hero-actions">
+        <a href="#stat-se-partnerem" class="btn btn-primary">Stát se partnerem</a>
+        <a href="zona-pro-partnery.html" class="btn btn-outline">Zóna pro partnery</a>
+      </div>
+    </div>
+  </div>
+  <svg class="pt-hero-curve" viewBox="0 0 1920 150" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,150 L0,60 Q960,190 1920,20 L1920,150 Z"/>
+  </svg>
+</section>
+
+<!-- PROČ SPOLUPRACOVAT -->
+<section>
+  <div class="container">
+    <div class="section-header section-header--left">
+      <h2 style="color: var(--primary);">Proč spolupracovat s Lexií?</h2>
+    </div>
+    <div class="pt-grid">
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="trophy"></i></div>
+        <h3>Špičkový produkt</h3>
+        <p>Vysoké limity pojistného plnění, nejširší rozsah krytí, nejméně výluk a unikátní all risk garance.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="clock"></i></div>
+        <h3>Jednoduché sjednání</h3>
+        <p>Plně digitální proces bez papírování, nabídku a smlouvu vytvoříte během pár minut.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="chart"></i></div>
+        <h3>Provizní model</h3>
+        <p>Možnost výběru provizního modelu (získatelská/následná, nebo lineární průběžná) na úrovni jednotlivé smlouvy.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="monitor"></i></div>
+        <h3>Online přehled</h3>
+        <p>Mějte dokonalý přehled o všech smlouvách a pojistných událostech klientů díky našemu digitálnímu systému.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="handshake"></i></div>
+        <h3>Osobní podpora</h3>
+        <p>Naši zkušení manažeři jsou vám vždy k dispozici, od prvního kontaktu až po konkrétní jednání s klienty.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="graduation"></i></div>
+        <h3>Profesionální vzdělávání</h3>
+        <p>Propracovaný systém vzdělávacích materiálů, díky kterým se rychle stanete specialistou na pojištění právní ochrany.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PODPORA A VZDĚLÁVÁNÍ -->
+<section class="bg-section">
+  <div class="container">
+    <div class="section-header section-header--left">
+      <h2 style="color: var(--primary);">Podpora a vzdělávání</h2>
+    </div>
+    <div class="pt-support">
+      <div class="pt-support-art" aria-hidden="true">
+        <!-- Žárovka nad otevřenou knihou -->
+        <svg viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M150 20v-14M104 38l-9-11M196 38l9-11M84 84H70M216 84h14M92 56l-11-6M208 56l11-6"/>
+          <path d="M150 34c-20 0-36 16-36 36 0 14 8 21 12 28 3 5 4 9 4 14h40c0-5 1-9 4-14 4-7 12-14 12-28 0-20-16-36-36-36z"/>
+          <path d="M132 126h36M136 136h28"/>
+          <path d="M150 176c-24-16-58-20-88-18v56c30-2 64 2 88 18 24-16 58-20 88-18v-56c-30-2-64 2-88 18z"/>
+          <path d="M150 176v56"/>
+        </svg>
+      </div>
+      <div>
+        <div class="pt-item">
+          <div class="pt-item-ic"><i class="icon" data-icon="graduation"></i></div>
+          <h3>Profesionální vzdělávání</h3>
+          <p>Špičkové e-learningy a e-booky, prezenční vzdělávání a praktické workshopy na míru vašim potřebám.</p>
+        </div>
+        <div class="pt-item">
+          <div class="pt-item-ic"><i class="icon" data-icon="sparkle"></i></div>
+          <h3>Marketingové materiály</h3>
+          <p>Připravíme vám letáky, brožury, online bannery i texty pro sociální sítě, vše, co potřebujete k úspěšnému prodeji.</p>
+        </div>
+        <div class="pt-item">
+          <div class="pt-item-ic"><i class="icon" data-icon="chat"></i></div>
+          <h3>Osobní konzultace</h3>
+          <p>Pravidelná podpora a poradenství od našich zkušených obchodních manažerů.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NÁSTROJE -->
+<section>
+  <div class="container">
+    <div class="section-header section-header--left">
+      <h2 style="color: var(--primary);">Nástroje, které vám usnadní práci</h2>
+    </div>
+    <div class="pt-tools">
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="monitor"></i></div>
+        <p><em>Digitální sjednání</em> bez papírování, rychle a jednoduše.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="document"></i></div>
+        <p><em>Přehled</em> o právní pomoci poskytované vašim klientům.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-ic"><i class="icon" data-icon="chart"></i></div>
+        <p><em>Možnost kombinace</em> různých provizních modelů.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRO FINANČNÍ PORADCE -->
+<section class="bg-section">
+  <div class="container">
+    <div class="pt-support">
+      <div>
+        <h2 style="color: var(--primary); margin-bottom: 16px;">Jste finanční poradce?</h2>
+        <p style="color: var(--text-muted); max-width: 52ch; margin-bottom: 24px;">Připravili jsme samostatnou stránku o tom, jak právní ochrana Lexia doplní vaše portfolio, jak funguje provize a co všechno pro vás zajistíme.</p>
+        <a href="financni-poradci/index.html" class="btn btn-primary">Pojištění pro finanční poradce</a>
+      </div>
+      <div class="pt-support-art" aria-hidden="true">
+        <img src="assets/lx-support.png" alt="" style="width:100%;max-width:260px;height:auto;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULÁŘ -->
+<section id="stat-se-partnerem">
+  <div class="container">
+    <div class="pt-form-wrap">
+      <div class="pt-form-intro">
+        <h2>Staňte se partnerem Lexia</h2>
+        <p>Napište nám základní informace o sobě a my se vám obratem ozveme.</p>
+        <form class="lead-form-card" data-demo>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" class="form-input" name="firstname" placeholder=" " required>
+              <label>Jméno</label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-input" name="lastname" placeholder=" " required>
+              <label>Příjmení</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="email" class="form-input" name="email" placeholder=" " required>
+              <label>E-mail</label>
+            </div>
+            <div class="form-group">
+              <input type="tel" class="form-input" name="phone" placeholder=" " required>
+              <label>Telefonní číslo</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea class="form-textarea" name="message" rows="3" placeholder=" "></textarea>
+            <label>Popište stručně svoji motivaci pro partnerství s Lexií.</label>
+          </div>
+          <p class="lead-form-consent">Informace ke zpracování osobních údajů najdete <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">ZDE</a></p>
+          <button type="submit" class="btn btn-primary">Chci se stát partnerem Lexia</button>
+        </form>
+      </div>
+      <div class="pt-form-art" aria-hidden="true">
+        <img src="assets/lx-support.png" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+          <li><a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Žádost o poskytnutí právní pomoci | Lexia</title>
+<meta name="description" content="Online formulář pro nahlášení škody a právní pomoc. Vyplňte žádost a náš tým se vám ozve.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+<style>
+/* Žádost o právní pomoc — formulář v bílých kartách na světle modrém podkladu */
+.claim-page{background:var(--bg-section);padding:48px 0 64px}
+.claim-wrap{max-width:900px;margin:0 auto}
+.claim-head{text-align:center;margin-bottom:32px}
+.claim-head h1{color:var(--primary);margin:0 0 10px}
+.claim-head p{color:var(--text-muted);margin:0}
+.claim-card{background:var(--white);border-radius:20px;padding:32px 36px;box-shadow:var(--shadow-2)}
+.claim-card+.claim-card{margin-top:24px}
+.claim-card h2{color:var(--primary);font-size:1.3rem;margin:0 0 22px}
+.claim-card h2 .req{color:#b3315a}
+.claim-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px}
+.claim-field label{display:block;font-weight:600;font-size:0.95rem;margin-bottom:8px}
+.claim-field label .req{color:#b3315a}
+.claim-field input,
+.claim-field textarea{width:100%;font-family:inherit;font-size:1rem;color:var(--text);background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px}
+.claim-field textarea{border-radius:14px;resize:vertical;min-height:150px}
+.claim-field input:focus,
+.claim-field textarea:focus{outline:none;border-color:var(--primary)}
+.claim-field input::placeholder,
+.claim-field textarea::placeholder{color:var(--text-muted)}
+.claim-field input.is-invalid,
+.claim-field textarea.is-invalid,
+.claim-file input.is-invalid{border-color:var(--danger);background:rgba(239,70,63,0.04)}
+.claim-hint{color:var(--text-muted);font-size:0.95rem;margin:-8px 0 18px}
+.claim-radios{display:flex;flex-wrap:wrap;gap:26px}
+.claim-radios label{display:inline-flex;align-items:center;gap:9px;font-size:1rem;cursor:pointer}
+.claim-radios input{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}
+.claim-file input[type=file]{width:100%;font-size:0.95rem;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer}
+.claim-consent{display:flex;align-items:flex-start;gap:12px;font-size:0.82rem;line-height:1.5;color:var(--text-muted)}
+.claim-consent input{width:18px;height:18px;margin-top:3px;accent-color:var(--primary);flex-shrink:0;cursor:pointer}
+.claim-consent .req{color:#b3315a}
+.claim-actions{display:flex;justify-content:center;margin-top:24px}
+.claim-foot{text-align:center;color:var(--text-muted);font-size:0.9rem;margin:28px 0 0}
+@media(max-width:860px){
+  .claim-grid{grid-template-columns:1fr}
+  .claim-card{padding:26px 22px}
+  .claim-actions{justify-content:stretch}
+  .claim-actions .btn{width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="pro-partnery.html">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="claim-page">
+  <div class="container">
+    <div class="claim-wrap">
+      <div class="claim-head">
+        <h1>Žádost o poskytnutí právní pomoci</h1>
+        <p>Online formulář pro nahlášení škody a právní pomoc</p>
+      </div>
+
+      <form data-demo>
+        <div class="claim-card">
+          <h2>Informace o vás</h2>
+          <div class="claim-grid">
+            <div class="claim-field">
+              <label for="cl-firstname">Jméno <span class="req">*</span></label>
+              <input type="text" id="cl-firstname" name="firstname" required>
+            </div>
+            <div class="claim-field">
+              <label for="cl-lastname">Příjmení <span class="req">*</span></label>
+              <input type="text" id="cl-lastname" name="lastname" required>
+            </div>
+            <div class="claim-field">
+              <label for="cl-company">Název právnické osoby</label>
+              <input type="text" id="cl-company" name="company">
+            </div>
+            <div class="claim-field">
+              <label for="cl-policy">Číslo pojistné smlouvy <span class="req">*</span></label>
+              <input type="text" id="cl-policy" name="policy" placeholder="např. 7310000123" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <h2>Jak vás můžeme nejlépe zastihnout</h2>
+          <div class="claim-grid">
+            <div class="claim-field">
+              <label for="cl-email">E-mail <span class="req">*</span></label>
+              <input type="email" id="cl-email" name="email" required>
+            </div>
+            <div class="claim-field">
+              <label for="cl-phone">Telefonní číslo <span class="req">*</span></label>
+              <input type="tel" id="cl-phone" name="phone" value="+420" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <h2>Musí být dodržena nějaká lhůta? <span class="req">*</span></h2>
+          <p class="claim-hint">Hrozí uplynutí nějaké lhůty?</p>
+          <div class="claim-radios">
+            <label><input type="radio" name="deadline" value="ano" required> Ano</label>
+            <label><input type="radio" name="deadline" value="ne"> Ne</label>
+            <label><input type="radio" name="deadline" value="nevim"> Nevím</label>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <h2>Co se vám přihodilo? <span class="req">*</span></h2>
+          <div class="claim-field">
+            <textarea name="description" placeholder="Popište nám prosím co nejpodrobněji, s čím potřebujete pomoci." required></textarea>
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <h2>Přiložte dokumenty</h2>
+          <p class="claim-hint">Formáty PDF, JPG, JPEG, PNG, XLSX, DOCX, celkem max. 20 MB. Přiložené soubory budou uvedeny v potvrzovacím e-mailu. Další dokumenty můžete doložit po zaregistrování žádosti.</p>
+          <div class="claim-file">
+            <input type="file" name="attachments" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.docx">
+          </div>
+        </div>
+
+        <div class="claim-card">
+          <label class="claim-consent">
+            <input type="checkbox" name="consent" required>
+            <span>Souhlasím se zpracováním osobních údajů za účelem vyřízení mé žádosti o právní pomoc dle <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">informací o zpracování osobních údajů</a> společnosti LEXIA. <span class="req">*</span></span>
+          </label>
+        </div>
+
+        <div class="claim-actions">
+          <button type="submit" class="btn btn-primary btn-lg">Odeslat žádost</button>
+        </div>
+      </form>
+
+      <p class="claim-foot">© LEXIA Legal Protection a.s. · www.lexia.cz</p>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+          <li><a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

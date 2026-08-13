@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="cs"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Náhled variant</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+body{padding:40px 20px} .nh{max-width:1120px;margin:0 auto 70px}
+.nh-h{font-family:var(--font-heading);font-size:1.5rem;color:var(--primary);margin:0 0 4px}
+.nh-p{color:var(--text-muted);margin:0 0 24px;font-size:.92rem}
+.nh-sep{border:0;border-top:2px dashed var(--border);margin:0 0 40px}
+.nh-tabs{display:inline-flex;gap:6px;background:var(--white);border:1px solid var(--border);border-radius:100px;padding:5px;margin-bottom:18px}
+.nh-tab{border:0;background:none;font-family:var(--font-heading);font-weight:700;font-size:.9rem;color:var(--text-muted);padding:9px 20px;border-radius:100px;cursor:pointer}
+.nh-tab.is-active{background:var(--primary);color:#fff}
+.fp-sit__icon--drive{background:rgba(0,165,191,.14);color:var(--accent)}
+.nh-tile{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px 20px;display:flex;flex-direction:column}
+.nh-tile__icon{width:52px;height:52px;border-radius:14px;background:var(--bg-light);color:var(--primary);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.nh-tile__icon .icon{width:26px;height:26px}
+.nh-tile__img{height:130px;border-radius:12px;background-size:cover;background-position:center;margin-bottom:16px}
+.nh-tile strong{font-family:var(--font-heading);font-size:1rem;color:var(--heading);line-height:1.35;margin-bottom:14px;flex:1}
+.nh-tile__row{display:flex;justify-content:space-between;align-items:baseline;font-size:.8rem;color:var(--text-light);padding:5px 0;border-top:1px solid var(--border)}
+.nh-tile__row b{font-size:.92rem;color:var(--danger)}
+.nh-tile__row--ok b{color:var(--primary)}
+</style></head><body>
+
+<div class="nh"><h2 class="nh-h">A) Přepínač místo nadpisů skupin</h2>
+<p class="nh-p">Šedé popisky „PŘI VÝKONU PROFESE" zmizí, skupiny se přepínají záložkami. Nejkompaktnější.</p><div class="nh-tabs">
+ <button class="nh-tab is-active">Při výkonu profese</button>
+ <button class="nh-tab">Za volantem</button></div>
+<div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="0">
+  <span class="fp-sit__icon "><i class="icon" data-icon="chart"></i></span>
+  <span class="fp-sit__title">Klient vás zažaluje za ztrátu na investici</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 350 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="1">
+  <span class="fp-sit__icon "><i class="icon" data-icon="bank"></i></span>
+  <span class="fp-sit__title">Banka po vás chce peníze za nesplácenou hypotéku</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 400 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="2">
+  <span class="fp-sit__icon "><i class="icon" data-icon="document"></i></span>
+  <span class="fp-sit__title">Přijde daňová kontrola</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 200 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="3">
+  <span class="fp-sit__icon "><i class="icon" data-icon="building"></i></span>
+  <span class="fp-sit__title">Přijde kontrola z ČNB</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 250 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="4">
+  <span class="fp-sit__icon "><i class="icon" data-icon="briefcase"></i></span>
+  <span class="fp-sit__title">Zastoupený po vás chce vrátit provize</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 250 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="5">
+  <span class="fp-sit__icon "><i class="icon" data-icon="scales"></i></span>
+  <span class="fp-sit__title">Klient na vás podá trestní oznámení</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 500 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div></div>
+<hr class="nh-sep">
+
+<div class="nh"><h2 class="nh-h">B) Bez skupin, skupinu pozná podle barvy ikony</h2>
+<p class="nh-p">Jeden souvislý seznam. Modrá ikona = profese, tyrkysová = řidič. Žádné nadpisy skupin.</p><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="0">
+  <span class="fp-sit__icon "><i class="icon" data-icon="chart"></i></span>
+  <span class="fp-sit__title">Klient vás zažaluje za ztrátu na investici</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 350 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="1">
+  <span class="fp-sit__icon "><i class="icon" data-icon="bank"></i></span>
+  <span class="fp-sit__title">Banka po vás chce peníze za nesplácenou hypotéku</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 400 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="2">
+  <span class="fp-sit__icon "><i class="icon" data-icon="document"></i></span>
+  <span class="fp-sit__title">Přijde daňová kontrola</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 200 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="3">
+  <span class="fp-sit__icon "><i class="icon" data-icon="building"></i></span>
+  <span class="fp-sit__title">Přijde kontrola z ČNB</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 250 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="4">
+  <span class="fp-sit__icon "><i class="icon" data-icon="briefcase"></i></span>
+  <span class="fp-sit__title">Zastoupený po vás chce vrátit provize</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 250 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="5">
+  <span class="fp-sit__icon "><i class="icon" data-icon="scales"></i></span>
+  <span class="fp-sit__title">Klient na vás podá trestní oznámení</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 500 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="6">
+  <span class="fp-sit__icon fp-sit__icon--drive"><i class="icon" data-icon="car"></i></span>
+  <span class="fp-sit__title">Způsobíte nehodu se zraněním</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 500 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="7">
+  <span class="fp-sit__icon fp-sit__icon--drive"><i class="icon" data-icon="road"></i></span>
+  <span class="fp-sit__title">Hrozí vám ztráta řidičského průkazu</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 80 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div><div class="fp-sit">
+ <button type="button" class="fp-sit__head" data-nh="8">
+  <span class="fp-sit__icon fp-sit__icon--drive"><i class="icon" data-icon="clipboard"></i></span>
+  <span class="fp-sit__title">Dostanete se do správního řízení za přestupk</span>
+  <span class="fp-sit__figures">
+   <span class="fp-sit__fig fp-sit__fig--without"><small>bez pojištění</small><b>až 120 000 Kč</b></span>
+   <span class="fp-sit__fig fp-sit__fig--with"><small>s Lexií</small><b>0 Kč</b></span>
+  </span></button></div></div>
+<hr class="nh-sep">
+
+<div class="nh"><h2 class="nh-h">C) Dlaždice s velkou ikonou</h2>
+<p class="nh-p">Vizuálnější než řádky, bez potřeby fotek. Vejde se 9 dlaždic ve třech sloupcích.</p><div class="grid grid-3"><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="chart"></i></span>
+ <strong>Klient vás zažaluje za ztrátu na investici</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 350 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="bank"></i></span>
+ <strong>Banka po vás chce peníze za nesplácenou hypotéku</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 400 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="document"></i></span>
+ <strong>Přijde daňová kontrola</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 200 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="building"></i></span>
+ <strong>Přijde kontrola z ČNB</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 250 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="briefcase"></i></span>
+ <strong>Zastoupený po vás chce vrátit provize</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 250 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="scales"></i></span>
+ <strong>Klient na vás podá trestní oznámení</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 500 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="car"></i></span>
+ <strong>Způsobíte nehodu se zraněním</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 500 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="road"></i></span>
+ <strong>Hrozí vám ztráta řidičského průkazu</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 80 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><span class="nh-tile__icon"><i class="icon" data-icon="clipboard"></i></span>
+ <strong>Dostanete se do správního řízení za přestupk</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 120 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div></div></div>
+<hr class="nh-sep">
+
+<div class="nh"><h2 class="nh-h">D) Dlaždice s fotkou</h2>
+<p class="nh-p">POZOR: fotky jsou jen náhodně půjčené z jiných sekcí webu, aby bylo vidět rozložení. Pro ostrou verzi je potřeba dodat 9 vlastních.</p><div class="grid grid-3"><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-firmy-prace.jpg)"></div>
+ <strong>Klient vás zažaluje za ztrátu na investici</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 350 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-obce-smlouvy.jpg)"></div>
+ <strong>Banka po vás chce peníze za nesplácenou hypotéku</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 400 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-firmy-smlouvy.jpg)"></div>
+ <strong>Přijde daňová kontrola</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 200 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-obce-uvod.jpg)"></div>
+ <strong>Přijde kontrola z ČNB</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 250 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-firmy-komercni.jpg)"></div>
+ <strong>Zastoupený po vás chce vrátit provize</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 250 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-garance-pojistovny.jpg)"></div>
+ <strong>Klient na vás podá trestní oznámení</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 500 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-jednotlivci-ridic.jpg)"></div>
+ <strong>Způsobíte nehodu se zraněním</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 500 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-firmy-ridic.jpg)"></div>
+ <strong>Hrozí vám ztráta řidičského průkazu</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 80 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div><div class="nh-tile"><div class="nh-tile__img" style="background-image:url(assets/lx-obce-ridic.jpg)"></div>
+ <strong>Dostanete se do správního řízení za přestupk</strong>
+ <div class="nh-tile__row"><span>bez pojištění</span><b>až 120 000 Kč</b></div>
+ <div class="nh-tile__row nh-tile__row--ok"><span>s Lexií</span><b>0 Kč</b></div></div></div></div>
+
+<script src="assets/icons.js"></script></body></html>

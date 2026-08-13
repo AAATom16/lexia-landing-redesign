@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zóna pro partnery | Lexia</title>
+<meta name="description" content="Materiály pro partnery Lexia: e-learningy, e-booky, pojistné podmínky, brožury a letáky ke stažení.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+<style>
+/* ===== ZÓNA PRO PARTNERY ===== */
+.zp-hero{position:relative;background:url('assets/obrazky/Lexia-plaz.jpeg') center/cover no-repeat;padding:80px 0 150px;overflow:hidden}
+.zp-hero-card{background:var(--white);border-radius:22px;box-shadow:var(--shadow-3);padding:40px 44px;max-width:480px}
+.zp-hero-card h1{margin:0 0 18px;line-height:1.15}
+.zp-hero-card h1 span{color:var(--primary)}
+.zp-hero-card p{margin:0;color:var(--text);font-size:1rem;line-height:1.6}
+.zp-hero-curve{position:absolute;left:0;bottom:-1px;width:100%;height:160px;display:block;fill:var(--white);pointer-events:none}
+
+/* Tři rozcestníkové karty */
+.zp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.zp-card{background:var(--white);border-radius:18px;box-shadow:var(--shadow-2);padding:34px 28px;text-align:center;text-decoration:none;color:var(--text);transition:transform .2s ease,box-shadow .2s ease}
+.zp-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-3)}
+.zp-ic{width:92px;height:92px;margin:0 auto 22px;border-radius:50%;border:2px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.zp-ic .icon{width:38px;height:38px}
+.zp-card h3{margin:0 0 12px;font-size:1.25rem;color:var(--primary)}
+.zp-card p{margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
+
+/* Sekce s ilustrací a seznamem */
+.zp-h2{color:var(--primary);text-transform:uppercase;letter-spacing:0.01em;margin:0 0 32px}
+.zp-split{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center}
+.zp-split--rev .zp-art{order:2}
+.zp-art{display:flex;align-items:center;justify-content:center}
+.zp-art svg{width:100%;max-width:320px;height:auto;color:var(--primary)}
+.zp-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:8px}
+.zp-item+.zp-item{margin-top:34px}
+.zp-item-ic{grid-row:1;grid-column:1;align-self:center;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.zp-item-ic .icon{width:22px;height:22px}
+.zp-item h3{grid-row:1;grid-column:2;align-self:center;margin:0;font-size:1.25rem;color:var(--primary)}
+.zp-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
+.zp-item .btn{grid-row:3;grid-column:2;justify-self:start;margin-top:14px}
+
+/* Ke stažení */
+.zp-dl{max-width:720px}
+.zp-dl a{display:block;padding:7px 0;color:var(--primary);text-decoration:none;font-size:1rem}
+.zp-dl a:hover{text-decoration:underline}
+
+@media(max-width:960px){
+  .zp-cards{grid-template-columns:1fr}
+  .zp-split{grid-template-columns:1fr;gap:32px}
+  .zp-split--rev .zp-art{order:-1}
+}
+@media(max-width:640px){
+  .zp-hero{padding:56px 0 110px}
+  .zp-hero-card{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="pro-partnery.html" class="active">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="zp-hero">
+  <div class="container">
+    <div class="zp-hero-card">
+      <h1><span>Zóna</span> pro partnery</h1>
+      <p>Místo, kde najdete užitečné materiály pro úspěšný prodej pojištění právní ochrany Lexia.</p>
+    </div>
+  </div>
+  <svg class="zp-hero-curve" viewBox="0 0 1920 160" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,160 L0,70 Q960,200 1920,25 L1920,160 Z"/>
+  </svg>
+</section>
+
+<!-- ROZCESTNÍK -->
+<section>
+  <div class="container">
+    <div class="zp-cards">
+      <a class="zp-card" href="#e-learningy">
+        <div class="zp-ic"><i class="icon" data-icon="monitor"></i></div>
+        <h3>E-learningy</h3>
+        <p>Připravili jsme pro Vás sadu e-learningových kurzů k prostudování.</p>
+      </a>
+      <a class="zp-card" href="#e-booky">
+        <div class="zp-ic"><i class="icon" data-icon="document"></i></div>
+        <h3>E-booky</h3>
+        <p>Ke každému segmentu zde najdete e-book ke stažení.</p>
+      </a>
+      <a class="zp-card" href="#ke-stazeni">
+        <div class="zp-ic"><i class="icon" data-icon="sparkle"></i></div>
+        <h3>Pojistné podmínky a ostatní</h3>
+        <p>Níže najdete ke stažení pojistné podmínky a další užitečné dokumenty.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- E-LEARNINGY -->
+<section id="e-learningy">
+  <div class="container">
+    <h2 class="zp-h2">E-learningy</h2>
+    <div class="zp-split">
+      <div class="zp-art" aria-hidden="true">
+        <!-- Tři postavy -->
+        <svg viewBox="0 0 300 220" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="60" cy="96" r="26" stroke-width="3"/>
+          <path d="M14 210c0-30 21-52 46-52s46 22 46 52" stroke-width="3"/>
+          <circle cx="240" cy="96" r="26" stroke-width="3"/>
+          <path d="M194 210c0-30 21-52 46-52s46 22 46 52" stroke-width="3"/>
+          <circle cx="150" cy="66" r="42"/>
+          <path d="M78 214c0-40 32-72 72-72s72 32 72 72"/>
+        </svg>
+      </div>
+      <div>
+        <div class="zp-item">
+          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <h3>Lexia</h3>
+          <p>Zde najdete úvodní e-learning o Lexii.</p>
+          <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
+        </div>
+        <div class="zp-item">
+          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <h3>Jednotlivci a domácnosti</h3>
+          <p>Provede vás klíčovými tématy, od pochopení zákaznických segmentů přes typické právní problémy až po konkrétní tipy, jak si domluvit schůzku a uzavřít pojistku.</p>
+          <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
+        </div>
+        <div class="zp-item">
+          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <h3>Podnikatelé a firmy</h3>
+          <p>Najdete v něm konkrétní situace, které podnikatele potkávají dnes a denně, ať už jde o neuhrazené faktury, spory se zákazníky, pracovní právo nebo dodavatelské vztahy.</p>
+          <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- E-BOOKY -->
+<section id="e-booky" class="bg-section">
+  <div class="container">
+    <h2 class="zp-h2" style="text-align: center;">E-booky</h2>
+    <div class="zp-split zp-split--rev">
+      <div class="zp-art" aria-hidden="true">
+        <!-- Žárovka nad knihou -->
+        <svg viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M150 30c-22 0-40 18-40 40 0 15 9 23 13 30 3 6 5 10 5 16h44c0-6 2-10 5-16 4-7 13-15 13-30 0-22-18-40-40-40z"/>
+          <path d="M132 130h36M137 142h26"/>
+          <path d="M150 178c-26-18-62-22-94-20v58c32-2 68 2 94 20 26-18 62-22 94-20v-58c-32-2-68 2-94 20z"/>
+          <path d="M150 178v58"/>
+        </svg>
+      </div>
+      <div>
+        <div class="zp-item">
+          <div class="zp-item-ic"><i class="icon" data-icon="document"></i></div>
+          <h3>Jednotlivci a domácnosti</h3>
+          <p>Zde si můžete stáhnout e-book, který je vhodným doplňkem k e-learningu Jednotlivci a domácnosti. Slouží i jako samostatný studijní materiál, který si můžete kdykoliv otevřít v notebooku nebo telefonu, případně si ho vytisknout.</p>
+          <a href="assets/dokumenty/ebook-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener" class="btn btn-outline">Stáhnout e-book</a>
+        </div>
+        <div class="zp-item">
+          <div class="zp-item-ic"><i class="icon" data-icon="document"></i></div>
+          <h3>Podnikatelé a firmy</h3>
+          <p>Stáhněte si e-book Podnikatelé a firmy, který je perfektním doplňkem našeho e-learningu, případně slouží jako samostatný studijní materiál.</p>
+          <a href="assets/dokumenty/ebook-podnikatele-firmy.pdf" target="_blank" rel="noopener" class="btn btn-outline">Stáhnout e-book</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KE STAŽENÍ -->
+<section id="ke-stazeni">
+  <div class="container">
+    <h2 class="zp-h2">Ke stažení</h2>
+    <div class="zp-dl">
+      <a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a>
+      <a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura pro klienty - Jednotlivci a domácnosti</a>
+      <a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura pro klienty - Podnikatelé a firmy</a>
+      <a href="assets/dokumenty/letak-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Leták - Jednotlivci a domácnosti</a>
+      <a href="assets/dokumenty/letak-podnikatele-firmy.pdf" target="_blank" rel="noopener">Leták - Podnikatelé a firmy</a>
+      <a href="assets/dokumenty/ebook-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">E-book - Jednotlivci a domácnosti</a>
+      <a href="assets/dokumenty/ebook-podnikatele-firmy.pdf" target="_blank" rel="noopener">E-book - Podnikatelé a firmy</a>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+          <li><a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

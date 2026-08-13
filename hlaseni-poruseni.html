@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hlášení porušení právních předpisů | Lexia</title>
+<meta name="description" content="Nahlaste porušení zákona nebo pravidel v oblasti pojištění. Speciální a nezávislý kanál pro oznamování takových případů.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <rect x="-30" y="-260" width="60" height="80" fill="#ffffff"/>
+      <rect x="-30" y="180" width="60" height="80" fill="#ffffff"/>
+      <rect x="-260" y="-30" width="80" height="60" fill="#ffffff"/>
+      <rect x="180" y="-30" width="80" height="60" fill="#ffffff"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+<style>
+/* Stránka s jedním formulářem — úzký sloupec */
+.report-page{max-width:720px;margin:0 auto}
+.report-intro{margin:0 0 28px}
+.report-file{margin-bottom:18px}
+.report-file>span{display:block;font-size:0.9rem;color:var(--text-muted);margin-bottom:8px}
+.report-file input[type=file]{width:100%;font-size:0.9rem;color:var(--text);background:var(--bg-light);border:1px solid var(--border);border-radius:999px;padding:12px 18px;cursor:pointer}
+.report-file input[type=file]::file-selector-button{margin-right:14px;border:0;border-radius:999px;padding:8px 16px;background:var(--primary);color:#fff;font-weight:600;cursor:pointer;font-family:inherit}
+.report-note{font-size:0.9rem;color:var(--text-muted);margin:0 0 8px}
+/* Nadpis na střed a v jednom řádku, úvodní text vlevo jako zbytek stránky */
+.page-hero{text-align:left}
+.page-hero .container>*{max-width:720px;margin-left:auto;margin-right:auto}
+.page-hero h1{text-align:center;max-width:none;white-space:nowrap;font-size:clamp(1.5rem,4.2vw,2.4rem)}
+.page-hero p{max-width:720px;margin:0;font-size:1rem;line-height:1.65}
+@media(max-width:560px){.page-hero h1{white-space:normal}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="pro-partnery.html">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="klient.html" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kalkulacka.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Hlášení porušení právních předpisů</h1>
+    <p>Pokud se při zprostředkování pojištění setkáte s něčím, co podle Vás porušuje zákon nebo pravidla v oblasti pojištění, můžete to nahlásit. Existuje k tomu speciální a nezávislý kanál, který slouží právě k oznamování takových případů.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="report-page">
+      <form class="lead-form-card" data-demo>
+        <div class="form-group">
+          <textarea class="form-textarea" name="description" rows="5" placeholder=" " required></textarea>
+          <label>Popis předmětu *</label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" class="form-input" name="firstname" placeholder=" ">
+            <label>Jméno</label>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-input" name="lastname" placeholder=" ">
+            <label>Příjmení</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-input" name="email" placeholder=" ">
+          <label>E-mail</label>
+        </div>
+        <div class="form-group">
+          <input type="tel" class="form-input" name="phone" placeholder=" ">
+          <label>Telefonní číslo</label>
+        </div>
+        <div class="report-file">
+          <span>Přílohy</span>
+          <input type="file" name="attachments" multiple>
+        </div>
+        <p class="report-note">Vyplnění kontaktních údajů nám umožní Vás informovat o průběhu řešení Vašeho podnětu.</p>
+        <p class="lead-form-consent">Informace ke zpracování osobních údajů najdete <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">ZDE</a></p>
+        <button type="submit" class="btn btn-primary">Odeslat podnět</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="klient.html">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+          <li><a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

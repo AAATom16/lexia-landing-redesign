@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "lexia-static",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8767"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "-l", "8767"],
       "port": 8767
     }
   ]

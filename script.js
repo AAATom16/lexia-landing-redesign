@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  // Validace povinných polí — zvýraznění a odskok na první nevyplněné
+  initFormValidation();
+
   // Form submit demo
   document.querySelectorAll('form[data-demo]').forEach(form => {
     form.addEventListener('submit', e => {
@@ -522,6 +525,64 @@ function initTestimonialsCarousel() {
   nextBtn && nextBtn.addEventListener('click', () => goTo(index + 1));
 
   goTo(0);
+}
+
+/* ============================================
+   VALIDACE FORMULÁŘŮ
+   Prohlížeč sám odeslání zablokuje, my navíc pole zčervenáme
+   a odscrollujeme na první nevyplněné.
+   ============================================ */
+function initFormValidation() {
+  // Obal pole, který se má zvýraznit (kvůli radiům a checkboxům v kartách)
+  function fieldWrap(el) {
+    return el.closest('.form-group, .claim-field, .claim-card, .report-file, .form-row') || el.parentElement;
+  }
+
+  function mark(el) {
+    el.classList.add('is-invalid');
+    const wrap = fieldWrap(el);
+    if (wrap) wrap.classList.add('is-invalid');
+  }
+
+  function clear(el) {
+    if (!el || !el.classList) return;
+    el.classList.remove('is-invalid');
+    const wrap = fieldWrap(el);
+    if (wrap && !wrap.querySelector('.is-invalid')) wrap.classList.remove('is-invalid');
+  }
+
+  document.querySelectorAll('form').forEach(form => {
+    let first = null;
+
+    // 'invalid' se v prohlížeči spustí pro každé neprošlé pole při odeslání
+    form.addEventListener('invalid', e => {
+      const el = e.target;
+      mark(el);
+      if (!first) {
+        first = el;
+        // Odskok pod sticky hlavičku, ať je pole opravdu vidět
+        const header = document.querySelector('.header');
+        const offset = (header ? header.offsetHeight : 0) + 24;
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+        setTimeout(() => el.focus({ preventScroll: true }), 320);
+      }
+      // Po doběhnutí série 'invalid' událostí se počítadlo resetuje
+      setTimeout(() => { first = null; }, 0);
+    }, true);
+
+    // Jakmile uživatel pole opraví, červená zmizí
+    ['input', 'change'].forEach(evt => {
+      form.addEventListener(evt, e => {
+        const el = e.target;
+        if (el.checkValidity && el.checkValidity()) clear(el);
+        // radia sdílí jméno — vyčistit celou skupinu
+        if (el.type === 'radio' && el.name) {
+          form.querySelectorAll(`input[name="${el.name}"]`).forEach(r => clear(r));
+        }
+      }, true);
+    });
+  });
 }
 
 /* ============================================
