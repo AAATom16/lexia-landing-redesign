@@ -28,7 +28,9 @@
 <style>
 /* ===== PRO PARTNERY ===== */
 /* Hero — foto s bílou kartou vlevo */
-.pt-hero{position:relative;background:url('assets/obrazky/Lexia-kruh.jpeg') center/cover no-repeat;padding:80px 0 140px;overflow:hidden}
+/* Výška hera sjednocená s ostatními stránkami (min-height 560px jako na O nás) */
+.pt-hero{position:relative;background:url('assets/obrazky/Lexia-kruh.jpeg') center/cover no-repeat;min-height:560px;display:flex;align-items:center;padding:60px 0 140px;overflow:hidden}
+.pt-hero>.container{width:100%}
 .pt-hero-card{background:var(--white);border-radius:22px;box-shadow:var(--shadow-3);padding:44px 48px;max-width:620px}
 .pt-hero-card h1{margin:0 0 20px;line-height:1.15}
 .pt-hero-card h1 span{color:var(--primary)}
@@ -47,13 +49,13 @@
 /* Podpora a vzdělávání */
 .pt-support{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center}
 .pt-support-art{display:flex;align-items:center;justify-content:center}
-.pt-support-art svg{width:100%;max-width:340px;height:auto;color:var(--primary-light,#7da0dc)}
-.pt-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:6px;align-items:center}
-.pt-item+.pt-item{margin-top:34px}
-.pt-item-ic{grid-row:1;grid-column:1;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.pt-support-art svg,.pt-support-art img{width:100%;max-width:340px;height:auto;color:var(--primary-light,#7da0dc)}
+.pt-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:0}
+.pt-item+.pt-item{margin-top:28px}
+.pt-item-ic{grid-row:1 / span 2;grid-column:1;align-self:start;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
 .pt-item-ic .icon{width:22px;height:22px}
-.pt-item h3{grid-row:1;grid-column:2;margin:0;font-size:1.25rem}
-.pt-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
+.pt-item h3{grid-row:1;grid-column:2;align-self:center;margin:0 0 2px;font-size:1.25rem;line-height:1.25;color:var(--primary)}
+.pt-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.5}
 
 /* Nástroje */
 .pt-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
@@ -74,7 +76,7 @@
 }
 @media(max-width:640px){
   .pt-grid,.pt-tools{grid-template-columns:1fr}
-  .pt-hero{padding:56px 0 110px}
+  .pt-hero{min-height:480px;padding:40px 0 110px}
   .pt-hero-card{padding:30px 24px}
 }
 </style>
@@ -126,32 +128,32 @@
     </div>
     <div class="pt-grid">
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="trophy"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="medal"></i></div>
         <h3>Špičkový produkt</h3>
         <p>Vysoké limity pojistného plnění, nejširší rozsah krytí, nejméně výluk a unikátní all risk garance.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="clock"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="stopwatch"></i></div>
         <h3>Jednoduché sjednání</h3>
         <p>Plně digitální proces bez papírování, nabídku a smlouvu vytvoříte během pár minut.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="chart"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="coins"></i></div>
         <h3>Provizní model</h3>
         <p>Možnost výběru provizního modelu (získatelská/následná, nebo lineární průběžná) na úrovni jednotlivé smlouvy.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="monitor"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="mouse"></i></div>
         <h3>Online přehled</h3>
         <p>Mějte dokonalý přehled o všech smlouvách a pojistných událostech klientů díky našemu digitálnímu systému.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="handshake"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="hand_person"></i></div>
         <h3>Osobní podpora</h3>
         <p>Naši zkušení manažeři jsou vám vždy k dispozici, od prvního kontaktu až po konkrétní jednání s klienty.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="graduation"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="lightbulb"></i></div>
         <h3>Profesionální vzdělávání</h3>
         <p>Propracovaný systém vzdělávacích materiálů, díky kterým se rychle stanete specialistou na pojištění právní ochrany.</p>
       </div>
@@ -167,28 +169,21 @@
     </div>
     <div class="pt-support">
       <div class="pt-support-art" aria-hidden="true">
-        <!-- Žárovka nad otevřenou knihou -->
-        <svg viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M150 20v-14M104 38l-9-11M196 38l9-11M84 84H70M216 84h14M92 56l-11-6M208 56l11-6"/>
-          <path d="M150 34c-20 0-36 16-36 36 0 14 8 21 12 28 3 5 4 9 4 14h40c0-5 1-9 4-14 4-7 12-14 12-28 0-20-16-36-36-36z"/>
-          <path d="M132 126h36M136 136h28"/>
-          <path d="M150 176c-24-16-58-20-88-18v56c30-2 64 2 88 18 24-16 58-20 88-18v-56c-30-2-64 2-88 18z"/>
-          <path d="M150 176v56"/>
-        </svg>
+        <img src="assets/il-kniha.svg" alt="">
       </div>
       <div>
         <div class="pt-item">
-          <div class="pt-item-ic"><i class="icon" data-icon="graduation"></i></div>
+          <div class="pt-item-ic"><i class="icon" data-icon="lightbulb"></i></div>
           <h3>Profesionální vzdělávání</h3>
           <p>Špičkové e-learningy a e-booky, prezenční vzdělávání a praktické workshopy na míru vašim potřebám.</p>
         </div>
         <div class="pt-item">
-          <div class="pt-item-ic"><i class="icon" data-icon="sparkle"></i></div>
+          <div class="pt-item-ic"><i class="icon" data-icon="marketing"></i></div>
           <h3>Marketingové materiály</h3>
           <p>Připravíme vám letáky, brožury, online bannery i texty pro sociální sítě, vše, co potřebujete k úspěšnému prodeji.</p>
         </div>
         <div class="pt-item">
-          <div class="pt-item-ic"><i class="icon" data-icon="chat"></i></div>
+          <div class="pt-item-ic"><i class="icon" data-icon="chat_bubbles"></i></div>
           <h3>Osobní konzultace</h3>
           <p>Pravidelná podpora a poradenství od našich zkušených obchodních manažerů.</p>
         </div>
@@ -205,32 +200,16 @@
     </div>
     <div class="pt-tools">
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="monitor"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="mouse"></i></div>
         <p><em>Digitální sjednání</em> bez papírování, rychle a jednoduše.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="document"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="document_check"></i></div>
         <p><em>Přehled</em> o právní pomoci poskytované vašim klientům.</p>
       </div>
       <div class="pt-card">
-        <div class="pt-ic"><i class="icon" data-icon="chart"></i></div>
+        <div class="pt-ic"><i class="icon" data-icon="coins_percent"></i></div>
         <p><em>Možnost kombinace</em> různých provizních modelů.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRO FINANČNÍ PORADCE -->
-<section class="bg-section">
-  <div class="container">
-    <div class="pt-support">
-      <div>
-        <h2 style="color: var(--primary); margin-bottom: 16px;">Jste finanční poradce?</h2>
-        <p style="color: var(--text-muted); max-width: 52ch; margin-bottom: 24px;">Připravili jsme samostatnou stránku o tom, jak právní ochrana Lexia doplní vaše portfolio, jak funguje provize a co všechno pro vás zajistíme.</p>
-        <a href="financni-poradci/index.html" class="btn btn-primary">Pojištění pro finanční poradce</a>
-      </div>
-      <div class="pt-support-art" aria-hidden="true">
-        <img src="assets/lx-support.png" alt="" style="width:100%;max-width:260px;height:auto;">
       </div>
     </div>
   </div>

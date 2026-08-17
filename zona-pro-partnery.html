@@ -27,7 +27,9 @@
 
 <style>
 /* ===== ZÓNA PRO PARTNERY ===== */
-.zp-hero{position:relative;background:url('assets/obrazky/Lexia-plaz.jpeg') center/cover no-repeat;padding:80px 0 150px;overflow:hidden}
+/* Výška hera sjednocená s ostatními stránkami (min-height 560px jako na O nás) */
+.zp-hero{position:relative;background:url('assets/obrazky/Lexia-plaz.jpeg') center/cover no-repeat;min-height:560px;display:flex;align-items:center;padding:60px 0 150px;overflow:hidden}
+.zp-hero>.container{width:100%}
 .zp-hero-card{background:var(--white);border-radius:22px;box-shadow:var(--shadow-3);padding:40px 44px;max-width:480px}
 .zp-hero-card h1{margin:0 0 18px;line-height:1.15}
 .zp-hero-card h1 span{color:var(--primary)}
@@ -48,18 +50,27 @@
 .zp-split{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;align-items:center}
 .zp-split--rev .zp-art{order:2}
 .zp-art{display:flex;align-items:center;justify-content:center}
-.zp-art svg{width:100%;max-width:320px;height:auto;color:var(--primary)}
-.zp-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:8px}
-.zp-item+.zp-item{margin-top:34px}
-.zp-item-ic{grid-row:1;grid-column:1;align-self:center;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
+.zp-art svg,.zp-art img{width:100%;max-width:340px;height:auto;color:var(--primary)}
+.zp-item{display:grid;grid-template-columns:auto 1fr;column-gap:18px;row-gap:0}
+.zp-item+.zp-item{margin-top:28px}
+.zp-item-ic{grid-row:1 / span 3;grid-column:1;align-self:start;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center}
 .zp-item-ic .icon{width:22px;height:22px}
-.zp-item h3{grid-row:1;grid-column:2;align-self:center;margin:0;font-size:1.25rem;color:var(--primary)}
-.zp-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.6}
-.zp-item .btn{grid-row:3;grid-column:2;justify-self:start;margin-top:14px}
+.zp-item h3{grid-row:1;grid-column:2;align-self:center;margin:0 0 2px;font-size:1.25rem;line-height:1.25;color:var(--primary)}
+.zp-item p{grid-row:2;grid-column:2;margin:0;color:var(--text-muted);font-size:0.95rem;line-height:1.5}
+/* Tlačítka u kurzů a e-booků — menší a modrá jako na předloze */
+.zp-item .btn{grid-row:3;grid-column:2;justify-self:start;margin-top:10px}
+.zp-item .btn-outline{
+  min-height:36px;
+  padding:8px 18px;
+  font-size:0.82rem;
+  color:var(--primary);
+  border-color:var(--primary);
+}
+.zp-item .btn-outline:hover{background:var(--primary);color:var(--white);border-color:var(--primary)}
 
 /* Ke stažení */
 .zp-dl{max-width:720px}
-.zp-dl a{display:block;padding:7px 0;color:var(--primary);text-decoration:none;font-size:1rem}
+.zp-dl a{display:block;padding:2px 0;color:var(--primary);text-decoration:none;font-size:1rem;line-height:1.45}
 .zp-dl a:hover{text-decoration:underline}
 
 @media(max-width:960px){
@@ -68,7 +79,7 @@
   .zp-split--rev .zp-art{order:-1}
 }
 @media(max-width:640px){
-  .zp-hero{padding:56px 0 110px}
+  .zp-hero{min-height:480px;padding:40px 0 110px}
   .zp-hero-card{padding:28px 24px}
 }
 </style>
@@ -113,17 +124,17 @@
   <div class="container">
     <div class="zp-cards">
       <a class="zp-card" href="#e-learningy">
-        <div class="zp-ic"><i class="icon" data-icon="monitor"></i></div>
+        <div class="zp-ic"><i class="icon" data-icon="elearning"></i></div>
         <h3>E-learningy</h3>
         <p>Připravili jsme pro Vás sadu e-learningových kurzů k prostudování.</p>
       </a>
       <a class="zp-card" href="#e-booky">
-        <div class="zp-ic"><i class="icon" data-icon="document"></i></div>
+        <div class="zp-ic"><i class="icon" data-icon="document_check"></i></div>
         <h3>E-booky</h3>
         <p>Ke každému segmentu zde najdete e-book ke stažení.</p>
       </a>
       <a class="zp-card" href="#ke-stazeni">
-        <div class="zp-ic"><i class="icon" data-icon="sparkle"></i></div>
+        <div class="zp-ic"><i class="icon" data-icon="lightbulb"></i></div>
         <h3>Pojistné podmínky a ostatní</h3>
         <p>Níže najdete ke stažení pojistné podmínky a další užitečné dokumenty.</p>
       </a>
@@ -137,31 +148,23 @@
     <h2 class="zp-h2">E-learningy</h2>
     <div class="zp-split">
       <div class="zp-art" aria-hidden="true">
-        <!-- Tři postavy -->
-        <svg viewBox="0 0 300 220" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="60" cy="96" r="26" stroke-width="3"/>
-          <path d="M14 210c0-30 21-52 46-52s46 22 46 52" stroke-width="3"/>
-          <circle cx="240" cy="96" r="26" stroke-width="3"/>
-          <path d="M194 210c0-30 21-52 46-52s46 22 46 52" stroke-width="3"/>
-          <circle cx="150" cy="66" r="42"/>
-          <path d="M78 214c0-40 32-72 72-72s72 32 72 72"/>
-        </svg>
+        <img src="assets/il-lide.svg" alt="">
       </div>
       <div>
         <div class="zp-item">
-          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <div class="zp-item-ic"><i class="icon" data-icon="elearning"></i></div>
           <h3>Lexia</h3>
           <p>Zde najdete úvodní e-learning o Lexii.</p>
-          <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
+          <a href="https://lexia.cz/www/elearning/prvni_pomoc_v_pravu/story.html" target="_blank" rel="noopener" class="btn btn-outline">Vstupte do e-learningu</a>
         </div>
         <div class="zp-item">
-          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <div class="zp-item-ic"><i class="icon" data-icon="elearning"></i></div>
           <h3>Jednotlivci a domácnosti</h3>
           <p>Provede vás klíčovými tématy, od pochopení zákaznických segmentů přes typické právní problémy až po konkrétní tipy, jak si domluvit schůzku a uzavřít pojistku.</p>
           <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
         </div>
         <div class="zp-item">
-          <div class="zp-item-ic"><i class="icon" data-icon="monitor"></i></div>
+          <div class="zp-item-ic"><i class="icon" data-icon="elearning"></i></div>
           <h3>Podnikatelé a firmy</h3>
           <p>Najdete v něm konkrétní situace, které podnikatele potkávají dnes a denně, ať už jde o neuhrazené faktury, spory se zákazníky, pracovní právo nebo dodavatelské vztahy.</p>
           <a href="#" class="btn btn-outline">Vstupte do e-learningu</a>
@@ -177,23 +180,17 @@
     <h2 class="zp-h2" style="text-align: center;">E-booky</h2>
     <div class="zp-split zp-split--rev">
       <div class="zp-art" aria-hidden="true">
-        <!-- Žárovka nad knihou -->
-        <svg viewBox="0 0 300 240" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M150 30c-22 0-40 18-40 40 0 15 9 23 13 30 3 6 5 10 5 16h44c0-6 2-10 5-16 4-7 13-15 13-30 0-22-18-40-40-40z"/>
-          <path d="M132 130h36M137 142h26"/>
-          <path d="M150 178c-26-18-62-22-94-20v58c32-2 68 2 94 20 26-18 62-22 94-20v-58c-32-2-68 2-94 20z"/>
-          <path d="M150 178v58"/>
-        </svg>
+        <img src="assets/il-kniha.svg" alt="">
       </div>
       <div>
         <div class="zp-item">
-          <div class="zp-item-ic"><i class="icon" data-icon="document"></i></div>
+          <div class="zp-item-ic"><i class="icon" data-icon="document_check"></i></div>
           <h3>Jednotlivci a domácnosti</h3>
           <p>Zde si můžete stáhnout e-book, který je vhodným doplňkem k e-learningu Jednotlivci a domácnosti. Slouží i jako samostatný studijní materiál, který si můžete kdykoliv otevřít v notebooku nebo telefonu, případně si ho vytisknout.</p>
           <a href="assets/dokumenty/ebook-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener" class="btn btn-outline">Stáhnout e-book</a>
         </div>
         <div class="zp-item">
-          <div class="zp-item-ic"><i class="icon" data-icon="document"></i></div>
+          <div class="zp-item-ic"><i class="icon" data-icon="document_check"></i></div>
           <h3>Podnikatelé a firmy</h3>
           <p>Stáhněte si e-book Podnikatelé a firmy, který je perfektním doplňkem našeho e-learningu, případně slouží jako samostatný studijní materiál.</p>
           <a href="assets/dokumenty/ebook-podnikatele-firmy.pdf" target="_blank" rel="noopener" class="btn btn-outline">Stáhnout e-book</a>
