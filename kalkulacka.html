@@ -121,11 +121,85 @@
             </label>
           </div>
 
-          <!-- Spory s nájemci - příplatek -->
-          <div id="najemci-box" style="display: none; margin-top: 14px; padding: 14px 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
+          <!-- Vozidla a řidiči - podrobnosti -->
+          <div id="vozidla-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
+            <strong style="display: block; margin-bottom: 4px;">Vozidla a řidiči v pojištění</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">V ceně pilíře je jedno osobní vozidlo do 3,5 t a řidič (pojistník). Další vozidla a řidiče připojistíte níže.</p>
+            <div class="veh-rows">
+              <div class="veh-row">
+                <span class="veh-name">Osobní vozidlo do 3,5 t</span>
+                <span class="veh-price">129 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_osobni" min="0" max="99" step="1" value="0" aria-label="Počet dalších osobních vozidel do 3,5 t">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Nákladní vozidlo do 3,5 t</span>
+                <span class="veh-price">149 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_nakladni" min="0" max="99" step="1" value="0" aria-label="Počet nákladních vozidel do 3,5 t">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Nákladní vozidlo nad 3,5 t</span>
+                <span class="veh-price">209 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_nakladni_plus" min="0" max="99" step="1" value="0" aria-label="Počet nákladních vozidel nad 3,5 t">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Autobus</span>
+                <span class="veh-price">229 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_autobus" min="0" max="99" step="1" value="0" aria-label="Počet autobusů">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Motocykl, tříkolka, čtyřkolka</span>
+                <span class="veh-price">69 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_motocykl" min="0" max="99" step="1" value="0" aria-label="Počet motocyklů">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Traktor a ostatní stroje</span>
+                <span class="veh-price">79 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_traktor" min="0" max="99" step="1" value="0" aria-label="Počet traktorů a strojů">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Přípojné vozidlo do 750 kg</span>
+                <span class="veh-price">39 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_prives" min="0" max="99" step="1" value="0" aria-label="Počet přípojných vozidel do 750 kg">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Přípojné vozidlo nad 750 kg</span>
+                <span class="veh-price">109 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_prives_plus" min="0" max="99" step="1" value="0" aria-label="Počet přípojných vozidel nad 750 kg">
+              </div>
+              <div class="veh-row">
+                <span class="veh-name">Další řidiči (nad rámec pojistníka)</span>
+                <span class="veh-price">109 Kč/měsíc</span>
+                <input type="number" class="form-input" name="veh_ridici" id="dalsi-ridici" min="0" max="99" step="1" value="0" aria-label="Počet dalších řidičů">
+              </div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--success); font-weight: 600; margin-top: 12px;">Od 6 vozidel a řidičů dohromady platí množstevní sleva 4 až 48 % na tuto sekci.</p>
+          </div>
+
+          <!-- Pracovněprávní ochrana - manažerská ochrana -->
+          <div id="prace-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
             <label class="form-checkbox" style="margin: 0;">
+              <input type="checkbox" name="manazer" id="manazer-check">
+              <span><strong>Manažerská právní ochrana</strong> pro vedoucí zaměstnance s odpovědností za škodu</span>
+            </label>
+            <div id="manazer-fields" style="display: none; margin-top: 14px; max-width: 280px;">
+              <div class="form-group" style="margin: 0;">
+                <label>Roční odměna za výkon funkce (Kč)</label>
+                <input type="number" class="form-input" id="manazer-odmena" placeholder="např. 960000" min="0" step="1000">
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Pojistné = 0,25 % z roční odměny, minimálně 4 788 Kč/rok (399 Kč/měsíc).</p>
+            </div>
+          </div>
+
+          <!-- Dům, byt, chata - další nemovitosti a spory s nájemci -->
+          <div id="nemovitost-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
+            <div class="form-group" style="max-width: 280px;">
+              <label>Počet dalších nemovitostí</label>
+              <input type="number" class="form-input" id="dalsi-nemovitosti" name="dalsi_nemovitosti" min="0" max="20" step="1" value="0">
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">V ceně pilíře je jedna nemovitost. Každá další <span class="px-label" data-j="79 Kč/měsíc" data-d="89 Kč/měsíc">79 Kč/měsíc</span>.</p>
+            </div>
+            <label class="form-checkbox" style="margin: 12px 0 0;">
               <input type="checkbox" name="najemci" id="najemci-check">
-              <span><strong>Příplatek za "Spory s nájemci"</strong> (+20 % z pilíře Dům/byt/chata), pokud byt/dům pronajímáte</span>
+              <span><strong>Příplatek za "Spory s nájemci"</strong> (+20 % z pilíře Dům/byt/chata včetně dalších nemovitostí), pokud byt/dům pronajímáte</span>
             </label>
           </div>
         </div>
@@ -358,7 +432,7 @@
             </div>
           </div>
 
-          <div class="calc-section" style="border-bottom: none;">
+          <div class="calc-section">
             <h4>2. Trvalá adresa</h4>
             <div class="form-row">
               <div class="form-group" style="flex: 2;">
@@ -417,10 +491,146 @@
                 <span>Potvrzuji, že pojištění sjednávám pro osoby žijící ve společné domácnosti.</span>
               </label>
             </div>
+          </div>
+
+          <!-- 3. Předmět pojištění — bloky se zobrazují podle vybraných pilířů a doplňků -->
+          <div class="calc-section" id="subject-section" style="border-bottom: none;" hidden>
+            <h4>3. Předmět pojištění</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">Doplňte údaje k tomu, co pojišťujete. Zobrazujeme jen položky, které jste si vybrali v kalkulaci.</p>
+
+            <!-- Vozidla a řidiči -->
+            <div class="subject-block" id="subj-vozidla" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="car"></i> Vozidla a řidiči</strong>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>SPZ (registrační značka) <span class="req">*</span></label>
+                  <input type="text" class="form-input" name="spz" placeholder="1AB 2345" data-subject-label="SPZ">
+                </div>
+                <div class="form-group">
+                  <label>Značka a model</label>
+                  <input type="text" class="form-input" name="vozidloModel" placeholder="Škoda Octavia" data-subject-label="Vozidlo">
+                </div>
+              </div>
+              <div class="form-group" id="subj-vozidla-dalsi" hidden>
+                <label>SPZ dalších vozidel</label>
+                <textarea class="form-input" name="spzDalsi" rows="2" placeholder="Každé vozidlo na samostatný řádek" data-subject-label="Další vozidla"></textarea>
+              </div>
+              <div class="form-group" id="subj-ridici" hidden>
+                <label>Další řidiči (jméno a datum narození)</label>
+                <textarea class="form-input" name="ridici" rows="2" placeholder="Jan Novák, 1. 1. 1980" data-subject-label="Další řidiči"></textarea>
+              </div>
+            </div>
+
+            <!-- Dům, byt, chata -->
+            <div class="subject-block" id="subj-nemovitost" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="house"></i> Dům, byt, chata</strong>
+              <label class="form-checkbox" style="margin: 0 0 12px;">
+                <input type="checkbox" id="nemo-same-address">
+                <span>Adresa nemovitosti je shodná s trvalou adresou</span>
+              </label>
+              <div id="nemo-address-fields">
+                <div class="form-row">
+                  <div class="form-group" style="flex: 2;">
+                    <label>Ulice a číslo popisné</label>
+                    <input type="text" class="form-input" name="nemoStreet" placeholder="Želetavská 1525/1" data-subject-label="Adresa nemovitosti">
+                  </div>
+                  <div class="form-group">
+                    <label>Obec</label>
+                    <input type="text" class="form-input" name="nemoCity" placeholder="Praha" data-subject-label="Obec nemovitosti">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" id="subj-nemovitost-dalsi" hidden>
+                <label>Adresy dalších nemovitostí</label>
+                <textarea class="form-input" name="nemoDalsi" rows="2" placeholder="Každou nemovitost na samostatný řádek" data-subject-label="Další nemovitosti"></textarea>
+              </div>
+            </div>
+
+            <!-- Nemovitost ve výstavbě -->
+            <div class="subject-block" id="subj-vystavba" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="construction"></i> Nemovitost ve výstavbě</strong>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Adresa stavby</label>
+                  <input type="text" class="form-input" name="stavbaAdresa" placeholder="Ulice, číslo, obec" data-subject-label="Adresa stavby">
+                </div>
+                <div class="form-group">
+                  <label>Číslo stavebního povolení</label>
+                  <input type="text" class="form-input" name="stavbaPovoleni" placeholder="volitelné">
+                </div>
+              </div>
+            </div>
+
+            <!-- Samostatné objekty -->
+            <div class="subject-block" id="subj-objekty" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="building"></i> Samostatný objekt</strong>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Adresa objektu</label>
+                  <input type="text" class="form-input" name="objektAdresa" placeholder="Ulice, číslo, obec" data-subject-label="Adresa objektu">
+                </div>
+                <div class="form-group">
+                  <label>Počet jednotek v objektu</label>
+                  <input type="number" class="form-input" name="objektJednotky" min="0" placeholder="např. 12">
+                </div>
+              </div>
+            </div>
+
+            <!-- Samostatné parcely -->
+            <div class="subject-block" id="subj-parcely" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="tree"></i> Samostatná parcela</strong>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Katastrální území</label>
+                  <input type="text" class="form-input" name="parcelaKu" placeholder="např. Michle" data-subject-label="Katastrální území">
+                </div>
+                <div class="form-group">
+                  <label>Parcelní číslo</label>
+                  <input type="text" class="form-input" name="parcelaCislo" placeholder="např. 1234/5" data-subject-label="Parcelní číslo">
+                </div>
+              </div>
+            </div>
+
+            <!-- Výkon funkce -->
+            <div class="subject-block" id="subj-vykon" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="scales"></i> Výkon funkce</strong>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Název společnosti nebo organizace</label>
+                  <input type="text" class="form-input" name="funkceFirma" placeholder="např. Bytové družstvo Michle" data-subject-label="Společnost (výkon funkce)">
+                </div>
+                <div class="form-group">
+                  <label>IČO</label>
+                  <input type="text" class="form-input" name="funkceIco" placeholder="12345678" pattern="[0-9]{8}">
+                </div>
+              </div>
+            </div>
+
+            <!-- Manažerská ochrana -->
+            <div class="subject-block" id="subj-manazer" hidden>
+              <strong class="subject-block-title"><i class="icon" data-icon="briefcase"></i> Manažerská právní ochrana</strong>
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label>Zaměstnavatel</label>
+                  <input type="text" class="form-input" name="zamestnavatel" placeholder="Název zaměstnavatele" data-subject-label="Zaměstnavatel">
+                </div>
+                <div class="form-group">
+                  <label>Pracovní pozice</label>
+                  <input type="text" class="form-input" name="pozice" placeholder="např. vedoucí provozu" data-subject-label="Pozice">
+                </div>
+              </div>
+            </div>
+
             <div class="calc-nav">
               <button type="button" class="btn btn-outline btn-lg" data-step-back="1">Zpět ke kalkulaci</button>
               <button type="button" class="btn btn-primary btn-lg" data-step-next="3">Pokračovat na rekapitulaci</button>
             </div>
+          </div>
+
+          <!-- Navigace, když není vybrán žádný předmět pojištění -->
+          <div class="calc-nav" id="subject-fallback-nav">
+            <button type="button" class="btn btn-outline btn-lg" data-step-back="1">Zpět ke kalkulaci</button>
+            <button type="button" class="btn btn-primary btn-lg" data-step-next="3">Pokračovat na rekapitulaci</button>
           </div>
         </form>
       </div>
@@ -492,6 +702,12 @@
               <strong data-echo="fullAddress">—</strong>
             </div>
           </div>
+        </div>
+
+        <!-- Předmět pojištění -->
+        <div class="recap-card" id="recap-subject" hidden>
+          <h4 class="recap-card-title"><i class="icon" data-icon="house"></i> Předmět pojištění</h4>
+          <div class="recap-data-grid" data-echo="subject-grid"></div>
         </div>
 
         <!-- Co pojištění obsahuje -->
