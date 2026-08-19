@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!--
+  PRACOVNÍ NÁHLED — není součástí webu, jen podklad k odsouhlasení.
+  Porovnání současných textů sekce „Kdy pojištění využijete" s novými
+  texty od klienta. Nic z toho zatím není na microsite zapsané.
+-->
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Návrh textů — Kdy pojištění využijete</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0045bf; --heading: #001a4d; --accent: #00a5bf;
+    --text: #1a1f2e; --muted: #4a5468; --border: #e5e9f0; --bg: #f7f9fc;
+    --light: #f0f5ff; --warn: #b8860b; --warnbg: #fff8e6; --del: #b3261e; --delbg: #fdf0ef;
+    --new: #0f7b3d; --newbg: #eefaf1;
+    --fh: 'Nunito', Arial, sans-serif; --fb: 'Poppins', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--fb); font-size: 15px; line-height: 1.6; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-family: var(--fh); font-weight: 800; color: var(--heading); font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-family: var(--fh); font-weight: 800; color: var(--heading); font-size: 1.3rem; margin: 48px 0 6px; }
+  h3 { font-family: var(--fh); font-weight: 800; color: var(--heading); font-size: 1rem; margin: 0 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 4px; }
+  .banner { background: var(--warnbg); border-left: 4px solid var(--warn); padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 24px 0 0; }
+  .banner strong { color: var(--heading); }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; align-items: start; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+  .card--after { border-color: #cfe0ff; box-shadow: 0 2px 10px rgba(0,69,191,0.07); }
+  .tag { display: inline-block; font-family: var(--fh); font-weight: 800; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; margin-bottom: 12px; }
+  .tag--before { background: #eef1f6; color: var(--muted); }
+  .tag--after { background: var(--light); color: var(--primary); }
+  .tag--new { background: var(--newbg); color: var(--new); }
+  .tag--del { background: var(--delbg); color: var(--del); }
+
+  .save { background: var(--light); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; }
+  .save small { display: block; font-family: var(--fh); font-weight: 800; font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .save b { font-family: var(--fh); font-size: 1.25rem; color: var(--heading); }
+  .save span { display: block; font-size: 0.8rem; color: var(--muted); }
+  .lead { font-family: var(--fh); font-weight: 700; color: var(--primary); font-size: 0.9rem; margin: 0 0 8px; }
+  .body { font-size: 0.88rem; color: var(--muted); margin: 0 0 10px; }
+  .covers { font-size: 0.82rem; background: #f4f7fc; border-radius: 8px; padding: 9px 12px; margin: 0; color: var(--muted); }
+  .covers b { color: var(--heading); }
+  .diff { margin: 6px 0 0; padding: 10px 0 0; border-top: 1px dashed var(--border); font-size: 0.82rem; color: var(--muted); }
+  .diff ul { margin: 4px 0 0; padding-left: 18px; }
+  .diff li { margin-bottom: 3px; }
+  .num { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-family: var(--fh); font-weight: 800; font-size: 0.85rem; align-items: center; justify-content: center; margin-right: 9px; vertical-align: middle; }
+  .rowtitle { font-family: var(--fh); font-weight: 800; color: var(--heading); font-size: 1.05rem; margin: 34px 0 12px; padding-top: 20px; border-top: 2px solid var(--border); }
+  .rowtitle:first-of-type { border-top: 0; padding-top: 0; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; font-size: 0.86rem; margin-top: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--light); font-family: var(--fh); font-weight: 800; color: var(--heading); font-size: 0.8rem; }
+  td.down { color: var(--del); font-weight: 600; }
+  .q { background: #fff; border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0; padding: 16px 20px; margin-bottom: 14px; }
+  .q h3 { margin-bottom: 6px; }
+  ol.qs { padding-left: 20px; }
+  ol.qs li { margin-bottom: 10px; }
+  code { background: #eef1f6; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }
+  @media (max-width: 860px) { .row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Nové texty v sekci „Kdy pojištění využijete"</h1>
+  <p class="sub">Porovnání současného stavu microsite s texty od klienta. <strong>Zatím nic není zapsané</strong> — čekám na odsouhlasení.</p>
+
+  <div class="banner">
+    <strong>Shrnutí:</strong> klient poslal 9 situací. Šest z nich nahrazuje stávající karty (přepsaný nadpis, částka i příběh),
+    tři jsou úplně nové a tři stávající karty by zmizely. Navíc přišel druhý, zkrácený seznam 10 položek,
+    pro který na microsite zatím není místo — viz otázky na konci.
+  </div>
+
+  <h2>1. Karty, které se přepíšou</h2>
+  <p class="sub">Vlevo dnešní stav, vpravo nový text od klienta.</p>
+
+  <!-- 1 -->
+  <div class="rowtitle"><span class="num">1</span>Klient Vás zažaluje</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Klient Vás zažaluje za ztrátu na investici</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 350 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">Klient žaluje za ztrátu na investičním portfoliu, obchodník regreduje</p>
+      <p class="body">Doporučil jste klientovi dynamické portfolio podílových fondů. Trh padl, klient tvrdí, že produkt neodpovídal jeho investičnímu profilu dle MiFID II a žaluje obchodníka s cennými papíry o 800 000 Kč. Obchodník (zastoupený) škodu uhradil a nyní ji regresivně vymáhá po Vás.</p>
+      <p class="covers"><b>Kryje:</b> Obrana proti vymáhání náhrady újmy, smluvní spory v rámci podnikání, limit 5 mil. Kč</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Klient Vás zažaluje za údajné způsobení škody</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 250 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Klient tvrdí, že Vás požádal o provedení změny v pojištění. Následně došlo k pojistné události, která byla pojišťovnou zamítnuta kvůli nepojištěnému riziku. Vy jste žádnou žádost klienta nedohledal. Klient chce škodu ve výši přes 1 000 000 Kč po Vás. Potřebujete se bránit a zapojit a vtáhnout do hry pojištění odpovědnosti. Bez odborné právní pomoci se těžko obejdete.</p>
+      <p class="covers"><b>Kryje:</b> Obrana proti vymáhání náhrady újmy. Spory s pojišťovnami. Limit 5 mil. Kč / pojistná událost.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Jiný příběh — místo investičního portfolia jde o neprovedenou změnu v pojistce.</li>
+          <li>Úspora <strong>350 000 → 250 000 Kč</strong>.</li>
+          <li>Mizí modrý shrnující řádek nad textem (klient ho neposlal).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="rowtitle"><span class="num">2</span>Kontrola z ČNB</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Přijde kontrola z ČNB</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 250 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">ČNB prověřuje záznamy z jednání u pojištění, úvěrů i investic</p>
+      <p class="body">ČNB v rámci kontroly distribuce na finančním trhu prověřuje záznamy z jednání, testy odbornosti (170/2018, 257/2016, 256/2004) a doporučení vedená přímo pod Vaším jménem. Hrozí výmaz z registru, ukončení spolupráce ze strany zastoupeného i osobní sankce.</p>
+      <p class="covers"><b>Kryje:</b> až 250 000 Kč <em style="color:#b3261e">← tady je dnes chyba, místo krytí je zopakovaná částka</em></p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Přijde kontrola z ČNB</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 100 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">ČNB v rámci kontroly distribuce prověřuje záznamy z jednání, údajné nepřípustné pobídky, provize nebo jiné výhody, neposkytnutí povinných informací zákazníkovi a další záležitosti. Hrozí Vám sankce v řádu milionů korun i odnětí oprávnění k činnosti. Bez specializovaného advokáta jde o velmi vážné riziko pro Vaši kariéru.</p>
+      <p class="covers"><b>Kryje:</b> Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení. Limit 5 mil. Kč / pojistná událost.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Nadpis zůstává stejný.</li>
+          <li>Úspora <strong>250 000 → 100 000 Kč</strong>.</li>
+          <li><strong>Opravuje se dnešní chyba</strong> v řádku „Kryje" — nově je tam skutečné krytí.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="rowtitle"><span class="num">3</span>Daňová kontrola</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Přijde daňová kontrola</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 200 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">Daňová kontrola, nedoplatek a hrozba trestního stíhání</p>
+      <p class="body">Finanční úřad zahájí daňovou kontrolu Vašeho podnikání. Doměří daň, penále a úroky z prodlení a vznikne daňový nedoplatek. Pozor: při zkrácení daně nad 100 000 Kč jde podle § 240 trestního zákoníku o trestný čin.</p>
+      <p class="covers"><b>Kryje:</b> Zastupování při daňové kontrole, odvolání i obhajoba v trestním řízení, limit 5 mil. Kč</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Zaklepe u Vás finančák</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 80 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Finanční úřad u Vás zahájí daňovou kontrolu. Neuzná Vám řadu nákladových položek, namítá další jiná pochybení. Doměří daň, penále a vyčíslí úroky z prodlení. S názorem finančního úřadu nesouhlasíte a chcete se bránit. Bez daňového advokáta není úspěšná obhajoba pravděpodobná a riziko platby doměrku daně visí ve vzduchu.</p>
+      <p class="covers"><b>Kryje:</b> Spory v souvislosti s daňovou kontrolou. Limit 250 tis. Kč / pojistná událost.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Nadpis <strong>„Přijde daňová kontrola" → „Zaklepe u Vás finančák"</strong>.</li>
+          <li>Úspora <strong>200 000 → 80 000 Kč</strong>.</li>
+          <li><strong>Limit 5 mil. → 250 tis. Kč.</strong> Nový údaj sedí s tabulkou „Co přesně pojištění kryje", dnešní ne — takže se tím opravuje rozpor.</li>
+          <li>Vypadává zmínka o trestném činu podle § 240.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="rowtitle"><span class="num">4</span>Vracení provizí</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Zastoupený po Vás chce vrátit provize</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 250 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">SZ/banka/obchodník požaduje vrácení vyplacených provizí</p>
+      <p class="body">Po hromadných stornech smluv Vám zastoupený vystavil vyúčtování na 450 000 Kč k vrácení. Tvrdíte, že storna byla mimo Vaši kontrolu. Spor o storno provizí je klasickým konfliktem mezi vázaným zástupcem a jeho zastoupeným.</p>
+      <p class="covers"><b>Kryje:</b> Spory ze smluv o výkonu funkce a obchodní spolupráci, limit 5 mil. Kč</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Centrála chce vrátit provize</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 100 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Centrála Vám zadrží provize ve výši 90 000 Kč. Vy jste přesvědčení, že je to neoprávněné, že pro takový postup nejsou splněné podmínky smlouvy o spolupráci. Centrála Vám i tak nechce provize uvolnit. Potřebujete právní pomoc k posouzení oprávněnosti postupu centrály a vymáhání nevyplacených provizí.</p>
+      <p class="covers"><b>Kryje:</b> Smluvní spory v rámci podnikání. Limit 5 mil. Kč / pojistná událost. Vztahuje se na 1 smluvní spor se spornou částkou do 100 tis. Kč.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Nadpis <strong>„Zastoupený" → „Centrála"</strong> (mimochodem lidštější slovo).</li>
+          <li>Úspora <strong>250 000 → 100 000 Kč</strong>, sporná částka 450 000 → 90 000 Kč.</li>
+          <li>Přibývá omezení „1 spor do 100 tis. Kč" — sedí s poznámkou pod tabulkou krytí. Částka 90 000 Kč je schválně pod limitem.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="rowtitle"><span class="num">5</span>Nehoda se zraněním</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Způsobíte nehodu se zraněním</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 500 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">Nehoda se zraněním, při 7denní pracovní neschopnosti hrozí trestní řízení</p>
+      <p class="body">Cestou za klientem (v ČR i kdekoli v Evropě) způsobíte dopravní nehodu, při které dojde ke zranění druhé osoby. Pokud pracovní neschopnost poškozeného přesáhne 7 dní, jde automaticky o trestný čin ublížení na zdraví z nedbalosti (§ 148 TZ).</p>
+      <p class="covers"><b>Kryje:</b> Obhajoba v trestním a přestupkovém řízení řidiče, vymáhání náhrady újmy, ČR + Evropa</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Obviní Vás z nehody se zraněním</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 300 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Obviní Vás ze zavinění dopravní nehody (v České republice i jinde v Evropě), které dojde ke zranění jiné osoby. Pokud doba léčení přesáhne 7 dní, může jít rovnou o trestný čin ublížení na zdraví z nedbalosti. Za ten hrozí ztráta řidičáku, podmínka a někdy i vězení. Pro obhajobu je potřeba nechat zpracovat odborný znalecký posudek, který stojí desetitisíce korun.</p>
+      <p class="covers"><b>Kryje:</b> Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení. Limit 5 mil. Kč / pojistná událost.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Nadpis <strong>„Způsobíte" → „Obviní Vás z"</strong>. Dobrá změna — poradce není viník, jen obviněný.</li>
+          <li>Úspora <strong>500 000 → 300 000 Kč</strong>.</li>
+          <li>Mizí odkaz na § 148 TZ, přibývá znalecký posudek a hrozba vězení.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="rowtitle"><span class="num">6</span>Ztráta řidičáku</div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--before">Teď na webu</span>
+      <h3>Hrozí Vám ztráta řidičského průkazu</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 80 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="lead">Dosažení 12 bodů nebo závažný přestupek, hrozí ztráta řidičáku</p>
+      <p class="body">Měření rychlosti, jízda na červenou, alkohol za volantem nebo opakované přestupky Vás dostanou na hranici 12 bodů. Bez řidičského průkazu ale nemůžete jezdit za klienty a fakticky končíte v profesi.</p>
+      <p class="covers"><b>Kryje:</b> Zastoupení v řízení o přestupcích, obrana proti zadržení/odebrání řidičského průkazu, ČR + Evropa</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--after">Nově</span>
+      <h3>Hrozí Vám ztráta řidičáku</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 60 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Měření rychlosti, jízda na červenou, držení telefonu za jizdy, opakované přestupky – to všechno Vás rychle dostane na hranici 12 bodů, kdy přijdete o řidičák. Bez něj ale nemůžete jezdit za klienty a fakticky tak končíte s profesí finančního poradce. Specializovaný advokát prověří oprávněnost záznamů v bodovém hodnocení, správnost postupu policie i samotného měření.</p>
+      <p class="covers"><b>Kryje:</b> Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení. Limit 5 mil. Kč / pojistná událost.</p>
+      <div class="diff"><strong>Co se mění:</strong>
+        <ul>
+          <li>Nadpis zkrácen na hovorovější „řidičáku".</li>
+          <li>Úspora <strong>80 000 → 60 000 Kč</strong>.</li>
+          <li>Místo alkoholu za volantem se uvádí držení telefonu (vhodnější — alkohol je obvykle výluka).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2>2. Tři úplně nové karty</h2>
+  <p class="sub">Na microsite pro ně dnes nic neodpovídá, přibyly by.</p>
+
+  <div class="row">
+    <div class="card card--after">
+      <span class="tag tag--new">Nová karta</span>
+      <h3>Uniklé osobní údaje</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 150 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Váš pracovní e-mail napadne hacker a získá přístup ke smlouvám zákazníků, číslům účtů i citlivým datům ve zdravotních dotaznících. Potřebujete ihned právní radu, jak postupovat a co nezanedbat. V následném správním řízení přes Úřadem pro ochranu osobních údajů budete potřebovat odbornou právní pomoc advokáta.</p>
+      <p class="covers"><b>Kryje:</b> Spory v oblasti ochrany osobních údajů a internetové bezpečnosti. Limit 250 tis. Kč / pojistná událost.</p>
+    </div>
+    <div class="card card--after">
+      <span class="tag tag--new">Nová karta</span>
+      <h3>Uzavírání nové důležité smlouvy</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 25 000 Kč</b><span>za advokáty</span></div>
+      <p class="body">Vaše centrála Vám předloží k podpisu novou smlouvu o spolupráci. Potřebujeme ji zkontrolovat, jestli v ní nejsou pro Vás potenciálně nejasná, sporná či riziková ustanovení. Na běžnou umělou inteligenci se jako zodpovědný podnikatel nespolehnete a potřebujete nechat smlouvu posoudit specializovaným právníkem.</p>
+      <p class="covers"><b>Kryje:</b> Kontrola smluv. 1× v průběhu pojistného období s limitem 25 tis. Kč.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card card--after">
+      <span class="tag tag--new">Nová karta</span>
+      <h3>Měsíce léčení po těžké dopravní nehodě</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 500 000 Kč</b><span>za advokáty a další právní náklady</span></div>
+      <p class="body">Za volantem se stane neštěstí, ani nevíte jak. Nedá Vám přednost neopatrný řidič a Vy skončíte s těžkými zraněními v nemocnici. Ta si vyžádají dlouhé měsíce léčení, během kterých se nemůžete věnovat práci. Vyčíslit všechny Vaše nároky, včetně ušlého zisku, uplatnit je po pojišťovně povinného ručení a řádně je doložit je práce pro zkušeného advokáta.</p>
+      <p class="covers"><b>Kryje:</b> Spory s pojišťovnami. Spory s odpovědnostními pojišťovnami. Limit 5 mil. Kč / pojistná událost.</p>
+      <div class="diff">Zajímavá novinka: poprvé je poradce v roli <strong>poškozeného</strong>, ne obviněného. Doplňuje to sadu.</div>
+    </div>
+    <div class="card" style="background:#fff">
+      <span class="tag tag--del">Pozor</span>
+      <h3>Nové karty potřebují fotky</h3>
+      <p class="body">Každá karta v této sekci má nahoře fotku. Tři nové karty zatím žádnou nemají. Buď je vybereme z těch, které se uvolní po smazaných kartách (viz níže), nebo pošli nové.</p>
+      <p class="body" style="margin-bottom:0">Můj návrh z toho, co v <code>assets/</code> je: notebook/kancelář pro únik dat, smlouvy pro kontrolu smlouvy, silnice pro nehodu.</p>
+    </div>
+  </div>
+
+  <h2>3. Tři karty, které by zmizely</h2>
+  <p class="sub">Klient pro ně neposlal náhradu. Než je smažu, potřebuju potvrdit, že je opravdu nechce.</p>
+
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--del">Zmizí</span>
+      <h3>Banka po Vás chce peníze za nesplácenou hypotéku</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 400 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="body">Sjednal jste hypotéku, klient přestal splácet a banka realizovala zástavu se ztrátou. Vymáhá ji po Vás jako vázaném zástupci podle § 86 zákona č. 257/2016 Sb.</p>
+      <div class="diff">Jediná karta, která mluví o <strong>úvěrech a hypotékách</strong>. Bez ní zůstane sekce hlavně o pojištění, ČNB a autě.</div>
+    </div>
+    <div class="card">
+      <span class="tag tag--del">Zmizí</span>
+      <h3>Klient na Vás podá trestní oznámení</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 500 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="body">Klient po neschválené refinanci tvrdí, že jste vědomě zatajil informace v žádosti o úvěr (§ 211 TZ). Policie zahájila prověřování.</p>
+      <div class="diff">Na tuhle kartu se váže <strong>hvězdička pod sekcí</strong> o úmyslných trestných činech. Pokud karta zmizí, poznámka zůstane trochu bez kontextu.</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <span class="tag tag--del">Zmizí</span>
+      <h3>Dostanete se do správního řízení za přestupek</h3>
+      <div class="save"><small>S Lexií ušetříte</small><b>až 120 000 Kč</b><span>tolik byste bez pojištění zaplatili za advokáty</span></div>
+      <p class="body">Po dopravní nehodě nebo přestupku s Vámi obecní úřad zahájí správní řízení. Hrozí pokuta v desítkách tisíc Kč, zákaz řízení až na 2 roky a body.</p>
+      <div class="diff">Částečně ji nahradí nová karta o ztrátě řidičáku, která správní řízení zmiňuje v krytí.</div>
+    </div>
+    <div class="card"></div>
+  </div>
+
+  <h2>4. Všechny částky jdou dolů</h2>
+  <p class="sub">Tohle je největší věcná změna, kterou bych ráda potvrdila — čísla „S Lexií ušetříte" klesají skoro všude.</p>
+  <table>
+    <tr><th>Situace</th><th>Teď</th><th>Nově</th><th>Rozdíl</th></tr>
+    <tr><td>Klient Vás zažaluje</td><td>350 000 Kč</td><td>250 000 Kč</td><td class="down">−100 000</td></tr>
+    <tr><td>Kontrola z ČNB</td><td>250 000 Kč</td><td>100 000 Kč</td><td class="down">−150 000</td></tr>
+    <tr><td>Daňová kontrola / finančák</td><td>200 000 Kč</td><td>80 000 Kč</td><td class="down">−120 000</td></tr>
+    <tr><td>Vracení provizí</td><td>250 000 Kč</td><td>100 000 Kč</td><td class="down">−150 000</td></tr>
+    <tr><td>Nehoda se zraněním</td><td>500 000 Kč</td><td>300 000 Kč</td><td class="down">−200 000</td></tr>
+    <tr><td>Ztráta řidičáku</td><td>80 000 Kč</td><td>60 000 Kč</td><td class="down">−20 000</td></tr>
+    <tr><td>Uniklé osobní údaje</td><td>—</td><td>150 000 Kč</td><td>nová</td></tr>
+    <tr><td>Kontrola smlouvy</td><td>—</td><td>25 000 Kč</td><td>nová</td></tr>
+    <tr><td>Měsíce léčení po nehodě</td><td>—</td><td>500 000 Kč</td><td>nová</td></tr>
+  </table>
+  <div class="banner" style="margin-top:16px">
+    Nejvyšší číslo v sekci klesne z 500 000 Kč (třikrát) na 500 000 Kč jen jednou.
+    Nová čísla působí střízlivěji a věrohodněji, ale slabší jako argument. <strong>Je to záměr?</strong>
+  </div>
+
+  <h2>5. Drobnosti v textu, na které jsem narazila</h2>
+  <p class="sub">Neopravuju je sama — jsou to texty klienta. Stačí říct „oprav" a udělám to.</p>
+  <table>
+    <tr><th>Kde</th><th>Je napsáno</th><th>Nejspíš má být</th></tr>
+    <tr><td>Kontrola smlouvy</td><td>„Potřeb<strong>ujeme</strong> ji zkontrolovat"</td><td>„Potřeb<strong>ujete</strong> ji zkontrolovat"</td></tr>
+    <tr><td>Ztráta řidičáku</td><td>„držení telefonu za <strong>jizdy</strong>"</td><td>„za <strong>jízdy</strong>"</td></tr>
+    <tr><td>Ztráta řidičáku</td><td>„<strong>a</strong> řadě případů připsání bodů odvrátí"</td><td>„a <strong>v</strong> řadě případů"</td></tr>
+    <tr><td>Uniklé osobní údaje</td><td>„správním řízení <strong>přes</strong> Úřadem"</td><td>„<strong>před</strong> Úřadem"</td></tr>
+    <tr><td>Vracení provizí</td><td>„Vy jste <strong>přesvědčení</strong>"</td><td>„Vy jste <strong>přesvědčen</strong>"</td></tr>
+    <tr><td>Nehoda se zraněním</td><td>„nehody (…), <strong>které</strong> dojde ke zranění"</td><td>„<strong>při které</strong> dojde"</td></tr>
+    <tr><td>Klient Vás zažaluje</td><td>„bránit <strong>a zapojit a vtáhnout</strong> do hry"</td><td>jedno sloveso stačí</td></tr>
+    <tr><td>Zkrácený seznam, přestupky</td><td>„My se <strong>Váš</strong> řidičák tvrdě popereme"</td><td>„My se <strong>o Váš</strong> řidičák popereme"</td></tr>
+  </table>
+
+  <h2>6. Druhý seznam „ZKRÁCENÉ" — kam s ním?</h2>
+  <p class="sub">Klient poslal ještě 10 krátkých odstavců (ČNB, Trestní soud, Civilní soud, Spor se zákazníkem, FAÚ, ÚOOÚ, Finanční úřad, ČOI, Přestupkové řízení, Kontrola smlouvy). Na microsite pro ně dnes není místo — jsou to jiné texty než dlouhé karty výše. Vidím tři možnosti:</p>
+  <div class="q"><h3>A) Nová sekce nad „Co přesně pojištění kryje"</h3><p class="body" style="margin:0">Deset malých dlaždic s ikonou, nadpisem a dvěma větami. Funguje jako rychlý přehled „kdo si Vás může podat" a připraví čtenáře na tabulku krytí. <strong>Tohle bych doporučila.</strong></p></div>
+  <div class="q"><h3>B) Náhrada za sekci „Práce vázaného zástupce není bez rizika"</h3><p class="body" style="margin:0">Ta má dnes 4 karty a stojí hned pod hero. Šlo by ji nahradit, ale říká něco jiného — vysvětluje <em>proč</em> pojištění potřebujete, ne <em>kdo</em> Vás může popotahovat.</p></div>
+  <div class="q"><h3>C) Zkrácené verze karet</h3><p class="body" style="margin:0">Karty by ukazovaly krátký text a dlouhý příběh až po rozkliknutí. Jenže seznamy si neodpovídají — zkrácený má 10 položek, dlouhý 9 a jiná témata (chybí ČOI, FAÚ, civilní soud).</p></div>
+
+  <h2>Co od tebe potřebuju</h2>
+  <ol class="qs">
+    <li><strong>Mají opravdu zmizet ty tři karty?</strong> (hypotéka/banka, trestní oznámení klienta, správní řízení za přestupek)</li>
+    <li><strong>Jsou nižší částky záměr?</strong> Viz tabulka výše.</li>
+    <li><strong>Mám opravit ty překlepy</strong>, nebo je nechat přesně jak přišly a poslat je zpět klientovi?</li>
+    <li><strong>Kam se zkráceným seznamem</strong> — A, B, nebo C?</li>
+    <li><strong>Fotky pro tři nové karty</strong> — vybrat z assets, nebo pošleš nové?</li>
+  </ol>
+
+</div>
+</body>
+</html>
