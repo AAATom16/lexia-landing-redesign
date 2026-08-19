@@ -8118,7 +8118,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.92rem;
-  color: var(--primary);
+  color: var(--heading);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
