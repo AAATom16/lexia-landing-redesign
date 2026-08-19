@@ -278,6 +278,17 @@ function initCalcWizard() {
     });
   }
 
+  // DEEP-LINK Z LANDING PAGE — ?varianta=jednotlivec|domacnost
+  // Karty produktů v hero sekci na index.html předvolí variantu kalkulačky.
+  const variantKey = new URLSearchParams(window.location.search).get('varianta');
+  if (variantKey === 'jednotlivec' || variantKey === 'domacnost') {
+    const variantRadio = document.querySelector(`input[name="variant"][value="${variantKey}"]`);
+    if (variantRadio && !variantRadio.checked) {
+      variantRadio.checked = true;
+      variantRadio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
   // Domácnost confirm (visible only when variant = domacnost)
   function updateHouseholdConfirm() {
     const variant = document.querySelector('input[name="variant"]:checked');

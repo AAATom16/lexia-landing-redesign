@@ -34,7 +34,7 @@
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
       <li><a href="index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="sluzby.html" class="active">Služby</a></li>
+      <li><a href="sluzby.html" class="active">Ceník</a></li>
       <li><a href="pro-partnery.html">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
@@ -48,126 +48,88 @@
   </nav>
 </header>
 
-<section class="page-hero" style="padding: 28px 0 4px;">
+<section class="page-hero page-hero--cenik" style="background-image: url('assets/obrazky/Lexia-lodicky.jpeg');">
   <div class="container">
-    <h1>Vyberte si hotový balíček nebo si pojištění <span style="color: var(--primary);">sestavte sami</span></h1>
+    <h1>Vyberte si hotový balíček nebo si pojištění <span style="color: var(--accent);">sestavte sami</span></h1>
   </div>
+  <svg class="hero-inward-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 L0,12 Q960,300 1920,12 L1920,190 Z"/>
+  </svg>
 </section>
 
 <!-- BALÍČKY -->
 <section class="has-glyph" style="padding-top: 14px; padding-bottom: 48px;" data-glyph="scales">
   <div class="container">
-    <div class="pkg-grid">
+    <div class="pkg-grid pkg-grid--4">
 
-      <!-- DRIVE -->
+      <!-- ŘIDIČ -->
       <article class="pkg-card">
         <div class="pkg-head">
-          <span class="pkg-icon"><i class="icon" data-icon="car"></i></span>
+          <span class="pkg-icon"><i class="icon" data-icon="lx_ridic"></i></span>
           <div class="pkg-titles">
-            <h3 class="pkg-name">DRIVE</h3>
-            <span class="pkg-sub">Právní ochrana vozidla</span>
+            <h3 class="pkg-name">Řidič</h3>
+            <span class="pkg-sub">Právní ochrana řidiče a vozidla</span>
           </div>
         </div>
-        <div class="pkg-price"><strong>159</strong><span>Kč/měs.</span></div>
-        <div class="pkg-price-year">1 749 Kč/rok</div>
+        <div class="pkg-price"><strong>119</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">1 309 Kč/rok</div>
         <ul class="pkg-list">
           <li>Právní ochrana vozidla</li>
           <li>Právní ochrana řidiče daného vozidla</li>
           <li>Právní ochrana posádky</li>
         </ul>
-        <a class="pkg-detail" href="nabidka?produkt=drive">Kompletní rozsah <span>ZDE</span></a>
-        <a href="objednavka?produkt=drive" class="btn btn-outline pkg-cta">Sjednat online</a>
+        <a class="pkg-detail" href="nabidka?produkt=ridic">Kompletní rozsah <span>ZDE</span></a>
+        <a href="objednavka?produkt=ridic" class="btn btn-primary pkg-cta">Sjednat online</a>
       </article>
 
-      <!-- DRIVE PLUS -->
+      <!-- JEDNOTLIVEC (kalkulačka) -->
       <article class="pkg-card">
         <div class="pkg-head">
-          <span class="pkg-icon pkg-icon--plus"><i class="icon" data-icon="car"></i></span>
+          <span class="pkg-icon"><i class="icon" data-icon="lx_jednotlivec"></i></span>
           <div class="pkg-titles">
-            <h3 class="pkg-name">DRIVE PLUS</h3>
-            <span class="pkg-sub">Právní ochrana vozidla</span>
+            <h3 class="pkg-name">Jednotlivec</h3>
+            <span class="pkg-sub">Ochrana na míru pro jednotlivce</span>
           </div>
         </div>
-        <div class="pkg-price"><strong>199</strong><span>Kč/měs.</span></div>
-        <div class="pkg-price-year">2 189 Kč/rok</div>
+        <div class="pkg-price"><span class="pkg-price-from">od</span><strong>179</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">od 1 969 Kč/rok</div>
         <ul class="pkg-list">
-          <li>Právní ochrana vozidla</li>
-          <li>Právní ochrana řidiče <strong>všech vozidel</strong></li>
-          <li>Právní ochrana posádky</li>
+          <li>Základní právní ochrana</li>
+          <li>Bydlení</li>
+          <li>Pronajímaná nemovitost</li>
         </ul>
-        <a class="pkg-detail" href="nabidka?produkt=driveplus">Kompletní rozsah <span>ZDE</span></a>
-        <a href="objednavka?produkt=driveplus" class="btn btn-outline pkg-cta">Sjednat online</a>
+        <a class="pkg-detail" href="nabidka?produkt=jednotlivec">Kompletní rozsah <span>ZDE</span></a>
+        <a href="kalkulacka?varianta=jednotlivec" class="btn btn-primary pkg-cta">Spočítat cenu</a>
       </article>
 
-      <!-- HOME -->
+      <!-- DOMÁCNOST -->
       <article class="pkg-card">
         <div class="pkg-head">
-          <span class="pkg-icon"><i class="icon" data-icon="house"></i></span>
+          <span class="pkg-icon"><i class="icon" data-icon="lx_domacnost"></i></span>
           <div class="pkg-titles">
-            <h3 class="pkg-name">HOME</h3>
-            <span class="pkg-sub">Právní ochrana bydlení</span>
+            <h3 class="pkg-name">Domácnost</h3>
+            <span class="pkg-sub">Právní ochrana domácnosti</span>
           </div>
         </div>
-        <div class="pkg-price"><strong>199</strong><span>Kč/měs.</span></div>
-        <div class="pkg-price-year">2 189 Kč/rok</div>
+        <div class="pkg-price"><span class="pkg-price-from">od</span><strong>269</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">od 2 959 Kč/rok</div>
         <ul class="pkg-list">
-          <li>Právní ochrana domu</li>
-          <li>Právní ochrana bytu</li>
-          <li>Právní ochrana chaty / chalupy</li>
+          <li>Základní právní ochrana</li>
+          <li>Bydlení</li>
+          <li>Pronajímaná nemovitost</li>
         </ul>
-        <a class="pkg-detail" href="nabidka?produkt=home">Kompletní rozsah <span>ZDE</span></a>
-        <a href="objednavka?produkt=home" class="btn btn-outline pkg-cta">Sjednat online</a>
+        <a class="pkg-detail" href="nabidka?produkt=domacnost">Kompletní rozsah <span>ZDE</span></a>
+        <a href="kalkulacka?varianta=domacnost" class="btn btn-primary pkg-cta">Spočítat cenu</a>
       </article>
 
-      <!-- TRIO (bestseller) -->
-      <article class="pkg-card pkg-card--featured">
-        <span class="pkg-badge"><i class="icon" data-icon="star"></i> Bestseller</span>
-        <div class="pkg-head">
-          <span class="pkg-icon"><i class="icon" data-icon="shield"></i></span>
-          <div class="pkg-titles">
-            <h3 class="pkg-name">TRIO</h3>
-            <span class="pkg-sub">Kompletní balíček</span>
-          </div>
-        </div>
-        <div class="pkg-price"><strong>499</strong><span>Kč/měs.</span></div>
-        <div class="pkg-price-year">5 489 Kč/rok</div>
-        <ul class="pkg-list">
-          <li>Základní právní ochrana domácnosti</li>
-          <li>Právní ochrana bydlení</li>
-          <li>Právní ochrana řidičů</li>
-        </ul>
-        <a class="pkg-detail" href="nabidka?produkt=trio">Kompletní rozsah <span>ZDE</span></a>
-        <a href="objednavka?produkt=trio" class="btn btn-primary pkg-cta">Sjednat online</a>
-      </article>
-
-      <!-- GARANCE PLUS -->
-      <article class="pkg-card">
-        <div class="pkg-head">
-          <span class="pkg-icon"><i class="icon" data-icon="umbrella"></i></span>
-          <div class="pkg-titles">
-            <h3 class="pkg-name">GARANCE PLUS</h3>
-            <span class="pkg-sub">Vymáhání po pojišťovnách</span>
-          </div>
-        </div>
-        <div class="pkg-price"><strong>349</strong><span>Kč/měs.</span></div>
-        <div class="pkg-price-year">3 839 Kč/rok</div>
-        <ul class="pkg-list">
-          <li>Hlášení a likvidace pojistných událostí</li>
-          <li>Vymáhání nároků po pojišťovnách</li>
-          <li>Právní ochrana řidiče</li>
-        </ul>
-        <a class="pkg-detail" href="nabidka?produkt=garance">Kompletní rozsah <span>ZDE</span></a>
-        <a href="objednavka?produkt=garance" class="btn btn-outline pkg-cta">Sjednat online</a>
-      </article>
-
-      <!-- INDIVIDUAL (kalkulačka) -->
+      <!-- INDIVIDUAL (na míru) -->
       <article class="pkg-card pkg-card--individual">
         <span class="pkg-badge pkg-badge--calc"><i class="icon" data-icon="settings"></i> Na míru</span>
         <div class="pkg-head">
-          <span class="pkg-icon"><i class="icon" data-icon="users"></i></span>
+          <span class="pkg-icon"><i class="icon" data-icon="lx_individual"></i></span>
           <div class="pkg-titles">
             <h3 class="pkg-name">INDIVIDUAL</h3>
-            <span class="pkg-sub">Volba jednotlivec / domácnost</span>
+            <span class="pkg-sub">Pojištění na míru</span>
           </div>
         </div>
         <div class="pkg-price"><span class="pkg-price-from">od</span><strong>179</strong><span>Kč/měs.</span></div>
@@ -184,12 +146,131 @@
     </div>
 
     <p class="pkg-note">Roční pojistné = 11× měsíční pojistné, 12. měsíc máte zdarma. Všechny ceny jsou konečné, bez aktivačních příplatků.</p>
+
+    <div class="section-header" style="margin-top: 52px;">
+      <h2>Připravujeme</h2>
+      <p>Na těchto balíčcích pracujeme. Jakmile je spustíme, půjdou sjednat online stejně jako ty výše.</p>
+    </div>
+
+    <div class="pkg-grid pkg-grid--5">
+
+      <!-- DRIVE -->
+      <article class="pkg-card pkg-card--soon">
+        <span class="pkg-badge pkg-badge--soon"><i class="icon" data-icon="clock"></i> Připravujeme</span>
+        <div class="pkg-head">
+          <span class="pkg-icon"><i class="icon" data-icon="lx_ridic"></i></span>
+          <div class="pkg-titles">
+            <h3 class="pkg-name">DRIVE</h3>
+            <span class="pkg-sub">Právní ochrana vozidla</span>
+          </div>
+        </div>
+        <div class="pkg-price"><strong>159</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">1 749 Kč/rok</div>
+        <ul class="pkg-list">
+          <li>Právní ochrana vozidla</li>
+          <li>Právní ochrana řidiče daného vozidla</li>
+          <li>Právní ochrana posádky</li>
+        </ul>
+        <a class="pkg-detail" href="nabidka?produkt=drive">Kompletní rozsah <span>ZDE</span></a>
+        <span class="btn btn-outline pkg-cta is-soon">Připravujeme</span>
+      </article>
+
+      <!-- DRIVE PLUS -->
+      <article class="pkg-card pkg-card--soon">
+        <span class="pkg-badge pkg-badge--soon"><i class="icon" data-icon="clock"></i> Připravujeme</span>
+        <div class="pkg-head">
+          <span class="pkg-icon pkg-icon--plus"><i class="icon" data-icon="lx_ridic"></i></span>
+          <div class="pkg-titles">
+            <h3 class="pkg-name">DRIVE PLUS</h3>
+            <span class="pkg-sub">Právní ochrana vozidla</span>
+          </div>
+        </div>
+        <div class="pkg-price"><strong>199</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">2 189 Kč/rok</div>
+        <ul class="pkg-list">
+          <li>Právní ochrana vozidla</li>
+          <li>Právní ochrana řidiče <strong>všech vozidel</strong></li>
+          <li>Právní ochrana posádky</li>
+        </ul>
+        <a class="pkg-detail" href="nabidka?produkt=driveplus">Kompletní rozsah <span>ZDE</span></a>
+        <span class="btn btn-outline pkg-cta is-soon">Připravujeme</span>
+      </article>
+
+      <!-- HOME -->
+      <article class="pkg-card pkg-card--soon">
+        <span class="pkg-badge pkg-badge--soon"><i class="icon" data-icon="clock"></i> Připravujeme</span>
+        <div class="pkg-head">
+          <span class="pkg-icon"><i class="icon" data-icon="lx_domacnost"></i></span>
+          <div class="pkg-titles">
+            <h3 class="pkg-name">HOME</h3>
+            <span class="pkg-sub">Právní ochrana bydlení</span>
+          </div>
+        </div>
+        <div class="pkg-price"><strong>199</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">2 189 Kč/rok</div>
+        <ul class="pkg-list">
+          <li>Právní ochrana domu</li>
+          <li>Právní ochrana bytu</li>
+          <li>Právní ochrana chaty / chalupy</li>
+        </ul>
+        <a class="pkg-detail" href="nabidka?produkt=home">Kompletní rozsah <span>ZDE</span></a>
+        <span class="btn btn-outline pkg-cta is-soon">Připravujeme</span>
+      </article>
+
+      <!-- TRIO -->
+      <article class="pkg-card pkg-card--soon">
+        <span class="pkg-badge pkg-badge--soon"><i class="icon" data-icon="clock"></i> Připravujeme</span>
+        <div class="pkg-head">
+          <span class="pkg-icon"><i class="icon" data-icon="lx_balicek"></i></span>
+          <div class="pkg-titles">
+            <h3 class="pkg-name">TRIO</h3>
+            <span class="pkg-sub">Kompletní balíček</span>
+          </div>
+        </div>
+        <div class="pkg-price"><strong>499</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">5 489 Kč/rok</div>
+        <ul class="pkg-list">
+          <li>Základní právní ochrana domácnosti</li>
+          <li>Právní ochrana bydlení</li>
+          <li>Právní ochrana řidičů</li>
+        </ul>
+        <a class="pkg-detail" href="nabidka?produkt=trio">Kompletní rozsah <span>ZDE</span></a>
+        <span class="btn btn-outline pkg-cta is-soon">Připravujeme</span>
+      </article>
+
+      <!-- GARANCE PLUS -->
+      <article class="pkg-card pkg-card--soon">
+        <span class="pkg-badge pkg-badge--soon"><i class="icon" data-icon="clock"></i> Připravujeme</span>
+        <div class="pkg-head">
+          <span class="pkg-icon"><i class="icon" data-icon="lx_garance"></i></span>
+          <div class="pkg-titles">
+            <h3 class="pkg-name">GARANCE PLUS</h3>
+            <span class="pkg-sub">Vymáhání po pojišťovnách</span>
+          </div>
+        </div>
+        <div class="pkg-price"><strong>349</strong><span>Kč/měs.</span></div>
+        <div class="pkg-price-year">3 839 Kč/rok</div>
+        <ul class="pkg-list">
+          <li>Hlášení a likvidace pojistných událostí</li>
+          <li>Vymáhání nároků po pojišťovnách</li>
+          <li>Právní ochrana řidiče</li>
+        </ul>
+        <a class="pkg-detail" href="nabidka?produkt=garance">Kompletní rozsah <span>ZDE</span></a>
+        <span class="btn btn-outline pkg-cta is-soon">Připravujeme</span>
+      </article>
+
+    </div>
   </div>
 </section>
 
 <!-- CO LEXIA HRADÍ -->
 <section class="bg-section has-glyph has-glyph--left" data-glyph="briefcase">
   <div class="container">
+    <div class="includes-with-photo">
+      <figure class="includes-photo">
+        <img src="assets/lx-jednotlivci-uvod.jpg" alt="Žena s hrnkem kávy doma v kuchyni" loading="lazy">
+      </figure>
+      <div class="includes-text">
     <div class="section-header">
       <h2>Co Lexia hradí v každém balíčku</h2>
       <p>Ať si vyberete kterýkoli balíček, tyto náklady za vás Lexia vždy uhradí.</p>
@@ -202,6 +283,8 @@
       <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> Náklady protistrany v případě prohry</li>
       <li><span class="includes-check"><i class="icon" data-icon="check"></i></span> ALL-RISK garance s minimem výluk</li>
     </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -216,56 +299,44 @@
         <thead>
           <tr>
             <th style="min-width: 180px;">Funkce</th>
-            <th>DRIVE</th>
-            <th>DRIVE PLUS</th>
-            <th>HOME</th>
-            <th class="is-featured">TRIO</th>
-            <th>GARANCE PLUS</th>
-            <th>INDIVIDUAL</th>
+            <th>Řidič</th>
+            <th>Jednotlivec</th>
+            <th class="is-featured">Domácnost</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Měsíční pojistné</strong></td>
-            <td>159 Kč</td><td>199 Kč</td><td>199 Kč</td><td class="is-featured">499 Kč</td><td>349 Kč</td><td>od 179 Kč</td>
+            <td>119 Kč</td><td>od 179 Kč</td><td class="is-featured">od 269 Kč</td>
           </tr>
           <tr>
             <td><strong>Roční pojistné</strong></td>
-            <td>1 749 Kč</td><td>2 189 Kč</td><td>2 189 Kč</td><td class="is-featured">5 489 Kč</td><td>3 839 Kč</td><td>od 1 969 Kč</td>
+            <td>1 309 Kč</td><td>od 1 969 Kč</td><td class="is-featured">od 2 959 Kč</td>
           </tr>
           <tr>
             <td><strong>Rozsah krytí</strong></td>
             <td>Vozidlo, řidič daného vozidla, posádka</td>
-            <td>Vozidlo, řidič všech vozidel, posádka</td>
-            <td>Dům, byt, chata / chalupa</td>
-            <td class="is-featured">Domácnost, bydlení i řidiči v jednom</td>
-            <td>Hlášení a likvidace PU, vymáhání po pojišťovnách, řidič</td>
             <td>Vše dle vlastní volby pilířů</td>
+            <td class="is-featured">Vše dle vlastní volby pilířů, pro všechny členy domácnosti</td>
           </tr>
           <tr>
             <td><strong>Typické spory</strong></td>
             <td>Prodejce, servis, pojišťovny, přestupky</td>
-            <td>Prodejce, servis, pojišťovny, přestupky</td>
-            <td>Pojišťovny, sousedé, řemeslníci, úřady</td>
-            <td class="is-featured">Trestní a přestupkové řízení, reklamace, sousedé</td>
-            <td>Pojišťovny, banky, hypotéky, úvěrové společnosti</td>
             <td>Nejčastější spory napříč životem</td>
+            <td class="is-featured">Nejčastější spory napříč životem celé domácnosti</td>
           </tr>
-          <tr class="compare-group"><td colspan="7">Lexia v ceně vždy hradí</td></tr>
-          <tr><td>Právní poradu a asistenci</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
-          <tr><td>Advokáty</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
-          <tr><td>Soudní poplatky</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
-          <tr><td>Soudní znalce a tlumočníky</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
-          <tr><td>Náklady protistrany v případě prohry</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
-          <tr><td>ALL-RISK garance</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr class="compare-group"><td colspan="4">Lexia v ceně vždy hradí</td></tr>
+          <tr><td>Právní poradu a asistenci</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr><td>Advokáty</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr><td>Soudní poplatky</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr><td>Soudní znalce a tlumočníky</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr><td>Náklady protistrany v případě prohry</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
+          <tr><td>ALL-RISK garance</td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc"><i class="icon icon-sm" data-icon="check"></i></td><td class="tc is-featured"><i class="icon icon-sm" data-icon="check"></i></td></tr>
           <tr class="compare-cta">
             <td></td>
-            <td><a href="objednavka?produkt=drive" class="btn btn-outline btn-sm">Sjednat</a></td>
-            <td><a href="objednavka?produkt=driveplus" class="btn btn-outline btn-sm">Sjednat</a></td>
-            <td><a href="objednavka?produkt=home" class="btn btn-outline btn-sm">Sjednat</a></td>
-            <td class="is-featured"><a href="objednavka?produkt=trio" class="btn btn-primary btn-sm">Sjednat</a></td>
-            <td><a href="objednavka?produkt=garance" class="btn btn-outline btn-sm">Sjednat</a></td>
-            <td><a href="kalkulacka.html" class="btn btn-primary btn-sm">Spočítat</a></td>
+            <td><a href="objednavka?produkt=ridic" class="btn btn-primary btn-sm">Sjednat</a></td>
+            <td><a href="kalkulacka?varianta=jednotlivec" class="btn btn-primary btn-sm">Spočítat</a></td>
+            <td class="is-featured"><a href="kalkulacka?varianta=domacnost" class="btn btn-primary btn-sm">Spočítat</a></td>
           </tr>
         </tbody>
       </table>

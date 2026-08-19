@@ -1086,7 +1086,7 @@ i.icon.hero-stat-icon {
   margin: 0;
 }
 .hero-card--products .hero-product-name { flex: 1 1 auto; white-space: nowrap; }
-.hero-card--products .hero-product-sub { display: block; font-size: 0.8rem; font-weight: 600; color: var(--accent); margin: 3px 0 0; }
+.hero-card--products .hero-product-sub { display: block; font-size: 0.8rem; font-weight: 600; line-height: 1.25; color: var(--accent); margin: 1px 0 0; }
 .hero-card--products .hero-product--featured .hero-product-sub { color: #ffd66b; }
 .hero-card--products .hero-product-desc { padding-left: 0; margin: 1px 0 0; line-height: 1.42; }
 
@@ -1227,7 +1227,7 @@ i.icon.hero-stat-icon {
   background: var(--primary-light);
   color: var(--primary);
 }
-.hero-product-icon .icon { width: 17px; height: 17px; }
+.hero-product-icon .icon { width: 21px; height: 21px; }
 .hero-product-name {
   flex: 1;
   min-width: 0;
@@ -2564,12 +2564,17 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 /* Varianty mřížky — 3 aktuální balíčky nahoře, 5 připravovaných níže.
    Musí být AŽ ZA výchozími media query výše, jinak je přebijí. */
 .pkg-grid--3 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
+.pkg-grid--4 { grid-template-columns: repeat(4, 1fr); width: 100%; max-width: 1180px; left: auto; transform: none; }
 .pkg-grid--5 { grid-template-columns: repeat(5, 1fr); }
 @media (max-width: 1240px) {
   .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
 }
+/* Čtyři karty se lámou rovnou na 2×2 — 3+1 nechává osamocenou kartu v druhé řadě. */
+@media (max-width: 900px) {
+  .pkg-grid--4 { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
+}
 @media (max-width: 760px) {
-  .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
+  .pkg-grid--3, .pkg-grid--4, .pkg-grid--5 { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
 }
 /* Mobilní úpravy balíčkových karet jsou níže, za základními pravidly .pkg-*
    (kvůli pořadí v souboru / specificitě). Viz "PACKAGE CARDS — MOBILE". */
@@ -2634,7 +2639,7 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   background: var(--bg-light);
   color: var(--primary);
 }
-.pkg-icon .icon { width: 20px; height: 20px; }
+.pkg-icon .icon { width: 24px; height: 24px; }
 .pkg-card--featured .pkg-icon { background: var(--primary); color: var(--white); }
 .pkg-card--individual .pkg-icon { background: var(--accent); color: var(--white); }
 .pkg-titles { min-width: 0; }
@@ -6265,6 +6270,27 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 }
 .ds.is-open .ds-pop { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
+/* Když se seznam nevejde, musí být na první pohled vidět, že jde scrollovat:
+   1) max-height končí uprostřed položky → poslední je vidět jen napůl,
+   2) tenký, stále viditelný posuvník v brand barvě. */
+.ds-pop {
+  /* Výška končí uprostřed položky → je vidět, že seznam pokračuje. */
+  max-height: 244px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  /* Jemné zesvětlení u spodní hrany jako druhý signál „scrolluj dál". */
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 26px), rgba(0, 0, 0, 0.15) 100%);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 26px), rgba(0, 0, 0, 0.15) 100%);
+}
+.ds-pop::-webkit-scrollbar { width: 10px; }
+.ds-pop::-webkit-scrollbar-track { background: transparent; }
+.ds-pop::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid var(--white);
+}
+.ds-pop::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
+
 .ds-group-label {
   padding: 10px 12px 4px;
   font-size: 0.72rem;
@@ -6288,6 +6314,9 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   transition: background 0.12s var(--ease), color 0.12s var(--ease);
 }
 .ds-option--grouped { padding-left: 22px; }
+/* Prázdná první položka (placeholder nativního selectu) se v seznamu nezobrazuje
+   — jinak je nahoře prázdný modrý řádek. */
+.ds-option:empty { display: none; }
 .ds-option:hover:not(:disabled),
 .ds-option.is-active:not(:disabled) { background: var(--bg-light); color: var(--primary); }
 .ds-option.is-selected,
@@ -8125,7 +8154,11 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   z-index: 0;
 }
 .page-hero--fp .container { position: relative; z-index: 2; }
-.page-hero--fp .onas-hero-card { max-width: 920px; }
+/* Kartu zúžíme, aby vedle ní zbylo místo na postavu poradce vpravo ve
+   fotce. Na širokých displejích fotka vyplňuje šířku a vodorovná pozice
+   nemá vliv; na úzkých se ořezává do stran, proto ji držíme u postavy. */
+.page-hero--fp { background-position: 68% center; }
+.page-hero--fp .onas-hero-card { max-width: 900px; }
 .fp-hero-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 270px;
@@ -8260,4 +8293,311 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 @media (max-width: 560px) {
   /* Dvousloupcové řádky formulářů (i s inline stylem) padají pod sebe */
   .form-row { grid-template-columns: 1fr !important; }
+}
+
+/* ============================================
+   KONTAKT (kontakt.html) — hero s fotkou,
+   cesty a formulář s kontaktními údaji
+   ============================================ */
+
+/* Hero: fotka přes celou šířku s tmavým přechodem, na ní nadpis a pod ním
+   tři karty „vyberte si situaci". Spodní padding = výška bílé vlny, aby karty
+   zůstaly na fotce a nepřetékaly do bílé plochy pod vlnou. */
+.page-hero--kontakt {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: left;
+  padding: 68px 0 200px;
+  min-height: 0;
+  display: block;
+}
+.page-hero--kontakt::after { display: none; }
+/* Ztmavení fotky, aby byl bílý nadpis čitelný i na světlých místech snímku. */
+.page-hero--kontakt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 26, 77, 0.72) 0%, rgba(0, 26, 77, 0.52) 55%, rgba(0, 26, 77, 0.34) 100%);
+  -webkit-mask-image: none;
+  mask-image: none;
+  pointer-events: none;
+}
+.page-hero--kontakt > .container { position: relative; z-index: 2; width: 100%; }
+
+.kontakt-hero-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 36px;
+}
+.kontakt-hero-head h1 {
+  margin: 0 0 12px;
+  color: var(--white);
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  line-height: 1.12;
+  text-shadow: 0 4px 24px rgba(0, 20, 60, 0.4);
+}
+.kontakt-hero-head p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.05rem;
+  text-shadow: 0 2px 14px rgba(0, 20, 60, 0.45);
+}
+
+/* Tři cesty vedle sebe pod nadpisem */
+.kontakt-hero-paths {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.kontakt-path {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 24px 24px;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 14px 34px rgba(20, 45, 80, 0.16);
+  text-decoration: none;
+  transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+}
+.kontakt-path:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 46px rgba(20, 45, 80, 0.24);
+}
+.kontakt-path-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+/* Ikony jsou originální piktogramy z brand manuálu (tenká modrá linka),
+   proto místo plné výplně jen jemný kroužek — kresba musí zůstat modrá. */
+.kontakt-path-ic {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  border: 1.5px solid rgba(0, 69, 191, 0.28);
+  transition: background 0.22s var(--ease), border-color 0.22s var(--ease);
+}
+.kontakt-path-ic img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.kontakt-path:hover .kontakt-path-ic { background: var(--bg-light); border-color: var(--primary); }
+.kontakt-path strong {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--heading);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+.kontakt-path-sub {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+/* Tlačítko uvnitř karty — vizuálně tlačítko, technicky součást odkazu. */
+.kontakt-path-btn {
+  /* margin-top: auto → tlačítka všech tří karet drží stejnou spodní linku,
+     i když je popis různě dlouhý. */
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.22s var(--ease);
+}
+.kontakt-path-btn .icon { width: 16px; height: 16px; }
+.kontakt-path:hover .kontakt-path-btn { background: var(--primary); color: var(--white); }
+.kontakt-path-btn--solid { background: var(--primary); color: var(--white); }
+.kontakt-path:hover .kontakt-path-btn--solid { background: var(--primary-dark); border-color: var(--primary-dark); }
+/* Naléhavá situace = jediná červená karta, aby byla na první pohled jiná. */
+.kontakt-path--urgent strong { color: var(--danger); }
+.kontakt-path-btn--danger { border-color: var(--danger); color: var(--danger); }
+.kontakt-path--urgent:hover .kontakt-path-btn--danger { background: var(--danger); border-color: var(--danger); color: var(--white); }
+
+/* Formulář + kontaktní údaje vedle sebe */
+.kontakt-form-section { padding: 56px 0 72px; }
+/* Nadpis sekce zarovnaný vlevo — drží stejnou levou hranu jako formulář pod ním. */
+.kontakt-form-section .section-header--left { max-width: 1120px; margin: 0 auto 40px; }
+.kontakt-form-section .section-header--left p { max-width: 60ch; }
+.kontakt-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 28px;
+  /* stretch → oba sloupce mají stejnou výšku, karta sídla nepřečnívá pod formulář */
+  align-items: stretch;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.kontakt-grid .contact-form-card { padding: 34px; }
+.kontakt-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+/* Pravý sloupec je doplněk k formuláři → menší dlaždice, aby hlavní pozornost
+   zůstala na formuláři vlevo. */
+.kontakt-aside .contact-option { padding: 14px 18px; gap: 14px; }
+.kontakt-aside .contact-option-icon { width: 40px; height: 40px; }
+.kontakt-aside .contact-option-icon .icon { width: 18px; height: 18px; }
+.kontakt-aside .contact-option-label { font-size: 0.66rem; }
+.kontakt-aside .contact-option-info strong { font-size: 1rem; }
+.kontakt-aside .contact-option-sub { font-size: 0.78rem; }
+
+/* Karta sídla s fotkou budovy — obrázek rozbíjí sloupec samých textů. */
+.kontakt-place {
+  display: flex;
+  flex-direction: column;
+  /* Karta sídla dorovná zbytek výšky sloupce — fotka se natáhne nebo zkrátí,
+     aby spodní hrana seděla s formulářem vlevo. */
+  flex: 1 1 auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+.kontakt-place-body { padding: 22px 24px 24px; }
+.kontakt-place-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.kontakt-place-label .icon { width: 15px; height: 15px; }
+.kontakt-place-body strong {
+  display: block;
+  color: var(--heading);
+  font-size: 1.02rem;
+  margin-bottom: 6px;
+}
+.kontakt-place-body p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.kontakt-place-meta {
+  margin-top: 12px !important;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem !important;
+  color: var(--text-light) !important;
+}
+
+@media (max-width: 900px) {
+  .kontakt-hero-paths { grid-template-columns: 1fr; gap: 14px; max-width: 620px; }
+  .page-hero--kontakt { padding: 44px 0 180px; }
+}
+@media (max-width: 960px) {
+  .kontakt-grid { grid-template-columns: 1fr; gap: 24px; }
+  .kontakt-place { flex: none; }
+}
+@media (max-width: 600px) {
+  .page-hero--kontakt { padding: 34px 0 150px; }
+  .kontakt-hero-head { margin-bottom: 26px; }
+  .kontakt-hero-head p { font-size: 0.95rem; }
+  .kontakt-path { padding: 18px 18px 20px; }
+  .kontakt-path-btn { width: 100%; justify-content: center; }
+  .kontakt-form-section { padding: 40px 0 56px; }
+  .kontakt-grid .contact-form-card { padding: 24px 20px; }
+}
+
+/* ============= CENÍK — FOTKY =============
+   Stejné řešení jako na stránce Kontakt: fotka v hlavičce s tmavým přechodem,
+   aby byl bílý nadpis čitelný, a fotka vedle výčtu „Co Lexia hradí". */
+.page-hero--cenik {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 56px 0 150px;
+  min-height: 0;
+  display: block;
+}
+.page-hero--cenik::after { display: none; }
+.page-hero--cenik::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 26, 77, 0.76) 0%, rgba(0, 26, 77, 0.58) 55%, rgba(0, 26, 77, 0.42) 100%);
+  -webkit-mask-image: none;
+  mask-image: none;
+  pointer-events: none;
+}
+.page-hero--cenik > .container { position: relative; z-index: 2; width: 100%; }
+.page-hero--cenik h1 {
+  color: var(--white);
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  text-shadow: 0 4px 24px rgba(0, 20, 60, 0.45);
+}
+
+/* Fotka vedle výčtu „Co Lexia hradí v každém balíčku" */
+.includes-with-photo {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.includes-photo {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.38);
+}
+.includes-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.includes-with-photo .section-header { text-align: left; margin-bottom: 22px; }
+.includes-with-photo .includes-grid {
+  grid-template-columns: 1fr;
+  justify-content: start;
+  gap: 12px;
+  margin: 0;
+  max-width: none;
+}
+@media (max-width: 880px) {
+  .includes-with-photo { grid-template-columns: 1fr; gap: 26px; }
+  .includes-with-photo .section-header { text-align: center; }
+}
+@media (max-width: 620px) {
+  /* Na mobilu je oblouk mělčí — nadpis musí zůstat nad ním, ne v jeho výřezu. */
+  .page-hero--cenik { padding: 34px 0 140px; }
+  .page-hero--cenik h1 { font-size: 1.55rem; line-height: 1.2; padding: 0 4px; }
 }

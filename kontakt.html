@@ -34,7 +34,7 @@
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
       <li><a href="index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="sluzby.html">Ceník</a></li>
       <li><a href="pro-partnery.html">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li><a href="kontakt.html" class="active">Kontakt</a></li>
@@ -48,55 +48,105 @@
   </nav>
 </header>
 
-<!-- CONTACT HERO: 3 options + form side-by-side -->
-<section class="contact-hero">
+<!-- HERO: fotka, nadpis a tři cesty pod ním -->
+<section class="page-hero page-hero--kontakt" style="background-image: url('assets/obrazky/Lexia-kontakt-hero.jpg');">
   <div class="container">
-    <div class="contact-hero-head">
-      <h1>Jak vám můžeme <span style="color: var(--primary);">pomoct?</span></h1>
-      <p class="hero-lead">Vyberte si situaci, která se vás týká. Reagujeme rychle.</p>
+    <div class="kontakt-hero-head">
+      <h1>Jak vám můžeme pomoct?</h1>
+      <p>Vyberte si situaci, která se vás týká. Reagujeme rychle.</p>
     </div>
 
-    <!-- THREE PATHS: urgent · nahlásit případ · dotaz -->
-    <div class="contact-split contact-split--three">
-      <a href="tel:+420465465465" class="contact-split-card contact-split-card--urgent">
-        <div class="split-icon"><i class="icon" data-icon="emergency"></i></div>
-        <div class="split-content">
-          <h3>Mám naléhavou situaci</h3>
-          <p>Dopravní nehoda, zadržení, exekuce, hrozící žaloba, okamžitá pomoc právníka.</p>
-          <div class="split-action">
-            <strong><i class="icon" data-icon="phone"></i> +420 465 465 465</strong>
-          </div>
-        </div>
+    <!-- TŘI CESTY: naléhavá situace · nahlásit případ · dotaz -->
+    <div class="kontakt-hero-paths">
+      <a href="tel:+420465465465" class="kontakt-path kontakt-path--urgent">
+        <span class="kontakt-path-head">
+          <span class="kontakt-path-ic"><img src="assets/obrazky/lx-ikona-vykricnik.png" alt="" loading="lazy"></span>
+          <strong>Mám naléhavou situaci</strong>
+        </span>
+        <span class="kontakt-path-sub">Dopravní nehoda, zadržení, exekuce, hrozící žaloba — právník hned, nonstop.</span>
+        <span class="kontakt-path-btn kontakt-path-btn--danger"><i class="icon" data-icon="phone"></i> +420 465 465 465</span>
       </a>
-      <a href="klient.html" class="contact-split-card contact-split-card--report">
-        <div class="split-icon"><i class="icon" data-icon="clipboard"></i></div>
-        <div class="split-content">
-          <h3>Nahlásit případ</h3>
-          <p>Mám pojištění a chci založit nový případ nebo zkontrolovat průběh stávajícího.</p>
-          <div class="split-action">
-            <strong>Přejít do klientské zóny</strong>
-          </div>
-        </div>
+
+      <a href="klient.html" class="kontakt-path">
+        <span class="kontakt-path-head">
+          <span class="kontakt-path-ic"><img src="assets/obrazky/lx-ikona-telefon.png" alt="" loading="lazy"></span>
+          <strong>Nahlásit případ</strong>
+        </span>
+        <span class="kontakt-path-sub">Mám pojištění a chci založit nový případ nebo sledovat průběh stávajícího.</span>
+        <span class="kontakt-path-btn kontakt-path-btn--solid">Přejít do klientské zóny</span>
       </a>
-      <a href="#contact-form" class="contact-split-card contact-split-card--ask">
-        <div class="split-icon"><i class="icon" data-icon="chat"></i></div>
-        <div class="split-content">
-          <h3>Chci se nezávazně zeptat</h3>
-          <p>Mám dotaz na pojištění, potřebuji poradit s výběrem nebo cenovou nabídkou.</p>
-          <div class="split-action">
-            <strong>Vyplnit formulář</strong>
-          </div>
-        </div>
+
+      <a href="#napiste-nam" class="kontakt-path">
+        <span class="kontakt-path-head">
+          <span class="kontakt-path-ic"><img src="assets/obrazky/lx-ikona-bubliny.png" alt="" loading="lazy"></span>
+          <strong>Chci se nezávazně zeptat</strong>
+        </span>
+        <span class="kontakt-path-sub">Poradíme s výběrem pojištění i s cenovou nabídkou. Nezávazně a zdarma.</span>
+        <span class="kontakt-path-btn">Vyplnit formulář</span>
       </a>
     </div>
+  </div>
+  <svg class="hero-inward-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,190 L0,12 Q960,300 1920,12 L1920,190 Z"/>
+  </svg>
+</section>
 
-    <div class="contact-divider" id="contact-form">
-      <span>nebo nás kontaktujte jinak</span>
+<!-- FORMULÁŘ + KONTAKTNÍ ÚDAJE -->
+<section class="bg-section kontakt-form-section" id="napiste-nam">
+  <div class="container">
+    <div class="section-header section-header--left">
+      <h2>Napište nám</h2>
+      <p>Vyplňte formulář a do 24 hodin se vám ozveme zpět. Nezávazně a zdarma.</p>
     </div>
 
-    <div class="contact-hero-grid">
-      <!-- LEFT: 3 contact options stacked -->
-      <div class="contact-options">
+    <div class="kontakt-grid">
+      <!-- FORMULÁŘ -->
+      <div class="contact-form-card" id="contact-form">
+        <form class="lead-form-card" data-demo>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="text" class="form-input" name="firstname" placeholder=" " required>
+              <label>Jméno</label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-input" name="lastname" placeholder=" " required>
+              <label>Příjmení</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <input type="tel" class="form-input" name="phone" placeholder=" " required>
+              <label>Telefonní číslo</label>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-input" name="email" placeholder=" " required>
+              <label>E-mail</label>
+            </div>
+          </div>
+          <div class="form-group form-group--select">
+            <label>Mám zájem o pojištění pro</label>
+            <select class="form-select" name="topic">
+              <option value=""></option>
+              <option>Sebe (jednotlivec)</option>
+              <option>Rodinu</option>
+              <option>Firmu nebo OSVČ</option>
+              <option>Řidičské pojištění</option>
+              <option>Pojištění zastupitele</option>
+              <option>Zatím nevím, potřebuji poradit</option>
+              <option>Jiné</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea class="form-textarea" name="message" rows="3" placeholder=" "></textarea>
+            <label>Vaše situace nebo dotaz</label>
+          </div>
+          <p class="lead-form-consent">Informace ke zpracování osobních údajů najdete <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">ZDE</a></p>
+          <button type="submit" class="btn btn-primary btn-lg">Odeslat zprávu</button>
+        </form>
+      </div>
+
+      <!-- KONTAKTY + SÍDLO -->
+      <aside class="kontakt-aside">
         <a href="tel:+420465465465" class="contact-option">
           <div class="contact-option-icon"><i class="icon" data-icon="phone"></i></div>
           <div class="contact-option-info">
@@ -121,60 +171,16 @@
             <span class="contact-option-sub">Po–Pá 8:00–18:00</span>
           </div>
         </a>
-        <div class="card">
-          <h4 style="margin-bottom: 12px;"><i class="icon" data-icon="location"></i> Sídlo společnosti</h4>
-          <p style="margin-bottom: 4px;"><strong>LEXIA Legal Protection a.s.</strong></p>
-          <p style="margin-bottom: 4px;">Želetavská 1525/1</p>
-          <p style="margin-bottom: 4px;">140 00 Praha 4</p>
-          <p style="margin-top: 12px; font-size: 0.9rem;">IČO: 22189432 • Datová schránka: gdzpx9r</p>
-        </div>
-      </div>
 
-      <!-- RIGHT: contact form -->
-      <div class="contact-form-card">
-        <div style="margin-bottom: 14px;">
-          <h3 style="margin: 0 0 4px; color: var(--primary); font-size: 1.6rem;">Nezávazně se zeptat</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Vyplňte formulář a do 24 hodin se vám ozveme zpět.</p>
+        <div class="kontakt-place">
+          <div class="kontakt-place-body">
+            <span class="kontakt-place-label"><i class="icon" data-icon="location"></i> Sídlo společnosti</span>
+            <strong>LEXIA Legal Protection a.s.</strong>
+            <p>Želetavská 1525/1<br>140 00 Praha 4 — budova Filadelfie</p>
+            <p class="kontakt-place-meta">IČO: 22189432 • Datová schránka: gdzpx9r</p>
+          </div>
         </div>
-        <form class="lead-form-card" data-demo>
-          <div class="form-row">
-            <div class="form-group">
-              <input type="text" class="form-input" name="firstname" placeholder=" " required>
-              <label>Jméno</label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-input" name="lastname" placeholder=" " required>
-              <label>Příjmení</label>
-            </div>
-          </div>
-          <div class="form-group form-group--half">
-            <input type="tel" class="form-input" name="phone" placeholder=" " required>
-            <label>Telefonní číslo</label>
-          </div>
-          <div class="form-group">
-            <input type="email" class="form-input" name="email" placeholder=" " required>
-            <label>E-mail</label>
-          </div>
-          <div class="form-group form-group--select">
-            <label>Mám zájem o pojištění pro</label>
-            <select class="form-select" name="topic">
-              <option value=""></option>
-              <option>Sebe (jednotlivec)</option>
-              <option>Rodinu</option>
-              <option>Firmu nebo OSVČ</option>
-              <option>Řidičské pojištění</option>
-              <option>Pojištění zastupitele</option>
-              <option>Zatím nevím, potřebuji poradit</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <textarea class="form-textarea" name="message" rows="2" placeholder=" "></textarea>
-            <label>Vaše situace nebo dotaz</label>
-          </div>
-          <p class="lead-form-consent">Informace ke zpracování osobních údajů najdete <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">ZDE</a></p>
-          <button type="submit" class="btn btn-primary">Odeslat</button>
-        </form>
-      </div>
+      </aside>
     </div>
   </div>
 </section>

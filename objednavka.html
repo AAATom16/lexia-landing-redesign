@@ -18,7 +18,7 @@
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
       <li><a href="index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="sluzby.html">Služby</a></li>
+      <li><a href="sluzby.html">Ceník</a></li>
       <li><a href="pro-partnery.html">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li class="nav-mobile-only"><a href="klient.html">Přihlásit se do klientské zóny</a></li>
@@ -360,26 +360,30 @@
   // Produkty s PEVNOU cenou (musí odpovídat cenám v hero sekci na index.html).
   // U DRIVE je volitelné rozšíření na DRIVE PLUS (řidič chráněn ve všech vozidlech).
   const FIXED_PRODUCTS = {
+    ridic: {
+      name: 'Řidič', subtitle: 'Právní ochrana řidiče a vozidla',
+      desc: 'Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.', icon: 'lx_ridic', price: 119, priceYear: 1309,
+    },
     drive: {
       name: 'DRIVE', subtitle: 'Právní ochrana vozidla',
-      desc: 'Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.', icon: 'car', price: 159, priceYear: 1749,
+      desc: 'Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.', icon: 'lx_ridic', price: 159, priceYear: 1749,
       plus: { name: 'DRIVE PLUS', desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', price: 199, priceYear: 2189 },
     },
     driveplus: {
       name: 'DRIVE PLUS', subtitle: 'Právní ochrana vozidla',
-      desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', icon: 'car', price: 199, priceYear: 2189,
+      desc: 'Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.', icon: 'lx_ridic', price: 199, priceYear: 2189,
     },
     home: {
       name: 'HOME', subtitle: 'Právní ochrana bydlení',
-      desc: 'Dům, byt i chata/chalupa. Spory se sousedy, řemeslníky i úřady.', icon: 'house', price: 199, priceYear: 2189,
+      desc: 'Dům, byt i chata/chalupa. Spory se sousedy, řemeslníky i úřady.', icon: 'lx_domacnost', price: 199, priceYear: 2189,
     },
     garance: {
       name: 'GARANCE PLUS', subtitle: 'Vymáhání nároků po pojišťovnách',
-      desc: 'Hlášení a likvidace pojistných událostí, vymáhání nároků po pojišťovnách i právní ochrana řidiče.', icon: 'umbrella', price: 349, priceYear: 3839,
+      desc: 'Hlášení a likvidace pojistných událostí, vymáhání nároků po pojišťovnách i právní ochrana řidiče.', icon: 'lx_garance', price: 349, priceYear: 3839,
     },
     trio: {
       name: 'TRIO', subtitle: 'Kompletní balíček',
-      desc: 'Základní ochrana domácnosti, bydlení i řidiči v jednom.', icon: 'shield', price: 499, priceYear: 5489,
+      desc: 'Základní ochrana domácnosti, bydlení i řidiči v jednom.', icon: 'lx_balicek', price: 499, priceYear: 5489,
     },
   };
   // Zpětná kompatibilita se staršími odkazy

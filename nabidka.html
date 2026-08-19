@@ -18,7 +18,7 @@
     <ul class="nav-links">
       <li><a href="pro-koho.html">Pro koho</a></li>
       <li><a href="index.html#jak-funguje">Jak funguje</a></li>
-      <li><a href="sluzby.html" class="active">Služby</a></li>
+      <li><a href="sluzby.html" class="active">Ceník</a></li>
       <li><a href="pro-partnery.html">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
@@ -163,43 +163,64 @@
    =========================================================== */
 (function () {
   var OFFERS = {
+    ridic: {
+      name: 'Řidič', sub: 'Právní ochrana řidiče a vozidla', icon: 'lx_ridic',
+      price: '119', priceUnit: 'Kč/měsíc', year: '1 309 Kč/rok',
+      cta: 'objednavka?produkt=ridic', ctaLabel: 'Sjednat online', ctaTitle: 'Sjednejte si ochranu řidiče online',
+      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče daného vozidla', 'Právní ochrana posádky'],
+      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
+    },
+    jednotlivec: {
+      name: 'Jednotlivec', sub: 'Ochrana na míru pro jednotlivce', icon: 'lx_jednotlivec',
+      price: 'od 179', priceUnit: 'Kč/měsíc', year: 'od 1 969 Kč/rok',
+      cta: 'kalkulacka?varianta=jednotlivec', ctaLabel: 'Spočítat cenu', ctaTitle: 'Sestavte si ochranu pro jednotlivce na míru',
+      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
+      spory: ['Nejčastější spory napříč životem, od bydlení a nemovitostí po vozidlo i práci']
+    },
+    domacnost: {
+      name: 'Domácnost', sub: 'Právní ochrana domácnosti', icon: 'lx_domacnost',
+      price: 'od 269', priceUnit: 'Kč/měsíc', year: 'od 2 959 Kč/rok',
+      cta: 'kalkulacka?varianta=domacnost', ctaLabel: 'Spočítat cenu', ctaTitle: 'Sjednejte si ochranu pro celou domácnost',
+      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
+      spory: ['Nejčastější spory napříč životem celé domácnosti a všech jejích členů']
+    },
     drive: {
-      name: 'DRIVE', sub: 'Právní ochrana vozidla', icon: 'car',
+      name: 'DRIVE', sub: 'Právní ochrana vozidla', icon: 'lx_ridic',
       price: '159', priceUnit: 'Kč/měsíc', year: '1 749 Kč/rok',
       cta: 'objednavka?produkt=drive', ctaLabel: 'Sjednat online',
       kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče daného vozidla', 'Právní ochrana posádky'],
       spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
     },
     driveplus: {
-      name: 'DRIVE PLUS', sub: 'Právní ochrana vozidla', icon: 'car',
+      name: 'DRIVE PLUS', sub: 'Právní ochrana vozidla', icon: 'lx_ridic',
       price: '199', priceUnit: 'Kč/měsíc', year: '2 189 Kč/rok',
       cta: 'objednavka?produkt=driveplus', ctaLabel: 'Sjednat online',
       kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče všech vozidel', 'Právní ochrana posádky'],
       spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
     },
     home: {
-      name: 'HOME', sub: 'Právní ochrana bydlení', icon: 'house',
+      name: 'HOME', sub: 'Právní ochrana bydlení', icon: 'lx_domacnost',
       price: '199', priceUnit: 'Kč/měsíc', year: '2 189 Kč/rok',
       cta: 'objednavka?produkt=home', ctaLabel: 'Sjednat online',
       kryti: ['Právní ochrana domu', 'Právní ochrana bytu', 'Právní ochrana chaty / chalupy'],
       spory: ['S pojišťovnami', 'Se sousedy', 'S řemeslníky', 'S finančním, katastrálním, stavebním úřadem']
     },
     trio: {
-      name: 'TRIO', sub: 'Kompletní balíček', icon: 'shield',
+      name: 'TRIO', sub: 'Kompletní balíček', icon: 'lx_balicek',
       price: '499', priceUnit: 'Kč/měsíc', year: '5 489 Kč/rok',
       cta: 'objednavka?produkt=trio', ctaLabel: 'Sjednat online',
       kryti: ['Základní právní ochrana domácnosti', 'Právní ochrana bydlení', 'Právní ochrana řidičů'],
       spory: ['Obhajoba v trestním, správním, přestupkovém aj. řízení', 'Reklamace, náhrada újmy, obrana proti vymáhání náhrady újmy', 'Se sousedy, řemeslníky, úřady', 'Dopravní přestupek, dopravní nehoda']
     },
     garance: {
-      name: 'GARANCE PLUS', sub: 'Vymáhání nároků po pojišťovnách', icon: 'umbrella',
+      name: 'GARANCE PLUS', sub: 'Vymáhání nároků po pojišťovnách', icon: 'lx_garance',
       price: '349', priceUnit: 'Kč/měsíc', year: '3 839 Kč/rok',
       cta: 'objednavka?produkt=garance', ctaLabel: 'Sjednat online',
       kryti: ['Hlášení a likvidace pojistných událostí', 'Vymáhání nároků po pojišťovnách', 'Právní ochrana řidiče'],
       spory: ['S pojišťovnami', 'S bankami, hypotečními bankami', 'S investičními, penzijními a úvěrovými společnostmi', 'S policií + přestupkové, správní a trestní řízení']
     },
     individual: {
-      name: 'INDIVIDUAL', sub: 'Volba jednotlivec / domácnost', icon: 'users',
+      name: 'INDIVIDUAL', sub: 'Pojištění na míru', icon: 'lx_individual',
       price: 'od 179', priceUnit: 'Kč/měsíc', year: 'od 1 969 Kč/rok',
       cta: 'kalkulacka.html', ctaLabel: 'Spočítat cenu',
       kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
@@ -228,7 +249,7 @@
   set('d-price', o.price);
   set('d-price-unit', o.priceUnit);
   set('d-year', o.year);
-  set('d-cta-title', 'Sjednejte si ' + o.name + (o.cta.indexOf('kalkulacka') === 0 ? ' na míru' : ' online'));
+  set('d-cta-title', o.ctaTitle || ('Sjednejte si ' + o.name + (o.cta.indexOf('kalkulacka') === 0 ? ' na míru' : ' online')));
   fill('d-kryti', o.kryti);
   fill('d-spory', o.spory);
 
