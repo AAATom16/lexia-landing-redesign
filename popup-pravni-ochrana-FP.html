@@ -275,7 +275,22 @@
         padding: 28px 20px 24px;
         max-height: calc(100vh - 28px);
       }
-      .popup-badge { margin-right: 44px; }   /* ať štítek neleze pod křížek */
+      /* Štítek i modrý nadpisek na jeden řádek */
+      .popup-close { top: 12px; right: 12px; width: 32px; height: 32px; }
+      .popup-badge {
+        margin-right: 0;
+        font-size: 0.6rem;
+        letter-spacing: 0.02em;
+        gap: 5px;
+        padding: 6px 10px;
+        white-space: nowrap;
+      }
+      .popup-badge svg { width: 13px; height: 13px; }
+      .popup-eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
       .popup-title { font-size: 1.45rem; }
       .popup-price { padding: 14px 16px; }
       .price-new { margin-left: 0; width: 100%; font-size: 1.55rem; }
