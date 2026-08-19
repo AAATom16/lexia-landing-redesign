@@ -2560,6 +2560,17 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   .pkg-grid { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
 }
 @media (max-width: 760px) { .pkg-grid { grid-template-columns: repeat(2, 1fr); max-width: 680px; } }
+
+/* Varianty mřížky — 3 aktuální balíčky nahoře, 5 připravovaných níže.
+   Musí být AŽ ZA výchozími media query výše, jinak je přebijí. */
+.pkg-grid--3 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
+.pkg-grid--5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1240px) {
+  .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
+}
+@media (max-width: 760px) {
+  .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
+}
 /* Mobilní úpravy balíčkových karet jsou níže, za základními pravidly .pkg-*
    (kvůli pořadí v souboru / specificitě). Viz "PACKAGE CARDS — MOBILE". */
 
@@ -2697,6 +2708,15 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 
 .pkg-cta { width: 100%; justify-content: center; }
 .pkg-note { text-align: center; color: var(--text-muted); margin-top: 22px; font-size: 0.9rem; }
+
+/* Připravované balíčky — zatlumené, zatím nejdou sjednat online */
+.pkg-card--soon { background: var(--bg-light); border-style: dashed; box-shadow: none; }
+.pkg-card--soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.pkg-card--soon .pkg-icon { background: rgba(15, 23, 42, 0.07); color: var(--text-muted); }
+.pkg-card--soon .pkg-price strong { color: var(--text-muted); }
+.pkg-badge--soon { background: var(--text-muted); }
+.pkg-badge--soon .icon { color: var(--white); }
+.pkg-cta.is-soon { pointer-events: none; opacity: 0.5; }
 
 /* Odkaz na detail nabídky („Kompletní rozsah ZDE") */
 .pkg-detail {
@@ -8092,6 +8112,19 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    světle modré (--bg-light). Červená z klientova návrhu se vědomě
    nepoužívá — trčela by z brand vizuálu.
    ------------------------------------------------------------ */
+/* Fotka poradce u auta je tmavší než světlý styl zbytku webu, proto ji
+   překrývá bílý závoj — silnější vlevo pod kartou, k pravému okraji
+   slábne, aby fotka zůstala čitelná. */
+.page-hero--fp::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.5) 48%, rgba(255, 255, 255, 0.16) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.page-hero--fp .container { position: relative; z-index: 2; }
 .page-hero--fp .onas-hero-card { max-width: 920px; }
 .fp-hero-card {
   display: grid;
