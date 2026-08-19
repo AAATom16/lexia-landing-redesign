@@ -12,6 +12,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", ".", "-l", "8768"],
       "port": 8768
+    },
+    {
+      "name": "lexia-static-3",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "-l", "8769"],
+      "port": 8769
     }
   ]
 }

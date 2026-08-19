@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  POP-UP: Pojištění právní ochrany pro finanční poradce (Lexia)
+  ───────────────────────────────────────────────────────────────────────────
+  Samostatný soubor — NENÍ nalinkovaný z webu, slouží jako předloha/design
+  k převzetí do jiného projektu. Vše potřebné (styly, ikony) je v tomto
+  jednom souboru; externí je jen načtení fontů z Google Fonts.
+
+  KDY POP-UP ZOBRAZIT (viz také popup-pravni-ochrana-FP.README.md):
+  1. Uživatel je přihlášený a jeho role/typ = FINANČNÍ PORADCE.
+  2. Pojištění právní ochrany pro finanční poradce ještě NEMÁ sjednané.
+  3. Zobrazit po přihlášení (obě podmínky výše musí platit současně).
+  Tím je pop-up cílený přímo na finanční poradce bez sjednaného pojištění.
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pop-up — Pojištění právní ochrany pro finanční poradce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Brand tokeny — dle brand manuálu Lexia 2025 ─────────────────── */
+    :root {
+      --primary: #0045bf;        /* Cobalt Blue */
+      --primary-dark: #003599;
+      --heading: #001a4d;        /* Deep Navy */
+      --accent: #00a5bf;         /* Blue Teal */
+      --accent-deep: #005f72;    /* Deep Teal */
+      --accent-yellow: #f2d800;  /* Yellow */
+      --danger: #ef463f;         /* Brand Red */
+      --bg-light: #f0f5ff;
+      --white: #ffffff;
+      --text: #1a1f2e;
+      --text-muted: #4a5468;
+      --border: #e5e9f0;
+      --font-heading: 'Nunito', Arial, sans-serif;
+      --font-base: 'Poppins', Arial, sans-serif;
+      --radius: 14px;
+      --radius-lg: 20px;
+      --shadow-3: 0 16px 32px -8px rgba(15, 23, 42, 0.10), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Demo pozadí (jen pro náhled — imituje stránku pod pop-upem) ── */
+    body {
+      font-family: var(--font-base);
+      color: var(--text);
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    .demo-page {
+      position: fixed;
+      inset: 0;
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-content: start;
+    }
+    .demo-page span {
+      display: block;
+      height: 180px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Overlay ─────────────────────────────────────────────────────── */
+    .popup-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 26, 77, 0.55);   /* Deep Navy s průhledností */
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+    }
+
+    /* ── Okno pop-upu ────────────────────────────────────────────────── */
+    .popup {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-3);
+      padding: 40px 44px 36px;
+      animation: popup-in 0.32s var(--ease) both;
+    }
+    @keyframes popup-in {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 100px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background-color 0.18s var(--ease), color 0.18s var(--ease);
+    }
+    .popup-close:hover { background: var(--bg-light); color: var(--heading); }
+    .popup-close svg { width: 18px; height: 18px; }
+
+    /* Štítek se zvýhodněním — kobaltový pill, žlutá jiskra (brand akcent) */
+    .popup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--primary);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 7px 16px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+    }
+    .popup-badge svg { width: 15px; height: 15px; color: var(--accent-yellow); flex-shrink: 0; }
+
+    .popup-eyebrow {
+      font-family: var(--font-base);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .popup-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.9rem;
+      line-height: 1.2;
+      color: var(--heading);
+      margin-bottom: 22px;
+    }
+
+    /* ── Cenový pruh ─────────────────────────────────────────────────── */
+    .popup-price {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: 16px 22px;
+      margin-bottom: 24px;
+    }
+    .price-old {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--danger);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
+    .price-label {
+      font-family: var(--font-base);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .price-new {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.7rem;
+      color: var(--accent-deep);
+      margin-left: auto;
+    }
+
+    /* ── Výhody ──────────────────────────────────────────────────────── */
+    .popup-benefits {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .popup-benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .popup-benefits svg {
+      width: 21px;
+      height: 21px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── CTA tlačítko — dle .btn-primary z webu ──────────────────────── */
+    .popup-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 26px;
+      border: 1.5px solid #0057f0;
+      border-radius: 100px;
+      background: linear-gradient(90deg, #0045bf 0%, #0057f0 100%);
+      color: var(--white);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0, 35, 96, 0.18);
+      transition: background-color 0.18s var(--ease), box-shadow 0.18s var(--ease), transform 0.18s var(--ease);
+    }
+    .popup-btn:hover {
+      background: linear-gradient(90deg, #003799 0%, #0045bf 100%);
+      border-color: #0045bf;
+      transform: translateY(-1px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 16px -4px rgba(0, 35, 96, 0.35);
+    }
+    .popup-btn:active { transform: translateY(1px); }
+    .popup-btn svg { width: 18px; height: 18px; }
+
+    /* ── Mobil ───────────────────────────────────────────────────────── */
+    @media (max-width: 560px) {
+      .popup { padding: 30px 22px 26px; }
+      .popup-badge { margin-right: 44px; }   /* ať štítek neleze pod křížek */
+      .popup-title { font-size: 1.5rem; }
+      .popup-price { padding: 14px 16px; }
+      .price-new { margin-left: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Demo pozadí — jen pro náhled, do produkce se nepřenáší -->
+  <div class="demo-page" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ══ POP-UP — tato část se přebírá ══ -->
+  <div class="popup-backdrop" id="popup-fp">
+    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-fp-title">
+
+      <button class="popup-close" type="button" aria-label="Zavřít" onclick="document.getElementById('popup-fp').style.display='none'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+
+      <span class="popup-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1L12 2z"/>
+          <path d="M19 15l1 2.6L22.6 18.6 20 19.6 19 22.2 18 19.6 15.4 18.6 18 17.6 19 15z" opacity="0.85"/>
+        </svg>
+        Exkluzivně pro Vás se zvýhodněním 41&nbsp;%
+      </span>
+
+      <p class="popup-eyebrow">Pojištění právní ochrany pro finanční poradce</p>
+
+      <h1 class="popup-title" id="popup-fp-title">Právní ochrana podnikání a&nbsp;řidiče.</h1>
+
+      <div class="popup-price">
+        <s class="price-old">508&nbsp;Kč</s>
+        <span class="price-label">Super cena pro Vás</span>
+        <strong class="price-new">299&nbsp;Kč/měsíc</strong>
+      </div>
+
+      <ul class="popup-benefits">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>
+          </svg>
+          Odpovědnostní pojištění kryje ty, kterým způsobíte škodu – my kryjeme Vás.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>
+          </svg>
+          Platíme advokáty, soudní poplatky, posudky a&nbsp;v&nbsp;případě prohry náklady protistrany, limit až 5&nbsp;000&nbsp;000&nbsp;Kč.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>
+          </svg>
+          Šetříme Vaše nervy, čas a&nbsp;peníze.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>
+          </svg>
+          Se svolením Vaší společnosti si sjednáváte sami u&nbsp;Lexie.
+        </li>
+      </ul>
+
+      <!-- href doplní kolega — odkaz na sjednání -->
+      <a class="popup-btn" href="#">
+        Sjednat
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12h16M13 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+
+</body>
+</html>
