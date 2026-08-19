@@ -48,14 +48,15 @@
 <section class="page-hero page-hero--onas page-hero--fp" style="background-image: url('../assets/lx-jednotlivci-bydleni.jpg');">
   <div class="container">
     <div class="onas-hero-card fp-hero-card">
+      <!-- Štítek „Připravujeme": absolutní pozice = nezasahuje do grid
+           rozložení karty. Smazat, až budou texty finální. -->
+      <span class="product-block__badge" style="position: absolute; top: -13px; left: 40px; margin: 0;">Připravujeme</span>
+      <h1 class="fp-hero-title">
+        Zažaluje Vás klient? Půjde po Vás úřad? Hrozí Vám ztráta řidičáku nebo trestní stíhání?<br>
+        <span class="fp-hero-title__punch">Advokáta platíme my!</span>
+      </h1>
+      <p class="fp-hero-kicker">Pojištění právní ochrany pro finanční poradce</p>
       <div class="fp-hero-main">
-        <span class="product-block__badge">Připravujeme</span>
-        <h1 class="fp-hero-title">
-          Zažaluje Vás klient? <span class="fp-hl">Půjde</span> po Vás úřad?<br>
-          Hrozí Vám ztráta řidičáku nebo <span class="fp-hl">trestní</span> stíhání?<br>
-          <span class="fp-hero-title__punch">Advokáta platíme my!</span>
-        </h1>
-        <p class="fp-hero-kicker">Pojištění právní ochrany pro finanční poradce</p>
         <p>Jako vázaný zástupce <strong>ručíte</strong> za své jednání <strong>osobně</strong>. <strong>Spor</strong> s klientem, ČNB, samostatným zprostředkovatelem nebo finančním úřadem? <strong>Ušetříme Vám nervy, čas a peníze.</strong> Platíme advokáty, posudky, soudní poplatky a v případě prohry i náklady protistrany.</p>
         <p class="fp-hero-more" id="fp-hero-more">Kromě byznysu Vám <strong>kryjeme záda i na cestách</strong>. Chráníme Váš řidičák a zajistíme Vám špičkovou obhajobu po dopravní nehodě, ve správním řízení i při hrozbě vybodování. A je nám jedno, jestli zrovna řídíte soukromé, firemní, nebo půjčené auto <strong>v ČR i po celé Evropě</strong>.</p>
         <button type="button" class="fp-hero-more__btn" aria-expanded="false" aria-controls="fp-hero-more">Číst dál</button>
@@ -63,9 +64,9 @@
 
       <aside class="fp-hero-side" aria-label="Hlavní výhody a cena">
         <ul class="fp-hero-benefits">
-          <li><span class="fp-benefit-icon"><i class="icon" data-icon="shield"></i></span>Limit 5 mil. Kč na případ</li>
-          <li><span class="fp-benefit-icon"><i class="icon" data-icon="bank"></i></span>Advokáti na finanční trh</li>
-          <li><span class="fp-benefit-icon"><i class="icon" data-icon="phone"></i></span>Non-stop linka</li>
+          <li><span class="fp-benefit-icon"><img src="../assets/lx-benefit-limit.png" alt="" aria-hidden="true"></span>Limit 5 mil. Kč na případ</li>
+          <li><span class="fp-benefit-icon"><img src="../assets/obrazky/Group-41.png" alt="" aria-hidden="true"></span>Advokáti na finanční trh</li>
+          <li><span class="fp-benefit-icon"><img src="../assets/obrazky/Group-40.png" alt="" aria-hidden="true"></span>Non-stop linka</li>
         </ul>
         <div class="fp-hero-pricebox">
           <div class="fp-price-old">
@@ -98,22 +99,22 @@
 
     <div class="grid grid-4" style="margin-top: 40px;">
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="briefcase"></i></div>
+        <div class="card-icon"><img src="../assets/obrazky/Group-42.png" alt="" aria-hidden="true"></div>
         <h3>Regres napříč distribucí (pojištění, úvěry, investice)</h3>
         <p>Distribuujete pojištění (170/2018), spotřebitelské úvěry a hypotéky (257/2016) i investiční nástroje (256/2004). Za škodu klientovi odpovídá zastoupený. SZ, banka i obchodník s cennými papíry ji ale standardně regresivně vymáhají po vázaném zástupci.</p>
       </div>
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="warning"></i></div>
+        <div class="card-icon"><img src="../assets/lx-benefit-allrisk.png" alt="" aria-hidden="true"></div>
         <h3>Odpovědnostní pojištění nestačí</h3>
         <p>Profesní PI hradí jen prokázanou škodu klientovi. Vaši obhajobu, trestní řízení, spor s ČNB, finanční arbitr, kontrolu FÚ, spor o storno provizí ani ochranu osobnosti PI neřeší. To vše kryje až právní ochrana.</p>
       </div>
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="scales"></i></div>
+        <div class="card-icon"><img src="../assets/obrazky/Group-41.png" alt="" aria-hidden="true"></div>
         <h3>Vlastní trestní odpovědnost</h3>
         <p>Trestní odpovědnost (podvod, zpronevěra, neoprávněné podnikání, úvěrový podvod dle § 211 TZ) je vždy osobní a nelze ji přenést na zastoupeného. Stačí jedno trestní oznámení a obhajoba stojí stovky tisíc.</p>
       </div>
       <div class="card">
-        <div class="card-icon"><i class="icon" data-icon="bank"></i></div>
+        <div class="card-icon"><img src="../assets/obrazky/Group-43.png" alt="" aria-hidden="true"></div>
         <h3>Kontrola ČNB, FÚ a vlastní podnikání</h3>
         <p>Jako OSVČ čelíte kontrole ČNB nad distribucí, kontrole finančního úřadu, sporům ze smluv i útokům na pověst samostatně. Sankce ČNB ani daňové doměrky z provizí za Vás nikdo nezaplatí.</p>
       </div>
