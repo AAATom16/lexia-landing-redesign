@@ -8116,8 +8116,8 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 .page-hero--fp .onas-hero-card p.fp-hero-kicker {
   margin: 0 0 16px;
   font-family: var(--font-heading);
-  font-weight: 700;
   font-size: 0.92rem;
+  font-weight: 800;
   color: var(--heading);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -8128,13 +8128,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 /* Pravý panel: výhody a cena v jedné rámované kartě. Ikony ve stejném
    stylu jako .card-icon napříč webem (zaoblený čtverec, --bg-light,
    modrý glyf), položky oddělené linkou, cena na světle modrém bloku. */
-.fp-hero-side {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-2);
-  padding: 6px 18px 18px;
-}
+.fp-hero-side { padding-top: 4px; }
 .fp-hero-benefits {
   list-style: none;
   margin: 0;
