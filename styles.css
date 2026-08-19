@@ -7817,7 +7817,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    (přebíjí .page-hero--onas .onas-hero-card h1). */
 .page-hero--fp .onas-hero-card { max-width: 660px; }
 .page-hero--fp .onas-hero-card h1 {
-  font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+  font-size: clamp(1.4rem, 2vw, 1.82rem);
   line-height: 1.26;
   margin-bottom: 14px;
 }
@@ -8079,39 +8079,102 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 .fp-hero-points .icon { width: 15px; height: 15px; color: var(--accent); }
 
 /* ------------------------------------------------------------
-   Hero microsite: nový nadpis od klienta (2 otázky + pointa).
-   Otázky jednobarevně tmavě, pointa modře (--primary).
-   Červená z klientova návrhu se vědomě nepoužívá — na této
-   stránce se nikde jinde nevyskytuje a trčela by z brand vizuálu.
+   Hero microsite: dvousloupcová karta dle předlohy klienta.
+   Vlevo nadpis (2 otázky + pointa), texty a tlačítka; vpravo panel
+   s výhodami v dlaždicích a cenou. Jen brandové barvy: zvýrazněná
+   slova modře (--primary), pointa tmavě (--heading), dlaždice na
+   světle modré (--bg-light). Červená z klientova návrhu se vědomě
+   nepoužívá — trčela by z brand vizuálu.
    ------------------------------------------------------------ */
-.page-hero--fp .onas-hero-card { max-width: 720px; }
-.page-hero--fp { min-height: 760px; }
+.page-hero--fp .onas-hero-card { max-width: 1060px; }
+.fp-hero-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  grid-template-areas:
+    "main side"
+    "actions side";
+  gap: 8px 40px;
+  align-items: start;
+}
+.fp-hero-main { grid-area: main; min-width: 0; }
+.fp-hero-side { grid-area: side; }
+.fp-hero-card .hero-actions { grid-area: actions; margin-top: 10px; }
 .fp-hero-title {
-  font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+  font-size: clamp(1.4rem, 2vw, 1.82rem);
   line-height: 1.26;
   margin-bottom: 14px;
 }
+.fp-hl { color: var(--primary); }
 .fp-hero-title__punch {
   display: inline-block;
-  margin-top: 6px;
-  font-size: 1.28em;
-  color: var(--primary);
+  margin-top: 10px;
+  font-size: 1.5em;
+  color: var(--heading);
 }
 /* Vyšší specificita kvůli obecnému pravidlu pro odstavce hero karty,
-   které by jinak podtitulu vnutilo šedou a jinou velikost. */
+   které by jinak podtitulu vnutilo jinou barvu a velikost. */
 .page-hero--fp .onas-hero-card p.fp-hero-kicker {
   margin: 0 0 16px;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.92rem;
-  color: var(--primary);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .page-hero--fp .onas-hero-card p { margin-bottom: 14px; font-size: 0.94rem; line-height: 1.55; }
 .page-hero--fp .onas-hero-card p strong { color: var(--heading); }
+
+/* Pravý panel: výhody v dlaždicích + cenový blok */
+.fp-hero-benefits {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fp-hero-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-light);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--heading);
+}
+.fp-benefit-icon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.fp-benefit-icon .icon { width: 22px; height: 22px; color: var(--primary); }
+.fp-hero-pricebox {
+  background: var(--bg-light);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.fp-hero-pricebox .fp-price-old { margin-bottom: 6px; }
+.fp-hero-pricebox .fp-price-head { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .fp-hero-card {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main" "side" "actions";
+  }
+}
 @media (max-width: 560px) {
   .fp-hero-title { font-size: 1.28rem; }
+  .fp-hero-title__punch { font-size: 1.32em; }
 }
 
 /* Na mobilu se druhý odstavec hero načte až na vyžádání — jinak je CTA
