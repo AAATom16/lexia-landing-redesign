@@ -8080,7 +8080,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 
 /* ------------------------------------------------------------
    Hero microsite: nový nadpis od klienta (2 otázky + pointa).
-   Klíčová slova tyrkysově (--accent), pointa modře (--primary).
+   Otázky jednobarevně tmavě, pointa modře (--primary).
    Červená z klientova návrhu se vědomě nepoužívá — na této
    stránce se nikde jinde nevyskytuje a trčela by z brand vizuálu.
    ------------------------------------------------------------ */
@@ -8091,19 +8091,22 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   line-height: 1.26;
   margin-bottom: 14px;
 }
-.fp-hl { color: var(--accent); }
 .fp-hero-title__punch {
   display: inline-block;
   margin-top: 6px;
   font-size: 1.28em;
   color: var(--primary);
 }
-.fp-hero-kicker {
+/* Vyšší specificita kvůli obecnému pravidlu pro odstavce hero karty,
+   které by jinak podtitulu vnutilo šedou a jinou velikost. */
+.page-hero--fp .onas-hero-card p.fp-hero-kicker {
   margin: 0 0 16px;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.02rem;
+  font-size: 0.92rem;
   color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 .page-hero--fp .onas-hero-card p { margin-bottom: 14px; font-size: 0.94rem; line-height: 1.55; }
 .page-hero--fp .onas-hero-card p strong { color: var(--heading); }
