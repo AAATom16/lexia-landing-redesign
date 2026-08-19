@@ -1,8 +1,8 @@
 # Pop-up: Pojištění právní ochrany pro finanční poradce
 
 Předloha pop-up okna pro implementaci mimo web Lexia. Design vychází
-z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): žlutý štítek
-se zvýhodněním, zelená cena a fajfky.
+z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): tyrkysový
+štítek se zvýhodněním, tyrkysová cena a fajfky.
 
 ## Soubor
 
@@ -49,10 +49,10 @@ přihlášení — dle vašeho uvážení.
 
 | Barva | Hex | Použití |
 |---|---|---|
-| Yellow | `#f2d800` | štítek se zvýhodněním (text v Deep Navy) |
-| Zelená | `#16a34a` | zvýhodněná cena, fajfky u výhod |
+| Blue Teal | `#00a5bf` | štítek se zvýhodněním, fajfky u výhod |
+| Deep Teal | `#005f72` | zvýhodněná cena |
 | Cobalt Blue | `#0045bf` | nadpisek, tlačítko Sjednat (gradient) |
-| Deep Navy | `#001a4d` | hlavní nadpis, text štítku, overlay |
+| Deep Navy | `#001a4d` | hlavní nadpis, overlay |
 | Light Blue | `#f0f5ff` | podklad cenového pruhu |
 | Grey (muted) | `#4a5468` | přeškrtnutá původní cena |
 
