@@ -31,8 +31,9 @@
       --heading: #001a4d;        /* Deep Navy */
       --accent: #00a5bf;         /* Blue Teal */
       --accent-deep: #005f72;    /* Deep Teal */
-      --danger: #ef463f;         /* Brand Red — štítek, přeškrtnutá cena */
+      --accent-yellow: #f2d800;  /* Yellow — štítek se zvýhodněním */
       --green: #16a34a;          /* Zelená — cena a fajfky (dle předlohy) */
+      --border-strong: #cfd6e2;
       --bg-light: #f0f5ff;
       --white: #ffffff;
       --text: #1a1f2e;
@@ -123,13 +124,13 @@
     .popup-close:hover { background: var(--bg-light); color: var(--heading); }
     .popup-close svg { width: 18px; height: 18px; }
 
-    /* Štítek se zvýhodněním — červený pill, ikona dárku z assets/icons.js */
+    /* Štítek se zvýhodněním — žlutý pill (brand akcent), ikona dárku z assets/icons.js */
     .popup-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--danger);
-      color: var(--white);
+      background: var(--accent-yellow);
+      color: var(--heading);
       font-family: var(--font-heading);
       font-weight: 800;
       font-size: 0.78rem;
@@ -175,7 +176,7 @@
       font-family: var(--font-heading);
       font-weight: 700;
       font-size: 1.15rem;
-      color: var(--danger);
+      color: var(--text-muted);
       text-decoration: line-through;
       text-decoration-thickness: 2px;
     }
@@ -219,35 +220,55 @@
       margin-top: 2px;
     }
 
-    /* ── CTA tlačítko — dle .btn-primary z webu ──────────────────────── */
+    /* ── CTA tlačítka — dle .btn-primary / .btn-outline z webu ───────── */
+    .popup-actions {
+      display: flex;
+      gap: 12px;
+    }
     .popup-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      width: 100%;
+      flex: 1;
       min-height: 50px;
-      padding: 13px 26px;
-      border: 1.5px solid #0057f0;
+      padding: 13px 22px;
       border-radius: 100px;
-      background: linear-gradient(90deg, #0045bf 0%, #0057f0 100%);
-      color: var(--white);
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1rem;
       text-decoration: none;
       cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0, 35, 96, 0.18);
-      transition: background-color 0.18s var(--ease), box-shadow 0.18s var(--ease), transform 0.18s var(--ease);
+      white-space: nowrap;
+      transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease),
+                  color 0.18s var(--ease), box-shadow 0.18s var(--ease), transform 0.18s var(--ease);
     }
-    .popup-btn:hover {
+    .popup-btn svg { width: 18px; height: 18px; }
+    .popup-btn:active { transform: translateY(1px); }
+
+    .popup-btn--primary {
+      border: 1.5px solid #0057f0;
+      background: linear-gradient(90deg, #0045bf 0%, #0057f0 100%);
+      color: var(--white);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0, 35, 96, 0.18);
+    }
+    .popup-btn--primary:hover {
       background: linear-gradient(90deg, #003799 0%, #0045bf 100%);
       border-color: #0045bf;
       transform: translateY(-1px);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 16px -4px rgba(0, 35, 96, 0.35);
     }
-    .popup-btn:active { transform: translateY(1px); }
-    .popup-btn svg { width: 18px; height: 18px; }
+
+    .popup-btn--outline {
+      border: 1.5px solid var(--border-strong);
+      background: var(--white);
+      color: var(--heading);
+    }
+    .popup-btn--outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
 
     /* ── Mobil ───────────────────────────────────────────────────────── */
     @media (max-width: 560px) {
@@ -261,6 +282,7 @@
       .popup-price { padding: 14px 16px; }
       .price-new { margin-left: 0; width: 100%; font-size: 1.55rem; }
       .popup-benefits li { font-size: 0.92rem; }
+      .popup-actions { flex-direction: column; }
     }
   </style>
 </head>
@@ -324,13 +346,19 @@
         </li>
       </ul>
 
-      <!-- href doplní kolega — odkaz na sjednání -->
-      <a class="popup-btn" href="#">
-        Sjednat
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 12h16M13 5l7 7-7 7"/>
-        </svg>
-      </a>
+      <div class="popup-actions">
+        <!-- href doplní kolega — odkaz na sjednání -->
+        <a class="popup-btn popup-btn--primary" href="#">
+          Sjednat
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12h16M13 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <!-- vede na microsite pro finanční poradce -->
+        <a class="popup-btn popup-btn--outline" href="https://lexia.cz/financni-poradci" target="_blank" rel="noopener">
+          Chci vědět více
+        </a>
+      </div>
 
     </div>
   </div>

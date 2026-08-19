@@ -1,8 +1,8 @@
 # Pop-up: Pojištění právní ochrany pro finanční poradce
 
 Předloha pop-up okna pro implementaci mimo web Lexia. Design vychází
-z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins) s barevností
-dle předlohy: červený štítek, zelená cena a fajfky.
+z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): žlutý štítek
+se zvýhodněním, zelená cena a fajfky.
 
 ## Soubor
 
@@ -31,10 +31,17 @@ Doporučení navíc (volitelné): zobrazení po přihlášení případně omezi
 frekvencí (např. max. 1× denně), ať poradce pop-up neobtěžuje při každém
 přihlášení — dle vašeho uvážení.
 
+## Tlačítka
+
+- **Sjednat** (modré, primární) — `href` doplňte, odkaz na sjednání
+  pojištění (v předloze je zatím `#`).
+- **Chci vědět více** (obrysové, sekundární) — vede na microsite
+  pro finanční poradce: `https://lexia.cz/financni-poradci`
+  (otevírá se do nové záložky).
+
 ## Co doplnit při implementaci
 
-- `href` u tlačítka **Sjednat** — odkaz na sjednání pojištění (v předloze
-  je zatím `#`).
+- `href` u tlačítka **Sjednat** (viz výše).
 - Křížek (`.popup-close`) v demu jen skryje okno přes inline `onclick` —
   při implementaci napojte na vlastní logiku zavírání.
 
@@ -42,11 +49,12 @@ přihlášení — dle vašeho uvážení.
 
 | Barva | Hex | Použití |
 |---|---|---|
-| Brand Red | `#ef463f` | štítek se zvýhodněním, přeškrtnutá původní cena |
+| Yellow | `#f2d800` | štítek se zvýhodněním (text v Deep Navy) |
 | Zelená | `#16a34a` | zvýhodněná cena, fajfky u výhod |
 | Cobalt Blue | `#0045bf` | nadpisek, tlačítko Sjednat (gradient) |
-| Deep Navy | `#001a4d` | hlavní nadpis, ztmavené pozadí (overlay) |
+| Deep Navy | `#001a4d` | hlavní nadpis, text štítku, overlay |
 | Light Blue | `#f0f5ff` | podklad cenového pruhu |
+| Grey (muted) | `#4a5468` | přeškrtnutá původní cena |
 
 Ikona ve štítku: **gift** (dárek) z `assets/icons.js` — vlastní ikonová
 sada webu Lexia (Phosphor-style, stroke 1.5 px), stejný styl jako fajfky,
