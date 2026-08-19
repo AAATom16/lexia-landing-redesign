@@ -8109,7 +8109,10 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 .fp-hero-card .fp-hero-kicker { grid-area: kicker; }
 .fp-hero-main { grid-area: main; min-width: 0; }
 .fp-hero-side { grid-area: side; }
-.fp-hero-card .hero-actions { grid-area: actions; margin-top: 0; }
+.fp-hero-card .hero-actions { grid-area: actions; margin-top: 10px; }
+/* Hlavní CTA je v hero širší než běžné tlačítko — výška zůstává
+   sjednocená se zbytkem webu. */
+.fp-hero-card .hero-actions .btn-primary { min-width: 260px; }
 /* Nadpis je hlavní prvek karty: přes celou šířku, výrazně větší než text */
 .fp-hero-title {
   font-size: clamp(1.9rem, 2.8vw, 2.4rem);
