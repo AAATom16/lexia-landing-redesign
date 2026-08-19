@@ -7817,9 +7817,10 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    (přebíjí .page-hero--onas .onas-hero-card h1). */
 .page-hero--fp .onas-hero-card { max-width: 660px; }
 .page-hero--fp .onas-hero-card h1 {
-  font-size: clamp(1.4rem, 2vw, 1.82rem);
-  line-height: 1.26;
+  font-size: clamp(1.3rem, 1.6vw, 1.46rem);
+  line-height: 1.3;
   margin-bottom: 14px;
+  color: var(--primary);
 }
 @media (max-width: 560px) {
   .page-hero--fp .onas-hero-card h1 { font-size: 1.28rem; }
@@ -8086,29 +8087,28 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    světle modré (--bg-light). Červená z klientova návrhu se vědomě
    nepoužívá — trčela by z brand vizuálu.
    ------------------------------------------------------------ */
-.page-hero--fp .onas-hero-card { max-width: 1060px; }
+.page-hero--fp .onas-hero-card { max-width: 920px; }
 .fp-hero-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
+  grid-template-columns: minmax(0, 1fr) 270px;
   grid-template-areas:
     "main side"
     "actions side";
-  gap: 8px 40px;
+  gap: 8px 32px;
   align-items: start;
 }
 .fp-hero-main { grid-area: main; min-width: 0; }
 .fp-hero-side { grid-area: side; }
 .fp-hero-card .hero-actions { grid-area: actions; margin-top: 10px; }
 .fp-hero-title {
-  font-size: clamp(1.4rem, 2vw, 1.82rem);
-  line-height: 1.26;
+  font-size: clamp(1.3rem, 1.6vw, 1.46rem);
+  line-height: 1.3;
   margin-bottom: 14px;
 }
-.fp-hl { color: var(--primary); }
 .fp-hero-title__punch {
   display: inline-block;
   margin-top: 10px;
-  font-size: 1.5em;
+  font-size: 1.6em;
   color: var(--heading);
 }
 /* Vyšší specificita kvůli obecnému pravidlu pro odstavce hero karty,
@@ -8118,7 +8118,7 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 0.92rem;
-  color: var(--text-muted);
+  color: var(--primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -8137,19 +8137,19 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 .fp-hero-benefits li {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   background: var(--bg-light);
   border-radius: 14px;
-  padding: 12px 16px;
+  padding: 11px 14px;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   color: var(--heading);
 }
 .fp-benefit-icon {
   flex: none;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: var(--white);
   border: 1px solid var(--border);
