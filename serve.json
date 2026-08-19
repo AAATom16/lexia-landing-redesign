@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/financniporadci", "destination": "/financni-poradci/index.html" }
+  ],
+  "redirects": [
+    { "source": "/financni-poradci", "destination": "/financniporadci", "type": 301 },
+    { "source": "/financni-poradci/", "destination": "/financniporadci", "type": 301 }
+  ]
+}

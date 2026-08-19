@@ -2560,6 +2560,17 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   .pkg-grid { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
 }
 @media (max-width: 760px) { .pkg-grid { grid-template-columns: repeat(2, 1fr); max-width: 680px; } }
+
+/* Varianty mřížky — 3 aktuální balíčky nahoře, 5 připravovaných níže.
+   Musí být AŽ ZA výchozími media query výše, jinak je přebijí. */
+.pkg-grid--3 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
+.pkg-grid--5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1240px) {
+  .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 1080px; left: auto; transform: none; }
+}
+@media (max-width: 760px) {
+  .pkg-grid--3, .pkg-grid--5 { grid-template-columns: repeat(2, 1fr); max-width: 680px; }
+}
 /* Mobilní úpravy balíčkových karet jsou níže, za základními pravidly .pkg-*
    (kvůli pořadí v souboru / specificitě). Viz "PACKAGE CARDS — MOBILE". */
 
@@ -2697,6 +2708,15 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 
 .pkg-cta { width: 100%; justify-content: center; }
 .pkg-note { text-align: center; color: var(--text-muted); margin-top: 22px; font-size: 0.9rem; }
+
+/* Připravované balíčky — zatlumené, zatím nejdou sjednat online */
+.pkg-card--soon { background: var(--bg-light); border-style: dashed; box-shadow: none; }
+.pkg-card--soon:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.pkg-card--soon .pkg-icon { background: rgba(15, 23, 42, 0.07); color: var(--text-muted); }
+.pkg-card--soon .pkg-price strong { color: var(--text-muted); }
+.pkg-badge--soon { background: var(--text-muted); }
+.pkg-badge--soon .icon { color: var(--white); }
+.pkg-cta.is-soon { pointer-events: none; opacity: 0.5; }
 
 /* Odkaz na detail nabídky („Kompletní rozsah ZDE") */
 .pkg-detail {
@@ -3823,16 +3843,15 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 42px;
   font-family: var(--font-heading);
   font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 1.35;
   letter-spacing: -0.005em;
   color: var(--primary);
   border: 1.5px solid var(--primary);
   border-radius: 100px;
-  padding: 10px 24px;
+  padding: 11px 22px;
   margin-bottom: 0;
   white-space: nowrap;
   transition: background 0.2s ease, color 0.2s ease;
@@ -7818,11 +7837,18 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    bez odsazení by po skoku zakryla štítek i nadpis sekce. */
 .page-hero--fp ~ section[id] { scroll-margin-top: 100px; }
 
-/* Hero microsite: nadpis se musí vejít nejvýš do 3 řádků */
+/* Hero microsite: nadpis se musí vejít nejvýš do 3 řádků.
+   Hodnoty odpovídají .fp-hero-title — tady musí být kvůli specificitě
+   (přebíjí .page-hero--onas .onas-hero-card h1). */
 .page-hero--fp .onas-hero-card { max-width: 660px; }
-.page-hero--fp .onas-hero-card h1 { font-size: clamp(2rem, 3.45vw, 3rem); }
+.page-hero--fp .onas-hero-card h1 {
+  font-size: clamp(1.9rem, 2.8vw, 2.4rem);
+  line-height: 1.15;
+  margin-bottom: 0;
+  color: var(--heading);
+}
 @media (max-width: 560px) {
-  .page-hero--fp .onas-hero-card h1 { font-size: 1.55rem; }
+  .page-hero--fp .onas-hero-card h1 { font-size: 1.5rem; }
 }
 
 /* Rozbalovací detail karty typické situace: karta ukazuje jen nadpis
@@ -8077,6 +8103,154 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   color: var(--heading);
 }
 .fp-hero-points .icon { width: 15px; height: 15px; color: var(--accent); }
+
+/* ------------------------------------------------------------
+   Hero microsite: dvousloupcová karta dle předlohy klienta.
+   Vlevo nadpis (2 otázky + pointa), texty a tlačítka; vpravo panel
+   s výhodami v dlaždicích a cenou. Jen brandové barvy: zvýrazněná
+   slova modře (--primary), pointa tmavě (--heading), dlaždice na
+   světle modré (--bg-light). Červená z klientova návrhu se vědomě
+   nepoužívá — trčela by z brand vizuálu.
+   ------------------------------------------------------------ */
+/* Fotka poradce u auta je tmavší než světlý styl zbytku webu, proto ji
+   překrývá bílý závoj — silnější vlevo pod kartou, k pravému okraji
+   slábne, aby fotka zůstala čitelná. */
+.page-hero--fp::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.5) 48%, rgba(255, 255, 255, 0.16) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.page-hero--fp .container { position: relative; z-index: 2; }
+.page-hero--fp .onas-hero-card { max-width: 920px; }
+.fp-hero-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  grid-template-areas:
+    "title title"
+    "kicker side"
+    "main side"
+    "actions side";
+  grid-template-rows: auto auto 1fr auto;
+  gap: 8px 32px;
+  align-items: start;
+}
+.fp-hero-card .fp-hero-title { grid-area: title; margin-bottom: 0; }
+.fp-hero-card .fp-hero-kicker { grid-area: kicker; }
+.fp-hero-main { grid-area: main; min-width: 0; }
+.fp-hero-side { grid-area: side; }
+.fp-hero-card .hero-actions { grid-area: actions; margin-top: 10px; }
+/* Hlavní CTA je v hero širší než běžné tlačítko — výška zůstává
+   sjednocená se zbytkem webu. */
+.fp-hero-card .hero-actions .btn-primary { min-width: 260px; }
+/* Nadpis je hlavní prvek karty: přes celou šířku, výrazně větší než text */
+.fp-hero-title {
+  font-size: clamp(1.9rem, 2.8vw, 2.4rem);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.fp-hero-title__punch { color: var(--primary); }
+/* Vyšší specificita kvůli obecnému pravidlu pro odstavce hero karty,
+   které by jinak podtitulu vnutilo jinou barvu a velikost. */
+.page-hero--fp .onas-hero-card p.fp-hero-kicker {
+  margin: 0 0 16px;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.page-hero--fp .onas-hero-card p { margin-bottom: 14px; font-size: 0.94rem; line-height: 1.55; }
+.page-hero--fp .onas-hero-card p strong { color: var(--heading); }
+
+/* Pravý panel: výhody a cena v jedné rámované kartě. Ikony ve stejném
+   stylu jako .card-icon napříč webem (zaoblený čtverec, --bg-light,
+   modrý glyf), položky oddělené linkou, cena na světle modrém bloku. */
+/* Panel se roztáhne na výšku levého sloupce: výhody lícují s vrškem
+   titulku, cenový blok se spodní hranou tlačítek. */
+.fp-hero-side {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.fp-hero-benefits li:first-child { padding-top: 0; }
+/* Karty sekce „není bez rizika": ikony z assets mají vlastní kroužek,
+   podkladový čtverec ani hover přebarvení tu nedávají smysl. */
+#pravni-ochrana .card-icon { width: 56px; height: 56px; background: none; }
+#pravni-ochrana .card-icon img { width: 100%; height: 100%; object-fit: contain; }
+#pravni-ochrana .card:hover .card-icon { background: none; }
+.fp-hero-benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.fp-hero-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--heading);
+}
+.fp-hero-benefits li:last-child { border-bottom: 0; }
+/* Ikony lx-benefit-* mají vlastní kroužek, žádný podklad nepřidáváme */
+.fp-benefit-icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+}
+.fp-benefit-icon img { width: 100%; height: 100%; object-fit: contain; }
+.fp-hero-pricebox {
+  margin-top: 0;
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.fp-hero-pricebox .fp-price-old { margin-bottom: 6px; }
+.fp-hero-pricebox .fp-price-head { margin-bottom: 0; }
+.fp-hero-pricebox .fp-price-for { font-size: 0.82rem; line-height: 1.4; }
+
+@media (max-width: 900px) {
+  /* Na mobilu jeden sloupec v pořadí nadpis → text → výhody a cena → tlačítka.
+     Všech pět oblastí musí být vyjmenováno, jinak se nadpis odsune jinam. */
+  .fp-hero-card {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-template-areas: "title" "kicker" "main" "side" "actions";
+  }
+}
+@media (max-width: 560px) {
+  .fp-hero-title { font-size: 1.5rem; }
+  .page-hero--fp .onas-hero-card p.fp-hero-kicker { font-size: 0.82rem; }
+}
+
+/* Na mobilu se druhý odstavec hero načte až na vyžádání — jinak je CTA
+   až po třech obrazovkách scrollování. */
+.fp-hero-more__btn { display: none; }
+@media (max-width: 560px) {
+  .fp-hero-more__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin: 0 0 16px; padding: 0; border: 0; background: none; cursor: pointer;
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.85rem;
+    color: var(--primary);
+  }
+  .fp-hero-more__btn::after {
+    content: ""; width: 8px; height: 8px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.18s var(--ease);
+  }
+  .fp-hero-more__btn[aria-expanded="true"]::after { transform: rotate(-135deg) translate(-2px, -2px); }
+  .fp-hero-more[hidden] { display: none; }
+}
 
 /* ===== Mobil: pojistky proti oříznutí obsahu ===== */
 @media (max-width: 720px) {
