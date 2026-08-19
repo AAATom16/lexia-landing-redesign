@@ -7812,11 +7812,17 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    bez odsazení by po skoku zakryla štítek i nadpis sekce. */
 .page-hero--fp ~ section[id] { scroll-margin-top: 100px; }
 
-/* Hero microsite: nadpis se musí vejít nejvýš do 3 řádků */
+/* Hero microsite: nadpis se musí vejít nejvýš do 3 řádků.
+   Hodnoty odpovídají .fp-hero-title — tady musí být kvůli specificitě
+   (přebíjí .page-hero--onas .onas-hero-card h1). */
 .page-hero--fp .onas-hero-card { max-width: 660px; }
-.page-hero--fp .onas-hero-card h1 { font-size: clamp(2rem, 3.45vw, 3rem); }
+.page-hero--fp .onas-hero-card h1 {
+  font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+  line-height: 1.26;
+  margin-bottom: 14px;
+}
 @media (max-width: 560px) {
-  .page-hero--fp .onas-hero-card h1 { font-size: 1.55rem; }
+  .page-hero--fp .onas-hero-card h1 { font-size: 1.28rem; }
 }
 
 /* Rozbalovací detail karty typické situace: karta ukazuje jen nadpis
@@ -8071,6 +8077,59 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   color: var(--heading);
 }
 .fp-hero-points .icon { width: 15px; height: 15px; color: var(--accent); }
+
+/* ------------------------------------------------------------
+   Hero microsite: nový nadpis od klienta (2 otázky + pointa).
+   Klíčová slova tyrkysově (--accent), pointa modře (--primary).
+   Červená z klientova návrhu se vědomě nepoužívá — na této
+   stránce se nikde jinde nevyskytuje a trčela by z brand vizuálu.
+   ------------------------------------------------------------ */
+.page-hero--fp .onas-hero-card { max-width: 720px; }
+.page-hero--fp { min-height: 760px; }
+.fp-hero-title {
+  font-size: clamp(1.45rem, 2.1vw, 1.95rem);
+  line-height: 1.26;
+  margin-bottom: 14px;
+}
+.fp-hl { color: var(--accent); }
+.fp-hero-title__punch {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 1.28em;
+  color: var(--primary);
+}
+.fp-hero-kicker {
+  margin: 0 0 16px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: var(--primary);
+}
+.page-hero--fp .onas-hero-card p { margin-bottom: 14px; font-size: 0.94rem; line-height: 1.55; }
+.page-hero--fp .onas-hero-card p strong { color: var(--heading); }
+@media (max-width: 560px) {
+  .fp-hero-title { font-size: 1.28rem; }
+}
+
+/* Na mobilu se druhý odstavec hero načte až na vyžádání — jinak je CTA
+   až po třech obrazovkách scrollování. */
+.fp-hero-more__btn { display: none; }
+@media (max-width: 560px) {
+  .fp-hero-more__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin: 0 0 16px; padding: 0; border: 0; background: none; cursor: pointer;
+    font-family: var(--font-heading); font-weight: 700; font-size: 0.85rem;
+    color: var(--primary);
+  }
+  .fp-hero-more__btn::after {
+    content: ""; width: 8px; height: 8px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.18s var(--ease);
+  }
+  .fp-hero-more__btn[aria-expanded="true"]::after { transform: rotate(-135deg) translate(-2px, -2px); }
+  .fp-hero-more[hidden] { display: none; }
+}
 
 /* ===== Mobil: pojistky proti oříznutí obsahu ===== */
 @media (max-width: 720px) {
