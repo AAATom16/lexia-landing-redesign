@@ -1,4 +1,4 @@
-# Pop-up: Pojištění právní ochrany pro finanční poradce
+# Pop-up: Pojištění právní ochrany pro realitní zprostředkovatele
 
 Předloha pop-up okna pro implementaci mimo web Lexia. Design vychází
 z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): tyrkysový
@@ -6,7 +6,7 @@ z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): tyrkysový
 
 ## Soubor
 
-- `popup-pravni-ochrana-FP.html` — vše v jednom souboru (HTML + CSS + ikony
+- `popup-pravni-ochrana-reality.html` — vše v jednom souboru (HTML + CSS + ikony
   jako inline SVG). Externí závislost je jen načtení fontů z Google Fonts
   (`Nunito` 700/800, `Poppins` 400–700).
 - Šedomodré bloky v pozadí jsou jen demo kulisa pro náhled — do produkce
@@ -20,15 +20,15 @@ z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins): tyrkysový
 Pop-up se zobrazí **po přihlášení** uživatele, a to pouze pokud platí
 obě podmínky současně:
 
-1. přihlášený uživatel je **finanční poradce**, a zároveň
-2. **pojištění právní ochrany pro finanční poradce ještě nemá sjednané**.
+1. přihlášený uživatel je **realitní zprostředkovatel / makléř**, a zároveň
+2. **pojištění právní ochrany pro realitní zprostředkovatele ještě nemá sjednané**.
 
-Ve všech ostatních případech (jiný typ uživatele, nebo poradce s již
+Ve všech ostatních případech (jiný typ uživatele, nebo makléř s již
 sjednaným pojištěním) se pop-up nezobrazuje. Tím je nabídka cílená přímo
-na finanční poradce bez tohoto pojištění.
+na realitní zprostředkovatele bez tohoto pojištění.
 
 Doporučení navíc (volitelné): zobrazení po přihlášení případně omezit
-frekvencí (např. max. 1× denně), ať poradce pop-up neobtěžuje při každém
+frekvencí (např. max. 1× denně), ať makléře pop-up neobtěžuje při každém
 přihlášení — dle vašeho uvážení.
 
 ## Tlačítka
@@ -36,8 +36,9 @@ přihlášení — dle vašeho uvážení.
 - **Sjednat** (modré, primární) — `href` doplňte, odkaz na sjednání
   pojištění (v předloze je zatím `#`).
 - **Chci vědět více** (obrysové, sekundární) — vede na microsite
-  pro finanční poradce: `https://lexia.cz/financniporadci`
-  (otevírá se do nové záložky).
+  pro realitní zprostředkovatele: `https://lexia.cz/reality`
+  (otevírá se do nové záložky). Pozor: microsite se teprve připravuje —
+  pokud se před spuštěním změní adresa, upravte ji i tady.
 
 ## Co doplnit při implementaci
 

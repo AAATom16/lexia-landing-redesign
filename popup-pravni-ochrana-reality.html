@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════════════════
-  POP-UP: Pojištění právní ochrany pro finanční poradce (Lexia)
+  POP-UP: Pojištění právní ochrany pro realitní zprostředkovatele (Lexia)
   ───────────────────────────────────────────────────────────────────────────
   Samostatný soubor — NENÍ nalinkovaný z webu, slouží jako předloha/design
   k převzetí do jiného projektu. Vše potřebné (styly, ikony) je v tomto
   jednom souboru; externí je jen načtení fontů z Google Fonts.
 
-  KDY POP-UP ZOBRAZIT (viz také popup-pravni-ochrana-FP.README.md):
-  1. Uživatel je přihlášený a jeho role/typ = FINANČNÍ PORADCE.
-  2. Pojištění právní ochrany pro finanční poradce ještě NEMÁ sjednané.
+  KDY POP-UP ZOBRAZIT (viz také popup-pravni-ochrana-reality.README.md):
+  1. Uživatel je přihlášený a jeho role/typ = REALITNÍ ZPROSTŘEDKOVATEL.
+  2. Pojištění právní ochrany pro realitní zprostředkovatele ještě NEMÁ sjednané.
   3. Zobrazit po přihlášení (obě podmínky výše musí platit současně).
-  Tím je pop-up cílený přímo na finanční poradce bez sjednaného pojištění.
+  Tím je pop-up cílený přímo na realitní zprostředkovatele bez sjednaného pojištění.
   ═══════════════════════════════════════════════════════════════════════════
 -->
 <html lang="cs">
@@ -19,7 +19,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Pop-up — Pojištění právní ochrany pro finanční poradce</title>
+  <title>Pop-up — Pojištění právní ochrany pro realitní zprostředkovatele</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -287,8 +287,8 @@
       }
       .popup-badge svg { width: 13px; height: 13px; }
       .popup-eyebrow {
-        font-size: 0.62rem;
-        letter-spacing: 0.02em;
+        font-size: 0.55rem;   /* delší text „pro realitní zprostředkovatele" — menší, ať drží 1 řádek */
+        letter-spacing: 0.01em;
         white-space: nowrap;
       }
       .popup-title { font-size: 1.45rem; }
@@ -307,10 +307,10 @@
   </div>
 
   <!-- ══ POP-UP — tato část se přebírá ══ -->
-  <div class="popup-backdrop" id="popup-fp">
-    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-fp-title">
+  <div class="popup-backdrop" id="popup-rz">
+    <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-rz-title">
 
-      <button class="popup-close" type="button" aria-label="Zavřít" onclick="document.getElementById('popup-fp').style.display='none'">
+      <button class="popup-close" type="button" aria-label="Zavřít" onclick="document.getElementById('popup-rz').style.display='none'">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
           <path d="M6 6l12 12M18 6L6 18"/>
         </svg>
@@ -322,9 +322,9 @@
         Exkluzivně pro Vás se zvýhodněním 41&nbsp;%
       </span>
 
-      <p class="popup-eyebrow">Pojištění právní ochrany pro finanční poradce</p>
+      <p class="popup-eyebrow">Pojištění právní ochrany pro realitní zprostředkovatele</p>
 
-      <h1 class="popup-title" id="popup-fp-title">Právní ochrana podnikání a&nbsp;řidiče.</h1>
+      <h1 class="popup-title" id="popup-rz-title">Právní ochrana podnikání a&nbsp;řidiče.</h1>
 
       <div class="popup-price">
         <s class="price-old">508&nbsp;Kč</s>
@@ -367,8 +367,8 @@
             <path d="M4 12h16M13 5l7 7-7 7"/>
           </svg>
         </a>
-        <!-- vede na microsite pro finanční poradce -->
-        <a class="popup-btn popup-btn--outline" href="https://lexia.cz/financniporadci" target="_blank" rel="noopener">
+        <!-- vede na microsite pro realitní zprostředkovatele -->
+        <a class="popup-btn popup-btn--outline" href="https://lexia.cz/reality" target="_blank" rel="noopener">
           Chci vědět více
         </a>
       </div>
