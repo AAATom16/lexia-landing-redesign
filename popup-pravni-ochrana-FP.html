@@ -31,8 +31,8 @@
       --heading: #001a4d;        /* Deep Navy */
       --accent: #00a5bf;         /* Blue Teal */
       --accent-deep: #005f72;    /* Deep Teal */
-      --accent-yellow: #f2d800;  /* Yellow */
-      --danger: #ef463f;         /* Brand Red */
+      --danger: #ef463f;         /* Brand Red — štítek, přeškrtnutá cena */
+      --green: #16a34a;          /* Zelená — cena a fajfky (dle předlohy) */
       --bg-light: #f0f5ff;
       --white: #ffffff;
       --text: #1a1f2e;
@@ -91,6 +91,8 @@
       position: relative;
       width: 100%;
       max-width: 620px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
       background: var(--white);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-3);
@@ -121,12 +123,12 @@
     .popup-close:hover { background: var(--bg-light); color: var(--heading); }
     .popup-close svg { width: 18px; height: 18px; }
 
-    /* Štítek se zvýhodněním — kobaltový pill, žlutá jiskra (brand akcent) */
+    /* Štítek se zvýhodněním — červený pill, ikona dárku z assets/icons.js */
     .popup-badge {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: var(--primary);
+      gap: 8px;
+      background: var(--danger);
       color: var(--white);
       font-family: var(--font-heading);
       font-weight: 800;
@@ -137,7 +139,7 @@
       border-radius: 100px;
       margin-bottom: 22px;
     }
-    .popup-badge svg { width: 15px; height: 15px; color: var(--accent-yellow); flex-shrink: 0; }
+    .popup-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     .popup-eyebrow {
       font-family: var(--font-base);
@@ -189,7 +191,7 @@
       font-family: var(--font-heading);
       font-weight: 800;
       font-size: 1.7rem;
-      color: var(--accent-deep);
+      color: var(--green);
       margin-left: auto;
     }
 
@@ -212,7 +214,7 @@
     .popup-benefits svg {
       width: 21px;
       height: 21px;
-      color: var(--accent);
+      color: var(--green);
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -249,11 +251,16 @@
 
     /* ── Mobil ───────────────────────────────────────────────────────── */
     @media (max-width: 560px) {
-      .popup { padding: 30px 22px 26px; }
+      .popup-backdrop { padding: 14px; align-items: flex-end; }
+      .popup {
+        padding: 28px 20px 24px;
+        max-height: calc(100vh - 28px);
+      }
       .popup-badge { margin-right: 44px; }   /* ať štítek neleze pod křížek */
-      .popup-title { font-size: 1.5rem; }
+      .popup-title { font-size: 1.45rem; }
       .popup-price { padding: 14px 16px; }
-      .price-new { margin-left: 0; width: 100%; }
+      .price-new { margin-left: 0; width: 100%; font-size: 1.55rem; }
+      .popup-benefits li { font-size: 0.92rem; }
     }
   </style>
 </head>
@@ -274,11 +281,9 @@
         </svg>
       </button>
 
+      <!-- ikona "gift" z assets/icons.js (Lexia icon library) -->
       <span class="popup-badge">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1L12 2z"/>
-          <path d="M19 15l1 2.6L22.6 18.6 20 19.6 19 22.2 18 19.6 15.4 18.6 18 17.6 19 15z" opacity="0.85"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M12 8v13"/><path d="M12 8S10.5 3.5 8 3.5A2.25 2.25 0 0 0 8 8h4Zm0 0s1.5-4.5 4-4.5A2.25 2.25 0 0 1 16 8h-4Z"/></svg>
         Exkluzivně pro Vás se zvýhodněním 41&nbsp;%
       </span>
 

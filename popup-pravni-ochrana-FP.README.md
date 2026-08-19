@@ -1,7 +1,8 @@
 # Pop-up: Pojištění právní ochrany pro finanční poradce
 
-Předloha pop-up okna pro implementaci mimo web Lexia. Design odpovídá
-brand manuálu Lexia 2025 (barvy, fonty Nunito ExtraBold + Poppins).
+Předloha pop-up okna pro implementaci mimo web Lexia. Design vychází
+z vizuálního stylu Lexia (fonty Nunito ExtraBold + Poppins) s barevností
+dle předlohy: červený štítek, zelená cena a fajfky.
 
 ## Soubor
 
@@ -11,6 +12,8 @@ brand manuálu Lexia 2025 (barvy, fonty Nunito ExtraBold + Poppins).
 - Šedomodré bloky v pozadí jsou jen demo kulisa pro náhled — do produkce
   se přebírá pouze blok označený `<!-- ══ POP-UP — tato část se přebírá ══ -->`
   (element `.popup-backdrop` a k němu příslušné CSS).
+- Responzivní: na mobilu (do 560 px) se okno přilepí k dolní hraně
+  a zmenší typografii.
 
 ## Kdy pop-up zobrazit (logika zobrazení)
 
@@ -35,14 +38,16 @@ přihlášení — dle vašeho uvážení.
 - Křížek (`.popup-close`) v demu jen skryje okno přes inline `onclick` —
   při implementaci napojte na vlastní logiku zavírání.
 
-## Použité brand barvy
+## Použité barvy
 
-| Token | Hex | Použití |
+| Barva | Hex | Použití |
 |---|---|---|
-| Cobalt Blue | `#0045bf` | štítek, nadpisek, CTA gradient |
+| Brand Red | `#ef463f` | štítek se zvýhodněním, přeškrtnutá původní cena |
+| Zelená | `#16a34a` | zvýhodněná cena, fajfky u výhod |
+| Cobalt Blue | `#0045bf` | nadpisek, tlačítko Sjednat (gradient) |
 | Deep Navy | `#001a4d` | hlavní nadpis, ztmavené pozadí (overlay) |
-| Blue Teal | `#00a5bf` | ikony odrážek (fajfky) |
-| Deep Teal | `#005f72` | zvýhodněná cena |
-| Yellow | `#f2d800` | jiskra ve štítku |
-| Brand Red | `#ef463f` | přeškrtnutá původní cena |
 | Light Blue | `#f0f5ff` | podklad cenového pruhu |
+
+Ikona ve štítku: **gift** (dárek) z `assets/icons.js` — vlastní ikonová
+sada webu Lexia (Phosphor-style, stroke 1.5 px), stejný styl jako fajfky,
+šipka a křížek.
