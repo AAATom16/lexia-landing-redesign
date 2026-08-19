@@ -3340,7 +3340,9 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   background-position: center;
   background-repeat: no-repeat;
   text-align: left;
-  padding: 0;
+  /* Spodní padding = výška bílé vlny (.hero-inward-curve), aby karta
+     zůstala celá na fotce a nepřetékala do bílé plochy pod vlnou. */
+  padding: 48px 0 190px;
   min-height: 560px;
   display: flex;
   align-items: center;
@@ -3377,7 +3379,7 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 .page-hero--onas .onas-hero-btn:hover span { transform: translateX(4px); }
 
 @media (max-width: 600px) {
-  .page-hero--onas { min-height: 480px; padding: 32px 0; }
+  .page-hero--onas { min-height: 480px; padding: 32px 0 170px; }
   .page-hero--onas .onas-hero-card { padding: 32px 24px; border-radius: 18px; }
 }
 
