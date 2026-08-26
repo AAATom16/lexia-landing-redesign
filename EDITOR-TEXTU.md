@@ -84,25 +84,29 @@ jen adresa `/editor` hlásí, že editor není nastavený.
    něco jako `pravni-ochrana-2026-Lexia!` (toto konkrétní nepoužívat)
 8. Kliknout na **Add** / **Save**
 
-### Krok B — místo pro uložené texty
+### Krok B — místo pro uložené texty (Volume)
 
-Bez tohoto kroku by se úpravy ztratily při každém novém nasazení webu.
+Bez tohoto kroku by se úpravy i historie ztratily při každém novém nasazení webu.
 
-1. Ve stejné službě přepnout na záložku **Settings**
-2. Najít sekci **Volumes** a kliknout na **+ New Volume** / **Add Volume**
-   (v některých verzích Railway je volba i po kliknutí pravým tlačítkem
-   na dlaždici služby → **Attach Volume**)
-3. Do pole **Mount path** napsat `/data`
-4. Potvrdit
+**Volume se nezakládá v Settings služby** — tam ho marně hledáte. Dělá se
+na hlavní ploše projektu:
 
-### Krok C — propojení
+1. Zavřít panel služby (křížek vpravo nahoře), ať je vidět plocha projektu
+   s dlaždicí webu
+2. Vpravo nahoře kliknout na **+ Create** (nebo stisknout **Cmd + K**
+   a napsat `volume`)
+3. Ze seznamu vybrat **Volume**
+4. Railway se zeptá, ke které službě ho připojit — vybrat službu s webem
+   (`lexia-web`)
+5. Do pole **Mount path** napsat `/data`
+6. Potvrdit
 
-1. Zpátky na záložku **Variables**
-2. **+ New Variable**
-3. Název `DATA_DIR`, hodnota `/data`
-4. Uložit
+Jde to i takto: najet myší na dlaždici služby → tři tečky → **Attach Volume**.
 
-Railway po uložení proměnných web sám znovu nasadí. Za minutu až dvě
+Nic dalšího vyplňovat netřeba — server si cestu k Volume přečte od Railway sám.
+(Kdyby bylo někdy potřeba jiné umístění, dá se přebít proměnnou `DATA_DIR`.)
+
+Railway po uložení web sám znovu nasadí. Za minutu až dvě
 je editor dostupný na `https://<adresa-webu>/editor`.
 
 ### Kontrola, že to sedí
@@ -110,7 +114,7 @@ je editor dostupný na `https://<adresa-webu>/editor`.
 - `https://<adresa-webu>/editor` ukáže přihlašovací okno → hotovo
 - Hlásí „Editor není zapnutý" → chybí krok A
 - Přihlášení projde, ale po nasazení nové verze webu jsou úpravy pryč
-  → chybí krok B nebo C
+  → chybí krok B (Volume)
 
 ---
 

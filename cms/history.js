@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
+const DATA_DIR = require('./env').dataDir();
 const INDEX = path.join(DATA_DIR, 'history.jsonl');
 const VERSIONS_DIR = path.join(DATA_DIR, 'versions');
 

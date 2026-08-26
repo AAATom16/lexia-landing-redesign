@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
+const DATA_DIR = require('./env').dataDir();
 const FILE = path.join(DATA_DIR, 'content.json');
 const BACKUP = path.join(DATA_DIR, 'content.backup.json');
 

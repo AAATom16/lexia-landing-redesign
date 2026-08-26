@@ -26,4 +26,14 @@ function loadEnv(file = path.join(__dirname, '..', '.env')) {
   return true;
 }
 
-module.exports = { loadEnv };
+/**
+ * Kam ukládat texty a historii.
+ * Railway nastaví RAILWAY_VOLUME_MOUNT_PATH sám při připojení Volume,
+ * takže stačí Volume připojit a nic dalšího vyplňovat netřeba.
+ */
+const dataDir = () =>
+  process.env.DATA_DIR
+  || process.env.RAILWAY_VOLUME_MOUNT_PATH
+  || path.join(__dirname, '..', 'data');
+
+module.exports = { loadEnv, dataDir };
