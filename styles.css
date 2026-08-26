@@ -8601,3 +8601,24 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   .page-hero--cenik { padding: 34px 0 140px; }
   .page-hero--cenik h1 { font-size: 1.55rem; line-height: 1.2; padding: 0 4px; }
 }
+
+/* ============================================
+   TLAČÍTKO — DOČASNĚ NEAKTIVNÍ (.btn.is-disabled)
+   Používá se na microsite pro finanční poradce a realitní zprostředkovatele
+   u CTA „Sjednat pojištění". Až bude hotová on-line kalkulace, stačí
+   `is-disabled` + `aria-disabled` odstranit a do `href` dát odkaz na kalkulačku.
+   ============================================ */
+.btn.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.35);
+  box-shadow: none;
+}
+.btn.is-disabled:hover,
+.btn.is-disabled:active,
+.btn-primary.is-disabled:hover,
+.btn-primary.is-disabled:active {
+  transform: none;
+  box-shadow: none;
+}
