@@ -81,7 +81,7 @@
       '<button type="button" class="lxe-btn" data-act="toggle">Upravit texty</button>' +
       '<button type="button" class="lxe-btn lxe-btn--save" data-act="save" disabled>Uložit</button>' +
       '<button type="button" class="lxe-btn lxe-btn--ghost" data-act="discard" disabled>Zahodit</button>' +
-      '<a class="lxe-btn lxe-btn--ghost" href="/editor">Přehled</a>' +
+      '<a class="lxe-btn lxe-btn--ghost" href="/editor/stranky">Přehled</a>' +
       '<button type="button" class="lxe-btn lxe-btn--ghost" data-act="logout">Odhlásit</button>';
     document.body.appendChild(bar);
 

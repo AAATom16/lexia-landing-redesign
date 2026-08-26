@@ -26,8 +26,8 @@ změna ztratí (prohlížeč na to upozorní).
 
 - **Ukončit úpravy** — vypne rámečky, web se chová úplně normálně
 - **Zahodit** — zruší rozepsané změny, které ještě nebyly uloženy
-- **Přehled** — seznam všech stránek a kolik má která upravených textů.
-  U každé je i tlačítko **Vrátit vše**
+- **Přehled** — seznam všech stránek a kolik má která upravených textů
+  (`/editor/stranky`). U každé je i tlačítko **Vrátit vše**
 - **Odhlásit** — konec práce. Přihlášení jinak vyprší samo po 12 hodinách
 
 U textu, do kterého se zrovna píše, se nahoře objeví černá bublinka:
@@ -56,7 +56,7 @@ U textu, do kterého se zrovna píše, se nahoře objeví černá bublinka:
 
 Každé uložení se zapíše. Nic se nedá nenávratně rozbít.
 
-1. V editoru kliknout vpravo nahoře na **Historie úprav**
+1. V pruhu dole kliknout na **Přehled** a tam vpravo nahoře na **Historie úprav**
    (nebo rovnou na `https://<adresa-webu>/editor/historie`)
 2. Je tam seznam: **kdy**, **co se dělo**, **která stránka**, **kolik textů**
    se změnilo

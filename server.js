@@ -160,7 +160,7 @@ function overviewPage() {
   <header class="lx-head">
     <div>
       <h1>Editor textů</h1>
-      <p class="lx-muted">Otevřete stránku, klikněte na <strong>Upravit texty</strong> a přepisujte přímo v ní.</p>
+      <p class="lx-muted">Otevřete stránku a přepisujte texty přímo v ní. Web se dá normálně proklikávat.</p>
     </div>
     <div class="lx-head-actions">
       <a class="lx-btn lx-btn-ghost" href="/editor/historie">Historie úprav</a>
@@ -221,7 +221,7 @@ function historyPage(page) {
       <p class="lx-muted">${page ? `Jen stránka <strong>${esc(page)}</strong>.` : 'Každé uložení textů je tu zapsané.'}
       Tlačítko <strong>Vrátit zpět</strong> vrátí celý web do podoby těsně před danou úpravou.</p>
     </div>
-    <a class="lx-btn lx-btn-ghost" href="/editor">Zpět na stránky</a>
+    <a class="lx-btn lx-btn-ghost" href="/editor/stranky">Zpět na stránky</a>
   </header>
   ${entries.length ? `<table class="lx-table">
     <thead><tr><th>Kdy</th><th>Co</th><th>Stránka</th><th>Textů</th><th></th></tr></thead>
@@ -328,7 +328,9 @@ const requireAuth = (req, res, next) => {
   res.redirect('/editor/prihlaseni?next=' + encodeURIComponent(req.originalUrl));
 };
 
-editor.get('/', requireAuth, (req, res) => res.type('html').send(overviewPage()));
+editor.get('/', requireAuth, (req, res) => res.redirect('/?edit=1'));
+
+editor.get('/stranky', requireAuth, (req, res) => res.type('html').send(overviewPage()));
 
 editor.get('/historie', requireAuth, (req, res) =>
   res.type('html').send(historyPage(typeof req.query.stranka === 'string' ? req.query.stranka : '')));
