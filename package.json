@@ -5,9 +5,12 @@
   "description": "Lexia static web",
   "scripts": {
     "build": "echo 'static site, no build'",
-    "start": "serve . -l ${PORT:-3000}"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
+    "express": "^5.2.1",
+    "node-html-parser": "^9.0.1",
     "serve": "^14.2.4"
   }
 }

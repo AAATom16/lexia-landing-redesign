@@ -3,21 +3,43 @@
   "configurations": [
     {
       "name": "lexia-static",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", ".", "-l", "8767"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "server.js"
+      ],
       "port": 8767
     },
     {
       "name": "lexia-static-2",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", ".", "-l", "8768"],
+      "runtimeArgs": [
+        "serve",
+        ".",
+        "-l",
+        "8768"
+      ],
       "port": 8768
     },
     {
       "name": "lexia-static-3",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", ".", "-l", "8769"],
+      "runtimeArgs": [
+        "serve",
+        ".",
+        "-l",
+        "8769"
+      ],
       "port": 8769
+    },
+    {
+      "name": "lexia-auto",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "npx serve . -l \"${PORT:-8770}\""
+      ],
+      "port": 8770,
+      "autoPort": true
     }
   ]
 }
