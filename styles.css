@@ -8009,6 +8009,25 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    Karta nesmí ořezávat přetékající obsah, zaoblení fotky proto řeší .tg-media. */
 .tg-card.fp-sit { position: relative; overflow: visible; }
 .tg-card.fp-sit .tg-media { border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
+
+/* Označení fotek vytvořených umělou inteligencí (AI Act, čl. 50).
+   Záměrně nenápadné — má informovat, ne přebíjet fotku. */
+.tg-ai {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 2px 6px;
+  border-radius: 100px;
+  background: rgba(15, 23, 42, 0.38);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
 .tg-card.fp-sit.is-open { z-index: 40; }
 /* Otevřená karta a panel tvoří jeden celek — dole rovný spoj bez zaoblení */
 #situace .tg-card.fp-sit.is-open,
@@ -8096,6 +8115,25 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 #situace:has(.tg-card.fp-sit.is-open) { position: relative; z-index: 40; }
 #situace:has(.tg-card.fp-sit.is-open) > .container { position: relative; z-index: 40; }
 #situace .tg-card.fp-sit .tg-media { border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
+
+/* Označení fotek vytvořených umělou inteligencí (AI Act, čl. 50).
+   Záměrně nenápadné — má informovat, ne přebíjet fotku. */
+.tg-ai {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 2px 6px;
+  border-radius: 100px;
+  background: rgba(15, 23, 42, 0.38);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+}
 #situace .tg-media {
   aspect-ratio: 16 / 9;
   border-radius: 0;
