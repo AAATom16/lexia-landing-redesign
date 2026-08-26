@@ -129,11 +129,9 @@ function loginPage(error, next) {
     <h1>Editor textů</h1>
     <p class="lx-muted">Zadejte heslo, které jste dostali od správce webu.</p>
     ${error ? `<p class="lx-error">${esc(error)}</p>` : ''}
-    <input type="hidden" name="next" value="${esc(next || '/editor')}">
-    <label for="jmeno">Vaše jméno <span class="lx-optional">(nepovinné, objeví se v historii úprav)</span></label>
-    <input id="jmeno" name="jmeno" type="text" autocomplete="name" maxlength="60">
+    <input type="hidden" name="next" value="${esc(next || '/?edit=1')}">
     <label for="heslo">Heslo</label>
-    <input id="heslo" name="heslo" type="password" autocomplete="current-password" required>
+    <input id="heslo" name="heslo" type="password" autocomplete="current-password" autofocus required>
     <button type="submit" class="lx-btn">Přihlásit se</button>
   </form>
 </div>`);
@@ -143,7 +141,7 @@ function overviewPage() {
   const edits = Object.fromEntries(store.summary().map((s) => [s.page, s]));
   const rows = listPages().map((page) => {
     const info = edits[page];
-    const url = '/' + page;
+    const url = '/' + page + '?edit=1';
     return `<tr>
       <td><a href="${esc(url)}" class="lx-page">${esc(page)}</a></td>
       <td class="lx-num">${info ? `<span class="lx-badge">${info.count}</span>` : '<span class="lx-dash">—</span>'}</td>
@@ -299,13 +297,13 @@ editor.use('/assets', express.static(path.join(ROOT, 'cms', 'assets'), {
 }));
 
 editor.get('/prihlaseni', (req, res) => {
-  if (auth.isAuthed(req)) return res.redirect('/editor');
+  if (auth.isAuthed(req)) return res.redirect('/?edit=1');
   res.type('html').send(loginPage(null, req.query.next));
 });
 
 editor.post('/prihlaseni', (req, res) => {
   const ip = req.ip || 'neznámá';
-  const next = typeof req.body.next === 'string' && req.body.next.startsWith('/') ? req.body.next : '/editor';
+  const next = typeof req.body.next === 'string' && req.body.next.startsWith('/') ? req.body.next : '/?edit=1';
   if (auth.tooManyAttempts(ip)) {
     return res.status(429).type('html')
       .send(loginPage('Příliš mnoho pokusů. Zkuste to prosím za 15 minut.', next));
@@ -315,7 +313,7 @@ editor.post('/prihlaseni', (req, res) => {
     return res.status(401).type('html').send(loginPage('Nesprávné heslo.', next));
   }
   auth.clearAttempts(ip);
-  auth.setCookie(req, res, req.body.jmeno);
+  auth.setCookie(req, res);
   res.redirect(next);
 });
 
@@ -405,7 +403,13 @@ editor.post('/api/save', requireAuth, async (req, res) => {
         before,
       );
     }
-    res.json({ ok: true, saved: touched, unknown });
+    // původní znění ze zdroje — editor podle něj umí nabídnout návrat zpět
+    const orig = {};
+    for (const key of Object.keys(prepared)) {
+      const item = known.get(key);
+      if (item) orig[key] = prepared[key] === null ? null : item.html;
+    }
+    res.json({ ok: true, saved: touched, unknown, orig });
   } catch (err) {
     res.status(500).json({ ok: false, error: 'Uložení selhalo: ' + err.message });
   }

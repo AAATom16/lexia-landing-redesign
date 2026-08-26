@@ -6,16 +6,18 @@
 
 const { extract } = require('./extract');
 
-const ASSET_VERSION = '3';
+const ASSET_VERSION = '5';
 
 const escAttr = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
   .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-function editorAssets(page, stats) {
+const editorStyles = () =>
+  `\n<link rel="stylesheet" href="/editor/assets/cms-editor.css?v=${ASSET_VERSION}">\n`;
+
+function editorScripts(page, stats) {
   const data = JSON.stringify({ page, ...stats }).replace(/</g, '\\u003c');
   return `
-<link rel="stylesheet" href="/editor/assets/cms-editor.css?v=${ASSET_VERSION}">
 <script>window.__LEXIA_CMS__ = ${data};</script>
 <script src="/editor/assets/cms-editor.js?v=${ASSET_VERSION}" defer></script>
 `;
@@ -63,9 +65,14 @@ function render(html, { overrides = {}, editMode = false, page = '', items = nul
   for (const p of patches) out = out.slice(0, p.start) + p.text + out.slice(p.end);
 
   if (editMode) {
-    const assets = editorAssets(page, { editable: items.length, applied, stale });
-    const idx = out.toLowerCase().lastIndexOf('</body>');
-    out = idx === -1 ? out + assets : out.slice(0, idx) + assets + out.slice(idx);
+    // styl do <head> (v <body> by ho mohl spolknout rozbitý tag),
+    // skripty na konec <body>
+    const head = out.toLowerCase().indexOf('</head>');
+    if (head !== -1) out = out.slice(0, head) + editorStyles() + out.slice(head);
+
+    const scripts = editorScripts(page, { editable: items.length, applied, stale });
+    const body = out.toLowerCase().lastIndexOf('</body>');
+    out = body === -1 ? out + scripts : out.slice(0, body) + scripts + out.slice(body);
   }
 
   return { html: out, items, applied, stale };

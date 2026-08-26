@@ -1,4 +1,8 @@
-/* Editor textů — klientská část. Načítá se jen přihlášenému uživateli. */
+/* Editor textů — klientská část. Načítá se jen přihlášenému uživateli.
+ *
+ * Web se v režimu úprav chová jako obyčejný web: odkazy fungují, jde se jím
+ * proklikávat. Text se začne upravovat až kliknutím do něj — teprve tehdy
+ * dostane ten jeden prvek contenteditable. */
 (function () {
   'use strict';
 
@@ -9,9 +13,10 @@
   if (!nodes.length) return;
 
   var original = new Map();   // klíč -> podoba textu při načtení stránky
-  var dirty = new Set();      // klíče, do kterých uživatel opravdu psal
-  var editing = false;
-  var bar, countEl, saveBtn, discardBtn, pop, popTarget, toastEl;
+  var dirty = new Set();      // klíče, do kterých uživatel psal
+  var editing = false;        // zapnutý režim úprav
+  var active = null;          // prvek, který se právě upravuje
+  var bar, countEl, saveBtn, discardBtn, pop, badge, badgeTarget, toastEl;
 
   // ------------------------------------------------------------- pomocné
 
@@ -22,7 +27,7 @@
   function cleanHtml(el) {
     var clone = el.cloneNode(true);
     clone.querySelectorAll('[data-icon]').forEach(function (icon) { icon.innerHTML = ''; });
-    return clone.innerHTML.replace(/\u200b/g, '');
+    return clone.innerHTML.replace(/​/g, '');
   }
 
   function isChanged(el) {
@@ -35,6 +40,18 @@
 
   function changedNodes() {
     return nodes.filter(isChanged);
+  }
+
+  /** Je celý text prvku schovaný v odkazech? Pak není kam kliknout na úpravu. */
+  function isLinkOnly(el) {
+    if (el.tagName === 'A') return true;
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var node;
+    while ((node = walker.nextNode())) {
+      if (!node.nodeValue.trim()) continue;
+      if (!node.parentElement.closest('a')) return false;
+    }
+    return true;
   }
 
   function refresh() {
@@ -86,30 +103,49 @@
     toastEl.className = 'lxe-toast';
     document.body.appendChild(toastEl);
 
+    // bublina u právě upravovaného textu
     pop = document.createElement('div');
     pop.className = 'lxe-pop';
     pop.hidden = true;
-    pop.innerHTML = '<button type="button" data-pop="revert">Vrátit původní text</button>';
+    pop.innerHTML =
+      '<button type="button" data-pop="revert">Vrátit původní text</button>' +
+      '<button type="button" data-pop="done">Hotovo</button>';
     document.body.appendChild(pop);
     pop.addEventListener('mousedown', function (e) { e.preventDefault(); });
     pop.addEventListener('click', function (e) {
-      if (!e.target.closest('[data-pop="revert"]') || !popTarget) return;
-      var key = popTarget.getAttribute('data-cms-key');
-      if (popTarget.hasAttribute('data-cms-orig')) {
+      if (!active) return;
+      if (e.target.closest('[data-pop="done"]')) return stopEditing();
+      if (!e.target.closest('[data-pop="revert"]')) return;
+      var key = active.getAttribute('data-cms-key');
+      if (active.hasAttribute('data-cms-orig')) {
         // text byl někdy dříve upraven — vracíme znění ze zdroje webu
-        popTarget.innerHTML = popTarget.getAttribute('data-cms-orig');
+        active.innerHTML = active.getAttribute('data-cms-orig');
         dirty.add(key);
       } else {
-        popTarget.innerHTML = original.get(key);
+        active.innerHTML = original.get(key);
         dirty.delete(key);
       }
       refresh();
-      hidePop();
+      stopEditing();
+    });
+
+    // tužka u textů, které jsou celé odkazem (jinak by klik jen přepnul stránku)
+    badge = document.createElement('button');
+    badge.type = 'button';
+    badge.className = 'lxe-badge';
+    badge.title = 'Upravit tento text';
+    badge.textContent = '✎';
+    badge.hidden = true;
+    document.body.appendChild(badge);
+    badge.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (badgeTarget) startEditing(badgeTarget);
+      hideBadge();
     });
   }
 
-  function showPop(el) {
-    popTarget = el;
+  function placePop(el) {
     var r = el.getBoundingClientRect();
     pop.hidden = false;
     var top = r.top + window.scrollY - pop.offsetHeight - 8;
@@ -120,7 +156,19 @@
 
   function hidePop() {
     pop.hidden = true;
-    popTarget = null;
+  }
+
+  function showBadge(el) {
+    badgeTarget = el;
+    var r = el.getBoundingClientRect();
+    badge.hidden = false;
+    badge.style.top = (r.top + window.scrollY - 6) + 'px';
+    badge.style.left = (r.right + window.scrollX + 4) + 'px';
+  }
+
+  function hideBadge() {
+    badge.hidden = true;
+    badgeTarget = null;
   }
 
   // ---------------------------------------------------------- režim úprav
@@ -143,15 +191,66 @@
     editing = on;
     rememberEditing(on);
     document.body.classList.toggle('lxe-editing', on);
-    nodes.forEach(function (el) {
-      if (on) el.setAttribute('contenteditable', 'true');
-      else el.removeAttribute('contenteditable');
-    });
+    if (!on) {
+      stopEditing();
+      hideBadge();
+    }
     bar.querySelector('[data-act="toggle"]').textContent = on ? 'Ukončit úpravy' : 'Upravit texty';
-    if (!on) hidePop();
-    if (on && !quiet) toast('Klikněte na text a přepište ho. Na jinou stránku přes Přehled.');
+    if (on && !quiet) toast('Klikněte na text a přepište ho. Odkazy fungují normálně.');
     refresh();
   }
+
+  /** Zapne úpravy jednoho prvku a postaví kurzor tam, kam se kliklo. */
+  function startEditing(el, x, y) {
+    if (active === el) return;
+    stopEditing();
+    active = el;
+    el.setAttribute('contenteditable', 'true');
+    el.focus({ preventScroll: true });
+
+    if (typeof x === 'number' && document.caretRangeFromPoint) {
+      var range = document.caretRangeFromPoint(x, y);
+      if (range) {
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+    placePop(el);
+  }
+
+  function stopEditing() {
+    if (!active) return;
+    active.removeAttribute('contenteditable');
+    active.blur();
+    active = null;
+    hidePop();
+  }
+
+  // klik rozhodne: odkaz = přejít, text = začít upravovat
+  document.addEventListener('mousedown', function (e) {
+    if (!editing || e.button !== 0) return;
+    if (e.target.closest('.lxe-bar, .lxe-pop, .lxe-badge')) return;
+
+    var el = e.target.closest('[data-cms-key]');
+    if (!el) return stopEditing();
+    if (el === active) return;
+
+    // odkaz uvnitř textu necháme fungovat jako odkaz
+    if (e.target.closest('a') && el.contains(e.target.closest('a'))) return stopEditing();
+
+    e.preventDefault();
+    startEditing(el, e.clientX, e.clientY);
+  }, true);
+
+  // tužka u textů, kam se jinak kliknout nedá
+  document.addEventListener('mouseover', function (e) {
+    if (!editing) return;
+    if (e.target.closest('.lxe-bar, .lxe-pop, .lxe-badge')) return;
+    var el = e.target.closest('[data-cms-key]');
+    if (!el || el === active || !isLinkOnly(el)) return hideBadge();
+    if (el !== badgeTarget) showBadge(el);
+  });
 
   function insertLineBreak() {
     var sel = window.getSelection();
@@ -175,22 +274,22 @@
       if (editing) save();
       return;
     }
-    if (!editing) return;
-    if (e.key === 'Escape') { hidePop(); document.activeElement.blur(); return; }
-    if (e.key === 'Enter' && e.target.hasAttribute && e.target.hasAttribute('data-cms-key')) {
+    if (!editing || !active) return;
+    if (e.key === 'Escape') return stopEditing();
+    if (e.key === 'Enter') {
       e.preventDefault();
       insertLineBreak();
-      markDirty(e.target);
+      markDirty(active);
       refresh();
     }
   });
 
   document.addEventListener('paste', function (e) {
-    if (!editing || !e.target.hasAttribute || !e.target.hasAttribute('data-cms-key')) return;
+    if (!active || e.target !== active) return;
     e.preventDefault();
     var text = (e.clipboardData || window.clipboardData).getData('text/plain');
     document.execCommand('insertText', false, text);
-    markDirty(e.target);
+    markDirty(active);
     refresh();
   });
 
@@ -200,22 +299,15 @@
     refresh();
   });
 
-  document.addEventListener('focusin', function (e) {
-    if (!editing) return;
-    var el = e.target.closest && e.target.closest('[data-cms-key]');
-    if (el) showPop(el); else hidePop();
+  window.addEventListener('resize', function () {
+    hideBadge();
+    if (active) placePop(active);
   });
 
-  // v režimu úprav klik do odkazu jen postaví kurzor (jinak by se stránka přepnula);
-  // s Ctrl/Cmd odkaz normálně funguje, ať jde po webu procházet dál
-  document.addEventListener('click', function (e) {
-    if (!editing) return;
-    if (e.ctrlKey || e.metaKey) return;
-    var link = e.target.closest('a');
-    if (link && link.closest('[data-cms-key]') && !link.closest('.lxe-bar')) e.preventDefault();
-  }, true);
-
-  window.addEventListener('resize', hidePop);
+  window.addEventListener('scroll', function () {
+    hideBadge();
+    if (active) placePop(active);
+  }, { passive: true });
 
   // ------------------------------------------------------------- ukládání
 
@@ -225,7 +317,7 @@
       el.innerHTML = original.get(el.getAttribute('data-cms-key'));
     });
     dirty.clear();
-    hidePop();
+    stopEditing();
     refresh();
     toast('Neuložené změny zahozeny.');
   }
@@ -233,6 +325,8 @@
   function save() {
     var changed = changedNodes();
     if (!changed.length) return;
+    stopEditing();
+
     var payload = {};
     changed.forEach(function (el) {
       payload[el.getAttribute('data-cms-key')] = cleanHtml(el);
@@ -249,9 +343,20 @@
     }).then(function (r) {
       saveBtn.textContent = 'Uložit';
       if (!r.ok || !r.data.ok) throw new Error((r.data && r.data.error) || 'Uložení selhalo.');
-      window.removeEventListener('beforeunload', warnUnsaved);
-      toast('Uloženo. Načítám stránku…');
-      setTimeout(function () { location.reload(); }, 500);
+
+      // stránku nepřenačítáme, jen si posuneme "původní podobu"
+      var orig = r.data.orig || {};
+      changed.forEach(function (el) {
+        var key = el.getAttribute('data-cms-key');
+        original.set(key, el.innerHTML);
+        if (Object.prototype.hasOwnProperty.call(orig, key)) {
+          if (orig[key] === null) el.removeAttribute('data-cms-orig');
+          else el.setAttribute('data-cms-orig', orig[key]);
+        }
+      });
+      dirty.clear();
+      refresh();
+      toast('Uloženo. Změny jsou hned na webu.');
     }).catch(function (err) {
       saveBtn.textContent = 'Uložit';
       saveBtn.disabled = false;
@@ -260,6 +365,9 @@
   }
 
   function logout() {
+    if (changedNodes().length && !confirm('Máte neuložené změny. Opravdu se odhlásit?')) return;
+    dirty.clear();
+    rememberEditing(false);
     var form = document.createElement('form');
     form.method = 'post';
     form.action = '/editor/odhlasit';
@@ -274,6 +382,8 @@
   }
   window.addEventListener('beforeunload', warnUnsaved);
 
+  // --------------------------------------------------------------- start
+
   function init() {
     // až po ostatních skriptech webu (icons.js doplňuje SVG do ikon),
     // ať je "původní podoba" opravdu ta, kterou uživatel vidí
@@ -282,8 +392,16 @@
     });
     buildBar();
     refresh();
-    // režim úprav přežije proklik na jinou stránku
-    if (wasEditing()) setEditing(true, true);
+
+    // ?edit=1 (po přihlášení) nebo pokračování z předchozí stránky
+    var wanted = /[?&]edit=1\b/.test(location.search);
+    if (wanted) {
+      var clean = location.pathname
+        + location.search.replace(/([?&])edit=1(&|$)/, '$1').replace(/[?&]$/, '')
+        + location.hash;
+      history.replaceState(null, '', clean);
+    }
+    if (wanted || wasEditing()) setEditing(true, true);
   }
 
   if (document.readyState === 'complete') init();

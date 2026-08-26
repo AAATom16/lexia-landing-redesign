@@ -8,25 +8,32 @@ Je schovaný za heslem. Kdo heslo nemá, vidí web úplně normálně.
 ## 1. Jak se to používá (pro člověka, který bude texty upravovat)
 
 1. Otevřít adresu **`https://<adresa-webu>/editor`**
-2. Vyplnit **jméno** (nepovinné — objeví se u úprav v historii), zadat heslo
-   a kliknout na **Přihlásit se**
-3. Objeví se seznam stránek. U vybrané stránky kliknout na **Otevřít a upravit**
-4. Stránka se otevře jako normální web, ale dole se ukáže bílý pruh
-   **„Editor textů"**. Kliknout v něm na **Upravit texty**
-5. Všechny texty, které jdou měnit, dostanou tečkovaný rámeček.
-   Kliknout do textu a přepsat ho jako ve Wordu
-6. Upravený text zezelená. Dole se objeví počet změn
-7. Kliknout na **Uložit** (nebo Ctrl+S / Cmd+S). Stránka se znovu načte
+2. Zadat heslo a kliknout na **Přihlásit se**
+3. Otevře se rovnou úvodní stránka webu, dole s bílým pruhem **„Editor textů"**
+   a už zapnutými úpravami
+4. Texty, které jdou měnit, mají tečkovaný rámeček. Kliknout do textu
+   a přepsat ho jako ve Wordu
+5. Upravený text zezelená, v pruhu dole naskočí počet změn
+6. Kliknout na **Uložit** (nebo Ctrl+S / Cmd+S). Stránka nikam neuskočí
    a změna je hned vidět i pro návštěvníky webu
+
+**Web se dá normálně proklikávat** — odkazy i menu fungují jako obvykle,
+takže se dá jít na další stránku a pokračovat tam. Režim úprav zůstává
+zapnutý. Jen pozor: než odejdete ze stránky, uložte, jinak se rozepsaná
+změna ztratí (prohlížeč na to upozorní).
 
 ### Co ještě pruh umí
 
+- **Ukončit úpravy** — vypne rámečky, web se chová úplně normálně
 - **Zahodit** — zruší rozepsané změny, které ještě nebyly uloženy
-- **Vrátit původní text** — malá černá bublinka u textu, do kterého se zrovna
-  klikne. Vrátí znění, které je v původní verzi webu
 - **Přehled** — seznam všech stránek a kolik má která upravených textů.
   U každé je i tlačítko **Vrátit vše**
 - **Odhlásit** — konec práce. Přihlášení jinak vyprší samo po 12 hodinách
+
+U textu, do kterého se zrovna píše, se nahoře objeví černá bublinka:
+
+- **Vrátit původní text** — vrátí znění z původní verze webu
+- **Hotovo** — ukončí psaní do tohoto textu
 
 ### Dobré vědět
 
@@ -34,11 +41,10 @@ Je schovaný za heslem. Kdo heslo nemá, vidí web úplně normálně.
 - Vložení textu ze schránky (Ctrl+V) vloží jen čistý text, bez cizího formátování
 - Nejdou měnit: obrázky, ceny počítané kalkulačkou, čísla smluv a další údaje,
   které dopočítává skript. Ty rámeček nedostanou
-- Odkazy v režimu úprav nepřepínají stránku — klik do nich jen postaví kurzor,
-  aby šel text odkazu přepsat. Když je potřeba odkaz přesto otevřít, stačí
-  při kliknutí držet **Ctrl** (na Macu **Cmd**)
-- Režim úprav zůstane zapnutý i po přechodu na jinou stránku, takže jde
-  web procházet a průběžně opravovat texty
+- Kliknutí na odkaz stránku normálně přepne. U textů, které jsou **celé
+  odkazem** (položky v menu, tlačítka), se při najetí myší objeví modré
+  kolečko s tužkou — kliknutím na něj se text začne upravovat
+- Režim úprav zůstane zapnutý i po přechodu na jinou stránku
 - Texty jsou vedené zvlášť pro každou stránku. Když se stejný text opakuje
   (třeba v patičce), úprava se projeví jen na té stránce, kde se udělala
 - Úpravy **nemění soubory webu**. Ukládají se zvlášť a při zobrazení se do stránky
@@ -52,7 +58,8 @@ Každé uložení se zapíše. Nic se nedá nenávratně rozbít.
 
 1. V editoru kliknout vpravo nahoře na **Historie úprav**
    (nebo rovnou na `https://<adresa-webu>/editor/historie`)
-2. Je tam seznam: **kdy**, **kdo**, **která stránka**, **kolik textů** se změnilo
+2. Je tam seznam: **kdy**, **co se dělo**, **která stránka**, **kolik textů**
+   se změnilo
 3. **Co se změnilo** ukáže u každého textu vedle sebe červeně **PŘED**
    a zeleně **PO**
 4. **Vrátit zpět** vrátí texty na celém webu do podoby těsně před tou úpravou
