@@ -17,10 +17,11 @@ Je schovaný za heslem. Kdo heslo nemá, vidí web úplně normálně.
 6. Kliknout na **Uložit** (nebo Ctrl+S / Cmd+S). Stránka nikam neuskočí
    a změna je hned vidět i pro návštěvníky webu
 
-**Web se dá normálně proklikávat** — odkazy i menu fungují jako obvykle,
-takže se dá jít na další stránku a pokračovat tam. Režim úprav zůstává
-zapnutý. Jen pozor: než odejdete ze stránky, uložte, jinak se rozepsaná
-změna ztratí (prohlížeč na to upozorní).
+**Přechod na jinou stránku:** dokud jsou úpravy zapnuté, web se nikam
+nepřepíná — klik do odkazu nebo tlačítka jen postaví kurzor, aby šel jejich
+text přepsat. Než někam přejdete, klikněte na **Uložit** a pak na
+**Ukončit úpravy**. Web se rozjede jako normálně, prokliknete se, kam
+potřebujete, a tam zase dáte **Upravit texty**.
 
 ### Co ještě pruh umí
 
@@ -41,9 +42,9 @@ U textu, do kterého se zrovna píše, se nahoře objeví černá bublinka:
 - Vložení textu ze schránky (Ctrl+V) vloží jen čistý text, bez cizího formátování
 - Nejdou měnit: obrázky, ceny počítané kalkulačkou, čísla smluv a další údaje,
   které dopočítává skript. Ty rámeček nedostanou
-- Kliknutí na odkaz stránku normálně přepne. U textů, které jsou **celé
-  odkazem** (položky v menu, tlačítka), se při najetí myší objeví modré
-  kolečko s tužkou — kliknutím na něj se text začne upravovat
+- Se zapnutými úpravami se nedá omylem odejít ze stránky ani spustit
+  tlačítko — všechny klikací prvky slouží k přepsání textu. Vypne se to
+  tlačítkem **Ukončit úpravy**
 - Režim úprav zůstane zapnutý i po přechodu na jinou stránku
 - Texty jsou vedené zvlášť pro každou stránku. Když se stejný text opakuje
   (třeba v patičce), úprava se projeví jen na té stránce, kde se udělala

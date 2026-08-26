@@ -1,8 +1,9 @@
 /* Editor textů — klientská část. Načítá se jen přihlášenému uživateli.
  *
- * Web se v režimu úprav chová jako obyčejný web: odkazy fungují, jde se jím
- * proklikávat. Text se začne upravovat až kliknutím do něj — teprve tehdy
- * dostane ten jeden prvek contenteditable. */
+ * V režimu úprav se web nikam nepřepíná — klik do textu jen postaví kurzor,
+ * i když je ten text odkaz nebo tlačítko. Web se zase rozchodí po kliknutí
+ * na "Ukončit úpravy". Contenteditable dostane vždy jen ten jeden text,
+ * do kterého se kliklo. */
 (function () {
   'use strict';
 
@@ -16,7 +17,7 @@
   var dirty = new Set();      // klíče, do kterých uživatel psal
   var editing = false;        // zapnutý režim úprav
   var active = null;          // prvek, který se právě upravuje
-  var bar, countEl, saveBtn, discardBtn, pop, badge, badgeTarget, toastEl;
+  var bar, countEl, saveBtn, discardBtn, pop, toastEl;
 
   // ------------------------------------------------------------- pomocné
 
@@ -40,18 +41,6 @@
 
   function changedNodes() {
     return nodes.filter(isChanged);
-  }
-
-  /** Je celý text prvku schovaný v odkazech? Pak není kam kliknout na úpravu. */
-  function isLinkOnly(el) {
-    if (el.tagName === 'A') return true;
-    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
-    var node;
-    while ((node = walker.nextNode())) {
-      if (!node.nodeValue.trim()) continue;
-      if (!node.parentElement.closest('a')) return false;
-    }
-    return true;
   }
 
   function refresh() {
@@ -128,21 +117,6 @@
       refresh();
       stopEditing();
     });
-
-    // tužka u textů, které jsou celé odkazem (jinak by klik jen přepnul stránku)
-    badge = document.createElement('button');
-    badge.type = 'button';
-    badge.className = 'lxe-badge';
-    badge.title = 'Upravit tento text';
-    badge.textContent = '✎';
-    badge.hidden = true;
-    document.body.appendChild(badge);
-    badge.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (badgeTarget) startEditing(badgeTarget);
-      hideBadge();
-    });
   }
 
   function placePop(el) {
@@ -156,19 +130,6 @@
 
   function hidePop() {
     pop.hidden = true;
-  }
-
-  function showBadge(el) {
-    badgeTarget = el;
-    var r = el.getBoundingClientRect();
-    badge.hidden = false;
-    badge.style.top = (r.top + window.scrollY - 6) + 'px';
-    badge.style.left = (r.right + window.scrollX + 4) + 'px';
-  }
-
-  function hideBadge() {
-    badge.hidden = true;
-    badgeTarget = null;
   }
 
   // ---------------------------------------------------------- režim úprav
@@ -191,12 +152,9 @@
     editing = on;
     rememberEditing(on);
     document.body.classList.toggle('lxe-editing', on);
-    if (!on) {
-      stopEditing();
-      hideBadge();
-    }
+    if (!on) stopEditing();
     bar.querySelector('[data-act="toggle"]').textContent = on ? 'Ukončit úpravy' : 'Upravit texty';
-    if (on && !quiet) toast('Klikněte na text a přepište ho. Odkazy fungují normálně.');
+    if (on && !quiet) toast('Klikněte na text a přepište ho. Na jinou stránku přes Ukončit úpravy.');
     refresh();
   }
 
@@ -227,30 +185,29 @@
     hidePop();
   }
 
-  // klik rozhodne: odkaz = přejít, text = začít upravovat
+  const inEditorUi = (el) => !!(el.closest && el.closest('.lxe-bar, .lxe-pop, .lxe-toast'));
+
+  // v režimu úprav klik do textu jen postaví kurzor
   document.addEventListener('mousedown', function (e) {
-    if (!editing || e.button !== 0) return;
-    if (e.target.closest('.lxe-bar, .lxe-pop, .lxe-badge')) return;
+    if (!editing || e.button !== 0 || e.ctrlKey || e.metaKey) return;
+    if (inEditorUi(e.target)) return;
 
     var el = e.target.closest('[data-cms-key]');
     if (!el) return stopEditing();
     if (el === active) return;
 
-    // odkaz uvnitř textu necháme fungovat jako odkaz
-    if (e.target.closest('a') && el.contains(e.target.closest('a'))) return stopEditing();
-
     e.preventDefault();
     startEditing(el, e.clientX, e.clientY);
   }, true);
 
-  // tužka u textů, kam se jinak kliknout nedá
-  document.addEventListener('mouseover', function (e) {
-    if (!editing) return;
-    if (e.target.closest('.lxe-bar, .lxe-pop, .lxe-badge')) return;
-    var el = e.target.closest('[data-cms-key]');
-    if (!el || el === active || !isLinkOnly(el)) return hideBadge();
-    if (el !== badgeTarget) showBadge(el);
-  });
+  // ...a stránka se nikam nepřepne, ani se nespustí tlačítko pod textem
+  document.addEventListener('click', function (e) {
+    if (!editing || e.ctrlKey || e.metaKey) return;
+    if (inEditorUi(e.target)) return;
+    if (!e.target.closest('[data-cms-key]')) return;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
 
   function insertLineBreak() {
     var sel = window.getSelection();
@@ -300,12 +257,10 @@
   });
 
   window.addEventListener('resize', function () {
-    hideBadge();
     if (active) placePop(active);
   });
 
   window.addEventListener('scroll', function () {
-    hideBadge();
     if (active) placePop(active);
   }, { passive: true });
 

@@ -84,29 +84,11 @@ body.lxe-editing [data-cms-key].lxe-changed {
   outline: 2px solid var(--lxe-green);
   background: rgba(15, 157, 88, .08);
 }
-/* odkazy v režimu úprav pořád fungují jako odkazy */
+/* v režimu úprav i odkazy a tlačítka slouží k psaní, ne k proklikávání */
 body.lxe-editing a[data-cms-key],
-body.lxe-editing [data-cms-key] a { cursor: pointer; }
-
-/* tužka u textů, které jsou celé odkazem */
-.lxe-badge {
-  position: absolute;
-  z-index: 2147483001;
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--lxe-blue);
-  color: #fff;
-  font-size: 13px;
-  line-height: 26px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(18, 35, 63, .3);
-}
-.lxe-badge:hover { filter: brightness(1.12); }
-.lxe-badge[hidden] { display: none; }
+body.lxe-editing button[data-cms-key],
+body.lxe-editing [data-cms-key] a,
+body.lxe-editing [data-cms-key] button { cursor: text; }
 
 /* bublina u právě upravovaného textu */
 .lxe-pop {
@@ -157,8 +139,26 @@ body.lxe-editing [data-cms-key] a { cursor: pointer; }
 
 @media print { .lxe-bar, .lxe-pop, .lxe-toast { display: none !important; } }
 
-@media (max-width: 620px) {
-  .lxe-bar { gap: 6px; padding: 7px 8px; font-size: 13px; }
+@media (max-width: 700px) {
+  .lxe-bar {
+    gap: 6px;
+    padding: 7px 10px;
+    font-size: 13px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    left: 8px;
+    right: 8px;
+    bottom: 10px;
+    transform: none;
+    max-width: none;
+    border-radius: 14px;
+    scrollbar-width: none;
+  }
+  .lxe-bar::-webkit-scrollbar { display: none; }
   .lxe-bar__label { display: none; }
-  .lxe-btn { padding: 8px 12px; }
+  .lxe-bar__dot { margin-left: 0; }
+  .lxe-btn { padding: 8px 12px; flex: none; }
+  .lxe-toast { bottom: 74px; left: 8px; right: 8px; transform: none; text-align: center; }
+  .lxe-toast.is-on { transform: translateY(-4px); }
 }

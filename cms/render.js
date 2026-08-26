@@ -6,7 +6,7 @@
 
 const { extract } = require('./extract');
 
-const ASSET_VERSION = '6';
+const ASSET_VERSION = '8';
 
 const escAttr = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
