@@ -155,6 +155,14 @@ function overviewPage() {
   }).join('');
 
   const total = Object.values(edits).reduce((a, e) => a + e.count, 0);
+  const warning = store.isWritable() ? '' : `
+  <div class="lx-alert">
+    <strong>Úpravy se teď neuloží.</strong>
+    Server nemůže zapisovat do <code>${esc(store.DATA_DIR)}</code>.
+    Na Railway to znamená, že službě chybí <strong>Volume</strong> připojený na <code>/data</code>.
+    <span class="lx-alert-detail">${esc(store.writableError())}</span>
+  </div>`;
+
   return shell('Editor textů', `
 <div class="lx-wrap">
   <header class="lx-head">
@@ -167,6 +175,7 @@ function overviewPage() {
       <form method="post" action="/editor/odhlasit"><button class="lx-btn lx-btn-ghost">Odhlásit se</button></form>
     </div>
   </header>
+  ${warning}
   <p class="lx-summary">Upravených textů celkem: <strong>${total}</strong></p>
   <table class="lx-table">
     <thead><tr><th>Stránka</th><th>Úprav</th><th>Naposledy</th><th></th></tr></thead>
@@ -360,8 +369,13 @@ editor.post('/api/restore', requireAuth, async (req, res) => {
   }
 });
 
-editor.get('/api/stav', (req, res) =>
-  res.json({ authed: auth.isAuthed(req), pages: auth.isAuthed(req) ? store.summary() : [] }));
+editor.get('/api/stav', (req, res) => res.json({
+  authed: auth.isAuthed(req),
+  ulozisteFunguje: store.isWritable(),
+  uloziste: store.DATA_DIR,
+  chyba: store.isWritable() ? '' : store.writableError(),
+  pages: auth.isAuthed(req) ? store.summary() : [],
+}));
 
 editor.post('/api/save', requireAuth, async (req, res) => {
   const { page, changes } = req.body || {};
@@ -471,7 +485,9 @@ app.use((req, res, next) => {
   const overrides = store.getPage(page);
   const hasWork = editMode || Object.keys(overrides).length > 0;
   const html = hasWork
-    ? render(entry.source, { overrides, editMode, page, items: entry.items }).html
+    ? render(entry.source, {
+      overrides, editMode, page, items: entry.items, storageError: editMode && !store.isWritable(),
+    }).html
     : entry.source;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -506,9 +522,13 @@ app.use((req, res) => {
 
 store.load();
 history.load();
+store.checkWritable();
 app.listen(PORT, () => {
   console.log(`[lexia] web běží na http://localhost:${PORT}`);
   console.log(auth.isEnabled()
     ? `[lexia] editor textů: http://localhost:${PORT}/editor (data v ${store.FILE})`
     : '[lexia] editor textů je VYPNUTÝ — nastavte LEXIA_EDITOR_PASSWORD');
+  store.checkWritable().then((state) => {
+    if (state.ok) console.log('[lexia] úložiště textů je zapisovatelné');
+  });
 });

@@ -6,7 +6,7 @@
 
 const { extract } = require('./extract');
 
-const ASSET_VERSION = '9';
+const ASSET_VERSION = '10';
 
 const escAttr = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
@@ -28,7 +28,9 @@ function editorScripts(page, stats) {
  * @param {object} opts   { overrides, editMode, page, items }
  * @returns {{ html: string, items: Array, applied: number }}
  */
-function render(html, { overrides = {}, editMode = false, page = '', items = null } = {}) {
+function render(html, {
+  overrides = {}, editMode = false, page = '', items = null, storageError = false,
+} = {}) {
   if (!items) {
     try {
       items = extract(html);
@@ -70,7 +72,7 @@ function render(html, { overrides = {}, editMode = false, page = '', items = nul
     const head = out.toLowerCase().indexOf('</head>');
     if (head !== -1) out = out.slice(0, head) + editorStyles() + out.slice(head);
 
-    const scripts = editorScripts(page, { editable: items.length, applied, stale });
+    const scripts = editorScripts(page, { editable: items.length, applied, stale, storageError });
     const body = out.toLowerCase().lastIndexOf('</body>');
     out = body === -1 ? out + scripts : out.slice(0, body) + scripts + out.slice(body);
   }

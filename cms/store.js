@@ -53,6 +53,28 @@ function persist() {
   return writeQueue;
 }
 
+/** Jde do úložiště vůbec zapisovat? Bez toho editor neuloží nic. */
+let writable = { ok: false, error: 'zatím nezkontrolováno' };
+
+async function checkWritable() {
+  const probe = path.join(DATA_DIR, '.zapis-test');
+  try {
+    await fs.promises.mkdir(DATA_DIR, { recursive: true });
+    await fs.promises.writeFile(probe, 'ok', 'utf8');
+    await fs.promises.unlink(probe);
+    writable = { ok: true, error: '' };
+  } catch (err) {
+    writable = { ok: false, error: `${err.code || ''} ${err.message}`.trim() };
+    console.error(`[cms] POZOR: do ${DATA_DIR} nejde zapisovat — úpravy se neuloží.`);
+    console.error(`[cms] důvod: ${writable.error}`);
+    console.error('[cms] na Railway to znamená chybějící Volume připojený na /data.');
+  }
+  return writable;
+}
+
+const isWritable = () => writable.ok;
+const writableError = () => writable.error;
+
 const getPage = (page) => db.pages[page] || {};
 
 /** Kopie celého stavu — podklad pro historii verzí. */
@@ -105,5 +127,6 @@ const summary = () =>
   })).sort((a, b) => a.page.localeCompare(b.page, 'cs'));
 
 module.exports = {
-  load, getPage, applyChanges, resetPage, summary, snapshot, replaceAll, FILE, DATA_DIR,
+  load, getPage, applyChanges, resetPage, summary, snapshot, replaceAll,
+  checkWritable, isWritable, writableError, FILE, DATA_DIR,
 };

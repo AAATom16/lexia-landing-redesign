@@ -351,6 +351,11 @@
     buildBar();
     refresh();
 
+    if (CFG.storageError) {
+      toast('Pozor: úpravy se neuloží — serveru chybí úložiště. Podrobnosti v Přehledu.', true);
+      saveBtn.title = 'Server nemůže ukládat — chybí úložiště (na Railway Volume na /data)';
+    }
+
     // ?edit=1 (po přihlášení) nebo pokračování z předchozí stránky
     var wanted = /[?&]edit=1\b/.test(location.search);
     if (wanted) {

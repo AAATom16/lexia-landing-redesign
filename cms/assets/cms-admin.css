@@ -201,3 +201,26 @@ a { color: #0045bf; }
 @media (max-width: 700px) {
   .lx-diff { grid-template-columns: 1fr; }
 }
+
+.lx-alert {
+  background: #fde8e7;
+  border: 1px solid #f4b8b4;
+  color: #8c2019;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin: 22px 0 0;
+  font-size: .93rem;
+  line-height: 1.6;
+}
+.lx-alert code {
+  background: rgba(140, 32, 25, .1);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: .88em;
+}
+.lx-alert-detail {
+  display: block;
+  margin-top: 6px;
+  font-size: .82rem;
+  opacity: .75;
+}
