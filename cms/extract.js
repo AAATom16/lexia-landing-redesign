@@ -37,14 +37,18 @@ const SKIP_TAGS = new Set([
 const MAX_LEN = 6000;
 
 /**
- * Místa, která přepisuje script.js za běhu (dopočítané ceny, jména, data).
- * Editovat je nemá smysl — skript by úpravu stejně přepsal.
+ * Místa, která přepisuje skript za běhu — dopočítané ceny, jména, data
+ * a přepínače rozbalovacích detailů (jejich popisek se sám mění na
+ * "Zobrazit detail" / "Skrýt detail"). Editovat je nemá smysl a klik na ně
+ * musí zůstat klikem, aby šel detail v editoru otevřít.
  */
-const DYNAMIC_SELECTOR = '[data-echo],[data-d],[data-j],[data-detail-toggle],[id^="sum-"]';
+const DYNAMIC_SELECTOR =
+  '[data-echo],[data-d],[data-j],[data-detail-toggle],[aria-controls],[id^="sum-"]';
 
 const isDynamic = (el) =>
   el.hasAttribute('data-echo') || el.hasAttribute('data-d') || el.hasAttribute('data-j') ||
-  el.hasAttribute('data-detail-toggle') || (el.id && el.id.startsWith('sum-'));
+  el.hasAttribute('data-detail-toggle') || el.hasAttribute('aria-controls') ||
+  (el.id && el.id.startsWith('sum-'));
 
 const normalize = (s) => s.replace(/\s+/g, ' ').trim();
 

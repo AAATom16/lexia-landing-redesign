@@ -45,6 +45,9 @@ U textu, do kterého se zrovna píše, se nahoře objeví černá bublinka:
 - Se zapnutými úpravami se nedá omylem odejít ze stránky ani spustit
   tlačítko — všechny klikací prvky slouží k přepsání textu. Vypne se to
   tlačítkem **Ukončit úpravy**
+- Výjimka: rozbalovátka jako **Zobrazit detail** nebo **Číst dál** fungují
+  i při úpravách, aby šlo dostat se k textům schovaným uvnitř. Jejich vlastní
+  popisek se měnit nedá — přepisuje ho web sám na „Skrýt detail" a zpátky
 - Režim úprav zůstane zapnutý i po přechodu na jinou stránku
 - Texty jsou vedené zvlášť pro každou stránku. Když se stejný text opakuje
   (třeba v patičce), úprava se projeví jen na té stránce, kde se udělala

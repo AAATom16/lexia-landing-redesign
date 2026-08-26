@@ -187,10 +187,13 @@
 
   const inEditorUi = (el) => !!(el.closest && el.closest('.lxe-bar, .lxe-pop, .lxe-toast'));
 
+  /** Přepínače rozbalovacích detailů musí fungovat i při úpravách. */
+  const isToggle = (el) => !!(el.closest && el.closest('[aria-controls],[data-detail-toggle]'));
+
   // v režimu úprav klik do textu jen postaví kurzor
   document.addEventListener('mousedown', function (e) {
     if (!editing || e.button !== 0 || e.ctrlKey || e.metaKey) return;
-    if (inEditorUi(e.target)) return;
+    if (inEditorUi(e.target) || isToggle(e.target)) return;
 
     var el = e.target.closest('[data-cms-key]');
     if (!el) return stopEditing();
@@ -203,7 +206,7 @@
   // ...a stránka se nikam nepřepne, ani se nespustí tlačítko pod textem
   document.addEventListener('click', function (e) {
     if (!editing || e.ctrlKey || e.metaKey) return;
-    if (inEditorUi(e.target)) return;
+    if (inEditorUi(e.target) || isToggle(e.target)) return;
     if (!e.target.closest('[data-cms-key]')) return;
     e.preventDefault();
     e.stopPropagation();
