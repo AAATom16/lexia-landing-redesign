@@ -311,6 +311,53 @@
     if (active) placePop(active);
   }, { passive: true });
 
+  // ------------------------------------------------------- ořezané texty
+
+  /**
+   * Některé texty sedí v boxu s pevnou výškou (max-height + overflow: hidden)
+   * — třeba odpovědi v často kladených otázkách. Delší text se v takovém boxu
+   * tiše odřízne a nikde se to neohlásí. Zákeřné je, že na širokém displeji
+   * se text vejde a zmizí až na mobilu, takže si toho pisatel nevšimne.
+   * Po uložení proto upozorníme.
+   */
+  function orezavaciBox(el) {
+    for (var node = el; node && node !== document.body; node = node.parentElement) {
+      var cs = window.getComputedStyle(node);
+      if (cs.overflow === 'visible' && cs.overflowY === 'visible') continue;
+
+      // text se do místa nevejde právě teď — nejspolehlivější signál
+      var skryto = node.scrollHeight - node.clientHeight;
+      if (skryto > 1 && node.clientHeight > 0) return { skryto: Math.round(skryto) };
+
+      // pevný strop výšky: na širokém displeji se text vejde, na mobilu už ne,
+      // proto varujeme, i když je zatím pod stropem
+      var strop = parseFloat(cs.maxHeight);
+      if (!isNaN(strop) && strop > 1) {
+        var vyuzito = node.scrollHeight / strop;
+        if (vyuzito > 0.7) return { strop: Math.round(strop), vyuzito: vyuzito };
+      }
+    }
+    return null;
+  }
+
+  /** @returns {string} varování, nebo prázdno když je vše v pořádku */
+  function varovaniOrezani(prvky) {
+    var nejhorsi = null;
+    prvky.forEach(function (el) {
+      var b = orezavaciBox(el);
+      if (!b) return;
+      if (b.skryto) { if (!nejhorsi || !nejhorsi.skryto || b.skryto > nejhorsi.skryto) nejhorsi = b; return; }
+      if (!nejhorsi) nejhorsi = b;
+    });
+    if (!nejhorsi) return '';
+    if (nejhorsi.skryto) {
+      return 'Uloženo, ale pozor: text se do svého místa nevejde a ' + nejhorsi.skryto
+        + ' px na konci se návštěvníkovi nezobrazí. Zkraťte ho, nebo napište správci webu.';
+    }
+    return 'Uloženo. Pozor: tenhle text má omezenou výšku a je skoro plný —'
+      + ' na mobilu, kde se text láme na víc řádků, se konec nemusí zobrazit.';
+  }
+
   // ------------------------------------------- přihlášení nad rozdělanou prací
 
   /**
@@ -449,7 +496,9 @@
       });
       dirty.clear();
       refresh();
-      toast('Uloženo. Změny jsou hned na webu.');
+      var varovani = varovaniOrezani(changed);
+      if (varovani) toast(varovani, true);
+      else toast('Uloženo. Změny jsou hned na webu.');
     }).catch(function (err) {
       saveBtn.textContent = 'Uložit';
       saveBtn.disabled = false;
