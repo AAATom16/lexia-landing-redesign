@@ -326,14 +326,37 @@ editor.post('/prihlaseni', (req, res) => {
   res.redirect(next);
 });
 
+/**
+ * Přihlášení z rozdělané stránky (JSON). Editor ho volá, když při ukládání
+ * zjistí, že relace vypršela — uživatel tak nepřijde o neuložené texty.
+ */
+editor.post('/api/prihlaseni', (req, res) => {
+  const ip = req.ip || 'neznámá';
+  if (auth.tooManyAttempts(ip)) {
+    return res.status(429).json({ ok: false, error: 'Příliš mnoho pokusů. Zkuste to prosím za 15 minut.' });
+  }
+  if (!auth.checkPassword((req.body || {}).heslo)) {
+    auth.noteFailure(ip);
+    return res.status(401).json({ ok: false, error: 'Nesprávné heslo.' });
+  }
+  auth.clearAttempts(ip);
+  auth.setCookie(req, res);
+  res.json({ ok: true });
+});
+
 editor.post('/odhlasit', (req, res) => {
   auth.clearCookie(res);
   res.redirect('/editor/prihlaseni');
 });
 
 const requireAuth = (req, res, next) => {
-  if (auth.isAuthed(req)) return next();
-  if (req.method === 'POST') return res.status(401).json({ ok: false, error: 'Nejste přihlášeni.' });
+  if (auth.isAuthed(req)) {
+    auth.refreshCookie(req, res); // práce v editoru přihlášení sama prodlužuje
+    return next();
+  }
+  if (req.method === 'POST') {
+    return res.status(401).json({ ok: false, error: 'Přihlášení vypršelo.', login: true });
+  }
   res.redirect('/editor/prihlaseni?next=' + encodeURIComponent(req.originalUrl));
 };
 
@@ -492,7 +515,10 @@ app.use((req, res, next) => {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, must-revalidate');
-  if (editMode) res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  if (editMode) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    auth.refreshCookie(req, res);
+  }
   res.send(html);
 });
 
@@ -502,11 +528,24 @@ app.use((req, res, next) => {
   next();
 });
 
+/**
+ * Vzhled a chování webu (.css, .js) se mění při každé opravě, a většina
+ * stránek je načítá bez čísla verze v adrese. Kdyby je prohlížeč držel
+ * v paměti hodinu jako obrázky, návštěvník by po nasazení viděl starou
+ * verzi a oprava by "nefungovala". Necháváme je proto pokaždé ověřit
+ * u serveru — když se soubor nezměnil, odpoví krátkým 304 a nic se
+ * nepřenáší. Obrázky a dokumenty se nemění, ty držíme hodinu dál.
+ */
+const REVALIDATE = /\.(css|js|mjs)$/i;
+
 app.use(express.static(ROOT, {
   index: false,
   dotfiles: 'ignore',
   redirect: false,
-  setHeaders: (res) => res.setHeader('Cache-Control', 'public, max-age=3600'),
+  setHeaders: (res, filePath) => res.setHeader(
+    'Cache-Control',
+    REVALIDATE.test(filePath) ? 'no-cache' : 'public, max-age=3600',
+  ),
 }));
 
 app.use((req, res) => {

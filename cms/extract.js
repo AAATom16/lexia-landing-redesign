@@ -21,6 +21,14 @@ const BLOCK_EDITABLE = new Set([
 /** Řádkové prvky — editovatelné jen když stojí samostatně mimo blok výše. */
 const INLINE_EDITABLE = new Set(['a', 'button', 'span', 'strong', 'em', 'small', 'b', 'i']);
 
+/**
+ * <div> je skoro vždycky jen obal, ne text. Pouštíme k úpravám proto jen ten,
+ * který nemá uvnitř žádný další prvek — čistý text (odpověď v často kladených
+ * otázkách, popisek nad nabídkou). Kdybychom pustili i obaly, dala by se
+ * jedním přepsáním smazat celá skupina tlačítek.
+ */
+const isTextOnlyDiv = (el, tag) => tag === 'div' && el.querySelectorAll('*').length === 0;
+
 /** Prvky, které uvnitř editovatelného textu smí zůstat (nevadí, jsou řádkové). */
 const INLINE_OK = new Set([
   'a', 'b', 'strong', 'i', 'em', 'u', 'br', 'span', 'small',
@@ -68,16 +76,52 @@ function hasOnlyInlineChildren(el) {
   return true;
 }
 
+/** Brzdí prvek jen vykreslená ikona (<svg> přímo v textu), nebo i něco jiného? */
+function blockedOnlyByIcon(el) {
+  const inIcon = new Set();
+  for (const svg of el.querySelectorAll('svg')) {
+    inIcon.add(svg);
+    for (const node of svg.querySelectorAll('*')) inIcon.add(node);
+  }
+  if (!inIcon.size) return false;
+  for (const child of el.querySelectorAll('*')) {
+    if (inIcon.has(child)) continue;
+    if (!INLINE_OK.has((child.rawTagName || '').toLowerCase())) return false;
+  }
+  return true;
+}
+
+/** Je uvnitř menší kus textu, který jde upravit samostatně? */
+function hasEditableDescendant(el) {
+  for (const child of el.querySelectorAll('*')) {
+    const tag = (child.rawTagName || '').toLowerCase();
+    if (!tag || SKIP_TAGS.has(tag)) continue;
+    if (!BLOCK_EDITABLE.has(tag) && !INLINE_EDITABLE.has(tag) && !isTextOnlyDiv(child, tag)) continue;
+    if (child.hasAttribute('data-no-edit')) continue;
+    if (isDynamic(child) || child.querySelector(DYNAMIC_SELECTOR)) continue;
+    if (!child.childNodes.length || !normalize(child.text)) continue;
+    const inner = child.innerHTML;
+    if (!inner || inner.length > MAX_LEN) continue;
+    if (hasOnlyInlineChildren(child)) return true;
+  }
+  return false;
+}
+
 function isEditable(el, tag) {
   if (el.hasAttribute('data-no-edit')) return false;
   if (isDynamic(el) || el.querySelector(DYNAMIC_SELECTOR)) return false;
-  if (!BLOCK_EDITABLE.has(tag) && !INLINE_EDITABLE.has(tag)) return false;
+  if (!BLOCK_EDITABLE.has(tag) && !INLINE_EDITABLE.has(tag) && !isTextOnlyDiv(el, tag)) return false;
   const childNodes = el.childNodes;
   if (!childNodes.length) return false;
   const inner = el.innerHTML;
   if (!inner || inner.length > MAX_LEN) return false;
   if (!normalize(el.text)) return false;
-  return hasOnlyInlineChildren(el);
+  if (hasOnlyInlineChildren(el)) return true;
+  // Vykreslená ikona (<svg>) přímo v textu editaci nebrání — jinak by nešly
+  // upravit odrážky a tlačítka, která ikonu mají v sobě. Ale jen tehdy, když
+  // uvnitř není menší text k úpravě; jinak by se z odkazu stal jeden velký
+  // blok i s ikonou a šipkou.
+  return blockedOnlyByIcon(el) && !hasEditableDescendant(el);
 }
 
 /** Popisek pro přehled v administraci. */

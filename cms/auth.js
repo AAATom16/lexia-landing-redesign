@@ -7,7 +7,10 @@
 const crypto = require('crypto');
 
 const COOKIE = 'lexia_editor';
-const MAX_AGE_MS = 12 * 60 * 60 * 1000; // 12 hodin
+// Přihlášení drží 30 dní a při každé práci v editoru se samo prodlužuje
+// (viz refreshCookie). Dřív platilo 12 hodin a uživatelce uprostřed práce
+// vypršelo — editor pak u Uložit hlásil "Nejste přihlášeni".
+const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 dní
 
 // čte se až za běhu, aby nezáleželo na pořadí načtení souborů
 const password = () => process.env.LEXIA_EDITOR_PASSWORD || '';
@@ -88,6 +91,20 @@ function setCookie(req, res, name) {
     `${COOKIE}=${issueToken(name)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${MAX_AGE_MS / 1000}${secure ? '; Secure' : ''}`);
 }
 
+/**
+ * Posuvné přihlášení: kdo v editoru pracuje, tomu se platnost sama obnovuje.
+ * Přepisujeme až ve druhé půlce platnosti, ať se hlavička neposílá pořád.
+ */
+function refreshCookie(req, res) {
+  const data = tokenOf(req);
+  if (!data) return false;
+  const remaining = Number(data.exp) - Date.now();
+  if (remaining > MAX_AGE_MS / 2) return false;
+  if (res.headersSent || res.getHeader('Set-Cookie')) return false;
+  setCookie(req, res, data.name || '');
+  return true;
+}
+
 function clearCookie(res) {
   res.setHeader('Set-Cookie', `${COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`);
 }
@@ -116,6 +133,6 @@ function noteFailure(ip) {
 const clearAttempts = (ip) => attempts.delete(ip);
 
 module.exports = {
-  COOKIE, isEnabled, checkPassword, isAuthed, authorOf, setCookie, clearCookie,
+  COOKIE, isEnabled, checkPassword, isAuthed, authorOf, setCookie, refreshCookie, clearCookie,
   tooManyAttempts, noteFailure, clearAttempts,
 };

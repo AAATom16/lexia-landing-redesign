@@ -17,7 +17,7 @@
   var dirty = new Set();      // klíče, do kterých uživatel psal
   var editing = false;        // zapnutý režim úprav
   var active = null;          // prvek, který se právě upravuje
-  var bar, countEl, saveBtn, discardBtn, pop, toastEl;
+  var bar, countEl, saveBtn, discardBtn, pop, toastEl, authBox;
 
   // ------------------------------------------------------------- pomocné
 
@@ -185,15 +185,55 @@
     hidePop();
   }
 
-  const inEditorUi = (el) => !!(el.closest && el.closest('.lxe-bar, .lxe-pop, .lxe-toast'));
+  const inEditorUi = (el) => !!(el.closest && el.closest('.lxe-bar, .lxe-pop, .lxe-toast, .lxe-auth'));
 
   /** Přepínače rozbalovacích detailů musí fungovat i při úpravách. */
   const isToggle = (el) => !!(el.closest && el.closest('[aria-controls],[data-detail-toggle]'));
 
+  /**
+   * Id panelů, které nějaké tlačítko na stránce rozbaluje.
+   * Stránky si detaily zavírají klikem "někam vedle" — jenže při úpravách
+   * je takovým klikem i postavení kurzoru do textu uvnitř panelu. Klik
+   * uvnitř panelu proto dál nepouštíme a detail zůstane otevřený.
+   */
+  var panelIds = null;
+
+  function detailPanelIds() {
+    if (panelIds) return panelIds;
+    panelIds = Object.create(null);
+    document.querySelectorAll('[aria-controls],[data-detail-toggle]').forEach(function (btn) {
+      var ids = btn.getAttribute('aria-controls') || btn.getAttribute('data-detail-toggle') || '';
+      ids.split(/\s+/).forEach(function (id) { if (id) panelIds[id] = true; });
+    });
+    return panelIds;
+  }
+
+  function inDetailPanel(el) {
+    var ids = detailPanelIds();
+    for (var node = el; node && node.nodeType === 1; node = node.parentElement) {
+      if (node.id && ids[node.id]) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Otázka v často kladených otázkách je sama editovatelný text, ale dokud je
+   * odpověď sbalená (max-height: 0), nejde na její text kliknout. První klik
+   * proto necháme projít a odpověď se rozbalí; u rozbalené otázky už klik
+   * staví kurzor a jde přepsat i samotná otázka.
+   */
+  function isCollapsedFaq(el) {
+    var q = el.closest && el.closest('.faq-question');
+    return !!(q && q.parentElement && !q.parentElement.classList.contains('active'));
+  }
+
+  /** Ovládací prvky uvnitř panelu (třeba "Skrýt detail") musí zůstat funkční. */
+  const isControl = (el) => !!(el.closest && el.closest('button, a, input, label, select, summary, [role="button"]'));
+
   // v režimu úprav klik do textu jen postaví kurzor
   document.addEventListener('mousedown', function (e) {
     if (!editing || e.button !== 0 || e.ctrlKey || e.metaKey) return;
-    if (inEditorUi(e.target) || isToggle(e.target)) return;
+    if (inEditorUi(e.target) || isToggle(e.target) || isCollapsedFaq(e.target)) return;
 
     var el = e.target.closest('[data-cms-key]');
     if (!el) return stopEditing();
@@ -206,8 +246,12 @@
   // ...a stránka se nikam nepřepne, ani se nespustí tlačítko pod textem
   document.addEventListener('click', function (e) {
     if (!editing || e.ctrlKey || e.metaKey) return;
-    if (inEditorUi(e.target) || isToggle(e.target)) return;
-    if (!e.target.closest('[data-cms-key]')) return;
+    if (inEditorUi(e.target) || isToggle(e.target) || isCollapsedFaq(e.target)) return;
+    if (!e.target.closest('[data-cms-key]')) {
+      // klik vedle textu uvnitř rozbaleného detailu ho nesmí zavřít,
+      // tlačítka a odkazy uvnitř panelu ale musí dál fungovat
+      if (!inDetailPanel(e.target) || isControl(e.target)) return;
+    }
     e.preventDefault();
     e.stopPropagation();
   }, true);
@@ -267,6 +311,96 @@
     if (active) placePop(active);
   }, { passive: true });
 
+  // ------------------------------------------- přihlášení nad rozdělanou prací
+
+  /**
+   * Když přihlášení mezitím vypršelo, nesmíme uživatele poslat na
+   * přihlašovací stránku — přišel by o neuložené texty. Zeptáme se na heslo
+   * rovnou tady a po přihlášení plynule dokončíme, co dělal.
+   */
+  function askLogin(message, afterLogin) {
+    if (!authBox) buildAuthBox();
+    authBox.__after = afterLogin;
+    authBox.querySelector('.lxe-auth__msg').textContent = message;
+    authBox.querySelector('.lxe-auth__err').textContent = '';
+    authBox.hidden = false;
+    var input = authBox.querySelector('input');
+    input.value = '';
+    input.focus();
+  }
+
+  function buildAuthBox() {
+    authBox = document.createElement('div');
+    authBox.className = 'lxe-auth';
+    authBox.hidden = true;
+    authBox.innerHTML =
+      '<div class="lxe-auth__card">' +
+      '<strong class="lxe-auth__title">Přihlášení vypršelo</strong>' +
+      '<p class="lxe-auth__msg"></p>' +
+      '<p class="lxe-auth__note">Vaše rozepsané texty zůstávají na stránce, nikam se neztratily.</p>' +
+      '<label class="lxe-auth__label">Heslo do editoru' +
+      '<input type="password" autocomplete="current-password"></label>' +
+      '<p class="lxe-auth__err"></p>' +
+      '<div class="lxe-auth__row">' +
+      '<button type="button" class="lxe-btn" data-auth="ok">Přihlásit a pokračovat</button>' +
+      '<button type="button" class="lxe-btn lxe-btn--ghost" data-auth="cancel">Zavřít</button>' +
+      '</div></div>';
+    document.body.appendChild(authBox);
+
+    var input = authBox.querySelector('input');
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); submitLogin(); }
+      if (e.key === 'Escape') { e.preventDefault(); authBox.hidden = true; }
+    });
+    authBox.addEventListener('click', function (e) {
+      if (e.target.closest('[data-auth="cancel"]')) authBox.hidden = true;
+      else if (e.target.closest('[data-auth="ok"]')) submitLogin();
+    });
+  }
+
+  function submitLogin() {
+    var input = authBox.querySelector('input');
+    var err = authBox.querySelector('.lxe-auth__err');
+    var btn = authBox.querySelector('[data-auth="ok"]');
+    if (!input.value) { err.textContent = 'Zadejte heslo.'; return; }
+    btn.disabled = true;
+    btn.textContent = 'Přihlašuji…';
+
+    postJson('/editor/api/prihlaseni', { heslo: input.value }).then(function (r) {
+      btn.disabled = false;
+      btn.textContent = 'Přihlásit a pokračovat';
+      if (!r.ok || !r.data.ok) {
+        err.textContent = (r.data && r.data.error) || 'Přihlášení se nepovedlo.';
+        input.select();
+        return;
+      }
+      authBox.hidden = true;
+      var after = authBox.__after;
+      authBox.__after = null;
+      if (after) after();
+    }).catch(function () {
+      btn.disabled = false;
+      btn.textContent = 'Přihlásit a pokračovat';
+      err.textContent = 'Server neodpovídá. Zkuste to prosím znovu.';
+    });
+  }
+
+  /** POST s JSON tělem; odpověď vrátíme i tehdy, když to JSON není. */
+  function postJson(url, body) {
+    return fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).then(function (res) {
+      return res.text().then(function (text) {
+        var data = {};
+        try { data = JSON.parse(text); } catch (err) { data = { error: text.slice(0, 200) }; }
+        return { ok: res.ok, status: res.status, data: data };
+      });
+    });
+  }
+
   // ------------------------------------------------------------- ukládání
 
   function discard() {
@@ -292,14 +426,15 @@
     saveBtn.disabled = true;
     saveBtn.textContent = 'Ukládám…';
 
-    fetch('/editor/api/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page: PAGE, changes: payload })
-    }).then(function (res) {
-      return res.json().then(function (data) { return { ok: res.ok, data: data }; });
-    }).then(function (r) {
+    postJson('/editor/api/save', { page: PAGE, changes: payload }).then(function (r) {
       saveBtn.textContent = 'Uložit';
+
+      // relace vypršela — texty na stránce necháme být a po přihlášení uložíme
+      if (r.status === 401) {
+        saveBtn.disabled = false;
+        askLogin('Přihlášení do editoru vypršelo, proto se texty neuložily. Zadejte heslo a uložíme je hned teď.', save);
+        return;
+      }
       if (!r.ok || !r.data.ok) throw new Error((r.data && r.data.error) || 'Uložení selhalo.');
 
       // stránku nepřenačítáme, jen si posuneme "původní podobu"
