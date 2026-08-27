@@ -107,8 +107,18 @@ function hasEditableDescendant(el) {
   return false;
 }
 
+/** Obsluha kliku (onclick apod.) uložení nikdy nepřežije — čistička ji zahodí. */
+function maObsluhuUdalosti(el) {
+  const test = (node) => Object.keys(node.attributes || {}).some((a) => /^on/i.test(a));
+  if (test(el)) return true;
+  return el.querySelectorAll('*').some(test);
+}
+
 function isEditable(el, tag) {
   if (el.hasAttribute('data-no-edit')) return false;
+  // text s obsluhou kliku nenabízíme — uložení by ji sebralo a tlačítko
+  // by přestalo fungovat
+  if (maObsluhuUdalosti(el)) return false;
   if (isDynamic(el) || el.querySelector(DYNAMIC_SELECTOR)) return false;
   if (!BLOCK_EDITABLE.has(tag) && !INLINE_EDITABLE.has(tag) && !isTextOnlyDiv(el, tag)) return false;
   const childNodes = el.childNodes;

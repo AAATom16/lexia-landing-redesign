@@ -8,23 +8,53 @@
 const { parse } = require('node-html-parser');
 
 const ALLOWED = {
-  a: ['href', 'target', 'rel', 'title', 'class', 'aria-label', 'download'],
-  b: ['class'],
-  strong: ['class'],
-  i: ['class', 'data-icon', 'aria-hidden'],
-  em: ['class'],
-  u: ['class'],
+  a: ['href', 'target', 'rel', 'title', 'class', 'aria-label', 'download', 'style'],
+  b: ['class', 'style'],
+  strong: ['class', 'style'],
+  i: ['class', 'data-icon', 'aria-hidden', 'style'],
+  em: ['class', 'style'],
+  u: ['class', 'style'],
   br: [],
   wbr: [],
-  span: ['class', 'data-icon', 'aria-hidden', 'title'],
-  small: ['class'],
-  sup: ['class'],
-  sub: ['class'],
-  mark: ['class'],
-  code: ['class'],
-  abbr: ['class', 'title'],
-  time: ['class', 'datetime'],
+  span: ['class', 'data-icon', 'aria-hidden', 'title', 'style'],
+  small: ['class', 'style'],
+  sup: ['class', 'style'],
+  sub: ['class', 'style'],
+  mark: ['class', 'style'],
+  code: ['class', 'style'],
+  abbr: ['class', 'title', 'style'],
+  time: ['class', 'datetime', 'style'],
 };
+
+/**
+ * Barevná a typografická úprava přímo v textu (style="color: var(--primary)")
+ * se na webu používá ve zvýrazněných slovech v nadpisech. Kdybychom ji při
+ * uložení zahodili, klientovi by pouhé přepsání nadpisu shodilo barvu.
+ * Pouštíme proto jen vzhledové vlastnosti — nic, čím jde překrýt stránku
+ * nebo něco načíst (position, z-index, url(), @import, expression()).
+ */
+const STYLE_PROPS = new Set([
+  'color', 'background', 'background-color', 'border-color', 'border-radius',
+  'font-weight', 'font-style', 'font-size',
+  'font-family', 'font-variant', 'text-decoration', 'text-transform',
+  'letter-spacing', 'word-spacing', 'line-height', 'white-space',
+  'text-align', 'vertical-align', 'width', 'height', 'opacity',
+]);
+
+const STYLE_ZAKAZ = /url\s*\(|expression\s*\(|javascript:|@import|binding|[<>"'\\]/;
+
+function safeStyle(value) {
+  const out = [];
+  for (const kus of String(value).split(';')) {
+    const idx = kus.indexOf(':');
+    if (idx < 1) continue;
+    const prop = kus.slice(0, idx).trim().toLowerCase();
+    const val = kus.slice(idx + 1).trim();
+    if (!STYLE_PROPS.has(prop) || !val || STYLE_ZAKAZ.test(val)) continue;
+    out.push(prop + ': ' + val);
+  }
+  return out.length ? out.join('; ') : null;
+}
 
 const VOID = new Set(['br', 'wbr']);
 /** U těchto značek zahodíme i obsah, nejen obal. */
@@ -106,6 +136,10 @@ function serialize(node) {
     let value = rawValue;
     if (lower === 'href') {
       value = safeHref(value);
+      if (value === null) continue;
+    }
+    if (lower === 'style') {
+      value = safeStyle(value);
       if (value === null) continue;
     }
     attrs.push(` ${lower}="${escapeAttr(value)}"`);
