@@ -325,16 +325,26 @@
       var cs = window.getComputedStyle(node);
       if (cs.overflow === 'visible' && cs.overflowY === 'visible') continue;
 
-      // text se do místa nevejde právě teď — nejspolehlivější signál
+      /* Rozbalovací boxy mění výšku plynule. Kdybychom měřili během přechodu,
+         viděli bychom rozpracovanou výšku a nahlásili ořez, který neexistuje —
+         a uživatel by začal krátit text, který je v pořádku. Přechod proto na
+         okamžik vypneme a změříme až ustálený stav. Vracíme ho zpět hned
+         v témže kroku, takže si toho obrazovka nevšimne. */
+      var puvodni = node.style.transition;
+      node.style.transition = 'none';
+      void node.offsetHeight;                       // vynutí přepočet rozměrů
       var skryto = node.scrollHeight - node.clientHeight;
-      if (skryto > 1 && node.clientHeight > 0) return { skryto: Math.round(skryto) };
+      var misto = node.clientHeight;
+      var strop = parseFloat(window.getComputedStyle(node).maxHeight);
+      var potreba = node.scrollHeight;
+      node.style.transition = puvodni;
 
-      // pevný strop výšky: na širokém displeji se text vejde, na mobilu už ne,
-      // proto varujeme, i když je zatím pod stropem
-      var strop = parseFloat(cs.maxHeight);
-      if (!isNaN(strop) && strop > 1) {
-        var vyuzito = node.scrollHeight / strop;
-        if (vyuzito > 0.7) return { strop: Math.round(strop), vyuzito: vyuzito };
+      // text se do místa nevejde ani v ustáleném stavu
+      if (skryto > 1 && misto > 0) return { skryto: Math.round(skryto) };
+
+      // pevný strop výšky: na širokém displeji se text vejde, na mobilu už ne
+      if (!isNaN(strop) && strop > 1 && potreba / strop > 0.7) {
+        return { strop: Math.round(strop) };
       }
     }
     return null;
