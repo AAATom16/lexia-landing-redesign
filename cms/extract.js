@@ -155,6 +155,11 @@ function extract(html) {
         section = child.id;
       }
 
+      // Do míst, která přepisuje skript za běhu, vůbec nelezeme — ani k jejich
+      // vnitřkům. Jinak by editor nabídl text, který se po načtení stránky
+      // stejně přepíše, a úprava klienta by beze stopy zmizela.
+      if (isDynamic(child)) { section = prevSection; continue; }
+
       if (isEditable(child, tag)) {
         const inner = child.innerHTML;
         const base = hashKey(tag, inner);

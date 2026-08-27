@@ -37,18 +37,18 @@
   <div class="container">
     <a href="sluzby.html" class="detail-back"> Zpět na přehled balíčků</a>
     <div class="detail-head">
-      <span class="detail-icon"><i class="icon" data-icon="shield" id="d-icon"></i></span>
+      <span class="detail-icon"><i class="icon" data-icon="shield" id="d-icon" data-no-edit></i></span>
       <div class="detail-head-text">
-        <h1 id="d-name">TRIO</h1>
-        <p class="detail-sub" id="d-sub">Kompletní balíček</p>
+        <h1 id="d-name" data-no-edit>TRIO</h1>
+        <p class="detail-sub" id="d-sub" data-no-edit>Kompletní balíček</p>
       </div>
       <div class="detail-pricing">
-        <div class="detail-price"><strong id="d-price">499</strong><span id="d-price-unit">Kč/měsíc</span></div>
-        <div class="detail-price-year" id="d-year">5 489 Kč/rok</div>
+        <div class="detail-price"><strong id="d-price" data-no-edit>499</strong><span id="d-price-unit" data-no-edit>Kč/měsíc</span></div>
+        <div class="detail-price-year" id="d-year" data-no-edit>5 489 Kč/rok</div>
       </div>
     </div>
     <div class="hero-actions">
-      <a href="#" class="btn btn-primary btn-lg" id="d-cta">Sjednat online</a>
+      <a href="#" class="btn btn-primary btn-lg" id="d-cta" data-no-edit>Sjednat online</a>
       <a href="sluzby.html#srovnani" class="btn btn-outline btn-lg">Porovnat balíčky</a>
     </div>
   </div>
@@ -60,11 +60,11 @@
     <div class="card detail-card detail-card--split">
       <div class="detail-col">
         <h2 class="detail-card-title"><i class="icon" data-icon="shield"></i> Rozsah krytí</h2>
-        <ul class="price-list" id="d-kryti"></ul>
+        <ul class="price-list" id="d-kryti" data-no-edit></ul>
       </div>
       <div class="detail-col">
         <h2 class="detail-card-title"><i class="icon" data-icon="scales"></i> Typické spory</h2>
-        <ul class="price-list" id="d-spory"></ul>
+        <ul class="price-list" id="d-spory" data-no-edit></ul>
       </div>
     </div>
   </div>
@@ -92,10 +92,10 @@
 <section>
   <div class="container">
     <div class="cta-banner">
-      <h2 id="d-cta-title">Sjednejte si TRIO online</h2>
+      <h2 id="d-cta-title" data-no-edit>Sjednejte si TRIO online</h2>
       <p>Vyplníte jen základní údaje a zaplatíte, pojištění platí ihned. Žádné skryté poplatky.</p>
       <div class="hero-actions" style="justify-content: center;">
-        <a href="#" class="btn btn-primary btn-lg" id="d-cta2">Sjednat online</a>
+        <a href="#" class="btn btn-primary btn-lg" id="d-cta2" data-no-edit>Sjednat online</a>
       </div>
     </div>
   </div>
@@ -154,114 +154,277 @@
   </div>
 </footer>
 
+<!-- TEXTY BALÍČKŮ — zdroj pro detail nahoře.
+     Na webu je skrytý, v editoru textů se zobrazí, aby šly texty upravit. -->
+<style>
+  [data-offer-catalogue] { display: none; }
+  body.lxe-editing [data-offer-catalogue] { display: block; }
+  [data-offer-catalogue] .offer-src { border: 1px solid var(--border, #e3e9f2); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }
+  [data-offer-catalogue] .offer-src h3 { margin: 0 0 4px; }
+  [data-offer-catalogue] .offer-src p { margin: 0 0 4px; }
+  [data-offer-catalogue] .offer-src ul { margin: 6px 0 0 18px; }
+</style>
+<section data-offer-catalogue>
+  <div class="container">
+    <div class="section-header">
+      <h2>Texty balíčků</h2>
+      <p>Odsud se plní detail nahoře. Přepište text tady a uložte; nahoře se projeví po znovunačtení stránky.</p>
+    </div>
+      <div class="offer-src" data-offer="ridic" data-offer-icon="lx_ridic" data-cta="objednavka?produkt=ridic">
+        <h3 data-o="name">Řidič</h3>
+        <p data-o="sub">Právní ochrana řidiče a vozidla</p>
+        <p data-o="price">119</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">1 309 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si ochranu řidiče online</p>
+        <ul data-o="kryti">
+          <li>Právní ochrana vozidla</li>
+          <li>Právní ochrana řidiče daného vozidla</li>
+          <li>Právní ochrana posádky</li>
+        </ul>
+        <ul data-o="spory">
+          <li>S prodejcem / servisem</li>
+          <li>S pojišťovnami</li>
+          <li>S policií a úřady</li>
+          <li>Přestupkové, správní a trestní řízení</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="jednotlivec" data-offer-icon="lx_jednotlivec" data-cta="kalkulacka?varianta=jednotlivec">
+        <h3 data-o="name">Jednotlivec</h3>
+        <p data-o="sub">Ochrana na míru pro jednotlivce</p>
+        <p data-o="price">od 179</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">od 1 969 Kč/rok</p>
+        <p data-o="ctaLabel">Spočítat cenu</p>
+        <p data-o="ctaTitle">Sestavte si ochranu pro jednotlivce na míru</p>
+        <ul data-o="kryti">
+          <li>Základní právní ochrana</li>
+          <li>Bydlení</li>
+          <li>Pronajímaná nemovitost</li>
+          <li>Nemovitost ve výstavbě</li>
+          <li>Ostatní parcely</li>
+          <li>Vozidlo</li>
+          <li>Řidič</li>
+          <li>Pracovněprávní ochrana</li>
+          <li>Manažerská právní ochrana</li>
+        </ul>
+        <ul data-o="spory">
+          <li>Nejčastější spory napříč životem, od bydlení a nemovitostí po vozidlo i práci</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="domacnost" data-offer-icon="lx_domacnost" data-cta="kalkulacka?varianta=domacnost">
+        <h3 data-o="name">Domácnost</h3>
+        <p data-o="sub">Právní ochrana domácnosti</p>
+        <p data-o="price">od 269</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">od 2 959 Kč/rok</p>
+        <p data-o="ctaLabel">Spočítat cenu</p>
+        <p data-o="ctaTitle">Sjednejte si ochranu pro celou domácnost</p>
+        <ul data-o="kryti">
+          <li>Základní právní ochrana</li>
+          <li>Bydlení</li>
+          <li>Pronajímaná nemovitost</li>
+          <li>Nemovitost ve výstavbě</li>
+          <li>Ostatní parcely</li>
+          <li>Vozidlo</li>
+          <li>Řidič</li>
+          <li>Pracovněprávní ochrana</li>
+          <li>Manažerská právní ochrana</li>
+        </ul>
+        <ul data-o="spory">
+          <li>Nejčastější spory napříč životem celé domácnosti a všech jejích členů</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="drive" data-offer-icon="lx_ridic" data-cta="objednavka?produkt=drive">
+        <h3 data-o="name">DRIVE</h3>
+        <p data-o="sub">Právní ochrana vozidla</p>
+        <p data-o="price">159</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">1 749 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si DRIVE online</p>
+        <ul data-o="kryti">
+          <li>Právní ochrana vozidla</li>
+          <li>Právní ochrana řidiče daného vozidla</li>
+          <li>Právní ochrana posádky</li>
+        </ul>
+        <ul data-o="spory">
+          <li>S prodejcem / servisem</li>
+          <li>S pojišťovnami</li>
+          <li>S policií a úřady</li>
+          <li>Přestupkové, správní a trestní řízení</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="driveplus" data-offer-icon="lx_ridic" data-cta="objednavka?produkt=driveplus">
+        <h3 data-o="name">DRIVE PLUS</h3>
+        <p data-o="sub">Právní ochrana vozidla</p>
+        <p data-o="price">199</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">2 189 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si DRIVE PLUS online</p>
+        <ul data-o="kryti">
+          <li>Právní ochrana vozidla</li>
+          <li>Právní ochrana řidiče všech vozidel</li>
+          <li>Právní ochrana posádky</li>
+        </ul>
+        <ul data-o="spory">
+          <li>S prodejcem / servisem</li>
+          <li>S pojišťovnami</li>
+          <li>S policií a úřady</li>
+          <li>Přestupkové, správní a trestní řízení</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="home" data-offer-icon="lx_domacnost" data-cta="objednavka?produkt=home">
+        <h3 data-o="name">HOME</h3>
+        <p data-o="sub">Právní ochrana bydlení</p>
+        <p data-o="price">199</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">2 189 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si HOME online</p>
+        <ul data-o="kryti">
+          <li>Právní ochrana domu</li>
+          <li>Právní ochrana bytu</li>
+          <li>Právní ochrana chaty / chalupy</li>
+        </ul>
+        <ul data-o="spory">
+          <li>S pojišťovnami</li>
+          <li>Se sousedy</li>
+          <li>S řemeslníky</li>
+          <li>S finančním, katastrálním, stavebním úřadem</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="trio" data-offer-icon="lx_balicek" data-cta="objednavka?produkt=trio">
+        <h3 data-o="name">TRIO</h3>
+        <p data-o="sub">Kompletní balíček</p>
+        <p data-o="price">499</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">5 489 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si TRIO online</p>
+        <ul data-o="kryti">
+          <li>Základní právní ochrana domácnosti</li>
+          <li>Právní ochrana bydlení</li>
+          <li>Právní ochrana řidičů</li>
+        </ul>
+        <ul data-o="spory">
+          <li>Obhajoba v trestním, správním, přestupkovém aj. řízení</li>
+          <li>Reklamace, náhrada újmy, obrana proti vymáhání náhrady újmy</li>
+          <li>Se sousedy, řemeslníky, úřady</li>
+          <li>Dopravní přestupek, dopravní nehoda</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="garance" data-offer-icon="lx_garance" data-cta="objednavka?produkt=garance">
+        <h3 data-o="name">GARANCE PLUS</h3>
+        <p data-o="sub">Vymáhání nároků po pojišťovnách</p>
+        <p data-o="price">349</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">3 839 Kč/rok</p>
+        <p data-o="ctaLabel">Sjednat online</p>
+        <p data-o="ctaTitle">Sjednejte si GARANCE PLUS online</p>
+        <ul data-o="kryti">
+          <li>Hlášení a likvidace pojistných událostí</li>
+          <li>Vymáhání nároků po pojišťovnách</li>
+          <li>Právní ochrana řidiče</li>
+        </ul>
+        <ul data-o="spory">
+          <li>S pojišťovnami</li>
+          <li>S bankami, hypotečními bankami</li>
+          <li>S investičními, penzijními a úvěrovými společnostmi</li>
+          <li>S policií + přestupkové, správní a trestní řízení</li>
+        </ul>
+      </div>
+      <div class="offer-src" data-offer="individual" data-offer-icon="lx_individual" data-cta="kalkulacka.html">
+        <h3 data-o="name">INDIVIDUAL</h3>
+        <p data-o="sub">Pojištění na míru</p>
+        <p data-o="price">od 179</p>
+        <p data-o="priceUnit">Kč/měsíc</p>
+        <p data-o="year">od 1 969 Kč/rok</p>
+        <p data-o="ctaLabel">Spočítat cenu</p>
+        <p data-o="ctaTitle">Sjednejte si INDIVIDUAL na míru</p>
+        <ul data-o="kryti">
+          <li>Základní právní ochrana</li>
+          <li>Bydlení</li>
+          <li>Pronajímaná nemovitost</li>
+          <li>Nemovitost ve výstavbě</li>
+          <li>Ostatní parcely</li>
+          <li>Vozidlo</li>
+          <li>Řidič</li>
+          <li>Pracovněprávní ochrana</li>
+          <li>Manažerská právní ochrana</li>
+        </ul>
+        <ul data-o="spory">
+          <li>Nejčastější spory napříč životem, od bydlení a nemovitostí po vozidlo i práci</li>
+        </ul>
+      </div>
+  </div>
+</section>
+
 <script src="assets/icons.js"></script>
 <script src="script.js"></script>
 <script>
 /* ===========================================================
    LEXIA — Detail nabídky balíčku
-   Data 1:1 dle dokumentu „Návrh produktů a balíčků LEXIA".
+   Texty se berou ze sekce "Texty balíčků" níže na stránce,
+   aby šly upravit v editoru textů. Tady se jen vyberou podle
+   adresy (?produkt=...) a doplní se do detailu nahoře.
    =========================================================== */
 (function () {
-  var OFFERS = {
-    ridic: {
-      name: 'Řidič', sub: 'Právní ochrana řidiče a vozidla', icon: 'lx_ridic',
-      price: '119', priceUnit: 'Kč/měsíc', year: '1 309 Kč/rok',
-      cta: 'objednavka?produkt=ridic', ctaLabel: 'Sjednat online', ctaTitle: 'Sjednejte si ochranu řidiče online',
-      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče daného vozidla', 'Právní ochrana posádky'],
-      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
-    },
-    jednotlivec: {
-      name: 'Jednotlivec', sub: 'Ochrana na míru pro jednotlivce', icon: 'lx_jednotlivec',
-      price: 'od 179', priceUnit: 'Kč/měsíc', year: 'od 1 969 Kč/rok',
-      cta: 'kalkulacka?varianta=jednotlivec', ctaLabel: 'Spočítat cenu', ctaTitle: 'Sestavte si ochranu pro jednotlivce na míru',
-      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
-      spory: ['Nejčastější spory napříč životem, od bydlení a nemovitostí po vozidlo i práci']
-    },
-    domacnost: {
-      name: 'Domácnost', sub: 'Právní ochrana domácnosti', icon: 'lx_domacnost',
-      price: 'od 269', priceUnit: 'Kč/měsíc', year: 'od 2 959 Kč/rok',
-      cta: 'kalkulacka?varianta=domacnost', ctaLabel: 'Spočítat cenu', ctaTitle: 'Sjednejte si ochranu pro celou domácnost',
-      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
-      spory: ['Nejčastější spory napříč životem celé domácnosti a všech jejích členů']
-    },
-    drive: {
-      name: 'DRIVE', sub: 'Právní ochrana vozidla', icon: 'lx_ridic',
-      price: '159', priceUnit: 'Kč/měsíc', year: '1 749 Kč/rok',
-      cta: 'objednavka?produkt=drive', ctaLabel: 'Sjednat online',
-      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče daného vozidla', 'Právní ochrana posádky'],
-      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
-    },
-    driveplus: {
-      name: 'DRIVE PLUS', sub: 'Právní ochrana vozidla', icon: 'lx_ridic',
-      price: '199', priceUnit: 'Kč/měsíc', year: '2 189 Kč/rok',
-      cta: 'objednavka?produkt=driveplus', ctaLabel: 'Sjednat online',
-      kryti: ['Právní ochrana vozidla', 'Právní ochrana řidiče všech vozidel', 'Právní ochrana posádky'],
-      spory: ['S prodejcem / servisem', 'S pojišťovnami', 'S policií a úřady', 'Přestupkové, správní a trestní řízení']
-    },
-    home: {
-      name: 'HOME', sub: 'Právní ochrana bydlení', icon: 'lx_domacnost',
-      price: '199', priceUnit: 'Kč/měsíc', year: '2 189 Kč/rok',
-      cta: 'objednavka?produkt=home', ctaLabel: 'Sjednat online',
-      kryti: ['Právní ochrana domu', 'Právní ochrana bytu', 'Právní ochrana chaty / chalupy'],
-      spory: ['S pojišťovnami', 'Se sousedy', 'S řemeslníky', 'S finančním, katastrálním, stavebním úřadem']
-    },
-    trio: {
-      name: 'TRIO', sub: 'Kompletní balíček', icon: 'lx_balicek',
-      price: '499', priceUnit: 'Kč/měsíc', year: '5 489 Kč/rok',
-      cta: 'objednavka?produkt=trio', ctaLabel: 'Sjednat online',
-      kryti: ['Základní právní ochrana domácnosti', 'Právní ochrana bydlení', 'Právní ochrana řidičů'],
-      spory: ['Obhajoba v trestním, správním, přestupkovém aj. řízení', 'Reklamace, náhrada újmy, obrana proti vymáhání náhrady újmy', 'Se sousedy, řemeslníky, úřady', 'Dopravní přestupek, dopravní nehoda']
-    },
-    garance: {
-      name: 'GARANCE PLUS', sub: 'Vymáhání nároků po pojišťovnách', icon: 'lx_garance',
-      price: '349', priceUnit: 'Kč/měsíc', year: '3 839 Kč/rok',
-      cta: 'objednavka?produkt=garance', ctaLabel: 'Sjednat online',
-      kryti: ['Hlášení a likvidace pojistných událostí', 'Vymáhání nároků po pojišťovnách', 'Právní ochrana řidiče'],
-      spory: ['S pojišťovnami', 'S bankami, hypotečními bankami', 'S investičními, penzijními a úvěrovými společnostmi', 'S policií + přestupkové, správní a trestní řízení']
-    },
-    individual: {
-      name: 'INDIVIDUAL', sub: 'Pojištění na míru', icon: 'lx_individual',
-      price: 'od 179', priceUnit: 'Kč/měsíc', year: 'od 1 969 Kč/rok',
-      cta: 'kalkulacka.html', ctaLabel: 'Spočítat cenu',
-      kryti: ['Základní právní ochrana', 'Bydlení', 'Pronajímaná nemovitost', 'Nemovitost ve výstavbě', 'Ostatní parcely', 'Vozidlo', 'Řidič', 'Pracovněprávní ochrana', 'Manažerská právní ochrana'],
-      spory: ['Nejčastější spory napříč životem, od bydlení a nemovitostí po vozidlo i práci']
-    }
-  };
+  var katalog = document.querySelector('[data-offer-catalogue]');
+  if (!katalog) return;
 
-  var key = new URLSearchParams(location.search).get('produkt');
-  var o = OFFERS[key] || OFFERS.trio;
+  var klic = new URLSearchParams(location.search).get('produkt');
+  var o = (klic && katalog.querySelector('[data-offer="' + klic + '"]')) ||
+          katalog.querySelector('[data-offer="trio"]') ||
+          katalog.querySelector('[data-offer]');
+  if (!o) return;
 
-  function set(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; }
-  function fill(id, items) {
+  function text(name) {
+    var el = o.querySelector('[data-o="' + name + '"]');
+    return el ? el.textContent.trim() : '';
+  }
+  function seznam(name) {
+    var ul = o.querySelector('ul[data-o="' + name + '"]');
+    if (!ul) return [];
+    return Array.prototype.map.call(ul.children, function (li) { return li.textContent.trim(); })
+      .filter(function (t) { return t; });
+  }
+  function set(id, hodnota) { var el = document.getElementById(id); if (el) el.textContent = hodnota; }
+  function fill(id, polozky) {
     var ul = document.getElementById(id);
     if (!ul) return;
     ul.innerHTML = '';
-    items.forEach(function (t) {
+    polozky.forEach(function (t) {
       var li = document.createElement('li');
       li.textContent = t;
       ul.appendChild(li);
     });
   }
 
-  document.title = o.name + ' · detail nabídky | Lexia';
-  set('d-name', o.name);
-  set('d-sub', o.sub);
-  set('d-price', o.price);
-  set('d-price-unit', o.priceUnit);
-  set('d-year', o.year);
-  set('d-cta-title', o.ctaTitle || ('Sjednejte si ' + o.name + (o.cta.indexOf('kalkulacka') === 0 ? ' na míru' : ' online')));
-  fill('d-kryti', o.kryti);
-  fill('d-spory', o.spory);
+  var nazev = text('name');
+  var cta = o.getAttribute('data-cta') || '#';
+
+  document.title = nazev + ' \u00b7 detail nabídky | Lexia';
+  set('d-name', nazev);
+  set('d-sub', text('sub'));
+  set('d-price', text('price'));
+  set('d-price-unit', text('priceUnit'));
+  set('d-year', text('year'));
+  set('d-cta-title', text('ctaTitle'));
+  fill('d-kryti', seznam('kryti'));
+  fill('d-spory', seznam('spory'));
 
   ['d-cta', 'd-cta2'].forEach(function (id) {
     var a = document.getElementById(id);
-    if (a) { a.setAttribute('href', o.cta); a.textContent = o.ctaLabel; }
+    if (a) { a.setAttribute('href', cta); a.textContent = text('ctaLabel'); }
   });
 
-  var icon = document.getElementById('d-icon');
-  if (icon) {
-    icon.setAttribute('data-icon', o.icon);
-    icon.innerHTML = '';
+  var ikona = document.getElementById('d-icon');
+  if (ikona) {
+    ikona.setAttribute('data-icon', o.getAttribute('data-offer-icon') || 'shield');
+    ikona.innerHTML = '';
     if (typeof injectIcons === 'function') injectIcons();
   }
 })();

@@ -33,7 +33,7 @@
 
 <section class="page-hero">
   <div class="container">
-    <h1 id="order-title">Sjednání pojištění online</h1>
+    <h1 id="order-title" data-no-edit>Sjednání pojištění online</h1>
     <p id="order-sub">Pevná cena, žádná konfigurace. Vyplňte údaje pojistníka, zaplaťte a máte hotovo.</p>
   </div>
 </section>
@@ -57,13 +57,13 @@
           <div class="calc-section">
             <h4>Váš vybraný produkt</h4>
             <div class="fixed-product">
-              <span class="fixed-product-icon"><i class="icon" data-icon="shield" id="fx-icon"></i></span>
+              <span class="fixed-product-icon"><i class="icon" data-icon="shield" id="fx-icon" data-no-edit></i></span>
               <div class="fixed-product-body">
-                <strong class="fixed-product-name" id="fx-name">TRIO</strong>
-                <span class="fixed-product-sub" id="fx-sub">Kompletní balíček</span>
-                <p class="fixed-product-desc" id="fx-desc">Domácnost, bydlení i řidiči v jednom.</p>
+                <strong class="fixed-product-name" id="fx-name" data-no-edit>TRIO</strong>
+                <span class="fixed-product-sub" id="fx-sub" data-no-edit>Kompletní balíček</span>
+                <p class="fixed-product-desc" id="fx-desc" data-no-edit>Domácnost, bydlení i řidiči v jednom.</p>
               </div>
-              <span class="fixed-product-price"><span class="fpp-now"><strong id="fx-price">499 Kč</strong><span>/měsíc</span></span><span class="fixed-product-year" id="fx-price-year">5 489 Kč/rok</span></span>
+              <span class="fixed-product-price" data-no-edit><span class="fpp-now"><strong id="fx-price" data-no-edit>499 Kč</strong><span>/měsíc</span></span><span class="fixed-product-year" id="fx-price-year" data-no-edit>5 489 Kč/rok</span></span>
             </div>
 
             <label class="fixed-upsell" id="fx-upsell" hidden>
@@ -72,7 +72,7 @@
                 <strong>Rozšířit na DRIVE PLUS</strong>
                 <span>Právní ochrana řidiče ve všech vozidlech, nejen ve vašem.</span>
               </span>
-              <span class="fixed-upsell-price">+40 Kč/měs.</span>
+              <span class="fixed-upsell-price" data-no-edit>+40 Kč/měs.</span>
             </label>
 
             <p class="fixed-note"><i class="icon" data-icon="check_circle" style="width:14px;height:14px;"></i> Pevná finální cena. Stačí vyplnit, pro koho pojištění je, a zaplatit.</p>
@@ -341,6 +341,57 @@
   </div>
 </footer>
 
+<!-- TEXTY PRODUKTŮ — zdroj pro kartu vybraného produktu nahoře.
+     Na webu skrytý, v editoru textů se zobrazí. Ceny se odsud NEBEROU:
+     počítá se z nich objednávka, proto zůstávají v kódu. -->
+<style>
+  [data-product-catalogue] { display: none; }
+  body.lxe-editing [data-product-catalogue] { display: block; }
+  [data-product-catalogue] .product-src { border: 1px solid var(--border, #e3e9f2); border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; }
+  [data-product-catalogue] .product-src h3, [data-product-catalogue] .product-src h4 { margin: 0 0 4px; }
+  [data-product-catalogue] .product-src p { margin: 0 0 4px; }
+</style>
+<section data-product-catalogue>
+  <div class="container">
+    <div class="section-header">
+      <h2>Texty produktů</h2>
+      <p>Odsud se plní karta vybraného produktu nahoře. Přepište text tady a uložte; nahoře se projeví po znovunačtení stránky. Ceny se tu needitují, počítá se z nich objednávka.</p>
+    </div>
+      <div class="product-src" data-product="ridic">
+        <h3 data-p="name">Řidič</h3>
+        <p data-p="subtitle">Právní ochrana řidiče a vozidla</p>
+        <p data-p="desc">Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.</p>
+      </div>
+      <div class="product-src" data-product="drive">
+        <h3 data-p="name">DRIVE</h3>
+        <p data-p="subtitle">Právní ochrana vozidla</p>
+        <p data-p="desc">Vozidlo, řidič i posádka. Spory se servisem, prodejcem i pojišťovnou.</p>
+        <h4 data-p="plusName">DRIVE PLUS</h4>
+        <p data-p="plusDesc">Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.</p>
+      </div>
+      <div class="product-src" data-product="driveplus">
+        <h3 data-p="name">DRIVE PLUS</h3>
+        <p data-p="subtitle">Právní ochrana vozidla</p>
+        <p data-p="desc">Vozidlo, posádka i řidič chráněný ve všech vozidlech, nejen ve vašem.</p>
+      </div>
+      <div class="product-src" data-product="home">
+        <h3 data-p="name">HOME</h3>
+        <p data-p="subtitle">Právní ochrana bydlení</p>
+        <p data-p="desc">Dům, byt i chata/chalupa. Spory se sousedy, řemeslníky i úřady.</p>
+      </div>
+      <div class="product-src" data-product="garance">
+        <h3 data-p="name">GARANCE PLUS</h3>
+        <p data-p="subtitle">Vymáhání nároků po pojišťovnách</p>
+        <p data-p="desc">Hlášení a likvidace pojistných událostí, vymáhání nároků po pojišťovnách i právní ochrana řidiče.</p>
+      </div>
+      <div class="product-src" data-product="trio">
+        <h3 data-p="name">TRIO</h3>
+        <p data-p="subtitle">Kompletní balíček</p>
+        <p data-p="desc">Základní ochrana domácnosti, bydlení i řidiči v jednom.</p>
+      </div>
+  </div>
+</section>
+
 <script src="assets/icons.js"></script>
 <script src="assets/datepicker.js"></script>
 <script>
@@ -392,6 +443,30 @@
   FIXED_PRODUCTS.bydleni = FIXED_PRODUCTS.home;
   FIXED_PRODUCTS['garance-plus'] = FIXED_PRODUCTS.garance;
   FIXED_PRODUCTS.balicek = FIXED_PRODUCTS.trio;
+
+  // Texty produktů se berou ze sekce "Texty produktů" níže na stránce, aby
+  // šly upravit v editoru textů. Ceny zůstávají tady v kódu — počítá se
+  // z nich objednávka, takže je nechceme mít závislé na přepisu textu.
+  (function nactiTextyZeStranky() {
+    const katalog = document.querySelector('[data-product-catalogue]');
+    if (!katalog) return;
+    Object.keys(FIXED_PRODUCTS).forEach(function (klic) {
+      const el = katalog.querySelector('[data-product="' + klic + '"]');
+      if (!el) return;
+      const t = function (n) {
+        const x = el.querySelector('[data-p="' + n + '"]');
+        return x ? x.textContent.trim() : '';
+      };
+      const p = FIXED_PRODUCTS[klic];
+      if (t('name')) p.name = t('name');
+      if (t('subtitle')) p.subtitle = t('subtitle');
+      if (t('desc')) p.desc = t('desc');
+      if (p.plus) {
+        if (t('plusName')) p.plus.name = t('plusName');
+        if (t('plusDesc')) p.plus.desc = t('plusDesc');
+      }
+    });
+  })();
 
   const key = new URLSearchParams(location.search).get('produkt');
   const product = FIXED_PRODUCTS[key] || FIXED_PRODUCTS.trio;
