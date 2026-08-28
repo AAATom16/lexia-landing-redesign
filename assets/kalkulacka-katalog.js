@@ -47,7 +47,12 @@
     return res.json();
   }
 
-  async function nacenit() {
+  /**
+   * Vstupy pilířů → parametry pro engine. Sdílí je nacenění i sjednání: kdyby
+   * si je sjednání skládalo po svém, mohla by smlouva vzniknout s jinými
+   * objekty, než na kterých stála ukázaná cena.
+   */
+  function sestavParametry() {
     const parameters = {};
     for (const [klic, hodnota] of Object.entries(stav.vstupy)) {
       const pilir = stav.katalog.pillars.find((p) => p.key === klic);
@@ -68,6 +73,11 @@
         }
       }
     }
+    return parameters;
+  }
+
+  async function nacenit() {
+    const parameters = sestavParametry();
     const res = await fetch(`${API}/public/v1/quote?tenant=${TENANT}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -382,6 +392,113 @@
 
   // Krok 2 wizardu potřebuje vědět, co je vybrané; jinak by si to musel číst
   // z názvů políček, která už neexistují.
+  // ── sjednání ──────────────────────────────────────────────────────────────
+
+  const pole = (jmeno) => document.querySelector(`[name="${jmeno}"]`)?.value?.trim() || '';
+  const zaskrtnuto = (jmeno) => !!document.querySelector(`[name="${jmeno}"]`)?.checked;
+
+  /**
+   * Odeslání žádosti o sjednání. Vzniká KONCEPT smlouvy, ne platné pojištění —
+   * proto stránka po odeslání nesmí tvrdit, že krytí běží, ani vybírat platbu.
+   *
+   * Cenu si backend počítá znovu; `expectedMonthlyCzk` posíláme jen jako
+   * kontrolu, že se mezi nacenením a odesláním nerozešel ceník. Když se
+   * rozejde, vrátí 409 a klient musí novou cenu vidět, ne ji dostat podstrčenou.
+   */
+  async function odesliSjednani() {
+    const jmeno = [pole('firstName'), pole('lastName')].filter(Boolean).join(' ');
+    const telo = {
+      product: stav.produkt,
+      segment: 'FO',
+      pillars: [...stav.vybrane],
+      parameters: sestavParametry(),
+      paymentFrequency:
+        document.querySelector('input[name="period"]:checked')?.value === 'rocni'
+          ? 'annual'
+          : 'monthly',
+      client: {
+        name: jmeno,
+        email: pole('email'),
+        phone: pole('phone'),
+        birthNumber: pole('rc') || undefined,
+        dateOfBirth: pole('birthDate') || undefined,
+        street: [pole('street'), pole('houseNum')].filter(Boolean).join(' ') || undefined,
+        city: pole('city') || undefined,
+        postalCode: pole('zip') || undefined,
+      },
+      consents: {
+        recap: zaskrtnuto('consent-recap'),
+        truthfulness: zaskrtnuto('consent-truthfulness'),
+        terms: zaskrtnuto('consent-terms'),
+        dataProcessing: zaskrtnuto('consent-data'),
+        marketing: zaskrtnuto('consent-marketing'),
+      },
+      ...(pole('start-date') ? { startDate: pole('start-date') } : {}),
+      ...(stav.posledni ? { expectedMonthlyCzk: stav.posledni.monthlyCzk } : {}),
+    };
+
+    const res = await fetch(`${API}/public/v1/contracts?tenant=${TENANT}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(telo),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      throw new Error((data && data.message) || 'Žádost se nepodařilo odeslat.');
+    }
+    return data;
+  }
+
+  /**
+   * Odeslání visí na tlačítku kroku 3 v ZACHYTÁVACÍ fázi, aby proběhlo dřív,
+   * než `script.js` překlopí stepper na krok 4. Bez toho by se poslední krok
+   * ukázal i tehdy, když by žádost spadla, a klient by odešel s dojmem, že
+   * pojištění zařídil.
+   */
+  function pripojSjednani() {
+    const btn = el('#btn-sjednat');
+    if (!btn) return;
+    const chyba = el('#sjednani-chyba');
+    let hotovo = false;
+
+    btn.addEventListener(
+      'click',
+      (ev) => {
+        if (hotovo) return; // druhý průchod už jen pustí navigaci dál
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+
+        const form = el('#contract-form');
+        if (form && !form.reportValidity()) return;
+        if (chyba) chyba.hidden = true;
+
+        const puvodni = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Odesíláme…';
+
+        odesliSjednani()
+          .then((data) => {
+            document
+              .querySelectorAll('[data-echo="contractNo"]')
+              .forEach((x) => (x.textContent = data.contractNumber || data.contractId));
+            hotovo = true;
+            btn.click(); // teď už projde na krok 4
+          })
+          .catch((e) => {
+            if (chyba) {
+              chyba.textContent = e.message;
+              chyba.hidden = false;
+            }
+          })
+          .finally(() => {
+            btn.disabled = false;
+            btn.textContent = puvodni;
+          });
+      },
+      true,
+    );
+  }
+
   window.LEXIA_CALC = { selected: () => [...stav.vybrane], quote: () => stav.posledni };
 
   document.addEventListener('DOMContentLoaded', () => {

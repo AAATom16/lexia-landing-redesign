@@ -31,7 +31,7 @@
       .calc-addons { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 18px; }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
-      .calc-addons[hidden], .calc-pillar-input[hidden] { display: none; }
+      .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden] { display: none; }
       .calc-option.is-addon { border-style: dashed; }
       .calc-badge { display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
@@ -79,7 +79,7 @@
       <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Nabídka</span></li>
       <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Vaše údaje</span></li>
       <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Rekapitulace</span></li>
-      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Dokončení</span></li>
+      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Odeslání</span></li>
     </ol>
 
     <!-- ============= STEP 1: Kalkulace ============= -->
@@ -489,16 +489,17 @@
 
         <div class="recap-card">
           <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Souhlasy</h4>
-          <label class="form-checkbox"><input type="checkbox" required><span>Souhlasím s rekapitulací zvoleného pojištění. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required><span>Potvrzuji pravdivost a úplnost uvedených údajů. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a>, informacemi o pojištění a dokumenty k produktu. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
-          <label class="form-checkbox" style="margin-top: 12px;"><input type="checkbox"><span>Souhlasím se zasíláním marketingové komunikace. <em style="color: var(--text-muted); font-weight: 400;">(volitelné)</em></span></label>
+          <label class="form-checkbox"><input type="checkbox" required name="consent-recap"><span>Souhlasím s rekapitulací zvoleného pojištění. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required name="consent-truthfulness"><span>Potvrzuji pravdivost a úplnost uvedených údajů. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required name="consent-terms"><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a>, informacemi o pojištění a dokumenty k produktu. <span class="req">*</span></span></label>
+          <label class="form-checkbox"><input type="checkbox" required name="consent-data"><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
+          <label class="form-checkbox" style="margin-top: 12px;"><input type="checkbox" name="consent-marketing"><span>Souhlasím se zasíláním marketingové komunikace. <em style="color: var(--text-muted); font-weight: 400;">(volitelné)</em></span></label>
         </div>
 
         <div class="calc-nav">
           <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
-          <button type="button" class="btn btn-primary btn-lg" data-step-next="4">Dokončit kalkulaci</button>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="4" id="btn-sjednat">Odeslat žádost o sjednání</button>
+          <p class="calc-error" id="sjednani-chyba" hidden role="alert"></p>
         </div>
       </div>
     </div>
@@ -507,26 +508,31 @@
     <div class="calc-step" data-step-panel="4" hidden>
       <div class="calc-single">
 
-        <!-- Sjednání on-line zatím neběží: kalkulačka umí spočítat cenu, ale
-             smlouvu nikdo nezaloží. Dokud pro to nebude backend, nesmí tenhle
-             krok tvrdit opak ani vybírat peníze. -->
-        <div class="state-card state-card--wide" data-state="hotovo">
-          <div class="state-icon state-icon--custom">
-            <i class="icon" data-icon="chat"></i>
+        <!-- Výsledek skutečného sjednání. Vzniká KONCEPT smlouvy, ne platné
+             pojištění — proto tu nesmí stát, že krytí běží, ani výzva k platbě.
+             Platební údaje pošle LEXIA až po kontrole údajů. -->
+        <div class="state-card state-card--wide" data-state="odeslano">
+          <div class="state-icon state-icon--success">
+            <i class="icon" data-icon="check_circle"></i>
           </div>
-          <h2>Kalkulace je hotová</h2>
-          <p>Spočítanou cenu máte níže. Sjednání on-line právě dokončujeme, takže poslední krok s vámi zatím uděláme osobně — ozvěte se nám a pojištění s vámi rovnou nastavíme.</p>
+          <h2>Žádost o sjednání jsme přijali</h2>
+          <p>Děkujeme. Žádost máme u sebe pod číslem níže. Zkontrolujeme údaje, ozveme se vám na <strong data-echo="email">—</strong> a pošleme smlouvu i platební pokyny.</p>
+
+          <div class="pay-warning">
+            <i class="icon" data-icon="clock"></i>
+            <span><strong>Pojištění zatím neplatí.</strong> Začne platit až po uzavření smlouvy a uhrazení pojistného — platební údaje dostanete od nás, neplaťte nic předem.</span>
+          </div>
 
           <div class="state-details">
+            <div class="recap-row"><span>Číslo žádosti</span><strong data-echo="contractNo">—</strong></div>
             <div class="recap-row"><span>Vybrané pojištění</span><strong data-echo="product">Pojištění právní ochrany</strong></div>
             <div class="recap-row"><span>Varianta</span><strong data-echo="variant">Jednotlivec</strong></div>
-            <div class="recap-row"><span>Cena (<span data-echo="period-label">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">179 Kč</strong></div>
-            <div class="recap-row" style="border-bottom: none;"><span>Kontakt</span><strong>info@lexia.cz · +420 465 465 465</strong></div>
+            <div class="recap-row" style="border-bottom: none;"><span>Cena (<span data-echo="period-label">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">179 Kč</strong></div>
           </div>
 
           <div class="state-actions">
-            <a href="kontakt.html" class="btn btn-primary btn-lg">Ozvat se a sjednat</a>
-            <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
+            <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+            <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
           </div>
         </div>
 
