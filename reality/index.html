@@ -357,7 +357,7 @@
     <p class="fp-lead" style="margin-bottom: 24px;">
       <strong>Neveřejná nabídka pouze pro realitní zprostředkovatele, partnery LEXIA.</strong><br>
       Komplexní právní ochrana pokrývá podnikání v realitním zprostředkování <strong>i ochranu řidiče v ČR a Evropě</strong>, a to za speciální cenu místo standardních 508 Kč se <strong>slevou 41 %</strong>.<br>
-      Při roční platbě <strong>3 289 Kč</strong>, platíte jen 11 měsíců a dvanáctý máte zdarma. Pojistku můžete kdykoliv zrušit.
+      Při roční platbě <strong data-fp-year-inline>3 289 Kč</strong>, platíte jen 11 měsíců a dvanáctý máte zdarma. Pojistku můžete kdykoliv zrušit.
     </p>
 
     <div class="fp-toggle" role="group" aria-label="Perioda platby">
@@ -519,39 +519,8 @@
   });
 })();
 
-// Přepínač měsíční / roční platby v sekci Exkluzivní nabídka
-(function () {
-  var buttons = document.querySelectorAll('[data-fp-period]');
-  var price = document.querySelector('[data-fp-price]');
-  var unit = document.querySelector('[data-fp-unit]');
-  var cta = document.querySelector('[data-fp-cta]');
-  if (!buttons.length || !price || !unit || !cta) return;
-
-  var old = document.querySelector('[data-fp-old]');
-  var disc = document.querySelector('[data-fp-disc]');
-
-  // Škrtnutá cena i sleva se přepínají spolu s obdobím.
-  // Roční platba = 11 x 299 Kč = 3 289 Kč, tedy jeden měsíc zdarma
-  // oproti 12 x 299 Kč = 3 588 Kč.
-  var values = {
-    month: { price: '299', unit: 'Kč/měsíc', old: '508 Kč', disc: 'SLEVA 41 %', cta: 'Sjednat za 299 Kč/měsíc' },
-    year: { price: '3 289', unit: 'Kč/rok', old: '3 588 Kč', disc: 'MĚSÍC ZDARMA', cta: 'Sjednat za 3 289 Kč/rok' }
-  };
-
-  buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var period = btn.getAttribute('data-fp-period');
-      var v = values[period];
-      if (!v) return;
-      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
-      price.textContent = v.price;
-      unit.textContent = v.unit;
-      cta.textContent = v.cta;
-      if (old) old.textContent = v.old;
-      if (disc) disc.textContent = v.disc;
-    });
-  });
-})();
+// Cenu i přepínač období řeší ../assets/cena-poradci.js — bere ji
+// z oceňovacího enginu, ne z natvrdo napsaného čísla.
 
 // Na mobilu je druhý odstavec hero sbalený, aby CTA nebylo až za třemi obrazovkami.
 (function () {
@@ -570,5 +539,6 @@
   sync();
 })();
 </script>
+  <script src="../assets/cena-poradci.js" defer></script>
 </body>
 </html>
