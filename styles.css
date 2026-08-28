@@ -60,6 +60,15 @@
 
 html { scroll-behavior: smooth; }
 
+/* Dekorační symboly v sekcích (.has-glyph::after) jsou schválně posunuté
+   za okraj (right: -4vw), aby vypadaly uříznuté. Nikdo je ale neořezával,
+   takže stránku reálně rozšiřovaly o 4 % okna a šlo s ní hýbat do strany —
+   na 1440 px o 58 px, na telefonu o 15 px. Samotné `overflow-x: clip` na body
+   to nestačilo; `overflow-x: hidden` na html posun spolehlivě zastaví
+   a rozumí mu i starší prohlížeče. Ověřeno, že lepivá hlavička drží
+   a kotvy se zastavují na stejném místě jako dřív. */
+html { overflow-x: hidden; }
+
 body {
   font-family: var(--font-base);
   font-size: 16px;
@@ -176,13 +185,16 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
   border-bottom-color: var(--border);
 }
 
+/* Stejná šířka i odsazení jako .container, aby logo začínalo přesně tam,
+   kde začíná obsah stránky pod ním. Dřív bylo 1120/28 proti 1080/24, takže
+   logo viselo na širokých obrazovkách o 16 px vlevo a na úzkých o 4 px vpravo. */
 .nav {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 28px;
-  max-width: 1120px;
+  padding: 20px 24px;
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -5436,7 +5448,9 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
    a 67 px vpravo, takže se nezalomí ani nepřekryje. */
 @media (max-width: 960px) {
   .nav-links { display: none; }
-  .menu-toggle { display: block; }
+  /* Odsazení od tlačítka „Spočítat cenu" — bez něj se ho hamburger dotýkal,
+     mezi nimi bylo jen 8 px vlastního odsazení hamburgeru. */
+  .menu-toggle { display: block; margin-left: 14px; }
   .nav-links.open {
     display: flex;
     flex-direction: column;
@@ -6717,6 +6731,11 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
      zastavila pod sticky hlavičkou a byla vidět její horní hranice. */
   scroll-margin-top: 120px;
 }
+
+/* Poslední karta už spodní odsazení nepotřebuje — přičítalo se k odsazení
+   sekce a mezera pod poslední kartou tím vycházela 176 px místo 128 px
+   jako všude jinde na webu. */
+.product-card:last-child { margin-bottom: 0; }
 /* Každá druhá sekce — jemný světle modrý podklad bez viditelného okraje */
 .product-card--bg {
   background: var(--bg-light);
