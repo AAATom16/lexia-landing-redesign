@@ -19,6 +19,7 @@
   const PRODUKTY = {
     jednotlivec: 'pojisteni_pravni_ochrany_pro_jednotlivce',
     domacnost: 'pojisteni_pravni_ochrany_pro_domacnosti',
+    poradce: 'pojisteni_pravni_ochrany_pro_financni_poradce_a_realitni_zprostredkovatele',
   };
 
   const czk = (n) => `${Math.round(n).toLocaleString('cs-CZ')} Kč`;
@@ -372,7 +373,8 @@
     poradi += 1;
     stav.produkt = PRODUKTY[varianta] || PRODUKTY.jednotlivec;
     const popisek = el('#sum-variant');
-    if (popisek) popisek.textContent = varianta === 'domacnost' ? 'Domácnost' : 'Jednotlivec';
+    const prepinac = el(`input[name="variant"][value="${varianta}"]`);
+    if (popisek) popisek.textContent = prepinac?.dataset.label || 'Jednotlivec';
     try {
       stav.katalog = await nactiKatalog(stav.produkt);
     } catch (e) {
@@ -501,10 +503,36 @@
 
   window.LEXIA_CALC = { selected: () => [...stav.vybrane], quote: () => stav.posledni };
 
+  /**
+   * Varianta z adresy (`?varianta=poradce`). Odsud na kalkulačku míří microsity
+   * /reality a /financniporadci, které prodávají jiný produkt než výchozí
+   * jednotlivce. Neznámou hodnotu ignorujeme — jinak by stačil překlep v odkazu
+   * a katalog by se načetl pro neexistující produkt.
+   *
+   * Týž parametr předvolí přepínač i ve `script.js` (starší deep-link z karet
+   * na úvodní stránce), ale jen pro jednotlivce a domácnost. Nezdvojí se to:
+   * `script.js` běží dřív, než katalogová kalkulačka připojí posluchače, takže
+   * jeho `change` nikdo nechytí. Produkt si tak řídí jedno místo — tohle.
+   */
+  function variantaZAdresy() {
+    const v = new URLSearchParams(window.location.search).get('varianta');
+    return v && Object.prototype.hasOwnProperty.call(PRODUKTY, v) ? v : null;
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     if (!el('#calc-pillars')) return;
     pripojUdalosti();
-    const varianta = el('input[name="variant"]:checked')?.value || 'jednotlivec';
+    const zAdresy = variantaZAdresy();
+    if (zAdresy) {
+      const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);
+      if (prepinac) {
+        prepinac.checked = true;
+        document
+          .querySelectorAll('input[name="variant"]')
+          .forEach((i) => i.closest('.calc-option')?.classList.toggle('selected', i.checked));
+      }
+    }
+    const varianta = zAdresy || el('input[name="variant"]:checked')?.value || 'jednotlivec';
     void prepniProdukt(varianta);
   });
 })();
