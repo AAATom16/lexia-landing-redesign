@@ -561,7 +561,7 @@ app.use((req, res) => {
 
 store.load();
 history.load();
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`[lexia] web běží na http://localhost:${PORT}`);
   console.log(auth.isEnabled()
     ? `[lexia] editor textů: http://localhost:${PORT}/editor (data v ${store.FILE})`
@@ -574,3 +574,30 @@ app.listen(PORT, () => {
       : '[lexia] úložiště textů NENÍ zapisovatelné — editor neuloží nic');
   });
 });
+
+/**
+ * Ukončení na povel.
+ *
+ * Railway při každém novém nasazení pošle běžícímu kontejneru SIGTERM. Když ho
+ * nikdo neodchytí, Node na ten signál zemře a npm to zapíše jako chybu
+ * ("npm error signal SIGTERM"), takže staré nasazení v Railway vypadá, jako by
+ * spadlo — i když jen řádně skončilo, protože ho nahradilo novější.
+ *
+ * Tady se přestanou přijímat nová spojení, rozpracované odpovědi doběhnou
+ * a proces skončí návratovým kódem 0. Pojistka po deseti vteřinách je pro
+ * případ, že by některé spojení odmítlo skončit — Railway čeká omezenou dobu
+ * a pak posílá SIGKILL, tak ať odejdeme po svých dřív.
+ */
+for (const signal of ['SIGTERM', 'SIGINT']) {
+  process.on(signal, () => {
+    console.log(`[lexia] ${signal} — ukončuji, čekám na doběhnutí požadavků`);
+    server.close(() => {
+      console.log('[lexia] hotovo, končím');
+      process.exit(0);
+    });
+    setTimeout(() => {
+      console.log('[lexia] spojení nedoběhla do 10 s, končím i tak');
+      process.exit(0);
+    }, 10_000).unref();
+  });
+}
