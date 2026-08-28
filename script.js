@@ -102,8 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Subtle parallax on hero dot patterns
   initParallax();
 
-  // Calculator
-  initCalculator();
+  // Kalkulačku řeší assets/kalkulacka-katalog.js — sama se naváže na DOM.
 
   // Calculator wizard (multi-step)
   initCalcWizard();
@@ -763,364 +762,35 @@ function initParallax() {
 }
 
 /* ============================================
-   KALKULAČKA - Lexia Jednotlivci a domácnosti
-   Měsíční ceny v Kč dle excelu
+   KALKULAČKA
+   Pilíře i ceny řeší assets/kalkulacka-katalog.js — ptá se katalogu
+   a oceňovacího enginu LEXIA. Ceník se sem NEVRACÍ: dokud tu byl,
+   rozešel se s tím, co se prodává (vozidla 129 vs 79 Kč, „další
+   nemovitost" pevnou sazbou místo slevy 40 %).
    ============================================ */
-
-// Ceny pilířů: [jednotlivec, domacnost]
-const PILLAR_PRICES = {
-  zakladni:    { j: 179, d: 269, label: 'Základní právní ochrana' },
-  vozidla:     { j: 129, d: 169, label: 'Vozidla a řidiči' },
-  prace:       { j:  79, d:  99, label: 'Pracovněprávní ochrana' },
-  nemovitost:  { j: 139, d: 159, label: 'Dům, byt, chata' },
-};
-
-// Doplňkové pilíře - pevná sazba
-const ADDON_VYSTAVBA = 819; // měsíčně, stejné pro J i D
-
-// Samostatné objekty - sazby měsíčně
-const OBJEKTY_PRICES = {
-  '100':     { j:  49, d:  59, label: 'Samostatné objekty do 100 m²' },
-  '500':     { j: 139, d: 159, label: 'Samostatné objekty do 500 m²' },
-  '500plus': { j:   0, d:   0, label: 'Samostatné objekty nad 500 m² (individuální)' },
-};
-
-const NAJEMCI_SURCHARGE = 0.20; // +20%
-
-// Další nemovitost nad rámec první v pilíři "Dům, byt, chata"
-const DALSI_NEMOVITOST = { j: 79, d: 89, label: 'Další nemovitost' };
-
-// Vozidla a řidiči nad rámec vozidla a řidiče v ceně pilíře (sazby dle ceníku 2026/04)
-const VEHICLE_PRICES = {
-  veh_osobni:        { price: 129, label: 'Osobní vozidlo do 3,5 t' },
-  veh_nakladni:      { price: 149, label: 'Nákladní vozidlo do 3,5 t' },
-  veh_nakladni_plus: { price: 209, label: 'Nákladní vozidlo nad 3,5 t' },
-  veh_autobus:       { price: 229, label: 'Autobus' },
-  veh_motocykl:      { price:  69, label: 'Motocykl, tříkolka, čtyřkolka' },
-  veh_traktor:       { price:  79, label: 'Traktor a ostatní stroje' },
-  veh_prives:        { price:  39, label: 'Přípojné vozidlo do 750 kg' },
-  veh_prives_plus:   { price: 109, label: 'Přípojné vozidlo nad 750 kg' },
-  veh_ridici:        { price: 109, label: 'Další řidič' },
-};
-
-// Množstevní sleva na sekci vozidla + řidiči (počítá se vozidlo a řidič v ceně pilíře)
-const VEHICLE_VOLUME_DISCOUNT = [
-  { max: 5, pct: 0 }, { max: 10, pct: 4 }, { max: 20, pct: 8 }, { max: 50, pct: 12 },
-  { max: 100, pct: 16 }, { max: 150, pct: 20 }, { max: 200, pct: 24 }, { max: 250, pct: 28 },
-  { max: 300, pct: 32 }, { max: 350, pct: 36 }, { max: 400, pct: 40 }, { max: 450, pct: 44 },
-  { max: 500, pct: 48 },
-];
-
-function lookupVolumeDiscount(count) {
-  if (count > 500) return 48;
-  const step = VEHICLE_VOLUME_DISCOUNT.find(s => count <= s.max);
-  return step ? step.pct : 0;
-}
-
-// Manažerská právní ochrana: 0,25 % z roční odměny, min. 4 788 Kč/rok
-const MANAZER_RATE = 0.0025;
-const MANAZER_MIN_MONTHLY = 399; // 4 788 Kč/rok / 12
-
-function initCalculator() {
-  const form = document.getElementById('calc-form');
-  if (!form) return;
-
-  // Toggle .selected class on calc-options pomocí native 'change' eventu
-  // (browser sám handluje toggle checkboxu/radia, my jen aktualizujeme styly)
-  form.querySelectorAll('.calc-option input').forEach(input => {
-    input.addEventListener('change', () => {
-      if (input.disabled) return;
-      const opt = input.closest('.calc-option');
-      if (!opt) return;
-
-      if (input.type === 'radio') {
-        form.querySelectorAll(`.calc-option input[name="${input.name}"]`).forEach(i => {
-          const sib = i.closest('.calc-option');
-          if (sib) sib.classList.toggle('selected', i.checked);
-        });
-      } else if (input.type === 'checkbox') {
-        opt.classList.toggle('selected', input.checked);
-      }
-      updateCalculator();
-    });
-  });
-
-  // Toggle detail sections
-  const toggleDetail = (checkboxId, detailId) => {
-    const cb = document.getElementById(checkboxId);
-    const detail = document.getElementById(detailId);
-    if (cb && detail) {
-      cb.addEventListener('change', () => {
-        detail.style.display = cb.checked ? 'block' : 'none';
-        updateCalculator();
-      });
-    }
-  };
-  toggleDetail('addon-vykon', 'vykon-detail');
-  toggleDetail('addon-objekty', 'objekty-detail');
-  toggleDetail('addon-parcely', 'parcely-detail');
-
-  // Detaily základních pilířů (vozidla, práce, nemovitost) — stejný princip jako u doplňků
-  const togglePillarDetail = (pillarName, detailId, onUncheck) => {
-    const cb = document.querySelector(`input[name="${pillarName}"]`);
-    const detail = document.getElementById(detailId);
-    if (!cb || !detail) return;
-    cb.addEventListener('change', () => {
-      detail.style.display = cb.checked ? 'block' : 'none';
-      if (!cb.checked && typeof onUncheck === 'function') onUncheck();
-      updateCalculator();
-    });
-  };
-
-  togglePillarDetail('pillar_vozidla', 'vozidla-detail', () => {
-    Object.keys(VEHICLE_PRICES).forEach(name => {
-      const input = document.querySelector(`input[name="${name}"]`);
-      if (input) input.value = 0;
-    });
-  });
-
-  togglePillarDetail('pillar_prace', 'prace-detail', () => {
-    const manazer = document.getElementById('manazer-check');
-    const fields = document.getElementById('manazer-fields');
-    if (manazer) manazer.checked = false;
-    if (fields) fields.style.display = 'none';
-  });
-
-  togglePillarDetail('pillar_nemovitost', 'nemovitost-detail', () => {
-    const najemci = document.getElementById('najemci-check');
-    const dalsi = document.getElementById('dalsi-nemovitosti');
-    if (najemci) najemci.checked = false;
-    if (dalsi) dalsi.value = 0;
-  });
-
-  // Manažerská ochrana — pole s odměnou až po zaškrtnutí
-  const manazerCheck = document.getElementById('manazer-check');
-  const manazerFields = document.getElementById('manazer-fields');
-  if (manazerCheck && manazerFields) {
-    manazerCheck.addEventListener('change', () => {
-      manazerFields.style.display = manazerCheck.checked ? 'block' : 'none';
-      updateCalculator();
-    });
-  }
-
-  // Listen to all inputs/selects for changes
-  form.querySelectorAll('input, select').forEach(el => {
-    el.addEventListener('change', updateCalculator);
-    if (el.type === 'number') el.addEventListener('input', updateCalculator);
-  });
-
-  // Addon options (sekce 3) - klik na label přepne checkbox (label sám už to umí, ale syncujeme update)
-  form.querySelectorAll('.addon-option input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', updateCalculator);
-  });
-
-  // Update price labels when variant changes
-  form.querySelectorAll('input[name="variant"]').forEach(r => {
-    r.addEventListener('change', updateVariantLabels);
-  });
-
-  updateVariantLabels();
-  updateCalculator();
-}
-
-function updateVariantLabels() {
-  const variant = document.querySelector('input[name="variant"]:checked')?.value || 'jednotlivec';
-  document.querySelectorAll('.px-label').forEach(el => {
-    el.textContent = variant === 'domacnost' ? el.dataset.d : el.dataset.j;
-  });
-}
-
-function updateCalculator() {
-  const variant = document.querySelector('input[name="variant"]:checked')?.value || 'jednotlivec';
-  const v = variant === 'domacnost' ? 'd' : 'j';
-  const period = document.querySelector('input[name="period"]:checked')?.value || 'mesicni';
-
-  let total = 0;
-  const lines = [];
-
-  // === ZÁKLADNÍ PILÍŘE ===
-  // Základní (povinný)
-  total += PILLAR_PRICES.zakladni[v];
-  lines.push({ name: PILLAR_PRICES.zakladni.label, price: PILLAR_PRICES.zakladni[v] });
-
-  // Vozidla — v ceně pilíře je 1 osobní vozidlo + řidič, další se připojišťují
-  if (document.querySelector('input[name="pillar_vozidla"]')?.checked) {
-    const basePrice = PILLAR_PRICES.vozidla[v];
-    let vehicleSection = basePrice;
-    let unitCount = 2; // vozidlo + řidič v ceně pilíře
-    total += basePrice;
-    lines.push({ name: PILLAR_PRICES.vozidla.label, price: basePrice });
-
-    Object.entries(VEHICLE_PRICES).forEach(([name, cfg]) => {
-      const count = parseInt(document.querySelector(`input[name="${name}"]`)?.value || 0, 10);
-      if (!count || count < 1) return;
-      const price = cfg.price * count;
-      total += price;
-      vehicleSection += price;
-      unitCount += count;
-      lines.push({ name: `↳ ${cfg.label}${count > 1 ? ` (×${count})` : ''}`, price: price });
-    });
-
-    // Množstevní sleva na celou sekci vozidel a řidičů
-    const pct = lookupVolumeDiscount(unitCount);
-    if (pct > 0) {
-      const discount = Math.round((vehicleSection * pct) / 100);
-      total -= discount;
-      lines.push({ name: `↳ Množstevní sleva ${pct} % (${unitCount} vozidel a řidičů)`, price: -discount });
-    }
-  }
-  // Práce
-  if (document.querySelector('input[name="pillar_prace"]')?.checked) {
-    total += PILLAR_PRICES.prace[v];
-    lines.push({ name: PILLAR_PRICES.prace.label, price: PILLAR_PRICES.prace[v] });
-
-    // Manažerská právní ochrana — 0,25 % z roční odměny, min. 399 Kč/měsíc
-    if (document.getElementById('manazer-check')?.checked) {
-      const odmena = parseFloat(document.getElementById('manazer-odmena')?.value || 0);
-      const manazerPrice = Math.max(MANAZER_MIN_MONTHLY, Math.round((odmena * MANAZER_RATE) / 12));
-      total += manazerPrice;
-      lines.push({ name: '↳ Manažerská právní ochrana', price: manazerPrice });
-    }
-  }
-  // Nemovitost — v ceně pilíře je 1 nemovitost, další se připojišťují
-  let nemoPrice = 0;
-  if (document.querySelector('input[name="pillar_nemovitost"]')?.checked) {
-    nemoPrice = PILLAR_PRICES.nemovitost[v];
-    total += nemoPrice;
-    lines.push({ name: PILLAR_PRICES.nemovitost.label, price: nemoPrice });
-
-    const dalsiPocet = parseInt(document.getElementById('dalsi-nemovitosti')?.value || 0, 10);
-    if (dalsiPocet > 0) {
-      const dalsiPrice = DALSI_NEMOVITOST[v] * dalsiPocet;
-      total += dalsiPrice;
-      nemoPrice += dalsiPrice;
-      lines.push({ name: `↳ ${DALSI_NEMOVITOST.label}${dalsiPocet > 1 ? ` (×${dalsiPocet})` : ''}`, price: dalsiPrice });
-    }
-
-    // Spory s nájemci - příplatek 20% z nemovitostí
-    if (document.getElementById('najemci-check')?.checked) {
-      const surcharge = Math.round(nemoPrice * NAJEMCI_SURCHARGE);
-      total += surcharge;
-      lines.push({ name: '↳ Spory s nájemci (+20 %)', price: surcharge });
-    }
-  }
-
-  // === DOPLŇKOVÉ PILÍŘE ===
-  // Výkon funkce
-  if (document.getElementById('addon-vykon')?.checked) {
-    const funkceMin = parseFloat(document.getElementById('vykon-funkce')?.value || 0);
-    const odmena = parseFloat(document.getElementById('vykon-odmena')?.value || 0);
-    if (funkceMin > 0) {
-      // 0,25 % z roční odměny / 12 = měsíční sazba ze sporné částky
-      const calcMonthly = Math.round((odmena * 0.0025) / 12);
-      const finalMonthly = Math.max(funkceMin, calcMonthly);
-      total += finalMonthly;
-      lines.push({ name: 'Výkon funkce', price: finalMonthly });
-    }
-  }
-
-  // Nemovitost ve výstavbě
-  if (document.querySelector('input[name="addon_vystavba"]')?.checked) {
-    total += ADDON_VYSTAVBA;
-    lines.push({ name: 'Nemovitost ve výstavbě', price: ADDON_VYSTAVBA });
-  }
-
-  // Samostatné objekty
-  if (document.getElementById('addon-objekty')?.checked) {
-    const size = document.querySelector('input[name="objekty_size"]:checked')?.value;
-    if (size && OBJEKTY_PRICES[size]) {
-      let objPrice = OBJEKTY_PRICES[size][v];
-      if (size === '500plus') {
-        lines.push({ name: OBJEKTY_PRICES[size].label, price: null });
-      } else {
-        total += objPrice;
-        lines.push({ name: OBJEKTY_PRICES[size].label, price: objPrice });
-        if (document.querySelector('input[name="objekty_najemci"]')?.checked) {
-          const surcharge = Math.round(objPrice * NAJEMCI_SURCHARGE);
-          total += surcharge;
-          lines.push({ name: '↳ Spory s nájemci (+20 %)', price: surcharge });
-        }
-      }
-    }
-  }
-
-  // Samostatné parcely
-  if (document.getElementById('addon-parcely')?.checked) {
-    const rate = parseFloat(document.getElementById('parcela-typ')?.value || 0);
-    const m2 = parseFloat(document.getElementById('parcela-m2')?.value || 0);
-    if (rate > 0 && m2 > 0) {
-      let parcelyPrice = Math.round(rate * m2);
-      total += parcelyPrice;
-      const typLabel = rate === 0.04 ? 'Stavební parcela' : 'Pozemková parcela';
-      lines.push({ name: `${typLabel} (${m2.toLocaleString('cs-CZ')} m²)`, price: parcelyPrice });
-      if (document.querySelector('input[name="parcely_najemci"]')?.checked) {
-        const surcharge = Math.round(parcelyPrice * NAJEMCI_SURCHARGE);
-        total += surcharge;
-        lines.push({ name: '↳ Spory s nájemci (+20 %)', price: surcharge });
-      }
-    }
-  }
-
-  // === FREKVENCE PLATBY ===
-  // Roční pojistné = 11 × měsíční → 12. měsíc zdarma (sleva ~8,3 %), dle ceníku LEXIA.
-  const YEARLY_MONTHS = 11;
-  const periodMultiplier = period === 'rocni' ? YEARLY_MONTHS : 1;
-  const finalTotal = total * periodMultiplier;
-  const yearlySaving = total;             // ušetřená 1 měsíční platba při roční úhradě
-  const periodLabel = period === 'rocni' ? 'ročně' : 'měsíčně';
-
-  // === RENDER SOUHRNU ===
-  document.getElementById('sum-variant').textContent = variant === 'domacnost' ? 'Domácnost' : 'Jednotlivec';
-  document.getElementById('sum-period').textContent = periodLabel;
-  document.getElementById('sum-period-label').textContent = periodLabel;
-  document.getElementById('sum-total').textContent = finalTotal.toLocaleString('cs-CZ') + ' Kč';
-
-  // Řádek s roční úsporou — viditelný jen při roční platbě
-  const savingEl = document.getElementById('sum-saving');
-  if (savingEl) {
-    savingEl.hidden = period !== 'rocni';
-    const amt = savingEl.querySelector('strong');
-    if (amt) amt.textContent = yearlySaving.toLocaleString('cs-CZ') + ' Kč';
-  }
-
-  // Render seznamu pilířů
-  const pillarsList = document.getElementById('sum-pillars');
-  if (pillarsList) {
-    pillarsList.innerHTML = lines.map(l => {
-      const priceText = l.price === null
-        ? '<span style="float: right; opacity: 0.9; font-size: 0.85rem;">indiv.</span>'
-        : `<span style="float: right; opacity: 0.9;">${l.price.toLocaleString('cs-CZ')} Kč</span>`;
-      return `<li style="padding: 4px 0;">${l.name} ${priceText}</li>`;
-    }).join('');
-  }
-
-  // Krok 2 zobrazuje jen bloky k tomu, co je opravdu vybrané
-  updateSubjectBlocks();
-}
 
 /* ============================================
    PŘEDMĚT POJIŠTĚNÍ (krok 2)
    Bloky se zobrazují podle pilířů a doplňků vybraných v kroku 1.
    ============================================ */
+window.updateSubjectBlocks = updateSubjectBlocks;
 function updateSubjectBlocks() {
   const section = document.getElementById('subject-section');
   if (!section) return;
 
-  const checked = sel => !!document.querySelector(sel)?.checked;
-  const num = sel => parseInt(document.querySelector(sel)?.value || 0, 10) || 0;
-
-  const vehicleTypes = Object.keys(VEHICLE_PRICES).filter(n => n !== 'veh_ridici');
-  const extraVehicles = vehicleTypes.reduce((sum, n) => sum + num(`input[name="${n}"]`), 0);
-  const extraDrivers = num('input[name="veh_ridici"]');
+  // Které pilíře jsou vybrané, ví kalkulačka z katalogu — ne názvy políček.
+  // Dokud se to řídilo `input[name="pillar_vozidla"]`, viselo to na produktu,
+  // který se už neprodává.
+  const vybrane = new Set((window.LEXIA_CALC && window.LEXIA_CALC.selected()) || []);
+  const ma = (...klice) => klice.some((k) => [...vybrane].some((v) => v.endsWith(k)));
 
   const blocks = {
-    'subj-vozidla':   checked('input[name="pillar_vozidla"]'),
-    'subj-nemovitost': checked('input[name="pillar_nemovitost"]'),
-    'subj-vystavba':  checked('input[name="addon_vystavba"]'),
-    'subj-objekty':   checked('#addon-objekty'),
-    'subj-parcely':   checked('#addon-parcely'),
-    'subj-vykon':     checked('#addon-vykon'),
-    'subj-manazer':   checked('input[name="pillar_prace"]') && checked('#manazer-check'),
+    'subj-vozidla': ma('-c8', '-c9'),
+    'subj-nemovitost': ma('-c2'),
+    'subj-vystavba': ma('-c5'),
+    'subj-parcely': ma('-c3'),
+    'subj-pronajem': ma('-c4'),
+    'subj-manazer': ma('-c7'),
   };
 
   let anyVisible = false;
@@ -1130,12 +800,6 @@ function updateSubjectBlocks() {
     el.hidden = !visible;
     if (visible) anyVisible = true;
   });
-
-  // Vnořené bloky — jen když je čím je naplnit
-  const sub = (id, visible) => { const el = document.getElementById(id); if (el) el.hidden = !visible; };
-  sub('subj-vozidla-dalsi', blocks['subj-vozidla'] && extraVehicles > 0);
-  sub('subj-ridici', blocks['subj-vozidla'] && extraDrivers > 0);
-  sub('subj-nemovitost-dalsi', blocks['subj-nemovitost'] && num('#dalsi-nemovitosti') > 0);
 
   section.hidden = !anyVisible;
   const fallbackNav = document.getElementById('subject-fallback-nav');
