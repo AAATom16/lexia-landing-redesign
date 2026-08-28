@@ -204,14 +204,20 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
   letter-spacing: 0.02em;
 }
 
+/* Odkazy jsou vystředěné vůči celé navigaci. Dřív se to řešilo přes
+   position:absolute + left:50%, jenže absolutně pozicovaný box dostane jen
+   polovinu šířky hlavičky — pod 1020 px se proto názvy lámaly do dvou řádků
+   a pod 793 px zajížděly pod tlačítka vpravo, takže „Kontakt" nešlo kliknout.
+   Řešení: odkazy zůstávají v normálním toku a střed drží tím, že logo i
+   tlačítka dostanou stejný díl zbylého místa (flex: 1 1 0). Vystředění je
+   proto pixel na pixel stejné jako dřív, ale odkazy se už nemají o co opřít. */
+.nav > .logo { flex: 1 1 0; }
+
 .nav-links {
   display: flex;
   align-items: center;
   gap: 36px;
   list-style: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%); /* odkazy zarovnané na střed navigace */
 }
 
 .nav-links a {
@@ -230,8 +236,11 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
 .nav-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 14px;
-  margin-left: 32px; /* odsazení od navigačních odkazů */
+  /* Stejný díl zbylého místa jako logo — drží odkazy přesně na středu.
+     Nahrazuje dřívější margin-left: 32px, které střed rozhazovalo. */
+  flex: 1 1 0;
 }
 
 .menu-toggle {
@@ -2787,6 +2796,24 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   .pkg-detail { font-size: 0.72rem; }
   .pkg-cta { font-size: 0.82rem; padding-left: 10px; padding-right: 10px; }
 }
+
+/* Na úzkých telefonech jedna karta na řádek. Dva sloupce nechávaly kartě jen
+   130 px na text, takže z ní na 320 px lezlo ven osm textů — názvy („INDIVIDUAL",
+   „Jednotlivec"), podnadpisy i ceny („od 269 Kč/měs."). Zalomit je nešlo, protože
+   jsou to jednotlivá slova. Přes 480 px se karty vejdou vedle sebe bez přetečení,
+   proto se dvousloupcové rozložení ruší až pod touto hranicí. */
+@media (max-width: 480px) {
+  .pkg-grid,
+  .pkg-grid--3,
+  .pkg-grid--4,
+  .pkg-grid--5 { grid-template-columns: 1fr; max-width: 420px; }
+}
+
+/* Pojistka pro případ, že do karty přibude delší jednoslovný název nebo cena:
+   raději slovo zalomit než ho nechat vylézt z rámečku. */
+.pkg-name,
+.pkg-sub,
+.pkg-list li { overflow-wrap: anywhere; }
 
 /* ============= INCLUDES STRIP (co Lexia hradí) ============= */
 .includes-grid {
@@ -5401,7 +5428,13 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
   .dash-sidebar { position: static; }
 }
 
-@media (max-width: 720px) {
+/* ============= MOBILNÍ MENU =============
+   Hamburger se zapíná na 960 px, ne až na 720 px. Mezi 721 a 960 px se dřív
+   zobrazovalo plné desktopové menu, které se ale na šířku nevešlo: názvy se
+   lámaly do dvou řádků a odkaz „Kontakt" zajížděl pod tlačítko „Spočítat cenu",
+   takže na něj nešlo kliknout. Na 961 px zbývá menu 35 px rezervy vlevo
+   a 67 px vpravo, takže se nezalomí ani nepřekryje. */
+@media (max-width: 960px) {
   .nav-links { display: none; }
   .menu-toggle { display: block; }
   .nav-links.open {
@@ -5412,7 +5445,6 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
     top: 100%;
     left: 0;
     right: 0;
-    transform: none; /* zrušit translateX(-50%) z desktop stylu, jinak menu vyjede mimo rám */
     background: var(--white);
     padding: 24px;
     border-bottom: 1px solid var(--border);
@@ -5439,6 +5471,9 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
     color: var(--primary);
     font-weight: 600;
   }
+}
+
+@media (max-width: 720px) {
   .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
