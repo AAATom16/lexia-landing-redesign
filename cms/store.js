@@ -56,8 +56,13 @@ function persist() {
 /** Jde do úložiště vůbec zapisovat? Bez toho editor neuloží nic. */
 let writable = { ok: false, error: 'zatím nezkontrolováno' };
 
+let probeSeq = 0;
+
 async function checkWritable() {
-  const probe = path.join(DATA_DIR, '.zapis-test');
+  // Každá kontrola má vlastní soubor. Dřív sdílely jeden název, takže když
+  // dvě proběhly současně, jedna smazala soubor druhé a ta pak ohlásila,
+  // že do úložiště nejde zapisovat — i když šlo.
+  const probe = path.join(DATA_DIR, `.zapis-test-${process.pid}-${probeSeq++}`);
   try {
     await fs.promises.mkdir(DATA_DIR, { recursive: true });
     await fs.promises.writeFile(probe, 'ok', 'utf8');

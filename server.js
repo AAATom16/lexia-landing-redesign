@@ -561,13 +561,16 @@ app.use((req, res) => {
 
 store.load();
 history.load();
-store.checkWritable();
 app.listen(PORT, () => {
   console.log(`[lexia] web běží na http://localhost:${PORT}`);
   console.log(auth.isEnabled()
     ? `[lexia] editor textů: http://localhost:${PORT}/editor (data v ${store.FILE})`
     : '[lexia] editor textů je VYPNUTÝ — nastavte LEXIA_EDITOR_PASSWORD');
+  // jen jednou — dvě souběžné kontroly si dřív mazaly zkušební soubor
+  // navzájem a hlásily, že do úložiště nejde zapisovat
   store.checkWritable().then((state) => {
-    if (state.ok) console.log('[lexia] úložiště textů je zapisovatelné');
+    console.log(state.ok
+      ? '[lexia] úložiště textů je zapisovatelné'
+      : '[lexia] úložiště textů NENÍ zapisovatelné — editor neuloží nic');
   });
 });
