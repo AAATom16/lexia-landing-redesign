@@ -480,9 +480,14 @@
 
         odesliSjednani()
           .then((data) => {
-            document
-              .querySelectorAll('[data-echo="contractNo"]')
-              .forEach((x) => (x.textContent = data.contractNumber || data.contractId));
+            // Koncept číslo smlouvy ještě nemá — přiděluje se až při aktivaci.
+            // Ukázat místo něj interní UUID by klientovi nepomohlo a vypadalo
+            // by to jako číslo smlouvy, které žádné není. Radši řádek skrýt.
+            const cislo = data.contractNumber || null;
+            document.querySelectorAll('[data-echo="contractNo"]').forEach((x) => {
+              if (cislo) x.textContent = cislo;
+              else x.closest('.recap-row')?.setAttribute('hidden', '');
+            });
             hotovo = true;
             btn.click(); // teď už projde na krok 4
           })

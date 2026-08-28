@@ -31,7 +31,7 @@
       .calc-addons { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 18px; }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
-      .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden] { display: none; }
+      .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden] { display: none; }
       .calc-option.is-addon { border-style: dashed; }
       .calc-badge { display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
@@ -521,7 +521,7 @@
             <i class="icon" data-icon="check_circle"></i>
           </div>
           <h2>Žádost o sjednání jsme přijali</h2>
-          <p>Děkujeme. Žádost máme u sebe pod číslem níže. Zkontrolujeme údaje, ozveme se vám na <strong data-echo="email">—</strong> a pošleme smlouvu i platební pokyny.</p>
+          <p>Děkujeme, žádost máme u sebe. Zkontrolujeme údaje, ozveme se vám na <strong data-echo="email">—</strong> a pošleme smlouvu i platební pokyny.</p>
 
           <div class="pay-warning">
             <i class="icon" data-icon="clock"></i>
@@ -529,7 +529,7 @@
           </div>
 
           <div class="state-details">
-            <div class="recap-row"><span>Číslo žádosti</span><strong data-echo="contractNo">—</strong></div>
+            <div class="recap-row"><span>Číslo smlouvy</span><strong data-echo="contractNo">—</strong></div>
             <div class="recap-row"><span>Vybrané pojištění</span><strong data-echo="product">Pojištění právní ochrany</strong></div>
             <div class="recap-row"><span>Varianta</span><strong data-echo="variant">Jednotlivec</strong></div>
             <div class="recap-row" style="border-bottom: none;"><span>Cena (<span data-echo="period-label">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">179 Kč</strong></div>
