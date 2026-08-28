@@ -414,8 +414,8 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
 .hero::after {
   content: '§';
   position: absolute;
-  left: -2vw;
-  bottom: -8vw;
+  left: 0;
+  bottom: 0;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: clamp(280px, 36vw, 540px);
   font-weight: 400;
@@ -429,7 +429,7 @@ p strong, li strong, span strong, strong { color: var(--text); font-weight: 700;
 }
 
 @media (max-width: 720px) {
-  .hero::after { font-size: 220px; left: -8vw; bottom: -12vw; opacity: 0.04; }
+  .hero::after { font-size: 220px; left: -8vw; bottom: 0; opacity: 0.04; }
 }
 
 /* ============= SECTION BACKGROUND GLYPH SYSTEM
@@ -2342,6 +2342,13 @@ i.icon svg, span.icon-svg svg {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
+/* Kdyby se rozbalovací seznam nestihl nahradit vlastním (assets/customselect.js
+   neproběhne), zůstane vidět nativní <select> — a dlouhá položka by z něj lezla
+   ven. Zkrácení třemi tečkami je pojistka právě pro tenhle případ; vlastní
+   seznam (.ds-display) to má vyřešené sám a proti roztažení sloupce chrání
+   celý web společné pravidlo v sekci POJISTKA PROTI ROZTAŽENÍ MŘÍŽEK. */
+.form-select { text-overflow: ellipsis; }
 
 /* Discount badge on calc-option pro roční platbu — green pill, floating top-right */
 .discount-badge {
