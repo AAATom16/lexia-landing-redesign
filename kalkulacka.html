@@ -25,6 +25,23 @@
   </svg>
 </template>
 
+
+    <style>
+      /* Kalkulačka z katalogu — doplňkové pilíře, vstupy a chybové hlášky. */
+      .calc-addons { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 18px; }
+      /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
+         nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
+      .calc-addons[hidden], .calc-pillar-input[hidden] { display: none; }
+      .calc-option.is-addon { border-style: dashed; }
+      .calc-badge { display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
+      .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
+      .calc-input-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+      .calc-object-row { display: grid; grid-template-columns: 1fr 90px; gap: 8px; }
+      .calc-pillar-input select, .calc-pillar-input input { width: 100%; padding: 8px 10px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); font: inherit; }
+      .calc-error { color: #b3261e; font-weight: 600; }
+      .calc-note { opacity: 0.85; font-style: italic; margin-top: 8px; }
+      @media (max-width: 640px) { .calc-addons { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
@@ -93,258 +110,15 @@
           </div>
         </div>
 
-        <!-- BASIC PILLARS -->
+        <!-- PILÍŘE — vykresluje assets/kalkulacka-katalog.js z katalogu produktů.
+             Ceny ani seznam pilířů se tu NEPÍŠOU: rozešly by se s tím, co se
+             prodává, jak se to stalo do 28. 8. 2026 (vozidla 129 vs 79 Kč). -->
         <div class="calc-section">
           <h4>2. Pilíře pojištění</h4>
           <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">Základní právní ochrana je povinná, ostatní pilíře jsou volitelné.</p>
-          <div class="calc-options" style="grid-template-columns: 1fr 1fr;">
-            <label class="calc-option selected" style="cursor: not-allowed; opacity: 0.95;">
-              <input type="checkbox" name="pillar_zakladni" checked disabled>
-              <strong><i class="icon" data-icon="shield"></i> Základní právní ochrana</strong>
-              <span class="px-label" data-j="179 Kč/měsíc" data-d="269 Kč/měsíc">179 Kč/měsíc</span>
-              <span style="display: inline-block; padding: 2px 8px; background: var(--primary); color: white; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px;">POVINNÝ</span>
-            </label>
-            <label class="calc-option">
-              <input type="checkbox" name="pillar_vozidla">
-              <strong><i class="icon" data-icon="car"></i> Vozidla a řidiči</strong>
-              <span class="px-label" data-j="129 Kč/měsíc" data-d="169 Kč/měsíc">129 Kč/měsíc</span>
-            </label>
-            <label class="calc-option">
-              <input type="checkbox" name="pillar_prace">
-              <strong><i class="icon" data-icon="briefcase"></i> Pracovněprávní ochrana</strong>
-              <span class="px-label" data-j="79 Kč/měsíc" data-d="99 Kč/měsíc">79 Kč/měsíc</span>
-            </label>
-            <label class="calc-option">
-              <input type="checkbox" name="pillar_nemovitost">
-              <strong><i class="icon" data-icon="house"></i> Dům, byt, chata</strong>
-              <span class="px-label" data-j="139 Kč/měsíc" data-d="159 Kč/měsíc">139 Kč/měsíc</span>
-            </label>
-          </div>
-
-          <!-- Vozidla a řidiči - podrobnosti -->
-          <div id="vozidla-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
-            <strong style="display: block; margin-bottom: 4px;">Vozidla a řidiči v pojištění</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">V ceně pilíře je jedno osobní vozidlo do 3,5 t a řidič (pojistník). Další vozidla a řidiče připojistíte níže.</p>
-            <div class="veh-rows">
-              <div class="veh-row">
-                <span class="veh-name">Osobní vozidlo do 3,5 t</span>
-                <span class="veh-price">129 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_osobni" min="0" max="99" step="1" value="0" aria-label="Počet dalších osobních vozidel do 3,5 t">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Nákladní vozidlo do 3,5 t</span>
-                <span class="veh-price">149 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_nakladni" min="0" max="99" step="1" value="0" aria-label="Počet nákladních vozidel do 3,5 t">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Nákladní vozidlo nad 3,5 t</span>
-                <span class="veh-price">209 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_nakladni_plus" min="0" max="99" step="1" value="0" aria-label="Počet nákladních vozidel nad 3,5 t">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Autobus</span>
-                <span class="veh-price">229 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_autobus" min="0" max="99" step="1" value="0" aria-label="Počet autobusů">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Motocykl, tříkolka, čtyřkolka</span>
-                <span class="veh-price">69 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_motocykl" min="0" max="99" step="1" value="0" aria-label="Počet motocyklů">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Traktor a ostatní stroje</span>
-                <span class="veh-price">79 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_traktor" min="0" max="99" step="1" value="0" aria-label="Počet traktorů a strojů">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Přípojné vozidlo do 750 kg</span>
-                <span class="veh-price">39 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_prives" min="0" max="99" step="1" value="0" aria-label="Počet přípojných vozidel do 750 kg">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Přípojné vozidlo nad 750 kg</span>
-                <span class="veh-price">109 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_prives_plus" min="0" max="99" step="1" value="0" aria-label="Počet přípojných vozidel nad 750 kg">
-              </div>
-              <div class="veh-row">
-                <span class="veh-name">Další řidiči (nad rámec pojistníka)</span>
-                <span class="veh-price">109 Kč/měsíc</span>
-                <input type="number" class="form-input" name="veh_ridici" id="dalsi-ridici" min="0" max="99" step="1" value="0" aria-label="Počet dalších řidičů">
-              </div>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--success); font-weight: 600; margin-top: 12px;">Od 6 vozidel a řidičů dohromady platí množstevní sleva 4 až 48 % na tuto sekci.</p>
-          </div>
-
-          <!-- Pracovněprávní ochrana - manažerská ochrana -->
-          <div id="prace-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
-            <label class="form-checkbox" style="margin: 0;">
-              <input type="checkbox" name="manazer" id="manazer-check">
-              <span><strong>Manažerská právní ochrana</strong> pro vedoucí zaměstnance s odpovědností za škodu</span>
-            </label>
-            <div id="manazer-fields" style="display: none; margin-top: 14px; max-width: 280px;">
-              <div class="form-group" style="margin: 0;">
-                <label>Roční odměna za výkon funkce (Kč)</label>
-                <input type="number" class="form-input" id="manazer-odmena" placeholder="např. 960000" min="0" step="1000">
-              </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Pojistné = 0,25 % z roční odměny, minimálně 4 788 Kč/rok (399 Kč/měsíc).</p>
-            </div>
-          </div>
-
-          <!-- Dům, byt, chata - další nemovitosti a spory s nájemci -->
-          <div id="nemovitost-detail" style="display: none; margin-top: 14px; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); border: 1px solid var(--primary-light);">
-            <div class="form-group" style="max-width: 280px;">
-              <label>Počet dalších nemovitostí</label>
-              <input type="number" class="form-input" id="dalsi-nemovitosti" name="dalsi_nemovitosti" min="0" max="20" step="1" value="0">
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">V ceně pilíře je jedna nemovitost. Každá další <span class="px-label" data-j="79 Kč/měsíc" data-d="89 Kč/měsíc">79 Kč/měsíc</span>.</p>
-            </div>
-            <label class="form-checkbox" style="margin: 12px 0 0;">
-              <input type="checkbox" name="najemci" id="najemci-check">
-              <span><strong>Příplatek za "Spory s nájemci"</strong> (+20 % z pilíře Dům/byt/chata včetně dalších nemovitostí), pokud byt/dům pronajímáte</span>
-            </label>
-          </div>
+          <div class="calc-options" id="calc-pillars" style="grid-template-columns: 1fr 1fr;"></div>
         </div>
 
-        <!-- ADDITIONAL PILLARS -->
-        <div class="calc-section">
-          <h4>3. Doplňkové pilíře (volitelné)</h4>
-          <div class="addon-stack">
-
-          <!-- Výkon funkce -->
-          <label class="addon-option">
-            <input type="checkbox" name="addon_vykon" id="addon-vykon">
-            <div class="addon-info">
-              <strong><i class="icon" data-icon="scales"></i> Právní ochrana při výkonu funkce</strong>
-              <span>Pro starosty, jednatele, členy SVJ, představenstev, spolků...</span>
-            </div>
-          </label>
-          <div id="vykon-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 12px;">
-            <div class="form-row" style="grid-template-columns: minmax(0, 1.5fr) minmax(150px, 1fr); align-items: end;">
-              <div class="form-group">
-                <label>Funkce <span class="req">*</span></label>
-                <select class="form-select" id="vykon-funkce">
-                  <option value="">— Vyberte funkci —</option>
-                  <optgroup label="Soukromý sektor, obchodní korporace">
-                    <option value="399">Jednatel (s.r.o.)</option>
-                    <option value="399">Člen představenstva nebo správní rady (a.s., družstvo)</option>
-                    <option value="199">Člen dozorčí rady</option>
-                    <option value="399">Prokurista</option>
-                    <option value="399">Likvidátor</option>
-                  </optgroup>
-                  <optgroup label="SVJ">
-                    <option value="39">Předseda výboru SVJ</option>
-                    <option value="29">Člen výboru SVJ</option>
-                    <option value="9">Člen kontrolní komise SVJ</option>
-                  </optgroup>
-                  <optgroup label="Neziskový a spolkový sektor">
-                    <option value="39">Předseda spolku / výboru</option>
-                    <option value="29">Člen rady spolku, výboru</option>
-                    <option value="299">Správce nadace / nadačního fondu</option>
-                    <option value="199">Člen správní rady (nadace, ústav)</option>
-                    <option value="99">Člen dozorčí rady (nadace)</option>
-                    <option value="299">Ředitel ústavu</option>
-                  </optgroup>
-                  <optgroup label="Veřejný sektor, státní správa">
-                    <option value="399">Ředitel státního podniku</option>
-                    <option value="199">Člen dozorčí rady státního podniku</option>
-                    <option value="99">Ředitel příspěvkové organizace</option>
-                    <option value="99">Vedoucí správního úřadu</option>
-                    <option value="199">Člen Rady regulátora</option>
-                    <option value="399">Člen představenstva veřejné instituce</option>
-                  </optgroup>
-                  <optgroup label="Veřejný sektor, samospráva">
-                    <option value="199">Primátor</option>
-                    <option value="99">Starosta</option>
-                    <option value="199">Hejtman kraje</option>
-                    <option value="69">Člen rady</option>
-                    <option value="49">Člen zastupitelstva</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Roční odměna za výkon funkce (Kč)</label>
-                <input type="number" class="form-input" id="vykon-odmena" placeholder="např. 240000" min="0" step="1000">
-              </div>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Pojistné = 0,25 % z roční odměny, minimálně dle vybrané funkce. Příklad: 240 000 Kč × 0,25 % = 600 Kč ročně.</p>
-          </div>
-
-          <!-- Nemovitost ve výstavbě -->
-          <label class="addon-option">
-            <input type="checkbox" name="addon_vystavba">
-            <div class="addon-info">
-              <strong><i class="icon" data-icon="construction"></i> Pojištění domu/bytu/chaty ve výstavbě</strong>
-              <span>819 Kč/měsíc, pevná sazba pro J i D</span>
-            </div>
-          </label>
-
-          <!-- Samostatné objekty -->
-          <label class="addon-option">
-            <input type="checkbox" name="addon_objekty" id="addon-objekty">
-            <div class="addon-info">
-              <strong><i class="icon" data-icon="building"></i> Pojištění samostatných objektů</strong>
-              <span>Bytové domy, smíšené objekty s bytovými i nebytovými prostorami</span>
-            </div>
-          </label>
-          <div id="objekty-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 12px;">
-            <div class="form-group">
-              <label>Velikost objektu</label>
-              <div class="calc-options" style="grid-template-columns: repeat(3, 1fr);">
-                <label class="calc-option">
-                  <input type="radio" name="objekty_size" value="100">
-                  <strong>do 100 m²</strong>
-                  <span class="px-label" data-j="49 Kč/měsíc" data-d="59 Kč/měsíc">49 Kč/měsíc</span>
-                </label>
-                <label class="calc-option">
-                  <input type="radio" name="objekty_size" value="500">
-                  <strong>do 500 m²</strong>
-                  <span class="px-label" data-j="139 Kč/měsíc" data-d="159 Kč/měsíc">139 Kč/měsíc</span>
-                </label>
-                <label class="calc-option">
-                  <input type="radio" name="objekty_size" value="500plus">
-                  <strong>nad 500 m²</strong>
-                  <span>Individuální kalkulace</span>
-                </label>
-              </div>
-            </div>
-            <label class="form-checkbox" style="margin-top: 12px;">
-              <input type="checkbox" name="objekty_najemci">
-              <span>Příplatek za "Spory s nájemci" (+20 %)</span>
-            </label>
-          </div>
-
-          <!-- Samostatné parcely -->
-          <label class="addon-option">
-            <input type="checkbox" name="addon_parcely" id="addon-parcely">
-            <div class="addon-info">
-              <strong><i class="icon" data-icon="tree"></i> Pojištění samostatných parcel</strong>
-              <span>Stavební parcely a pozemky</span>
-            </div>
-          </label>
-          <div id="parcely-detail" style="display: none; padding: 18px; background: var(--bg-light); border-radius: var(--radius-sm);">
-            <div class="form-row" style="grid-template-columns: minmax(0, 1.5fr) minmax(150px, 1fr); align-items: end;">
-              <div class="form-group">
-                <label>Typ parcely</label>
-                <select class="form-select" id="parcela-typ">
-                  <option value="" selected>— Vyberte —</option>
-                  <option value="0.04">Stavební parcela (0,04 Kč/m²/měsíc)</option>
-                  <option value="0.02">Pozemková (orná půda, sad, les...) (0,02 Kč/m²/měsíc)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Výměra parcely (m²)</label>
-                <input type="number" class="form-input" id="parcela-m2" placeholder="např. 1000" min="0">
-              </div>
-            </div>
-            <label class="form-checkbox" style="margin-top: 12px;">
-              <input type="checkbox" name="parcely_najemci">
-              <span>Příplatek za "Spory s nájemci" (+20 %)</span>
-            </label>
-          </div>
-
-          </div><!-- /addon-stack -->
-        </div>
-
-        <!-- PERIOD -->
         <div class="calc-section" style="border-bottom: none;">
           <h4>4. Frekvence platby</h4>
           <div class="calc-options">
@@ -562,19 +336,7 @@
             </div>
 
             <!-- Samostatné objekty -->
-            <div class="subject-block" id="subj-objekty" hidden>
-              <strong class="subject-block-title"><i class="icon" data-icon="building"></i> Samostatný objekt</strong>
-              <div class="form-row">
-                <div class="form-group" style="flex: 2;">
-                  <label>Adresa objektu</label>
-                  <input type="text" class="form-input" name="objektAdresa" placeholder="Ulice, číslo, obec" data-subject-label="Adresa objektu">
-                </div>
-                <div class="form-group">
-                  <label>Počet jednotek v objektu</label>
-                  <input type="number" class="form-input" name="objektJednotky" min="0" placeholder="např. 12">
-                </div>
-              </div>
-            </div>
+            
 
             <!-- Samostatné parcely -->
             <div class="subject-block" id="subj-parcely" hidden>
@@ -592,19 +354,7 @@
             </div>
 
             <!-- Výkon funkce -->
-            <div class="subject-block" id="subj-vykon" hidden>
-              <strong class="subject-block-title"><i class="icon" data-icon="scales"></i> Výkon funkce</strong>
-              <div class="form-row">
-                <div class="form-group" style="flex: 2;">
-                  <label>Název společnosti nebo organizace</label>
-                  <input type="text" class="form-input" name="funkceFirma" placeholder="např. Bytové družstvo Michle" data-subject-label="Společnost (výkon funkce)">
-                </div>
-                <div class="form-group">
-                  <label>IČO</label>
-                  <input type="text" class="form-input" name="funkceIco" placeholder="12345678" pattern="[0-9]{8}">
-                </div>
-              </div>
-            </div>
+            
 
             <!-- Manažerská ochrana -->
             <div class="subject-block" id="subj-manazer" hidden>
@@ -982,7 +732,8 @@
 </footer>
 
 <script src="assets/icons.js"></script>
-<script src="script.js"></script>
+<script src="assets/kalkulacka-katalog.js" defer></script>
+    <script src="script.js"></script>
 <script src="assets/datepicker.js"></script>
 <script src="assets/customselect.js"></script>
 </body>
