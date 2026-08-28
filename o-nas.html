@@ -53,7 +53,17 @@
 .onas-team-photo img.lx-real{position:relative;width:100%;height:100%;object-fit:cover}
 .onas-team h3{color:var(--primary);margin:0 0 12px}
 .onas-bio + .onas-bio{margin-top:32px}
-@media(max-width:860px){.onas-split,.onas-team{grid-template-columns:1fr;gap:32px}.onas-ic--xl{width:200px;height:200px}.onas-ic--xl svg{width:110px;height:110px}.onas-mv-card{max-width:none}.onas-mv-card+.onas-mv-card{margin-top:24px}.onas-team-photo{height:300px}}
+.onas-colonnade{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1000px;margin:0 auto}
+.onas-colonnade-text h2{color:var(--text);margin-bottom:20px}
+/* Nadpis má zůstat na jednom řádku. Sloupec s textem je proto měřítkem
+   (container) a velikost písma se odvozuje od jeho šířky — nadpis se
+   zmenší přesně tak, aby se vešel, ale nikdy nepřeroste běžnou velikost h2.
+   V prohlížeči bez podpory container queries zůstane chování jako dřív. */
+@supports (font-size:1cqw){
+  .onas-colonnade-text{container-type:inline-size}
+  .onas-colonnade-text h2{white-space:nowrap;font-size:min(1.625rem,5.5cqw)}
+}
+@media(max-width:860px){.onas-split,.onas-team,.onas-colonnade{grid-template-columns:1fr;gap:32px}.onas-ic--xl{width:200px;height:200px}.onas-ic--xl svg{width:110px;height:110px}.onas-mv-card{max-width:none}.onas-mv-card+.onas-mv-card{margin-top:24px}.onas-team-photo{height:300px}}
 </style>
 </head>
 <body>
@@ -137,7 +147,7 @@
   <div class="container">
     <div class="onas-split">
       <div>
-        <h2 style="color: var(--primary);">Zakládáme si na osobním přístupu</h2>
+        <h2>Zakládáme si na osobním přístupu</h2>
         <div class="onas-ic onas-ic--xl onas-ic--img"><img src="assets/il-lide.svg" alt="" aria-hidden="true"></div>
       </div>
       <div>
@@ -196,9 +206,9 @@
 <!-- COLONNADE PARTNERSHIP -->
 <section class="bg-section">
   <div class="container">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; max-width: 1000px; margin: 0 auto;">
-      <div>
-        <h2 style="margin-bottom: 20px; color: var(--text);">Partnerství s Colonnade Insurance S.A.</h2>
+    <div class="onas-colonnade">
+      <div class="onas-colonnade-text">
+        <h2>Partnerství s Colonnade Insurance S.A.</h2>
         <p style="margin-bottom: 16px;">Za každým kvalitním pojištěním stojí silná a spolehlivá pojišťovna. My jsme si zvolili partnerství s Colonnade Insurance S.A., moderní pojišťovnou se sídlem v Lucembursku a pobočkami v České republice, Polsku, Maďarsku, Bulharsku, Rumunsku a na Slovensku.</p>
         <p style="margin-bottom: 16px;">Colonnade je držitelem ratingu finanční síly A-. Její základní kapitál přesahuje 95 000 000 EUR.</p>
         <p>Colonnade je členem kanadského holdingu Fairfax, který je kótován na torontské burze, sdružuje 28 pojišťoven a zajišťoven na více než 100 trzích. Hrubé předepsané pojistné holdingu činí více než 739 mld. Kč.</p>

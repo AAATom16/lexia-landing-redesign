@@ -8,8 +8,8 @@
   --primary: #0045bf;          /* Cobalt Blue */
   --primary-dark: #003599;
   --primary-light: #7da0dc;    /* Baby Blue */
-  --heading: #001a4d;          /* Deep Navy - pro hlavní nadpisy h1-h3 */
-  --heading-soft: #0045bf;     /* Cobalt - pro menší bold texty (Jednotlivec, image captions...) */
+  --heading: #001a4d;          /* Deep Navy - hlavní nadpis stránky (h1) a drobné nadpisy h3-h6 */
+  --heading-soft: #0045bf;     /* Cobalt - nadpisy sekcí (h2) a menší bold texty (Jednotlivec, image captions...) */
   --accent: #00a5bf;           /* Blue Teal */
   --accent-yellow: #f2d800;    /* Yellow */
   --accent-deep: #005f72;      /* Deep Teal */
@@ -95,7 +95,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 { font-size: clamp(2rem, 3.8vw, 3rem); letter-spacing: -0.038em; line-height: 1.05; }
-h2 { font-size: clamp(1.625rem, 2.6vw, 2.125rem); letter-spacing: -0.03em; line-height: 1.1; }
+/* Nadpisy sekcí jsou na celém webu kobaltové — jedno místo, kde se ta barva
+   určuje. Hlavní nadpis stránky (h1) zůstává námořnický, takže je mezi nimi
+   jasná hierarchie: tmavší nahoře, světlejší níž. */
+h2 { font-size: clamp(1.625rem, 2.6vw, 2.125rem); letter-spacing: -0.03em; line-height: 1.1; color: var(--heading-soft); }
 h3 { font-size: 1.1875rem; letter-spacing: -0.015em; line-height: 1.3; }
 h4 { font-size: 1rem; letter-spacing: -0.005em; }
 
@@ -1632,7 +1635,6 @@ section { padding: 64px 0; }
 /* ============= PROČ U NÁS / BENEFITS ============= */
 .why-us-title {
   font-family: var(--font-heading); /* Nunito — stejně jako ostatní nadpisy h2 */
-  color: var(--primary);
   font-size: clamp(1.6rem, 1.1rem + 1.7vw, 2.35rem);
   line-height: 1.1;
   font-weight: 800;
@@ -1772,7 +1774,6 @@ i.icon svg, span.icon-svg svg {
   margin: 0 0 40px;
 }
 .tg-header h2 {
-  color: var(--primary);
   font-size: clamp(1.75rem, 3.2vw, 2.5rem);
   line-height: 1.15;
   margin-bottom: 16px;
@@ -1878,7 +1879,6 @@ i.icon svg, span.icon-svg svg {
   margin-bottom: 64px;
 }
 .howworks-title {
-  color: var(--primary);
   font-weight: 800;
   font-size: clamp(1.9rem, 3vw, 2.6rem);
   margin-bottom: 16px;
@@ -2155,7 +2155,6 @@ i.icon svg, span.icon-svg svg {
 }
 
 .lpc-card h2 {
-  color: var(--primary);
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 2rem;
@@ -3117,7 +3116,6 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   gap: 10px;
   font-size: 1.2rem;
   margin-bottom: 18px;
-  color: var(--heading);
 }
 .detail-card-title .icon { width: 22px; height: 22px; color: var(--primary); }
 .detail-card .price-list { margin-bottom: 0; }
@@ -5867,6 +5865,9 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
   font-weight: 600;
 }
 
+/* V administraci je h2 název stránky, ne nadpis sekce — zůstává námořnický. */
+#admin-page-title { color: var(--heading); }
+
 .admin-section-header {
   display: flex;
   justify-content: space-between;
@@ -6410,7 +6411,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   align-items: start;
 }
 .coverage-text h2 {
-  color: var(--primary);
   font-size: clamp(1.75rem, 2.8vw, 2.4rem);
   line-height: 1.12;
   margin: 0 0 16px;
@@ -6425,9 +6425,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
-
-/* Nadpis sekce Lidé Lexia — světlejší modrá jako u ostatních nadpisů */
-.testimonials-title { color: var(--primary); }
 
 /* ===== Testimonials carousel ===== */
 /* Fotopás na pozadí — bílá karta s citátem leží vlevo přes fotku */
@@ -6575,7 +6572,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 }
 .lead-form-intro h2 {
   margin-bottom: 14px;
-  color: var(--primary);
   font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem);
   line-height: 1.12;
 }
@@ -6783,7 +6779,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   margin: 0 0 14px;
   font-size: clamp(1.75rem, 2.7vw, 2.25rem);
   line-height: 1.12;
-  color: var(--heading);
 }
 .product-card__lead {
   margin: 0 0 24px;
@@ -7541,14 +7536,13 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
    ============================================================ */
 
 /* Štítek sekce ve tvaru pilulky */
-/* Barvy podle zbytku webu: nadpis sekce v --primary,
-   zvýrazněná část v --primary-light (stejně jako h2 na hlavních stránkách). */
+/* Barvu nadpisu sekce dává základní pravidlo pro h2, zvýrazněná část
+   je v --primary-light (stejně jako h2 na hlavních stránkách). */
 .fp-h2 {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: clamp(1.6rem, 2.7vw, 2.15rem);
   line-height: 1.18;
-  color: var(--primary);
   margin: 0 0 16px;
 }
 .fp-h2 span { color: var(--primary-light); }
