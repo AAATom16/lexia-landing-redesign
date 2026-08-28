@@ -37,7 +37,18 @@ const DENY = [
 ];
 
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
-const REDIRECTS = { '/financni-poradci': '/financniporadci', '/financni-poradci/': '/financniporadci' };
+// Klientská zóna a administrace nikdy nebyly funkční — statické atrapy
+// duplikovaly portál (klient.html dokonce ukazoval vymyšlený počet klientů).
+// Skutečné obojí žije na portálu; staré adresy tam posíláme, ať nepadají na 404.
+const PORTAL_LOGIN = 'https://portal.lexia.cz/login';
+const REDIRECTS = {
+  '/financni-poradci': '/financniporadci',
+  '/financni-poradci/': '/financniporadci',
+  '/klient': PORTAL_LOGIN,
+  '/klient.html': PORTAL_LOGIN,
+  '/admin': PORTAL_LOGIN,
+  '/admin.html': PORTAL_LOGIN,
+};
 
 function safeRelative(urlPath) {
   let decoded;
