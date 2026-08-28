@@ -205,44 +205,12 @@ function initCalcWizard() {
     window.scrollTo({ top: stepper.offsetTop - 100, behavior: 'smooth' });
   }
 
-  // Založení smlouvy: vygeneruj číslo smlouvy + variabilní symbol a přepni na správný stav.
-  // Číslo generujeme jen jednou za průchod, aby se při návratu zpět neměnilo.
-  let contractIssued = null;
-  function finalizeContract() {
-    if (!contractIssued) {
-      const year = new Date().getFullYear();
-      const seq = String(Math.floor(1000000 + Math.random() * 9000000));
-      contractIssued = { no: `LX-${year}-${seq}`, vs: `${year}${seq.slice(0, 6)}` };
-    }
-    document.querySelectorAll('[data-echo="contractNo"]').forEach(el => el.textContent = contractIssued.no);
-    document.querySelectorAll('[data-echo="vs"]').forEach(el => el.textContent = contractIssued.vs);
-
-    // Individuální nacenění — nabídka obsahuje položku bez pevné ceny (samostatný objekt nad 500 m²)
-    const objektySize = document.querySelector('input[name="objekty_size"]:checked')?.value;
-    const needsCustom = document.getElementById('addon-objekty')?.checked && objektySize === '500plus';
-    document.querySelectorAll('[data-step-panel="4"] [data-state]').forEach(card => {
-      const wanted = needsCustom ? 'custom' : 'success';
-      card.hidden = card.dataset.state !== wanted;
-    });
-  }
-
-  // Platební brána — příprava na integraci (GoPay / Comgate / Stripe apod.)
-  const payBtn = document.getElementById('pay-gateway');
-  if (payBtn) {
-    payBtn.addEventListener('click', () => {
-      // TODO: napojení na platební bránu. Na backendu se vytvoří platba a přesměruje se na URL brány:
-      //   const res = await fetch('/api/payment/create', { method: 'POST', body: JSON.stringify(payload) });
-      //   window.location.href = (await res.json()).gatewayUrl;
-      if (payBtn.disabled) return;
-      const orig = payBtn.innerHTML;
-      payBtn.disabled = true;
-      payBtn.innerHTML = 'Přesměrování na platební bránu…';
-      window.setTimeout(() => {
-        payBtn.disabled = false;
-        payBtn.innerHTML = orig;
-      }, 1200);
-    });
-  }
+  // Poslední krok kalkulačky NEZAKLÁDÁ smlouvu — žádný backend za tím zatím
+  // není. Dřív se tu číslo smlouvy i variabilní symbol vyráběly `Math.random()`
+  // a stránka pak vybírala platbu do 24 hodin na skutečný účet. Peníze tedy
+  // mohly dorazit pod symbolem, který neodpovídal žádné smlouvě. Do doby, než
+  // sjednání pojede přes API, tu nesmí vzniknout žádné číslo.
+  function finalizeContract() {}
 
   nextBtns.forEach(btn => {
     btn.addEventListener('click', e => {

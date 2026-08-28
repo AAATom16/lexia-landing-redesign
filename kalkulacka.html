@@ -79,7 +79,7 @@
       <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Nabídka</span></li>
       <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Vaše údaje</span></li>
       <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Rekapitulace</span></li>
-      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Založení smlouvy</span></li>
+      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Dokončení</span></li>
     </ol>
 
     <!-- ============= STEP 1: Kalkulace ============= -->
@@ -498,91 +498,34 @@
 
         <div class="calc-nav">
           <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
-          <button type="button" class="btn btn-primary btn-lg" data-step-next="4"><i class="icon" data-icon="lock"></i> Sjednat a zaplatit</button>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="4">Dokončit kalkulaci</button>
         </div>
       </div>
     </div>
 
-    <!-- ============= STEP 4: Založení smlouvy + platba ============= -->
+    <!-- ============= STEP 4: Dokončení kalkulace ============= -->
     <div class="calc-step" data-step-panel="4" hidden>
       <div class="calc-single">
 
-        <!-- STATE 1: SMLOUVA ZALOŽENA — čeká na platbu -->
-        <div class="state-card state-card--wide" data-state="success">
-          <div class="state-icon state-icon--success">
-            <i class="icon" data-icon="check_circle"></i>
-          </div>
-          <h2>Smlouva byla založena</h2>
-          <p>Děkujeme za sjednání pojištění právní ochrany Lexia. Smlouvu a všechny dokumenty jsme odeslali na váš e-mail <strong data-echo="email">—</strong>. Pro aktivaci pojištění prosím dokončete platbu.</p>
-
-          <div class="state-details">
-            <div class="recap-row"><span>Číslo smlouvy</span><strong data-echo="contractNo">—</strong></div>
-            <div class="recap-row"><span>Datum počátku pojištění</span><strong data-echo="startDate">—</strong></div>
-            <div class="recap-row" style="border-bottom: none;"><span>Částka k úhradě (<span data-echo="period-label">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">179 Kč</strong></div>
-          </div>
-
-          <!-- Upozornění: uhradit do 24 h -->
-          <div class="pay-warning">
-            <i class="icon" data-icon="clock"></i>
-            <span>Platbu prosím proveďte do <strong>24 hodin</strong> od sjednání. Při delší prodlevě nemusí pojištění začít platit.</span>
-          </div>
-
-          <!-- Platba -->
-          <div class="pay-block">
-            <!-- Primární: platební brána (příprava na integraci) -->
-            <button type="button" class="btn btn-primary btn-lg pay-gateway-btn" id="pay-gateway" data-gateway="card">
-              <i class="icon" data-icon="lock"></i> Zaplatit platební kartou
-            </button>
-            <p class="pay-secure"><i class="icon" data-icon="lock"></i> Zabezpečeno PCI DSS certifikovanou platební bránou</p>
-
-            <!-- Alternativa: bankovní převod + QR -->
-            <div class="pay-alt">
-              <div class="pay-alt-head"><span>nebo zaplaťte bankovním převodem</span></div>
-              <div class="pay-alt-body">
-                <div class="pay-qr" aria-hidden="true">
-                  <svg width="104" height="104" viewBox="0 0 64 64" role="img" aria-label="QR kód pro platbu">
-                    <rect width="64" height="64" fill="#ffffff"/>
-                    <rect x="4" y="4" width="16" height="16" fill="var(--primary)"/><rect x="8" y="8" width="8" height="8" fill="#fff"/>
-                    <rect x="44" y="4" width="16" height="16" fill="var(--primary)"/><rect x="48" y="8" width="8" height="8" fill="#fff"/>
-                    <rect x="4" y="44" width="16" height="16" fill="var(--primary)"/><rect x="8" y="48" width="8" height="8" fill="#fff"/>
-                    <rect x="28" y="4" width="4" height="4" fill="var(--primary)"/><rect x="36" y="8" width="4" height="4" fill="var(--primary)"/>
-                    <rect x="28" y="16" width="4" height="4" fill="var(--primary)"/><rect x="24" y="28" width="4" height="4" fill="var(--primary)"/>
-                    <rect x="32" y="28" width="8" height="4" fill="var(--primary)"/><rect x="48" y="28" width="8" height="4" fill="var(--primary)"/>
-                    <rect x="28" y="36" width="4" height="4" fill="var(--primary)"/><rect x="40" y="36" width="4" height="4" fill="var(--primary)"/>
-                    <rect x="52" y="40" width="4" height="4" fill="var(--primary)"/><rect x="28" y="48" width="8" height="4" fill="var(--primary)"/>
-                    <rect x="44" y="48" width="4" height="4" fill="var(--primary)"/><rect x="36" y="56" width="8" height="4" fill="var(--primary)"/>
-                    <rect x="52" y="52" width="8" height="8" fill="var(--primary)"/>
-                  </svg>
-                </div>
-                <div class="pay-alt-rows">
-                  <div class="recap-row"><span>Číslo účtu</span><strong>2113322110/0800</strong></div>
-                  <div class="recap-row"><span>Variabilní symbol</span><strong data-echo="vs">—</strong></div>
-                  <div class="recap-row" style="border-bottom: none;"><span>Částka</span><strong data-echo="total">179 Kč</strong></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="state-actions">
-            <a href="#" class="btn btn-outline"><i class="icon" data-icon="document"></i> Stáhnout dokumenty</a>
-            <a href="index.html" class="btn btn-ghost">Zpět na hlavní stránku</a>
-          </div>
-        </div>
-
-        <!-- STATE 2: INDIVIDUÁLNÍ NACENĚNÍ — zobrazí se, pokud nabídka obsahuje individuálně naceněné položky -->
-        <div class="state-card" data-state="custom" hidden>
+        <!-- Sjednání on-line zatím neběží: kalkulačka umí spočítat cenu, ale
+             smlouvu nikdo nezaloží. Dokud pro to nebude backend, nesmí tenhle
+             krok tvrdit opak ani vybírat peníze. -->
+        <div class="state-card state-card--wide" data-state="hotovo">
           <div class="state-icon state-icon--custom">
             <i class="icon" data-icon="chat"></i>
           </div>
-          <h2>Poptávka byla odeslána</h2>
-          <p>Vaše nabídka obsahuje položku, kterou naceňujeme individuálně. Údaje jsme uložili a odeslali na váš e-mail <strong data-echo="email">—</strong>. Náš specialista vás bude kontaktovat do 24 hodin s konečnou cenou a smlouvou k podpisu.</p>
+          <h2>Kalkulace je hotová</h2>
+          <p>Spočítanou cenu máte níže. Sjednání on-line právě dokončujeme, takže poslední krok s vámi zatím uděláme osobně — ozvěte se nám a pojištění s vámi rovnou nastavíme.</p>
+
           <div class="state-details">
-            <div class="recap-row"><span>Číslo poptávky</span><strong data-echo="contractNo">—</strong></div>
             <div class="recap-row"><span>Vybrané pojištění</span><strong data-echo="product">Pojištění právní ochrany</strong></div>
+            <div class="recap-row"><span>Varianta</span><strong data-echo="variant">Jednotlivec</strong></div>
+            <div class="recap-row"><span>Cena (<span data-echo="period-label">měsíčně</span>)</span><strong style="color: var(--primary); font-size: 1.25rem;" data-echo="total">179 Kč</strong></div>
             <div class="recap-row" style="border-bottom: none;"><span>Kontakt</span><strong>info@lexia.cz · +420 465 465 465</strong></div>
           </div>
+
           <div class="state-actions">
-            <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+            <a href="kontakt.html" class="btn btn-primary btn-lg">Ozvat se a sjednat</a>
             <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
           </div>
         </div>
