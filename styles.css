@@ -2319,14 +2319,21 @@ i.icon svg, span.icon-svg svg {
 
 .faq-item.active .faq-question .icon { transform: rotate(180deg); }
 
+/* Odpověď se rozbaluje do výšky, kterou si obsah řekne. Dřív tu byl pevný
+   strop 400 px a co se nevešlo, se bez varování oříznulo — na mobilu stačilo
+   pár vět navíc. Řádek mřížky o výšce 0fr → 1fr umí totéž co max-height,
+   ale roste podle obsahu, takže se odpověď nemůže useknout. */
 .faq-answer {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  transition: grid-template-rows 0.3s ease;
   color: var(--text-muted);
 }
+/* Vnitřek musí smět být nižší než jeho obsah, jinak by se řádek nesmrštil. */
+.faq-answer > * { min-height: 0; }
 
-.faq-item.active .faq-answer { max-height: 400px; }
+.faq-item.active .faq-answer { grid-template-rows: 1fr; }
 
 .faq-answer-inner { padding: 18px 24px; }
 
@@ -3390,12 +3397,25 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 /* ============= PAGE HERO ============= */
 .page-hero {
   background: var(--white);
-  padding: 48px 0 24px;
+  padding: 48px 0 0;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
-.page-hero + section { padding-top: 32px; }
+/* Dvě stránky si k té mezeře přidávaly vlastní odsazení navíc a vycházelo
+   jim 84 a 62 px místo 48. Formulář hlášení a tlačítka v hero detailu nabídky
+   ho tedy pod úvodním blokem nepotřebují. */
+.report-page > .lead-form-card { margin-top: 0; }
+.detail-hero .hero-actions { margin-bottom: 0; }
+
+/* Jednotná mezera pod úvodním blokem stránky. Dřív kolísala od 19 do 92 px
+   podle toho, kolik si která stránka nastavila sama — při proklikávání webu
+   měla každá stránka jiný nádech. Varianty s dekorativní křivkou (O nás,
+   Kontakt, ceník, microsite) si spodní odsazení řídí samy, křivka ho vyplní. */
+.page-hero + section,
+.hero + section,
+.pt-hero + section,
+.zp-hero + section { padding-top: 48px; }
 .page-hero h1 { margin-bottom: 12px; }
 .page-hero p { max-width: 720px; margin: 0 auto; }
 
@@ -4987,7 +5007,7 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   align-items: center;
   justify-content: center;
   padding: 60px 24px;
-  background: var(--bg-light);
+  background: var(--white);
 }
 
 .auth-card {
@@ -4998,6 +5018,23 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
   width: 100%;
   max-width: 440px;
 }
+
+/* Řádek pod heslem: „Pamatovat si přihlášení" a „Zapomněli jste heslo?"
+   se do 344 px karty nevešly a lámaly se každý do dvou řádků. Menší písmo
+   a zákaz lámání je udrží vedle sebe, každý na jednom řádku. */
+.auth-form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  /* Na velmi úzkém telefonu se oba texty vedle sebe fyzicky nevejdou —
+     tam se pod sebe zalomí jako celek, ale nikdy uvnitř slova. */
+  flex-wrap: wrap;
+}
+.auth-form-row .form-checkbox { margin: 0; }
+.auth-form-row span,
+.auth-form-row a { white-space: nowrap; }
 
 .auth-card h1 { text-align: center; margin-bottom: 8px; }
 .auth-card .lead { text-align: center; margin-bottom: 28px; color: var(--text-muted); }
@@ -5061,12 +5098,87 @@ input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offse
 .stat-card .value { font-size: 1.75rem; font-weight: 800; color: var(--heading); }
 .stat-card .trend { font-size: 0.85rem; color: var(--success); margin-top: 4px; }
 
+/* ============= POJISTKA PROTI ROZTAŽENÍ MŘÍŽEK =============
+   Sloupec 1fr znamená ve skutečnosti minmax(auto, 1fr) — nikdy se nezmenší
+   pod šířku svého nejdelšího nezalomitelného slova. Dlouhý název, e-mail nebo
+   číslo pak roztáhne sloupec, s ním celou mřížku a obsah vyleze mimo obrazovku.
+   Přesně tak přetékaly názvy balíčků na ceníku. Tohle pravidlo dovolí buňkám
+   zmenšit se pod obsah, takže se text raději zalomí, než aby rozbil layout.
+   Řeší to na jednom místě, ne přepisováním 114 jednotlivých mřížek. ============= */
+.admin-form-grid > *,
+.admin-layout > *,
+.admin-pages-list > *,
+.admin-quick-grid > *,
+.admin-stats > *,
+.calc-options > *,
+.calc-wrapper > *,
+.contact-hero-grid > *,
+.contact-split > *,
+.contact-split--three > *,
+.contact-split-card > *,
+.coverage > *,
+.dash-stats > *,
+.dash-wrapper > *,
+.detail-card--split > *,
+.dp-grid > *,
+.dp-week > *,
+.dp-years > *,
+.faq-layout > *,
+.featured-promo > *,
+.footer-grid > *,
+.form-row > *,
+.fp-case__prices > *,
+.fp-hero-card > *,
+.grid-2 > *,
+.grid-3 > *,
+.grid-4 > *,
+.grid-5 > *,
+.hero-grid > *,
+.hero-stats > *,
+.howworks-steps > *,
+.image-grid-2 > *,
+.image-grid-3 > *,
+.includes-grid > *,
+.includes-with-photo > *,
+.kontakt-grid > *,
+.kontakt-hero-paths > *,
+.lead-form > *,
+.pay-wrap > *,
+.pd-feature-row > *,
+.pd-row > *,
+.pd-variants__grid > *,
+.pkg-grid > *,
+.pkg-grid--3 > *,
+.pkg-grid--4 > *,
+.pkg-grid--5 > *,
+.product-block__grid > *,
+.product-card__grid > *,
+.product-detail__pillars > *,
+.product-detail__variant-grid > *,
+.product-showcase-row > *,
+.recap-data-grid > *,
+.recap-hero-stats > *,
+.recap-wrap > *,
+.steps > *,
+.testimonials-grid > *,
+.tg-grid > *,
+.veh-row > *,
+.why-grid > * { min-width: 0; }
+
+/* Výjimka: .fp-stats na microsite — v buňce je cena „2 500 až 5 000 Kč/h",
+   která se schválně nesmí lámat, takže buňka svou šířku potřebuje. */
+
 /* ============= TABLE ============= */
 .table-wrapper {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
+  /* Posunout do strany jde na každé šířce, ne jen na mobilu. Dřív tu bylo
+     overflow: hidden a posouvání se zapínalo až pod 720 px — širší tabulka
+     se na tabletu tiše ořízla a k useknutým sloupcům se nedalo dostat. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -5104,6 +5216,9 @@ tbody tr:hover { background: var(--bg-section); }
   border-radius: 100px;
   font-size: 0.78rem;
   font-weight: 600;
+  /* Štítek stavu se nikdy neláme — „Čeká na podpis" se v úzkém sloupci
+     tabulky roztrhlo na dva řádky a pilulka pak vypadala rozbitě. */
+  white-space: nowrap;
 }
 
 .badge-success { background: rgba(0, 165, 191, 0.14); color: var(--accent-deep); }
@@ -5364,7 +5479,7 @@ h1.reveal, h2.reveal, h3.reveal, h4.reveal,
 /* Otevřená otázka — jemné modré podbarvení pozadí */
 .faq-item.active .faq-question { background: var(--bg-light); }
 
-.faq-answer { transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.faq-answer { transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
 
 /* Calc option focus-ring na hover */
 .calc-option:hover {
@@ -8076,7 +8191,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
   max-height: 60vh;
   overflow-y: auto;
 }
-}
 
 .fp-sit__body { padding: 0 20px 20px; }
 /* Poslední odstavec v detailu už nepřidává spodní mezeru — odsazení
@@ -8335,8 +8449,6 @@ input[type="date"]::-webkit-clear-button { display: none; -webkit-appearance: no
 
 /* ===== Mobil: pojistky proti oříznutí obsahu ===== */
 @media (max-width: 720px) {
-  /* Každá tabulka se dá odscrollovat do strany, ne oříznout */
-  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
 @media (max-width: 560px) {
   /* Dvousloupcové řádky formulářů (i s inline stylem) padají pod sebe */
