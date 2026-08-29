@@ -470,8 +470,27 @@
         ev.preventDefault();
         ev.stopImmediatePropagation();
 
+        // Nevyplněné povinné pole bývá v kroku 2, jehož panel je teď skrytý —
+        // prohlížeč na skrytý prvek bublinu ukázat neumí, takže samotné
+        // `reportValidity()` by tlačítko umlčelo a člověk by nevěděl proč.
+        // Proto na to pole skočíme zpátky sami.
         const form = el('#contract-form');
-        if (form && !form.reportValidity()) return;
+        const spatne = form
+          ? [...form.querySelectorAll('input, select, textarea')].find((x) => !x.checkValidity())
+          : null;
+        if (spatne) {
+          const krok = spatne.closest('[data-step-panel]')?.dataset.stepPanel;
+          if (krok) el(`[data-step-back="${krok}"]`)?.click();
+          setTimeout(() => {
+            spatne.focus();
+            spatne.reportValidity();
+          }, 350);
+          if (chyba) {
+            chyba.textContent = 'Zkontrolujte prosím vyplněné údaje — něco ještě chybí.';
+            chyba.hidden = false;
+          }
+          return;
+        }
         if (chyba) chyba.hidden = true;
 
         const puvodni = btn.textContent;
