@@ -59,6 +59,18 @@
         display: flex; flex-direction: column; gap: 2px; }
       .calc-info-list li:last-child { border-bottom: none; }
       .calc-info-list em { color: var(--text-muted); font-size: .82rem; font-style: normal; }
+      .doc-hint { color: var(--text-muted); font-size: .88rem; margin: 0 0 12px; }
+      .doc-list { display: flex; flex-direction: column; gap: 8px; }
+      .doc-item { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        padding: 10px 12px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); }
+      .doc-item strong { font-weight: 600; }
+      .doc-item span { color: var(--text-muted); font-size: .8rem; }
+      .doc-preview { margin-top: 16px; }
+      .doc-preview-head { display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; margin-bottom: 8px; }
+      .doc-preview iframe { width: 100%; height: 60vh; min-height: 380px; border: 1px solid var(--primary-light);
+        border-radius: var(--radius-sm); background: #fff; }
+      .doc-preview[hidden] { display: none; }
       /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
          („Dům / ch…"). Pod sebou se vejdou oba celé. */
       .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -513,6 +525,21 @@
               <summary>ALL-RISK garance</summary>
               <p>Pomůžeme i v oblastech, které nejsou výslovně vyloučeny v pojistných podmínkách.</p>
             </details>
+          </div>
+        </div>
+
+        <!-- Roman 29. 8. 2026: dokumenty má klient VIDĚT v rekapitulaci, ne až
+             jako přílohu e-mailu po sjednání. Náhled, ne stahování. -->
+        <div class="recap-card">
+          <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Dokumenty k pojištění</h4>
+          <p class="doc-hint">Než žádost odešlete, prohlédněte si prosím dokumenty k pojištění. Po odeslání vám je pošleme i s návrhem smlouvy na e-mail.</p>
+          <div class="doc-list" id="doc-list"><p class="doc-hint">Načítáme dokumenty…</p></div>
+          <div class="doc-preview" id="doc-preview" hidden>
+            <div class="doc-preview-head">
+              <strong id="doc-preview-title"></strong>
+              <button type="button" class="btn btn-outline btn-sm" id="doc-preview-close">Zavřít náhled</button>
+            </div>
+            <iframe id="doc-preview-frame" title="Náhled dokumentu"></iframe>
           </div>
         </div>
 
