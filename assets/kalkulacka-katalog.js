@@ -513,6 +513,10 @@
             el('[data-state="odeslano"]')?.removeAttribute('hidden');
             el('[data-state="neodeslano"]')?.setAttribute('hidden', '');
             hotovo = true;
+            // Tlačítko je po dobu odesílání `disabled` a na zakázaný prvek se
+            // klik nedoručí — bez tohohle by se krok 4 nikdy neukázal.
+            btn.disabled = false;
+            btn.textContent = puvodni;
             btn.click(); // teď už projde na krok 4
           })
           .catch((e) => {
@@ -522,8 +526,11 @@
             }
           })
           .finally(() => {
-            btn.disabled = false;
-            btn.textContent = puvodni;
+            // Po úspěchu je tlačítko obnovené už výš, aby se dal doručit klik.
+            if (!hotovo) {
+              btn.disabled = false;
+              btn.textContent = puvodni;
+            }
           });
       },
       true,
