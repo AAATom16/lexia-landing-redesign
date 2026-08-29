@@ -488,6 +488,11 @@
               if (cislo) x.textContent = cislo;
               else x.closest('.recap-row')?.setAttribute('hidden', '');
             });
+            // Potvrzení odkrývá JEN úspěšná odpověď; jinak zůstane viset karta
+            // „nepodařilo se odeslat". Bez toho by rozbité odesílání zase
+            // ohlásilo úspěch, který nenastal.
+            el('[data-state="odeslano"]')?.removeAttribute('hidden');
+            el('[data-state="neodeslano"]')?.setAttribute('hidden', '');
             hotovo = true;
             btn.click(); // teď už projde na krok 4
           })
@@ -527,6 +532,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     if (!el('#calc-pillars')) return;
     pripojUdalosti();
+    pripojSjednani();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);

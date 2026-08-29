@@ -516,7 +516,7 @@
         <!-- Výsledek skutečného sjednání. Vzniká KONCEPT smlouvy, ne platné
              pojištění — proto tu nesmí stát, že krytí běží, ani výzva k platbě.
              Platební údaje pošle LEXIA až po kontrole údajů. -->
-        <div class="state-card state-card--wide" data-state="odeslano">
+        <div class="state-card state-card--wide" data-state="odeslano" hidden>
           <div class="state-icon state-icon--success">
             <i class="icon" data-icon="check_circle"></i>
           </div>
@@ -537,6 +537,25 @@
 
           <div class="state-actions">
             <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+            <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
+          </div>
+        </div>
+
+        <!-- Výchozí stav. Kartu s potvrzením odkrývá JEDINĚ úspěšná odpověď
+             backendu. Kdyby se odesílání rozbilo (a jednou se to už stalo —
+             posluchač se nepřipojil a stránka hlásila úspěch, který nenastal),
+             člověk uvidí tohle, ne falešné potvrzení. -->
+        <div class="state-card state-card--wide" data-state="neodeslano">
+          <div class="state-icon state-icon--custom">
+            <i class="icon" data-icon="chat"></i>
+          </div>
+          <h2>Žádost se nepodařilo odeslat</h2>
+          <p>Omlouváme se, něco se pokazilo a vaši žádost jsme nepřijali. Zkuste to prosím znovu, nebo se nám ozvěte — sjednáme pojištění s vámi napřímo.</p>
+          <div class="state-details">
+            <div class="recap-row" style="border-bottom: none;"><span>Kontakt</span><strong>info@lexia.cz · +420 465 465 465</strong></div>
+          </div>
+          <div class="state-actions">
+            <button type="button" class="btn btn-primary btn-lg" data-step-back="3">Zpět na rekapitulaci</button>
             <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
           </div>
         </div>
