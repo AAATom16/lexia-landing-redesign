@@ -41,6 +41,24 @@
          výměra parcely i odměna byly NEVIDITELNÉ a mimo tok — Roman je 29. 8. nemohl
          vyplnit, protože tam opticky nebyly. */
       .calc-pillar-input input { position: static; opacity: 1; }
+      /* „i" u dlaždice. Dlaždice je `<label>`, takže tlačítko musí být nad ním
+         a klik na něj nesmí probublat — jinak by otevření detailu pilíř odškrtlo. */
+      .calc-option { position: relative; }
+      .calc-info { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+        border-radius: 50%; border: 1px solid var(--primary-light); background: #fff;
+        color: var(--primary); font: 600 13px/1 serif; cursor: pointer; z-index: 2; }
+      .calc-info:hover { background: var(--primary); color: #fff; }
+      .calc-info-dialog { max-width: 560px; width: calc(100% - 32px); border: none;
+        border-radius: var(--radius-md, 12px); padding: 24px; }
+      .calc-info-dialog::backdrop { background: rgba(0,0,0,.45); }
+      .calc-info-dialog h3 { margin: 0 0 4px; }
+      .calc-info-sub { color: var(--text-muted); margin: 0 0 16px; font-size: .9rem; }
+      .calc-info-list { list-style: none; margin: 0 0 20px; padding: 0;
+        max-height: 50vh; overflow-y: auto; }
+      .calc-info-list li { padding: 8px 0; border-bottom: 1px solid var(--primary-light);
+        display: flex; flex-direction: column; gap: 2px; }
+      .calc-info-list li:last-child { border-bottom: none; }
+      .calc-info-list em { color: var(--text-muted); font-size: .82rem; font-style: normal; }
       /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
          („Dům / ch…"). Pod sebou se vejdou oba celé. */
       .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }

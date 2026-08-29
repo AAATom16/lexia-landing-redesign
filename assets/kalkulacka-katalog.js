@@ -162,8 +162,90 @@
       label.appendChild(znak);
     }
 
+    if ((p.coverage || []).length) label.appendChild(infoIkona(p));
     if (p.input) label.appendChild(vstupyPilire(p));
     return label;
+  }
+
+  const ROZSAH = { europe: 'Evropa', world: 'celý svět', cz: 'Česko' };
+
+  /**
+   * „i" u dlaždice (Roman 29. 8. 2026) — co pilíř kryje, s limity.
+   *
+   * Obsah se bere z oblastí krytí, které katalog stejně publikuje, ne z ručně
+   * psaného textu. Psaný popis by se dřív nebo později rozešel s produktem;
+   * tohle se změní samo, jakmile se změní krytí.
+   *
+   * Tlačítko je `type="button"` a klik nesmí probublat — dlaždice je `<label>`
+   * se zaškrtávátkem, takže bez toho by otevření detailu pilíř zároveň
+   * odškrtlo.
+   */
+  function infoIkona(p) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'calc-info';
+    btn.textContent = 'i';
+    btn.setAttribute('aria-label', `Co kryje ${p.name}`);
+    btn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      otevriInfo(p);
+    });
+    return btn;
+  }
+
+  function otevriInfo(p) {
+    el('#calc-info-dialog')?.remove();
+    const dlg = document.createElement('dialog');
+    dlg.id = 'calc-info-dialog';
+    dlg.className = 'calc-info-dialog';
+
+    const h = document.createElement('h3');
+    h.textContent = p.name;
+    dlg.appendChild(h);
+
+    const shrnuti = document.createElement('p');
+    shrnuti.className = 'calc-info-sub';
+    shrnuti.textContent =
+      p.priceKind === 'fixed' && p.monthlyCzk != null
+        ? `${czk(p.monthlyCzk)} měsíčně · ${p.coverage.length} pojištěných oblastí`
+        : `${p.priceLabel} · ${p.coverage.length} pojištěných oblastí`;
+    dlg.appendChild(shrnuti);
+
+    const ul = document.createElement('ul');
+    ul.className = 'calc-info-list';
+    p.coverage.forEach((o) => {
+      const li = document.createElement('li');
+      const nazev = document.createElement('span');
+      nazev.textContent = o.name;
+      li.appendChild(nazev);
+      const detail = [];
+      if (o.limitCzk != null) detail.push(`limit ${czk(o.limitCzk)}`);
+      if (o.territorialScope) detail.push(ROZSAH[o.territorialScope] || o.territorialScope);
+      // Čekací doba je jediný údaj, kvůli kterému může klient odejít s pocitem,
+      // že kryto je hned — proto se ukazuje, i když je nula dní běžnější.
+      if (o.waitingPeriodDays) detail.push(`čekací doba ${o.waitingPeriodDays} dní`);
+      if (detail.length) {
+        const meta = document.createElement('em');
+        meta.textContent = detail.join(' · ');
+        li.appendChild(meta);
+      }
+      ul.appendChild(li);
+    });
+    dlg.appendChild(ul);
+
+    const zavri = document.createElement('button');
+    zavri.type = 'button';
+    zavri.className = 'btn btn-outline';
+    zavri.textContent = 'Zavřít';
+    zavri.addEventListener('click', () => dlg.close());
+    dlg.appendChild(zavri);
+
+    dlg.addEventListener('close', () => dlg.remove());
+    // Klik mimo obsah zavírá — u `dialog` je to klik na samotný backdrop.
+    dlg.addEventListener('click', (ev) => { if (ev.target === dlg) dlg.close(); });
+    document.body.appendChild(dlg);
+    dlg.showModal();
   }
 
   function vstupyPilire(p) {
