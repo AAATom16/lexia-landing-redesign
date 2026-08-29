@@ -69,8 +69,12 @@
             : Array.from({ length: Math.min(mnozstvi, 20) }, () => ({ typeKey }));
       } else if (pilir.input.kind === 'salary') {
         if (Number(hodnota) > 0) {
+          // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
+          // přednost před samostatnou hodnotou, a položka bez odměny spadne na
+          // minimální pojistné — pak je jedno, co člověk zadá, vyjde pořád
+          // minimum. Klíč je `grossMonthlyCzk`, tedy odměna MĚSÍČNÍ.
           parameters[pilir.input.salaryParam] = Number(hodnota);
-          parameters[pilir.input.itemsParam] = [{ quantity: 1 }];
+          parameters[pilir.input.itemsParam] = [{ grossMonthlyCzk: Number(hodnota) }];
         }
       }
     }
@@ -167,7 +171,9 @@
     box.dataset.for = p.key;
 
     if (p.input.kind === 'salary') {
-      box.appendChild(popisek('Roční odměna za výkon funkce (Kč)'));
+      // MĚSÍČNÍ, ne roční: engine počítá procento z hrubé měsíční odměny.
+      // Roční hodnota by pojistné nadsadila dvanáctkrát.
+      box.appendChild(popisek('Hrubá měsíční odměna za výkon funkce (Kč)'));
       const i = document.createElement('input');
       i.type = 'number';
       i.min = '0';
