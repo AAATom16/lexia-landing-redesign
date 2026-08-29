@@ -31,7 +31,7 @@
       .calc-addons { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 18px; }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
-      .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden] { display: none; }
+      .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden], .form-group[hidden], p[data-stav][hidden] { display: none; }
       .calc-option.is-addon { border-style: dashed; }
       .calc-badge { display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
@@ -194,9 +194,17 @@
                 <label>Datum narození <span class="req">*</span></label>
                 <input type="date" class="form-input" name="birthDate" required>
               </div>
-              <div class="form-group">
-                <label>Rodné číslo</label>
-                <input type="text" class="form-input" name="rc" placeholder="123456/7890" pattern="[0-9]{6}/[0-9]{3,4}">
+              <div class="form-group" id="rc-group">
+                <label>Rodné číslo <span class="req">*</span></label>
+                <input type="text" class="form-input" name="rc" placeholder="123456/7890" pattern="[0-9]{6}/[0-9]{3,4}" required>
+                <label class="form-checkbox" style="margin-top: 8px;">
+                  <input type="checkbox" name="bez-rc" id="bez-rc">
+                  <span>Nemám rodné číslo (cizinec)</span>
+                </label>
+              </div>
+              <div class="form-group" id="doklad-group" hidden>
+                <label>Číslo pasu nebo povolení k pobytu <span class="req">*</span></label>
+                <input type="text" class="form-input" name="dokladCislo" placeholder="P1234567" disabled>
               </div>
             </div>
             <div class="form-row">
@@ -521,7 +529,8 @@
             <i class="icon" data-icon="check_circle"></i>
           </div>
           <h2>Žádost o sjednání jsme přijali</h2>
-          <p>Děkujeme, žádost máme u sebe. Zkontrolujeme údaje, ozveme se vám na <strong data-echo="email">—</strong> a pošleme smlouvu i platební pokyny.</p>
+          <p data-stav="mail-odesel">Děkujeme. Návrh smlouvy i platební údaje jsme poslali na <strong data-echo="email">—</strong>. Najdete tam QR kód i odkaz na platbu kartou.</p>
+          <p data-stav="mail-neodesel" hidden>Děkujeme, žádost máme u sebe pod číslem níže. E-mail s návrhem se nám ale nepodařilo odeslat — ozveme se vám sami a smlouvu i platební údaje pošleme ručně.</p>
 
           <div class="pay-warning">
             <i class="icon" data-icon="clock"></i>

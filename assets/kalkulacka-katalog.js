@@ -424,6 +424,7 @@
         phone: pole('phone'),
         birthNumber: pole('rc') || undefined,
         dateOfBirth: pole('birthDate') || undefined,
+        identityDocumentNumber: pole('dokladCislo') || undefined,
         street: [pole('street'), pole('houseNum')].filter(Boolean).join(' ') || undefined,
         city: pole('city') || undefined,
         postalCode: pole('zip') || undefined,
@@ -457,6 +458,30 @@
    * ukázal i tehdy, když by žádost spadla, a klient by odešel s dojmem, že
    * pojištění zařídil.
    */
+  /**
+   * Cizinec bez rodného čísla uvede číslo pasu nebo povolení k pobytu.
+   * Skryté pole musí být `disabled`, jinak by ho prohlížeč pořád validoval
+   * jako povinné a odeslání by se zaseklo na políčku, které není vidět.
+   */
+  function pripojIdentifikaci() {
+    const prepinac = el('#bez-rc');
+    const rc = el('[name="rc"]');
+    const doklad = el('[name="dokladCislo"]');
+    if (!prepinac || !rc || !doklad) return;
+    const prepni = () => {
+      const cizinec = prepinac.checked;
+      rc.required = !cizinec;
+      rc.disabled = cizinec;
+      if (cizinec) rc.value = '';
+      doklad.closest('.form-group')?.toggleAttribute('hidden', !cizinec);
+      doklad.required = cizinec;
+      doklad.disabled = !cizinec;
+      if (!cizinec) doklad.value = '';
+    };
+    prepinac.addEventListener('change', prepni);
+    prepni();
+  }
+
   function pripojSjednani() {
     const btn = el('#btn-sjednat');
     if (!btn) return;
@@ -507,6 +532,11 @@
               if (cislo) x.textContent = cislo;
               else x.closest('.recap-row')?.setAttribute('hidden', '');
             });
+            // Nesmíme tvrdit, že e-mail dorazil, když backend hlásí opak —
+            // člověk by pak marně čekal na platební údaje ve schránce.
+            const odesel = data.proposalSent !== false;
+            el('[data-stav="mail-odesel"]')?.toggleAttribute('hidden', !odesel);
+            el('[data-stav="mail-neodesel"]')?.toggleAttribute('hidden', odesel);
             // Potvrzení odkrývá JEN úspěšná odpověď; jinak zůstane viset karta
             // „nepodařilo se odeslat". Bez toho by rozbité odesílání zase
             // ohlásilo úspěch, který nenastal.
@@ -559,6 +589,7 @@
     if (!el('#calc-pillars')) return;
     pripojUdalosti();
     pripojSjednani();
+    pripojIdentifikaci();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);
