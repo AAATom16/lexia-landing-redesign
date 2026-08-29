@@ -484,6 +484,99 @@
 
   // Krok 2 wizardu potřebuje vědět, co je vybrané; jinak by si to musel číst
   // z názvů políček, která už neexistují.
+  // ── dokumenty k pojištění ─────────────────────────────────────────────────
+
+  const kb = (b) => `${Math.round(b / 1024)} kB`;
+
+  /**
+   * Předsmluvní dokumenty v rekapitulaci (Roman 29. 8. 2026).
+   *
+   * Seznam i obsah dává backend — jsou to tytéž oficiální soubory, které pak
+   * chodí jako příloha návrhu, takže se náhled nemůže rozejít s tím, co klient
+   * dostane. Zobrazuje se v `<iframe>`, ne ke stažení.
+   *
+   * Načítá se až při prvním zobrazení rekapitulace a jen jednou za produkt —
+   * klient se mezi kroky vrací a stahovat seznam pokaždé je zbytečné.
+   */
+  let dokumentyProProdukt = null;
+
+  async function nactiDokumenty() {
+    const box = el('#doc-list');
+    if (!box || !stav.produkt || dokumentyProProdukt === stav.produkt) return;
+    dokumentyProProdukt = stav.produkt;
+    box.innerHTML = '<p class="doc-hint">Načítáme dokumenty…</p>';
+    try {
+      const res = await fetch(
+        `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents?tenant=${TENANT}`,
+        { headers: { Accept: 'application/json' } },
+      );
+      if (!res.ok) throw new Error('nedostupné');
+      const data = await res.json();
+      vykresliDokumenty(data.documents || []);
+    } catch {
+      dokumentyProProdukt = null; // ať to jde zkusit znovu
+      box.innerHTML =
+        '<p class="doc-hint">Dokumenty se teď nepodařilo načíst. Pošleme vám je e-mailem spolu s návrhem smlouvy.</p>';
+    }
+  }
+
+  function vykresliDokumenty(seznam) {
+    const box = el('#doc-list');
+    if (!box) return;
+    box.innerHTML = '';
+    if (!seznam.length) {
+      box.innerHTML = '<p class="doc-hint">Dokumenty vám pošleme e-mailem spolu s návrhem smlouvy.</p>';
+      return;
+    }
+    seznam.forEach((d) => {
+      const radek = document.createElement('div');
+      radek.className = 'doc-item';
+      const popis = document.createElement('div');
+      const nazev = document.createElement('strong');
+      nazev.textContent = d.title;
+      popis.appendChild(nazev);
+      if (d.sizeBytes) {
+        const velikost = document.createElement('span');
+        velikost.textContent = ` · PDF, ${kb(d.sizeBytes)}`;
+        popis.appendChild(velikost);
+      }
+      radek.appendChild(popis);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-outline btn-sm';
+      btn.textContent = 'Zobrazit';
+      btn.addEventListener('click', () => zobrazDokument(d));
+      radek.appendChild(btn);
+      box.appendChild(radek);
+    });
+  }
+
+  function zobrazDokument(d) {
+    const box = el('#doc-preview');
+    const ramec = el('#doc-preview-frame');
+    const titulek = el('#doc-preview-title');
+    if (!box || !ramec) return;
+    if (titulek) titulek.textContent = d.title;
+    ramec.src =
+      `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
+      `${encodeURIComponent(d.key)}?tenant=${TENANT}`;
+    box.hidden = false;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function pripojDokumenty() {
+    el('#doc-preview-close')?.addEventListener('click', () => {
+      const box = el('#doc-preview');
+      const ramec = el('#doc-preview-frame');
+      if (ramec) ramec.src = 'about:blank';
+      if (box) box.hidden = true;
+    });
+    // Rekapitulace je krok 3; seznam načítáme, až se na něj klient dostane.
+    document.querySelectorAll('[data-step-next="3"]').forEach((b) =>
+      b.addEventListener('click', () => void nactiDokumenty()),
+    );
+  }
+
   // ── sjednání ──────────────────────────────────────────────────────────────
 
   const pole = (jmeno) => document.querySelector(`[name="${jmeno}"]`)?.value?.trim() || '';
@@ -678,6 +771,7 @@
     pripojUdalosti();
     pripojSjednani();
     pripojIdentifikaci();
+    pripojDokumenty();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);
