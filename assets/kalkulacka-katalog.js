@@ -156,7 +156,9 @@
     if (p.mandatory) {
       const znak = document.createElement('span');
       znak.className = 'calc-badge';
-      znak.textContent = 'POVINNÝ';
+      // Roman 29. 8. 2026 — „POVINNÝ" verzálkami působilo jako varování; jde
+      // přitom o samozřejmost, ne o podmínku, kterou musí klient řešit.
+      znak.textContent = 'sjednává se vždy';
       label.appendChild(znak);
     }
 
@@ -429,7 +431,6 @@
         email: pole('email'),
         phone: pole('phone'),
         birthNumber: pole('rc') || undefined,
-        dateOfBirth: pole('birthDate') || undefined,
         identityDocumentNumber: pole('dokladCislo') || undefined,
         street: [pole('street'), pole('houseNum')].filter(Boolean).join(' ') || undefined,
         city: pole('city') || undefined,
@@ -442,7 +443,6 @@
         dataProcessing: zaskrtnuto('consent-data'),
         marketing: zaskrtnuto('consent-marketing'),
       },
-      ...(pole('start-date') ? { startDate: pole('start-date') } : {}),
       ...(stav.posledni ? { expectedMonthlyCzk: stav.posledni.monthlyCzk } : {}),
     };
 
