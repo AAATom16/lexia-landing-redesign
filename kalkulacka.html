@@ -33,10 +33,17 @@
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
       .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden], .form-group[hidden], p[data-stav][hidden] { display: none; }
       .calc-option.is-addon { border-style: dashed; }
-      .calc-badge { display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
+      .calc-badge { font-weight: 400; text-transform: none; display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
       .calc-input-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
-      .calc-object-row { display: grid; grid-template-columns: 1fr 90px; gap: 8px; }
+      /* `.calc-option input { position:absolute; opacity:0 }` ve styles.css schovává
+         zaškrtávátko dlaždice. Chytalo ale i pole uvnitř pilíře, takže počet objektů,
+         výměra parcely i odměna byly NEVIDITELNÉ a mimo tok — Roman je 29. 8. nemohl
+         vyplnit, protože tam opticky nebyly. */
+      .calc-pillar-input input { position: static; opacity: 1; }
+      /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
+         („Dům / ch…"). Pod sebou se vejdou oba celé. */
+      .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
       .calc-pillar-input select, .calc-pillar-input input { width: 100%; padding: 8px 10px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); font: inherit; }
       .calc-error { color: #b3261e; font-weight: 600; }
       .calc-note { opacity: 0.85; font-style: italic; margin-top: 8px; }
@@ -108,11 +115,10 @@
               <span>Pro výkon profese finančního poradce nebo realitního zprostředkovatele</span>
             </label>
           </div>
-          <div class="form-group" style="margin-top: 20px; max-width: 220px;">
-            <label>Datum počátku pojištění <span class="req">*</span></label>
-            <input type="date" class="form-input" id="start-date" name="start-date">
-            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Pojištění začíná platit dnem zaplacení a nejdříve od zvoleného data.</p>
-          </div>
+          <!-- Roman 29. 8. 2026: datum počátku se nevybírá. Řídí se platbou —
+               přes Comgate začíná ihned, převodem následující den. Políčko by
+               slibovalo volbu, kterou klient nemá. -->
+          <p class="calc-pocatek">Pojištění začíná platit po zaplacení — při platbě kartou ihned, převodem následující pracovní den.</p>
         </div>
 
         <!-- PILÍŘE — vykresluje assets/kalkulacka-katalog.js z katalogu produktů.
@@ -190,10 +196,6 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group">
-                <label>Datum narození <span class="req">*</span></label>
-                <input type="date" class="form-input" name="birthDate" required>
-              </div>
               <div class="form-group" id="rc-group">
                 <label>Rodné číslo <span class="req">*</span></label>
                 <input type="text" class="form-input" name="rc" placeholder="123456/7890" pattern="[0-9]{6}/[0-9]{3,4}" required>
@@ -447,10 +449,6 @@
             <div class="recap-data-item">
               <span class="label">Jméno a příjmení</span>
               <strong data-echo="fullName">Jan Novák</strong>
-            </div>
-            <div class="recap-data-item">
-              <span class="label">Datum narození</span>
-              <strong data-echo="birthDate">—</strong>
             </div>
             <div class="recap-data-item">
               <span class="label">E-mail</span>
