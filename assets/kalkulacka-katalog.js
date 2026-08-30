@@ -520,6 +520,9 @@
     let cekani = null;
     let porad = 0;
     let navrhy = [];
+    // Vyplnění pole ulice vyvolá `input`, což by spustilo nový dotaz a seznam
+    // by se hned po výběru otevřel znovu. Po dobu vyplňování ho umlčíme.
+    let vyplnuji = false;
 
     const zavri = () => {
       seznam.hidden = true;
@@ -543,6 +546,18 @@
       zavri();
     };
 
+    const vyplnAdresuBezSpusteni = (a) => {
+      vyplnuji = true;
+      try {
+        vyplnAdresu(a);
+      } finally {
+        // Až po doběhnutí událostí, které vyplnění vyvolalo.
+        setTimeout(() => {
+          vyplnuji = false;
+        }, 0);
+      }
+    };
+
     const vykresli = () => {
       seznam.innerHTML = '';
       if (!navrhy.length) return zavri();
@@ -557,7 +572,7 @@
         // klik stihl dojít, a výběr by nešel provést myší.
         li.addEventListener('mousedown', (ev) => {
           ev.preventDefault();
-          vyplnAdresu(a);
+          vyplnAdresuBezSpusteni(a);
         });
         seznam.appendChild(li);
       });
@@ -565,6 +580,7 @@
     };
 
     pole.addEventListener('input', () => {
+      if (vyplnuji) return;
       clearTimeout(cekani);
       const dotaz = pole.value.trim();
       if (dotaz.length < 3) return zavri();
