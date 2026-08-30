@@ -322,7 +322,7 @@
     const pozn = document.createElement('em');
     pozn.className = 'calc-podminky-note';
     pozn.textContent =
-      'Co odškrtnete, nevadí — pojištění sjednáte dál, jen vám cenu potvrdíme individuálně.';
+      'Co odškrtnete, nevadí. Pojištění sjednáte dál, jen vám cenu potvrdíme individuálně.';
     box.appendChild(pozn);
     return box;
   }
@@ -905,7 +905,7 @@
             spatne.reportValidity();
           }, 350);
           if (chyba) {
-            chyba.textContent = 'Zkontrolujte prosím vyplněné údaje — něco ještě chybí.';
+            chyba.textContent = 'Zkontrolujte prosím vyplněné údaje, něco ještě chybí.';
             chyba.hidden = false;
           }
           return;
