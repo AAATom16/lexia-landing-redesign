@@ -31,6 +31,8 @@
     vybrane: new Set(),
     /** klíč pilíře → pole objektů `{ typeKey, quantity }` nebo `{ gross_salary }` */
     vstupy: {},
+    /** klíč pilíře → texty podmínek, které klient ODŠKRTL (tedy nesplňuje) */
+    nesplnene: {},
     posledni: null,
   };
 
@@ -91,6 +93,7 @@
         segment: 'FO',
         pillars: [...stav.vybrane],
         parameters,
+        unmetConditions: stav.nesplnene,
       }),
     });
     const data = await res.json().catch(() => null);
@@ -177,7 +180,8 @@
     }
 
     if ((p.coverage || []).length) label.appendChild(infoIkona(p));
-    if (p.input) label.appendChild(vstupyPilire(p));
+    // Podmínky se ukazují i u pilíře, který jinak nemá co vyplňovat.
+    if (p.input || (p.conditions || []).length) label.appendChild(vstupyPilire(p));
     return label;
   }
 
@@ -285,11 +289,52 @@
     dlg.showModal();
   }
 
+  /**
+   * Podmínky pojistitelnosti k odsouhlasení (Roman 29. 8. 2026).
+   *
+   * Začínají zaškrtnuté, klient je ODŠKRTÁVÁ — stejně jako operátor v interní
+   * kalkulačce. Odškrtnutá podmínka pošle pilíř na individuální úpis a jeho
+   * cena spadne na nulu; bez toho by si klient s domem nad 500 m² koupil
+   * standardní sazbu, která na jeho případ nesedí.
+   */
+  function podminkyPilire(p) {
+    const box = document.createElement('div');
+    box.className = 'calc-podminky';
+    const h = document.createElement('p');
+    h.className = 'calc-podminky-title';
+    h.textContent = 'Potvrďte prosím, že platí:';
+    box.appendChild(h);
+    p.conditions.forEach((text, i) => {
+      const l = document.createElement('label');
+      l.className = 'calc-podminka';
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = !(stav.nesplnene[p.key] || []).includes(text);
+      c.dataset.conditionFor = p.key;
+      c.dataset.conditionText = text;
+      c.id = `podm-${p.key}-${i}`;
+      l.appendChild(c);
+      const s = document.createElement('span');
+      s.textContent = text;
+      l.appendChild(s);
+      box.appendChild(l);
+    });
+    const pozn = document.createElement('em');
+    pozn.className = 'calc-podminky-note';
+    pozn.textContent =
+      'Co odškrtnete, nevadí — pojištění sjednáte dál, jen vám cenu potvrdíme individuálně.';
+    box.appendChild(pozn);
+    return box;
+  }
+
   function vstupyPilire(p) {
     const box = document.createElement('div');
     box.className = 'calc-pillar-input';
     box.hidden = !stav.vybrane.has(p.key);
     box.dataset.for = p.key;
+    if ((p.conditions || []).length) box.appendChild(podminkyPilire(p));
+    // Pilíř může mít podmínky a přitom nic k vyplnění.
+    if (!p.input) return box;
 
     if (p.input.kind === 'salary') {
       // MĚSÍČNÍ, ne roční: engine počítá procento z hrubé měsíční odměny.
@@ -438,6 +483,20 @@
         if (stav.posledni) vykresliShrnuti(stav.posledni, null);
         return;
       }
+      if (t.dataset.conditionFor) {
+        const klic = t.dataset.conditionFor;
+        const text = t.dataset.conditionText;
+        const seznam = new Set(stav.nesplnene[klic] || []);
+        // Zaškrtnuto = podmínka platí. Odškrtnuté si pamatujeme, protože právě
+        // ta posílají pilíř na individuální úpis.
+        if (t.checked) seznam.delete(text);
+        else seznam.add(text);
+        if (seznam.size) stav.nesplnene[klic] = [...seznam];
+        else delete stav.nesplnene[klic];
+        prepocitej();
+        return;
+      }
+
       if (t.dataset.pillar) {
         const klic = t.dataset.pillar;
         if (t.checked) stav.vybrane.add(klic);
@@ -450,7 +509,11 @@
         // i bez ruční změny, jinak by zaškrtnutí pilíře rovnou hlásilo, že
         // objekty chybí.
         if (t.checked) nactiVstupZFormulare(form, klic);
-        else delete stav.vstupy[klic];
+        else {
+          delete stav.vstupy[klic];
+          // Podmínky nevybraného pilíře nemají co ovlivňovat.
+          delete stav.nesplnene[klic];
+        }
 
         // Odebráním rodiče musí zmizet i jeho doplňky, jinak by se poslaly
         // pilíře, které spolu nejdou sjednat.
@@ -746,6 +809,7 @@
       segment: 'FO',
       pillars: [...stav.vybrane],
       parameters: sestavParametry(),
+      unmetConditions: stav.nesplnene,
       paymentFrequency:
         document.querySelector('input[name="period"]:checked')?.value === 'rocni'
           ? 'annual'
