@@ -84,6 +84,19 @@
       .calc-info-podminky ul { margin: 0 0 8px; padding-left: 18px; font-size: .9rem; }
       .calc-info-podminky li { margin: 2px 0; }
       .calc-info-podminky em { color: var(--text-muted); font-size: .82rem; font-style: normal; }
+      /* Podmínky pojistitelnosti k odsouhlasení uvnitř dlaždice. Zaškrtávátko
+         tu MUSÍ přebít `.calc-option input { position:absolute; opacity:0 }`,
+         jinak by bylo neviditelné stejně jako dřív pole pro počty. */
+      .calc-podminky { margin-bottom: 12px; padding-bottom: 10px;
+        border-bottom: 1px dashed var(--primary-light); }
+      .calc-podminky-title { margin: 0 0 6px; font-size: .82rem; font-weight: 600;
+        color: var(--text-muted); }
+      .calc-podminka { display: flex; align-items: flex-start; gap: 8px; margin: 4px 0;
+        font-size: .86rem; line-height: 1.35; cursor: pointer; }
+      .calc-podminka input { position: static; opacity: 1; width: auto; margin-top: 2px;
+        flex: 0 0 auto; padding: 0; }
+      .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
+        font-style: normal; color: var(--text-muted); }
       .doc-hint { color: var(--text-muted); font-size: .88rem; margin: 0 0 12px; }
       .doc-list { display: flex; flex-direction: column; gap: 8px; }
       .doc-item { display: flex; align-items: center; justify-content: space-between; gap: 12px;
