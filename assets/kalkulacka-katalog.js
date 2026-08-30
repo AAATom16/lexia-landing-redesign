@@ -226,6 +226,29 @@
         : `${p.priceLabel} · ${p.coverage.length} pojištěných oblastí`;
     dlg.appendChild(shrnuti);
 
+    // Podmínky pojistitelnosti nahoru, před výčet krytí. Je to jediná část,
+    // kterou klient musí o sobě ověřit; když je přehlédne, koupí si cenu, která
+    // pro jeho případ neplatí. Interní kalkulačka je ukazuje operátorovi taky.
+    if ((p.conditions || []).length) {
+      const box = document.createElement('div');
+      box.className = 'calc-info-podminky';
+      const h = document.createElement('strong');
+      h.textContent = 'Za jakých podmínek platí tato cena';
+      box.appendChild(h);
+      const ol = document.createElement('ul');
+      p.conditions.forEach((t) => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ol.appendChild(li);
+      });
+      box.appendChild(ol);
+      const pozn = document.createElement('em');
+      pozn.textContent =
+        'Pokud některá neplatí, pojištění sjednat jde, ale cenu vám potvrdíme individuálně.';
+      box.appendChild(pozn);
+      dlg.appendChild(box);
+    }
+
     const ul = document.createElement('ul');
     ul.className = 'calc-info-list';
     p.coverage.forEach((o) => {
