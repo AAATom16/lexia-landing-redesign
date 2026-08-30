@@ -90,6 +90,17 @@
       .doc-preview iframe { width: 100%; height: 60vh; min-height: 380px; border: 1px solid var(--primary-light);
         border-radius: var(--radius-sm); background: #fff; }
       .doc-preview[hidden] { display: none; }
+      /* Našeptávač adresy. Seznam visí nad formulářem, proto `position: relative`
+         na obalu a vysoký `z-index` — jinak by ho překryla další řádka polí. */
+      .adr-wrap { position: relative; }
+      .adr-navrhy { position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+        margin: 4px 0 0; padding: 4px; list-style: none; background: #fff;
+        border: 1px solid var(--primary-light); border-radius: var(--radius-sm);
+        box-shadow: 0 8px 24px rgba(0,0,0,.10); max-height: 260px; overflow-y: auto; }
+      .adr-navrhy[hidden] { display: none; }
+      .adr-navrhy li { padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: .92rem; }
+      .adr-navrhy li:hover, .adr-navrhy li[aria-selected="true"] { background: var(--bg-light); }
+      .adr-navrhy li span { display: block; color: var(--text-muted); font-size: .8rem; }
       /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
          („Dům / ch…"). Pod sebou se vejdou oba celé. */
       .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -273,9 +284,10 @@
           <div class="calc-section">
             <h4>2. Trvalá adresa</h4>
             <div class="form-row">
-              <div class="form-group" style="flex: 2;">
+              <div class="form-group adr-wrap" style="flex: 2;">
                 <label>Ulice <span class="req">*</span></label>
-                <input type="text" class="form-input" name="street" placeholder="Praha 4">
+                <input type="text" class="form-input" name="street" placeholder="Začněte psát ulici a číslo" autocomplete="off">
+                <ul class="adr-navrhy" id="adr-navrhy" hidden role="listbox" aria-label="Návrhy adres"></ul>
               </div>
               <div class="form-group">
                 <label>Číslo popisné <span class="req">*</span></label>
