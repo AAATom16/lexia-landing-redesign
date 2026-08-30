@@ -28,11 +28,30 @@
 
     <style>
       /* Kalkulačka z katalogu — doplňkové pilíře, vstupy a chybové hlášky. */
-      .calc-addons { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-left: 18px; }
+      /* Doplňky sedí UVNITŘ svého pilíře. Svislá linka a odsazení říkají, že
+         patří k dlaždici nad nimi; dřív to byl pruh přes celou mřížku, který se
+         od rodiče odtrhl a při rozbalení odsunul všechno pod sebou. */
+      .calc-pillar-group { display: flex; flex-direction: column; }
+      .calc-addons { display: grid; gap: 10px; margin: 10px 0 0 20px;
+        padding: 12px 0 2px 16px; border-left: 2px solid var(--primary-light); }
+      /* Na celou šířku vypadá vycentrovaná dlaždice rozsypaně: název a cena
+         pod sebou uprostřed. Srovnáno do řádku, název vlevo a cena vpravo.
+         Vpravo nahoře sedí „i", proto to odsazení. */
+      #calc-pillars .calc-option { text-align: left; display: grid;
+        grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline;
+        padding-right: 44px; }
+      #calc-pillars .calc-option strong { display: block; margin: 0; }
+      #calc-pillars .calc-option .px-label { justify-self: end; white-space: nowrap;
+        font-weight: 600; color: var(--primary); }
+      #calc-pillars .calc-option .calc-badge,
+      #calc-pillars .calc-pillar-input { grid-column: 1 / -1; justify-self: stretch; }
+      #calc-pillars .calc-option .calc-badge { justify-self: start; }
+      .calc-addons-title { margin: 0; font-size: .8rem; letter-spacing: .02em;
+        text-transform: uppercase; color: var(--text-muted); }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
       .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden], .form-group[hidden], p[data-stav][hidden] { display: none; }
-      .calc-option.is-addon { border-style: dashed; }
+      .calc-option.is-addon { background: var(--bg-soft, #fbfcfe); }
       .calc-badge { font-weight: 400; text-transform: none; display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
       .calc-input-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
@@ -77,7 +96,7 @@
       .calc-pillar-input select, .calc-pillar-input input { width: 100%; padding: 8px 10px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); font: inherit; }
       .calc-error { color: #b3261e; font-weight: 600; }
       .calc-note { opacity: 0.85; font-style: italic; margin-top: 8px; }
-      @media (max-width: 640px) { .calc-addons { grid-template-columns: 1fr; } }
+      @media (max-width: 640px) { .calc-addons { margin-left: 8px; padding-left: 10px; } }
     </style>
 </head>
 <body>
@@ -157,7 +176,7 @@
         <div class="calc-section">
           <h4>2. Pilíře pojištění</h4>
           <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">Základní právní ochrana je povinná, ostatní pilíře jsou volitelné.</p>
-          <div class="calc-options" id="calc-pillars" style="grid-template-columns: 1fr 1fr;"></div>
+          <div class="calc-options" id="calc-pillars" style="grid-template-columns: 1fr;"></div>
         </div>
 
         <div class="calc-section" style="border-bottom: none;">
