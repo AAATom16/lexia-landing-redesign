@@ -498,6 +498,102 @@
 
   // Krok 2 wizardu potřebuje vědět, co je vybrané; jinak by si to musel číst
   // z názvů políček, která už neexistují.
+  // ── našeptávač adresy ─────────────────────────────────────────────────────
+
+  /**
+   * Našeptávač adresy nad `/address/autocomplete` (Roman 29. 8. 2026: „čekal
+   * jsem našeptávač, jako v kalkulačce v Portálu").
+   *
+   * Je to týž veřejný endpoint a týž zdroj (SmartForm), jaký používá portál
+   * i kalkulačky frenkee, takže se adresy nemůžou rozejít. Odpověď nese celou
+   * strukturu, takže se vyplní ulice, číslo, obec i PSČ najednou a nikdo je
+   * nemusí opisovat.
+   *
+   * Když upstream mlčí nebo spadne, seznam se prostě neukáže a adresa se
+   * vyplní ručně. Sjednání to nesmí blokovat.
+   */
+  function pripojNaseptavac() {
+    const pole = document.querySelector('[name="street"]');
+    const seznam = el('#adr-navrhy');
+    if (!pole || !seznam) return;
+
+    let cekani = null;
+    let porad = 0;
+    let navrhy = [];
+
+    const zavri = () => {
+      seznam.hidden = true;
+      seznam.innerHTML = '';
+    };
+
+    const vyplnAdresu = (a) => {
+      const set = (jmeno, hodnota) => {
+        const e = document.querySelector(`[name="${jmeno}"]`);
+        if (!e || !hodnota) return;
+        e.value = hodnota;
+        e.dispatchEvent(new Event('input', { bubbles: true }));
+        e.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      // `street` bez čísla; číslo popisné má vlastní pole, jinak by se
+      // v návrhu smlouvy objevilo dvakrát.
+      set('street', a.street || a.streetAndNumber || '');
+      set('houseNum', a.number || '');
+      set('city', a.city || a.cityExtended || '');
+      set('zip', (a.zip || '').replace(/\s+/g, ''));
+      zavri();
+    };
+
+    const vykresli = () => {
+      seznam.innerHTML = '';
+      if (!navrhy.length) return zavri();
+      navrhy.slice(0, 8).forEach((a) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.textContent = a.streetAndNumber || a.street || '';
+        const mesto = document.createElement('span');
+        mesto.textContent = [a.zip, a.city].filter(Boolean).join(' ');
+        li.appendChild(mesto);
+        // `mousedown`, ne `click`: `blur` pole by seznam zavřel dřív, než by
+        // klik stihl dojít, a výběr by nešel provést myší.
+        li.addEventListener('mousedown', (ev) => {
+          ev.preventDefault();
+          vyplnAdresu(a);
+        });
+        seznam.appendChild(li);
+      });
+      seznam.hidden = false;
+    };
+
+    pole.addEventListener('input', () => {
+      clearTimeout(cekani);
+      const dotaz = pole.value.trim();
+      if (dotaz.length < 3) return zavri();
+      const moje = ++porad;
+      cekani = setTimeout(async () => {
+        try {
+          const res = await fetch(
+            `${API}/address/autocomplete?query=${encodeURIComponent(dotaz)}`,
+            { headers: { Accept: 'application/json' } },
+          );
+          if (!res.ok) return zavri();
+          const data = await res.json();
+          // Odpovědi se můžou vrátit v jiném pořadí, než odešly; starší
+          // výsledek nesmí přepsat novější.
+          if (moje !== porad) return;
+          navrhy = Array.isArray(data) ? data : [];
+          vykresli();
+        } catch {
+          zavri();
+        }
+      }, 250);
+    });
+
+    pole.addEventListener('blur', () => setTimeout(zavri, 120));
+    pole.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') zavri();
+    });
+  }
+
   // ── dokumenty k pojištění ─────────────────────────────────────────────────
 
   const kb = (b) => `${Math.round(b / 1024)} kB`;
@@ -786,6 +882,7 @@
     pripojSjednani();
     pripojIdentifikaci();
     pripojDokumenty();
+    pripojNaseptavac();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);
