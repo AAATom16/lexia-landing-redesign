@@ -108,7 +108,15 @@
 
     const hlavni = stav.katalog.pillars.filter((p) => !p.requiresPillarKey);
     for (const p of hlavni) {
-      box.appendChild(dlazdice(p));
+      // Pilíř i jeho doplňky drží jeden obal. Dřív se doplňky vykreslovaly jako
+      // pruh přes celou šířku mřížky, takže se vizuálně odtrhly od pilíře, ke
+      // kterému patří, a jejich rozbalení odsunulo všechno pod nimi. Roman
+      // 29. 8. 2026: „nepřehledné". Uvnitř obalu je vazba vidět ze struktury
+      // a nic jiného se nehne.
+      const skupina = document.createElement('div');
+      skupina.className = 'calc-pillar-group';
+      skupina.appendChild(dlazdice(p));
+
       const doplnky = stav.katalog.pillars.filter((d) => d.requiresPillarKey === p.key);
       if (doplnky.length) {
         const wrap = document.createElement('div');
@@ -117,9 +125,15 @@
         // Doplněk jde sjednat jen s rodičem — dokud není vybraný, nemá smysl
         // ho ani ukazovat.
         wrap.hidden = !stav.vybrane.has(p.key);
+        const nadpis = document.createElement('p');
+        nadpis.className = 'calc-addons-title';
+        nadpis.textContent =
+          doplnky.length === 1 ? 'Doplněk k tomuto pilíři' : 'Doplňky k tomuto pilíři';
+        wrap.appendChild(nadpis);
         doplnky.forEach((d) => wrap.appendChild(dlazdice(d, true)));
-        box.appendChild(wrap);
+        skupina.appendChild(wrap);
       }
+      box.appendChild(skupina);
     }
   }
 
