@@ -64,13 +64,25 @@
       if (!pilir || !pilir.input || !stav.vybrane.has(klic)) continue;
       if (pilir.input.kind === 'objects') {
         // Engine počítá POLOŽKY seznamu, ne pole `quantity`: tři objekty jsou
-        // tři položky. U výměry je to jedna položka s plochou v `areaParam`.
-        const { typeKey, mnozstvi } = hodnota || {};
-        if (!typeKey || !(mnozstvi > 0)) continue;
+        // tři položky. U výměry nese každá položka svou plochu v `areaParam`,
+        // takže dvě parcely různého druhu jsou dvě položky s vlastní výměrou.
+        const radky = (Array.isArray(hodnota) ? hodnota : []).filter(
+          (r) => r.typeKey && r.mnozstvi > 0,
+        );
+        if (!radky.length) continue;
+        // Skutečný počet, bez stropu. Do 31. 8. 2026 tu bylo `Math.min(mnozstvi, 20)`,
+        // jenže pole žádné `max` nemělo: kdo zadal 50 objektů, dostal cenu za 20
+        // a nic se mu neřeklo. Ukázaná cena pak neseděla se smluvní — přesně ta
+        // třída chyby, kvůli které kalkulačka přešla na společný ceník.
         parameters[pilir.input.param] =
           pilir.input.unit === 'sqm'
-            ? [{ typeKey, [pilir.input.areaParam || 'area_m2']: mnozstvi }]
-            : Array.from({ length: Math.min(mnozstvi, 20) }, () => ({ typeKey }));
+            ? radky.map((r) => ({
+                typeKey: r.typeKey,
+                [pilir.input.areaParam || 'area_m2']: r.mnozstvi,
+              }))
+            : radky.flatMap((r) =>
+                Array.from({ length: r.mnozstvi }, () => ({ typeKey: r.typeKey })),
+              );
       } else if (pilir.input.kind === 'salary') {
         if (Number(hodnota) > 0) {
           // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
@@ -142,10 +154,23 @@
     }
   }
 
+  /**
+   * Dlaždice pilíře.
+   *
+   * Rám je `<div>`, zaškrtávátko sedí ve vnitřním `<label class="calc-pillar-head">`
+   * a vstupy pilíře visí vedle něj, ne uvnitř. Dokud byla dlaždice celá jeden
+   * `<label>`, patřil k zaškrtávátku i každý select, popisek a mezera uvnitř,
+   * takže klik do prázdna ve vyplňovacím bloku pilíř odškrtl i s vyplněnými
+   * údaji — a každý nový prvek se musel ručně vyvazovat přes stopPropagation.
+   * Interní kalkulačka to má stejně: `<label>` obaluje jen hlavičku.
+   */
   function dlazdice(p, jeDoplnek) {
-    const label = document.createElement('label');
+    const label = document.createElement('div');
     label.className = 'calc-option' + (stav.vybrane.has(p.key) ? ' selected' : '');
     if (jeDoplnek) label.classList.add('is-addon');
+
+    const hlavicka = document.createElement('label');
+    hlavicka.className = 'calc-pillar-head';
 
     const vstup = document.createElement('input');
     vstup.type = 'checkbox';
@@ -154,13 +179,14 @@
     if (p.mandatory) {
       vstup.checked = true;
       vstup.disabled = true;
-      label.style.cursor = 'not-allowed';
+      // Kurzor patří hlavičce, ne rámu: klikacím prvkem je od přestavby ona.
+      hlavicka.style.cursor = 'not-allowed';
     }
-    label.appendChild(vstup);
+    hlavicka.appendChild(vstup);
 
     const nazev = document.createElement('strong');
     nazev.textContent = p.name;
-    label.appendChild(nazev);
+    hlavicka.appendChild(nazev);
 
     const cena = document.createElement('span');
     cena.className = 'px-label';
@@ -170,7 +196,7 @@
       p.priceKind === 'fixed' && p.monthlyCzk != null
         ? `${czk(p.monthlyCzk)}/měsíc`
         : p.priceLabel;
-    label.appendChild(cena);
+    hlavicka.appendChild(cena);
 
     if (p.mandatory) {
       const znak = document.createElement('span');
@@ -178,46 +204,69 @@
       // Roman 29. 8. 2026 — „POVINNÝ" verzálkami působilo jako varování; jde
       // přitom o samozřejmost, ne o podmínku, kterou musí klient řešit.
       znak.textContent = 'sjednává se vždy';
-      label.appendChild(znak);
+      hlavicka.appendChild(znak);
     }
 
-    if ((p.coverage || []).length) label.appendChild(infoIkona(p));
+    if (maDetail(p)) hlavicka.appendChild(odkazPodrobnosti(p));
+    label.appendChild(hlavicka);
     // Podmínky se ukazují i u pilíře, který jinak nemá co vyplňovat.
     if (p.input || (p.conditions || []).length) label.appendChild(vstupyPilire(p));
     return label;
   }
 
+  /** Má pilíř co ukázat v Podrobnostech? Bez obsahu odkaz nevznikne. */
+  function maDetail(p) {
+    return Boolean(
+      (p.coverage || []).length || (p.conditions || []).length || p.info || p.insuredPersons,
+    );
+  }
+
   const ROZSAH = { europe: 'Evropa', world: 'celý svět', cz: 'Česko' };
 
   /**
-   * „i" u dlaždice (Roman 29. 8. 2026) — co pilíř kryje, s limity.
+   * Odkaz „Podrobnosti" u dlaždice.
    *
-   * Obsah se bere z oblastí krytí, které katalog stejně publikuje, ne z ručně
-   * psaného textu. Psaný popis by se dřív nebo později rozešel s produktem;
-   * tohle se změní samo, jakmile se změní krytí.
+   * Stejný prvek i stejné jméno jako v portálu: poradce klikne na „Podrobnosti"
+   * a klient taky, takže si o tomtéž otvírají totéž. Předchůdcem byla ikona „i"
+   * ukotvená absolutně do rohu dlaždice — nesdílela účaří s ničím kolem a při
+   * jednosloupcové mřížce skončila na opačném konci řádku než název, ke kterému
+   * patřila.
    *
-   * Tlačítko je `type="button"` a klik nesmí probublat — dlaždice je `<label>`
-   * se zaškrtávátkem, takže bez toho by otevření detailu pilíř zároveň
-   * odškrtlo.
+   * `type="button"`, aby odkaz neodesílal formulář. Sedí uvnitř hlavičkového
+   * `<label>`, takže klik hlídáme dvakrát: tlačítko je sice interaktivní obsah
+   * a aktivace popisku se podle specifikace nespustí, ale spoléhat se na to
+   * u prvku, který má JEDINOU úlohu neodškrtnout pilíř, nestojí za to. Portál
+   * to dělá stejně.
    */
-  function infoIkona(p) {
+  function odkazPodrobnosti(p) {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'calc-info';
-    // Ikona ze sady webu, ne písmeno „i" v kroužku. Automatické doplňování
-    // v icons.js běží jen při načtení stránky, kdežto dlaždice vznikají až po
-    // katalogu, takže SVG vkládáme sami.
-    const svg = typeof LEXIA_ICONS !== 'undefined' ? LEXIA_ICONS.info : null;
-    if (svg) btn.innerHTML = svg;
-    else btn.textContent = 'i';
-    btn.setAttribute('aria-label', `Co kryje ${p.name}`);
-    btn.title = `Co kryje ${p.name}`;
+    btn.className = 'calc-detail';
+    btn.textContent = 'Podrobnosti';
+    btn.setAttribute('aria-label', `Podrobnosti k pilíři ${p.name}`);
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
       otevriInfo(p);
     });
     return btn;
+  }
+
+  /**
+   * Odstavcová rubrika v okně Podrobnosti. Prázdnou hodnotu vynechá i s
+   * nadpisem — katalog posílá `null`, ne prázdný řetězec, právě proto, aby
+   * nadpis nezůstal viset nad ničím.
+   */
+  function rubrika(dlg, nadpis, text) {
+    if (!text) return;
+    const h = document.createElement('strong');
+    h.className = 'calc-info-rubrika';
+    h.textContent = nadpis;
+    dlg.appendChild(h);
+    const p = document.createElement('p');
+    p.className = 'calc-info-text';
+    p.textContent = text;
+    dlg.appendChild(p);
   }
 
   function otevriInfo(p) {
@@ -260,6 +309,20 @@
       box.appendChild(pozn);
       dlg.appendChild(box);
     }
+
+    // Rubriky, které v Podrobnostech čte poradce v portálu. Katalog je publikuje
+    // od 31. 8. 2026 (`info` = „Příklad využití", `insuredPersons`); do té doby
+    // tu žádný souvislý popis nebyl, protože `description` je u pilířů prázdný,
+    // a okno vystačilo s tabulkou limitů — poradce a klient tak nad stejným
+    // pilířem četli jiný text. Pořadí ctí Romanovo zadání z 29. 8.: podmínky
+    // pojistitelnosti zůstávají první, ostatní se řadí za ně.
+    rubrika(dlg, 'K čemu pilíř je', p.info);
+    rubrika(dlg, 'Pojištěné osoby', p.insuredPersons);
+
+    const nadpisKryti = document.createElement('strong');
+    nadpisKryti.className = 'calc-info-rubrika';
+    nadpisKryti.textContent = 'Co pilíř kryje';
+    if (p.coverage.length) dlg.appendChild(nadpisKryti);
 
     const ul = document.createElement('ul');
     ul.className = 'calc-info-list';
@@ -360,30 +423,94 @@
 
     const jeVymera = p.input.unit === 'sqm';
     box.appendChild(popisek(jeVymera ? 'Typ pozemku a výměra v m²' : 'Typ objektu a počet'));
+
+    const seznam = document.createElement('div');
+    seznam.className = 'calc-object-list';
+    seznam.dataset.listFor = p.key;
+    box.appendChild(seznam);
+    prekresliInstance(p, seznam);
+
+    // Přidávat se dá jen u výměrových pilířů. U počítaných nese počet jedno
+    // pole, stejně jako stepper v portálu — druhý řádek by tam nic nepřidal.
+    if (jeVymera) {
+      const pridat = document.createElement('button');
+      pridat.type = 'button';
+      pridat.className = 'btn btn-outline btn-sm calc-pridat';
+      pridat.dataset.addFor = p.key;
+      pridat.textContent = '+ Přidat parcelu';
+      box.appendChild(pridat);
+    }
+    return box;
+  }
+
+  /**
+   * Instance objektů pilíře. Do 31. 8. 2026 měl pilíř jediný řádek a stav byl
+   * plochý objekt `{ typeKey, mnozstvi }`, takže všechny objekty musely být
+   * téhož druhu — a u výměrových pilířů se druhá parcela nedala zadat vůbec,
+   * protože číslo znamenalo výměru té jediné. Portál drží seznam instancí,
+   * kde má každá parcela svůj druh i svou výměru; tohle je totéž.
+   */
+  function instanceObjektu(p) {
+    const v = stav.vstupy[p.key];
+    if (Array.isArray(v) && v.length) return v;
+    return [vychoziInstance(p)];
+  }
+
+  function vychoziInstance(p) {
+    return {
+      typeKey: (p.input.types || [])[0]?.key || '',
+      mnozstvi: p.input.unit === 'sqm' ? 1000 : 1,
+    };
+  }
+
+  function prekresliInstance(p, seznam) {
+    const box = seznam || document.querySelector(`.calc-object-list[data-list-for="${p.key}"]`);
+    if (!box) return;
+    box.innerHTML = '';
+    const radky = instanceObjektu(p);
+    radky.forEach((inst, i) => box.appendChild(radekObjektu(p, inst, i, radky.length)));
+  }
+
+  function radekObjektu(p, inst, poradi, celkem) {
+    const jeVymera = p.input.unit === 'sqm';
     const rada = document.createElement('div');
     rada.className = 'calc-object-row';
 
     const vyber = document.createElement('select');
     vyber.dataset.typeFor = p.key;
-    p.input.types.forEach((t) => {
+    (p.input.types || []).forEach((t) => {
       const o = document.createElement('option');
       o.value = t.key;
       o.textContent = t.label;
+      if (t.key === inst.typeKey) o.selected = true;
       vyber.appendChild(o);
     });
+    vyber.setAttribute('aria-label', jeVymera ? `Parcela č. ${poradi + 1} — druh` : 'Typ objektu');
     rada.appendChild(vyber);
 
     const pocet = document.createElement('input');
     pocet.type = 'number';
-    pocet.min = jeVymera ? '1' : '1';
+    pocet.min = '1';
     pocet.step = '1';
-    pocet.value = (stav.vstupy[p.key] && stav.vstupy[p.key].mnozstvi) || (jeVymera ? 1000 : 1);
+    // Povinné, ať prázdné pole zastaví „Pokračovat" místo aby pilíř tiše
+    // vypadl z ceny. Skrytá pole vyřazuje `synchronizujSkryta`, jinak by
+    // nevybraný pilíř blokoval krok neviditelným polem.
+    pocet.required = true;
+    pocet.value = inst.mnozstvi || '';
     pocet.dataset.qtyFor = p.key;
-    pocet.setAttribute('aria-label', jeVymera ? 'Výměra v m²' : 'Počet objektů');
+    pocet.setAttribute('aria-label', jeVymera ? `Parcela č. ${poradi + 1} — výměra v m²` : 'Počet objektů');
     rada.appendChild(pocet);
 
-    box.appendChild(rada);
-    return box;
+    if (jeVymera && celkem > 1) {
+      const pryc = document.createElement('button');
+      pryc.type = 'button';
+      pryc.className = 'calc-odebrat';
+      pryc.dataset.removeFor = p.key;
+      pryc.dataset.index = String(poradi);
+      pryc.textContent = 'Odebrat';
+      rada.appendChild(pryc);
+    }
+    return rada;
   }
 
   function popisek(text) {
@@ -536,6 +663,11 @@
             });
           }
         }
+        // Až za skrytím doplňků: pole odkryté dlaždice musí být zase povolená
+        // (kontrola kroku při neúspěchu vypnula všechna skrytá, jinak by do
+        // nich po zaškrtnutí pilíře nešlo psát) a pole schovaného doplňku
+        // naopak vypnutá, ať krok neblokuje neviditelným `required`.
+        synchronizujSkryta();
         prepocitej();
         return;
       }
@@ -552,6 +684,27 @@
     form.addEventListener('input', (ev) => {
       if (ev.target.type === 'number') ev.target.dispatchEvent(new Event('change', { bubbles: true }));
     });
+
+    // Přidání a odebrání instance. Tlačítka `change` neposílají, proto vlastní
+    // posluchač; stav se předtím načte z formuláře, ať se nepřepíšou hodnoty,
+    // které člověk zrovna napsal.
+    form.addEventListener('click', (ev) => {
+      const pridat = ev.target.closest('[data-add-for]');
+      const odebrat = ev.target.closest('[data-remove-for]');
+      if (!pridat && !odebrat) return;
+      ev.preventDefault();
+      const klic = (pridat || odebrat).dataset.addFor || (pridat || odebrat).dataset.removeFor;
+      const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
+      if (!pilir) return;
+      nactiVstupZFormulare(form, klic);
+      const radky = Array.isArray(stav.vstupy[klic]) ? [...stav.vstupy[klic]] : [];
+      if (pridat) radky.push(vychoziInstance(pilir));
+      else radky.splice(Number(odebrat.dataset.index), 1);
+      // Poslední řádek nemizí: pilíř bez jediného objektu by neměl co nacenit.
+      stav.vstupy[klic] = radky.length ? radky : [vychoziInstance(pilir)];
+      prekresliInstance(pilir);
+      prepocitej();
+    });
   }
 
   function nactiVstupZFormulare(form, klic) {
@@ -559,9 +712,11 @@
     if (!box) return;
     const odmena = box.querySelector('[data-salary-for]');
     if (odmena) { stav.vstupy[klic] = Number(odmena.value || 0); return; }
-    const typ = box.querySelector('[data-type-for]')?.value;
-    const mnozstvi = Number(box.querySelector('[data-qty-for]')?.value || 0);
-    stav.vstupy[klic] = typ ? { typeKey: typ, mnozstvi } : null;
+    const radky = [...box.querySelectorAll('.calc-object-row')].map((r) => ({
+      typeKey: r.querySelector('[data-type-for]')?.value || '',
+      mnozstvi: Number(r.querySelector('[data-qty-for]')?.value || 0),
+    }));
+    stav.vstupy[klic] = radky.length ? radky : null;
   }
 
   async function prepniProdukt(varianta) {
@@ -705,6 +860,21 @@
   function synchronizujSkryta() {
     document.querySelectorAll('#subject-section .subject-block').forEach((blok) => {
       const skryty = blok.hidden || blok.closest('#subject-section')?.hidden;
+      blok.querySelectorAll('input, select, textarea').forEach((pole) => {
+        pole.disabled = !!skryty;
+      });
+    });
+    // Vstupy nevybraného pilíře jsou skryté, ale prohlížeč je pořád validuje.
+    // Bez tohohle by od chvíle, kdy je počet objektů `required`, blokovalo
+    // „Pokračovat" pole, které není vidět — a `focus()` na skryté pole nic
+    // neudělá, takže by člověk zůstal stát bez vysvětlení. Tatáž past už
+    // jednou zastavila sjednání kvůli skrytému rodnému číslu.
+    document.querySelectorAll('.calc-pillar-input').forEach((blok) => {
+      // Doplňkový pilíř má vlastní blok nezakrytý, schovaný je až kontejner
+      // doplňků nad ním — bez téhle větve by nevybraný doplněk blokoval krok.
+      // Schválně se nekouká na libovolného skrytého předka: panely neaktivních
+      // kroků jsou taky `hidden` a vypnout kvůli nim pilíře by bylo špatně.
+      const skryty = blok.hidden || blok.closest('.calc-addons')?.hidden === true;
       blok.querySelectorAll('input, select, textarea').forEach((pole) => {
         pole.disabled = !!skryty;
       });
