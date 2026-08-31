@@ -84,13 +84,19 @@
                 Array.from({ length: r.mnozstvi }, () => ({ typeKey: r.typeKey })),
               );
       } else if (pilir.input.kind === 'salary') {
-        if (Number(hodnota) > 0) {
-          // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
-          // přednost před samostatnou hodnotou, a položka bez odměny spadne na
-          // minimální pojistné — pak je jedno, co člověk zadá, vyjde pořád
-          // minimum. Klíč je `grossMonthlyCzk`, tedy odměna MĚSÍČNÍ.
-          parameters[pilir.input.salaryParam] = Number(hodnota);
-          parameters[pilir.input.itemsParam] = [{ grossMonthlyCzk: Number(hodnota) }];
+        // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
+        // přednost před samostatnou hodnotou, a položka bez odměny spadne na
+        // minimální pojistné — pak je jedno, co člověk zadá, vyjde pořád
+        // minimum. Klíč je `grossMonthlyCzk`, tedy odměna MĚSÍČNÍ.
+        //
+        // Posílá se JEN seznam. Samostatná hodnota by u víc funkcí stejně
+        // prohrála a nesla by jen odměnu té první, což by v požadavku vypadalo
+        // jako rozpor sama se sebou.
+        const odmeny = (Array.isArray(hodnota) ? hodnota : [hodnota])
+          .map((x) => Number(x))
+          .filter((x) => x > 0);
+        if (odmeny.length) {
+          parameters[pilir.input.itemsParam] = odmeny.map((x) => ({ grossMonthlyCzk: x }));
         }
       }
     }
@@ -409,15 +415,26 @@
 
     if (p.input.kind === 'salary') {
       // MĚSÍČNÍ, ne roční: engine počítá procento z hrubé měsíční odměny.
-      // Roční hodnota by pojistné nadsadila dvanáctkrát.
-      box.appendChild(popisek('Hrubá měsíční odměna za výkon funkce (Kč)'));
-      const i = document.createElement('input');
-      i.type = 'number';
-      i.min = '0';
-      i.step = '1000';
-      i.dataset.salaryFor = p.key;
-      i.value = stav.vstupy[p.key] || '';
-      box.appendChild(i);
+      // Roční hodnota by pojistné nadsadila dvanáctkrát. Roman to 31. 8. 2026
+      // potvrdil.
+      box.appendChild(
+        popisek(
+          'Hrubá měsíční odměna za výkon funkce (Kč). Vykonáváte-li funkcí víc, ' +
+            'přidejte každou zvlášť.',
+        ),
+      );
+      const seznam = document.createElement('div');
+      seznam.className = 'calc-object-list';
+      seznam.dataset.listFor = p.key;
+      box.appendChild(seznam);
+      prekresliFunkce(p, seznam);
+
+      const pridat = document.createElement('button');
+      pridat.type = 'button';
+      pridat.className = 'btn btn-outline btn-sm calc-pridat';
+      pridat.dataset.addFor = p.key;
+      pridat.textContent = '+ Přidat funkci';
+      box.appendChild(pridat);
       return box;
     }
 
@@ -469,6 +486,50 @@
     box.innerHTML = '';
     const radky = instanceObjektu(p);
     radky.forEach((inst, i) => box.appendChild(radekObjektu(p, inst, i, radky.length)));
+  }
+
+  /**
+   * Manažerské funkce. Roman 31. 8. 2026: „Každá funkce má vlastní odměnu
+   * i vlastní minimum 399 Kč a sčítají se." Dosud šlo zadat jedinou odměnu,
+   * takže klient se dvěma funkcemi dostal na webu nižší cenu, než mu pak
+   * spočítal poradce.
+   */
+  function funkceManazera(p) {
+    const v = stav.vstupy[p.key];
+    if (Array.isArray(v) && v.length) return v;
+    return [0];
+  }
+
+  function prekresliFunkce(p, seznam) {
+    const box = seznam || document.querySelector(`.calc-object-list[data-list-for="${p.key}"]`);
+    if (!box) return;
+    box.innerHTML = '';
+    const odmeny = funkceManazera(p);
+    odmeny.forEach((castka, i) => box.appendChild(radekFunkce(p, castka, i, odmeny.length)));
+  }
+
+  function radekFunkce(p, castka, poradi, celkem) {
+    const rada = document.createElement('div');
+    rada.className = 'calc-object-row calc-funkce-row';
+    const i = document.createElement('input');
+    i.type = 'number';
+    i.min = '1';
+    i.step = '1000';
+    i.required = true;
+    i.dataset.salaryFor = p.key;
+    i.value = castka || '';
+    i.setAttribute('aria-label', celkem > 1 ? `Funkce č. ${poradi + 1} — hrubá měsíční odměna` : 'Hrubá měsíční odměna');
+    rada.appendChild(i);
+    if (celkem > 1) {
+      const pryc = document.createElement('button');
+      pryc.type = 'button';
+      pryc.className = 'calc-odebrat';
+      pryc.dataset.removeFor = p.key;
+      pryc.dataset.index = String(poradi);
+      pryc.textContent = 'Odebrat';
+      rada.appendChild(pryc);
+    }
+    return rada;
   }
 
   function radekObjektu(p, inst, poradi, celkem) {
@@ -677,7 +738,7 @@
         return;
       }
       if (t.dataset.salaryFor) {
-        stav.vstupy[t.dataset.salaryFor] = Number(t.value || 0);
+        nactiVstupZFormulare(form, t.dataset.salaryFor);
         prepocitej();
       }
     });
@@ -696,13 +757,16 @@
       const klic = (pridat || odebrat).dataset.addFor || (pridat || odebrat).dataset.removeFor;
       const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
       if (!pilir) return;
+      const jeFunkce = pilir.input?.kind === 'salary';
       nactiVstupZFormulare(form, klic);
       const radky = Array.isArray(stav.vstupy[klic]) ? [...stav.vstupy[klic]] : [];
-      if (pridat) radky.push(vychoziInstance(pilir));
+      if (pridat) radky.push(jeFunkce ? 0 : vychoziInstance(pilir));
       else radky.splice(Number(odebrat.dataset.index), 1);
-      // Poslední řádek nemizí: pilíř bez jediného objektu by neměl co nacenit.
-      stav.vstupy[klic] = radky.length ? radky : [vychoziInstance(pilir)];
-      prekresliInstance(pilir);
+      // Poslední řádek nemizí: pilíř bez jediné položky by neměl co nacenit.
+      const vychozi = jeFunkce ? 0 : vychoziInstance(pilir);
+      stav.vstupy[klic] = radky.length ? radky : [vychozi];
+      if (jeFunkce) prekresliFunkce(pilir);
+      else prekresliInstance(pilir);
       prepocitej();
     });
   }
@@ -710,8 +774,11 @@
   function nactiVstupZFormulare(form, klic) {
     const box = form.querySelector(`.calc-pillar-input[data-for="${klic}"]`);
     if (!box) return;
-    const odmena = box.querySelector('[data-salary-for]');
-    if (odmena) { stav.vstupy[klic] = Number(odmena.value || 0); return; }
+    const odmeny = [...box.querySelectorAll('[data-salary-for]')];
+    if (odmeny.length) {
+      stav.vstupy[klic] = odmeny.map((i) => Number(i.value || 0));
+      return;
+    }
     const radky = [...box.querySelectorAll('.calc-object-row')].map((r) => ({
       typeKey: r.querySelector('[data-type-for]')?.value || '',
       mnozstvi: Number(r.querySelector('[data-qty-for]')?.value || 0),
@@ -726,6 +793,7 @@
     poradi += 1;
     stav.produkt = PRODUKTY[varianta] || PRODUKTY.jednotlivec;
     prepniPodnikatele(varianta);
+    synchronizujNadpis();
     const popisek = el('#sum-variant');
     const prepinac = el(`input[name="variant"][value="${varianta}"]`);
     if (popisek) popisek.textContent = prepinac?.dataset.label || 'Jednotlivec';
@@ -760,6 +828,42 @@
    * vidět, umlčí odeslání a člověk nemá jak zjistit proč — na tom se to už
    * jednou zaseklo u data narození.
    */
+
+  /**
+   * Nadpis stránky podle zvoleného produktu a rozdělaného kroku.
+   *
+   * Roman 1. 9. 2026: jeden nadpis pro všechno říkal na každém místě průchodu
+   * totéž. Stránka proto nese dvanáct dvojic nadpis + podtitulek (tři produkty
+   * krát čtyři kroky) a tady se vybírá ta, která sedí.
+   *
+   * Krok se čte z toho, který panel je zrovna vidět, ne z vlastního počítadla:
+   * kroky přepíná stepper ve `script.js` a druhá evidence téhož by se s ním
+   * dřív nebo později rozešla.
+   */
+  function synchronizujNadpis() {
+    const sloty = [...document.querySelectorAll("[data-nadpis]")];
+    if (!sloty.length) return;
+    const produkt =
+      document.querySelector('input[name="variant"]:checked')?.value || "jednotlivec";
+    const krok =
+      document.querySelector("[data-step-panel]:not([hidden])")?.dataset.stepPanel || "1";
+    const sedi = (e) => e.dataset.produkt === produkt && e.dataset.krok === krok;
+    // Když by kombinace chyběla, ukáže se první slot daného kroku, ať nezůstane
+    // stránka bez nadpisu.
+    const nahrada = sloty.find((e) => e.dataset.krok === krok) || sloty[0];
+    const vybrany = sloty.find(sedi) || nahrada;
+    sloty.forEach((e) => { e.hidden = e !== vybrany; });
+  }
+
+  /** Kroky přepíná cizí skript, takže se hlídá změna viditelnosti panelů. */
+  function sledujKroky() {
+    const panely = [...document.querySelectorAll("[data-step-panel]")];
+    if (!panely.length) return;
+    const pozorovatel = new MutationObserver(() => synchronizujNadpis());
+    panely.forEach((p) => pozorovatel.observe(p, { attributes: true, attributeFilter: ["hidden"] }));
+    synchronizujNadpis();
+  }
+
   function prepniPodnikatele(varianta) {
     const blok = el('#podnikatel-blok');
     if (!blok) return;
@@ -769,6 +873,17 @@
       pole.disabled = !podnikatel;
       if (pole.type !== 'radio') pole.required = podnikatel;
     });
+    // Roman 1. 9. 2026 — u podnikatele pryč jméno, příjmení i rodné číslo,
+    // stejně jako je má portál schované ve větvi pro fyzickou osobu. Pole se
+    // musí i vypnout: skryté povinné pole by neviditelně zastavilo krok.
+    const osobni = el('#osobni-blok');
+    if (osobni) {
+      osobni.hidden = podnikatel;
+      osobni.querySelectorAll('input').forEach((pole) => {
+        pole.disabled = podnikatel;
+      });
+      if (!podnikatel) pripojIdentifikaci.obnov?.();
+    }
     // U podnikatele je adresou pojistníka sídlo podnikání, ne bydliště.
     const nadpis = el('#nadpis-adresa');
     if (nadpis) nadpis.textContent = podnikatel ? '2. Sídlo podnikání' : '2. Trvalá adresa';
@@ -1061,7 +1176,6 @@
       if (!res.ok) throw new Error('nedostupné');
       const data = await res.json();
       vykresliDokumenty(data.documents || []);
-      nastavOdkazGdpr();
     } catch {
       dokumentyProProdukt = null; // ať to jde zkusit znovu
       box.innerHTML =
@@ -1166,20 +1280,6 @@
     );
   }
 
-  /**
-   * Odkaz „zde" u souhlasu míří na oficiální dokument o zpracování osobních
-   * údajů, tedy na týž soubor, který klient dostane přílohou. Doplňuje se až
-   * po načtení katalogu, protože adresa nese klíč produktu.
-   */
-  function nastavOdkazGdpr() {
-    const a = el('#odkaz-gdpr');
-    if (!a || !stav.produkt) return;
-    a.href =
-      `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
-      `personal-data?tenant=${TENANT}`;
-    a.target = '_blank';
-    a.rel = 'noopener';
-  }
 
   function pripojDokumenty() {
     el('#doc-preview-close')?.addEventListener('click', () => {
@@ -1214,7 +1314,12 @@
    * rozejde, vrátí 409 a klient musí novou cenu vidět, ne ji dostat podstrčenou.
    */
   function teloSjednani() {
-    const jmeno = [pole('firstName'), pole('lastName')].filter(Boolean).join(' ');
+    const jeFirma = !el('#podnikatel-blok')?.hidden;
+    const osobniJmeno = [pole('firstName'), pole('lastName')].filter(Boolean).join(' ');
+    // U podnikatele nese jméno pojistníka název firmy — osobní pole na stránce
+    // nejsou. API `name` vyžaduje, takže bez tohohle by sjednání spadlo na
+    // validaci s prázdným jménem.
+    const jmeno = jeFirma ? pole('businessName') || osobniJmeno : osobniJmeno;
     return {
       product: stav.produkt,
       segment: 'FO',
@@ -1233,8 +1338,10 @@
           ? {
               legalForm: document.querySelector('input[name="legalForm"]:checked').value,
               businessName: pole('businessName') || undefined,
-              // Za pojistníka jedná ten, kdo formulář vyplňuje.
-              representedBy: jmeno,
+              // „Za pojistníka jedná" má od 1. 9. 2026 vlastní pole, stejně jako
+              // v portálu. Dřív se sem dosazoval ten, kdo formulář vyplňuje, což
+              // u firmy nemusí být tatáž osoba.
+              representedBy: pole('jednajici') || jmeno,
             }
           : {}),
         email: pole('email'),
@@ -1246,10 +1353,11 @@
         postalCode: pole('zip') || undefined,
       },
       consents: {
-        marketing: zaskrtnuto('consent-marketing'),
-        // Souhlas se dává odesláním; posíláme znění, které měl klient před
-        // sebou, aby šlo doložit, s čím souhlasil.
-        shownText: el('#souhlas-zneni')?.textContent?.replace(/\s+/g, ' ').trim() || undefined,
+        // Roman 1. 9. 2026 (po poradě s Petrem Čepou): zaškrtávátko marketingu
+        // i text o zpracování osobních údajů jsou ze stránky pryč, takže není
+        // co číst ani co doložit. Souhlas se zpracováním se dál dává odesláním
+        // a server ho u klienta zaznamená; jen už k němu neuloží znění.
+        marketing: false,
       },
       ...(stav.posledni ? { expectedMonthlyCzk: stav.posledni.monthlyCzk } : {}),
     };
@@ -1319,6 +1427,10 @@
     };
     prepinac.addEventListener('change', prepni);
     prepni();
+    // Vystaveno ven: po přepnutí z podnikatele zpět na fyzickou osobu se
+    // všechna pole osobního bloku povolí naráz, což by zapnulo i doklad
+    // cizince. Tímhle se stav dorovná podle zaškrtávátka.
+    pripojIdentifikaci.obnov = prepni;
   }
 
   function pripojSjednani() {
@@ -1457,6 +1569,7 @@
     pripojNaseptavac();
     pripojValidaciKroku();
     pripojPodnikatele();
+    sledujKroky();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);

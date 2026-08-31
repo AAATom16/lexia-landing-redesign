@@ -113,7 +113,7 @@
       .ico-radek { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
       .ico-radek .btn { white-space: nowrap; }
       #po-upozorneni { color: var(--text-muted); font-weight: 400; margin-top: 8px; }
-      #podnikatel-blok[hidden] { display: none; }
+      #podnikatel-blok[hidden], #osobni-blok[hidden] { display: none; }
       #podnikatel-blok .calc-option { text-align: left; padding: 12px 14px; }
       .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
         font-style: normal; color: var(--text-muted); }
@@ -190,8 +190,64 @@
 
 <section class="page-hero">
   <div class="container">
-    <h1>Spočítejte si <span style="color: var(--primary);">vaši cenu</span></h1>
-    <p>Produkt <strong>Jednotlivci a domácnosti</strong>. Vyberte variantu a sestavte si pojištění z pilířů a doplňků. Cena se počítá automaticky.</p>
+    <!-- Roman 1. 9. 2026: nadpis byl jeden pro všechny produkty i pro všechny čtyři
+         kroky, takže na kterémkoli místě průchodu říkal totéž. Každá dvojice
+         produkt + krok má proto vlastní nadpis a podtitulek; skript ukazuje ten,
+         který sedí, ostatní schová. V editoru textů se dají upravit jednotlivě.
+
+         Výchozí texty se schválně NEOPAKUJÍ. Editor si uložený text klíčuje hashem
+         z jeho obsahu, takže dva shodné by se rozlišovaly jen pořadím a při
+         přeskládání stránky by si uložené úpravy prohodily místo. Z téhož důvodu
+         zůstává první dvojice slovo od slova taková, jaká byla — kdyby se změnila,
+         odpojila by se od ní úprava uložená v editoru. -->
+    <div data-nadpis data-produkt="jednotlivec" data-krok="1">
+      <h1>Spočítejte si <span style="color: var(--primary);">vaši cenu</span></h1>
+      <p>Produkt <strong>Jednotlivci a domácnosti</strong>. Vyberte variantu a sestavte si pojištění z pilířů a doplňků. Cena se počítá automaticky.</p>
+    </div>
+    <div data-nadpis data-produkt="jednotlivec" data-krok="2" hidden>
+      <h1>Doplňte <span style="color: var(--primary);">své údaje</span></h1>
+      <p>Produkt <strong>Jednotlivec</strong>. Potřebujeme je do návrhu pojistné smlouvy.</p>
+    </div>
+    <div data-nadpis data-produkt="jednotlivec" data-krok="3" hidden>
+      <h1>Zkontrolujte <span style="color: var(--primary);">rekapitulaci</span></h1>
+      <p>Produkt <strong>Jednotlivec</strong>. Projděte si dokumenty i návrh smlouvy dřív, než ho odešleme.</p>
+    </div>
+    <div data-nadpis data-produkt="jednotlivec" data-krok="4" hidden>
+      <h1>Návrh smlouvy je <span style="color: var(--primary);">na cestě</span></h1>
+      <p>Produkt <strong>Jednotlivec</strong>. Zbývá uhradit pojistné.</p>
+    </div>
+    <div data-nadpis data-produkt="domacnost" data-krok="1" hidden>
+      <h1>Vyberte si <span style="color: var(--primary);">právní ochranu</span></h1>
+      <p>Produkt <strong>Domácnost</strong>. Sestavte si pojištění z pilířů a doplňků podle toho, co potřebujete. Cena se počítá průběžně.</p>
+    </div>
+    <div data-nadpis data-produkt="domacnost" data-krok="2" hidden>
+      <h1>Doplňte <span style="color: var(--primary);">své údaje</span></h1>
+      <p>Produkt <strong>Domácnost</strong>. Potřebujeme je do návrhu pojistné smlouvy.</p>
+    </div>
+    <div data-nadpis data-produkt="domacnost" data-krok="3" hidden>
+      <h1>Zkontrolujte <span style="color: var(--primary);">rekapitulaci</span></h1>
+      <p>Produkt <strong>Domácnost</strong>. Projděte si dokumenty i návrh smlouvy dřív, než ho odešleme.</p>
+    </div>
+    <div data-nadpis data-produkt="domacnost" data-krok="4" hidden>
+      <h1>Návrh smlouvy je <span style="color: var(--primary);">na cestě</span></h1>
+      <p>Produkt <strong>Domácnost</strong>. Zbývá uhradit pojistné.</p>
+    </div>
+    <div data-nadpis data-produkt="poradce" data-krok="1" hidden>
+      <h1>Vyberte si <span style="color: var(--primary);">právní ochranu</span></h1>
+      <p>Produkt <strong>Poradci a realiťáci</strong>. Sestavte si pojištění z pilířů a doplňků podle toho, co potřebujete. Cena se počítá průběžně.</p>
+    </div>
+    <div data-nadpis data-produkt="poradce" data-krok="2" hidden>
+      <h1>Doplňte <span style="color: var(--primary);">své údaje</span></h1>
+      <p>Produkt <strong>Poradci a realiťáci</strong>. Potřebujeme je do návrhu pojistné smlouvy.</p>
+    </div>
+    <div data-nadpis data-produkt="poradce" data-krok="3" hidden>
+      <h1>Zkontrolujte <span style="color: var(--primary);">rekapitulaci</span></h1>
+      <p>Produkt <strong>Poradci a realiťáci</strong>. Projděte si dokumenty i návrh smlouvy dřív, než ho odešleme.</p>
+    </div>
+    <div data-nadpis data-produkt="poradce" data-krok="4" hidden>
+      <h1>Návrh smlouvy je <span style="color: var(--primary);">na cestě</span></h1>
+      <p>Produkt <strong>Poradci a realiťáci</strong>. Zbývá uhradit pojistné.</p>
+    </div>
   </div>
 </section>
 
@@ -340,8 +396,19 @@
                   <label>Obchodní firma nebo název <span class="req">*</span></label>
                   <input type="text" class="form-input" name="businessName" placeholder="Načte se z ARESu" disabled>
                 </div>
+                <div class="form-group">
+                  <label>Za pojistníka jedná <span class="req">*</span></label>
+                  <input type="text" class="form-input" name="jednajici" placeholder="Ing. Jan Novák (jednatel)" disabled>
+                </div>
               </div>
             </div>
+            <!-- Roman 1. 9. 2026: u produktu pro poradce a realiťáky je pojistníkem
+                 vždy podnikatel, takže jméno, příjmení ani rodné číslo tam nemají co
+                 dělat. Portál to má stejně: u podnikatele ukazuje jen IČO a název,
+                 osobní pole jsou ve větvi pro fyzickou osobu. Blok se proto celý
+                 schovává i s vypnutím polí — skryté povinné pole by jinak
+                 neviditelně zastavilo "Pokračovat". -->
+            <div id="osobni-blok">
             <div class="form-row">
               <div class="form-group">
                 <label>Jméno <span class="req">*</span></label>
@@ -365,6 +432,7 @@
                 <label>Číslo pasu nebo povolení k pobytu <span class="req">*</span></label>
                 <input type="text" class="form-input" name="dokladCislo" placeholder="P1234567" disabled>
               </div>
+            </div>
             </div>
             <div class="form-row">
               <div class="form-group">
@@ -670,13 +738,12 @@
           </div>
         </div>
 
-        <!-- Roman 31. 8. 2026: povinná zaškrtávátka pryč. Souhlas se dává
-             odesláním a jeho znění se ukládá ke klientovi, aby šlo doložit,
-             s čím souhlasil. -->
-        <div class="recap-card">
-          <p class="souhlas-text" id="souhlas-zneni">Odesláním návrhu pojistné smlouvy souhlasím se zpracováním osobních údajů. Bližší informace o zpracování osobních údajů pro klienty a zájemce o pojištění právní ochrany LEXIA naleznete <a href="#" id="odkaz-gdpr">zde</a>.</p>
-          <label class="form-checkbox" style="margin-top: 12px;"><input type="checkbox" name="consent-marketing"><span>Souhlasím se zasíláním marketingové komunikace. <em style="color: var(--text-muted); font-weight: 400;">(volitelné)</em></span></label>
-        </div>
+        <!-- Roman 1. 9. 2026 (po poradě s Petrem Čepou): informace o zpracování
+             osobních údajů i marketingový souhlas ze stránky úplně pryč.
+             Souhlas se zpracováním se dál dává ODESLÁNÍM a zaznamenává se
+             u klienta; jen už se k němu neukládá znění, protože na stránce
+             žádné není. Dokument samotný zůstává v seznamu dokumentů
+             k pojištění výš na téhle stránce i v příloze návrhu. -->
 
         <div class="calc-nav">
           <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
