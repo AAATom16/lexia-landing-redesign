@@ -110,6 +110,10 @@
       .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
         font-style: normal; color: var(--text-muted); }
       .doc-hint { color: var(--text-muted); font-size: .88rem; margin: 0 0 12px; }
+      .souhlas-text { margin: 0; font-size: .9rem; line-height: 1.5; color: var(--text-muted); }
+      .souhlas-text a { color: var(--primary); }
+      .odeslani-pred { flex-basis: 100%; margin: 0 0 12px; font-size: .88rem;
+        line-height: 1.5; color: var(--text-muted); }
       .doc-list { display: flex; flex-direction: column; gap: 8px; }
       .doc-item { display: flex; align-items: center; justify-content: space-between; gap: 12px;
         padding: 10px 12px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); }
@@ -180,7 +184,7 @@
       <li class="step is-active" data-step="1"><span class="step-num">1</span><span class="step-label">Nabídka</span></li>
       <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Vaše údaje</span></li>
       <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Rekapitulace</span></li>
-      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Odeslání</span></li>
+      <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Potvrzení</span></li>
     </ol>
 
     <!-- ============= STEP 1: Kalkulace ============= -->
@@ -358,14 +362,13 @@
           <div class="calc-section">
             <h4 id="nadpis-adresa">2. Trvalá adresa</h4>
             <div class="form-row">
-              <div class="form-group adr-wrap" style="flex: 2;">
-                <label>Ulice <span class="req">*</span></label>
-                <input type="text" class="form-input" name="street" placeholder="Začněte psát ulici a číslo" autocomplete="off" required>
+              <!-- Ulice a číslo v jednom poli, jako v portálu (Roman 31. 8. 2026).
+                   Našeptávač i ARES vracejí obojí pohromadě, takže rozdělené
+                   pole znamenalo hádat, kde končí ulice a začíná číslo. -->
+              <div class="form-group adr-wrap" style="flex: 3;">
+                <label>Ulice a číslo popisné <span class="req">*</span></label>
+                <input type="text" class="form-input" name="street" placeholder="Želetavská 1525/1" autocomplete="off" required>
                 <ul class="adr-navrhy" id="adr-navrhy" hidden role="listbox" aria-label="Návrhy adres"></ul>
-              </div>
-              <div class="form-group">
-                <label>Číslo popisné <span class="req">*</span></label>
-                <input type="text" class="form-input" name="houseNum" placeholder="1525/1" required>
               </div>
             </div>
             <div class="form-row">
@@ -540,7 +543,7 @@
     <div class="calc-step" data-step-panel="3" hidden>
       <div class="calc-single">
         <div style="text-align: center; margin-bottom: 8px;">
-          <h2 style="margin: 0;">Rekapitulace nabídky</h2>
+          <h2 style="margin: 0;">Rekapitulace</h2>
           <p style="color: var(--text-muted); margin-top: 8px;">Před dokončením si prosím zkontrolujte všechny údaje.</p>
         </div>
 
@@ -637,7 +640,7 @@
              jako přílohu e-mailu po sjednání. Náhled, ne stahování. -->
         <div class="recap-card">
           <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Dokumenty k pojištění</h4>
-          <p class="doc-hint">Než žádost odešlete, prohlédněte si prosím dokumenty k pojištění. Po odeslání vám je pošleme i s návrhem smlouvy na e-mail.</p>
+          <p class="doc-hint">Než potvrdíte odeslání návrhu smlouvy na váš e-mail, můžete si všechny dokumenty prohlédnout. Po stisknutí tlačítka „Odeslat návrh smlouvy" vám pošleme všechny dokumenty do vašeho e-mailu, kde si je budeme moci znovu v klidu projít.</p>
           <div class="doc-list" id="doc-list"><p class="doc-hint">Načítáme dokumenty…</p></div>
           <div class="doc-preview" id="doc-preview" hidden>
             <div class="doc-preview-head">
@@ -648,18 +651,18 @@
           </div>
         </div>
 
+        <!-- Roman 31. 8. 2026: povinná zaškrtávátka pryč. Souhlas se dává
+             odesláním a jeho znění se ukládá ke klientovi, aby šlo doložit,
+             s čím souhlasil. -->
         <div class="recap-card">
-          <h4 class="recap-card-title"><i class="icon" data-icon="document"></i> Souhlasy</h4>
-          <label class="form-checkbox"><input type="checkbox" required name="consent-recap"><span>Souhlasím s rekapitulací zvoleného pojištění. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required name="consent-truthfulness"><span>Potvrzuji pravdivost a úplnost uvedených údajů. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required name="consent-terms"><span>Seznámil/a jsem se s <a href="#" style="color: var(--primary);">pojistnými podmínkami</a>, informacemi o pojištění a dokumenty k produktu. <span class="req">*</span></span></label>
-          <label class="form-checkbox"><input type="checkbox" required name="consent-data"><span>Souhlasím se zpracováním osobních údajů pro účely sjednání a správy pojištění. <span class="req">*</span></span></label>
+          <p class="souhlas-text" id="souhlas-zneni">Odesláním návrhu pojistné smlouvy souhlasím se zpracováním osobních údajů. Bližší informace o zpracování osobních údajů pro klienty a zájemce o pojištění právní ochrany LEXIA naleznete <a href="#" id="odkaz-gdpr">zde</a>.</p>
           <label class="form-checkbox" style="margin-top: 12px;"><input type="checkbox" name="consent-marketing"><span>Souhlasím se zasíláním marketingové komunikace. <em style="color: var(--text-muted); font-weight: 400;">(volitelné)</em></span></label>
         </div>
 
         <div class="calc-nav">
           <button type="button" class="btn btn-outline btn-lg" data-step-back="2">Upravit údaje</button>
-          <button type="button" class="btn btn-primary btn-lg" data-step-next="4" id="btn-sjednat">Odeslat žádost o sjednání</button>
+          <p class="odeslani-pred">Po stisknutí tlačítka „Odeslat návrh smlouvy" vám odešleme návrh pojistné smlouvy na sjednání pojištění právní ochrany do vašeho e-mailu. Všechny dokumenty si v klidu prostudujte. Pojistná smlouva bude aktivní, jakmile zaplatíte pojistné.</p>
+          <button type="button" class="btn btn-primary btn-lg" data-step-next="4" id="btn-sjednat">Odeslat návrh smlouvy</button>
           <p class="calc-error" id="sjednani-chyba" hidden role="alert"></p>
         </div>
       </div>
@@ -676,13 +679,13 @@
           <div class="state-icon state-icon--success">
             <i class="icon" data-icon="check_circle"></i>
           </div>
-          <h2>Žádost o sjednání jsme přijali</h2>
-          <p data-stav="mail-odesel">Děkujeme. Návrh smlouvy i platební údaje jsme poslali na <strong data-echo="email">—</strong>. Najdete tam QR kód i odkaz na platbu kartou.</p>
+          <h2>Poslali jsme vám návrh smlouvy</h2>
+          <p data-stav="mail-odesel">Návrh smlouvy i platební údaje jsme vám poslali na <strong data-echo="email">—</strong>. Najdete tam odkaz na platební bránu i QR kód k rychlému převodu pojistného.</p>
           <p data-stav="mail-neodesel" hidden>Děkujeme, žádost máme u sebe pod číslem níže. E-mail s návrhem se nám ale nepodařilo odeslat. Ozveme se vám sami a smlouvu i platební údaje pošleme ručně.</p>
 
           <div class="pay-warning">
             <i class="icon" data-icon="clock"></i>
-            <span><strong>Pojištění zatím neplatí.</strong> Začne platit až po uzavření smlouvy a uhrazení pojistného. Platební údaje dostanete od nás, neplaťte nic předem.</span>
+            <span><strong>Pojištění zatím neplatí.</strong> Pojištění bude aktivní až po zaplacení pojistného.</span>
           </div>
 
           <div class="state-details">
@@ -723,90 +726,7 @@
 </section>
 
 <!-- LEGAL AREAS -->
-<section class="bg-section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Co je v pojištění</span>
-      <h2>30 pojištěných právních oblastí</h2>
-      <p>Lexia kryje 30 právních oblastí (rizik) napříč pilíři. Limit pojistného plnění až 2,5 mil. Kč na jednu pojistnou událost.</p>
-    </div>
-    <div class="table-wrapper">
-      <table class="legal-areas-table">
-        <thead>
-          <tr>
-            <th style="width: 6%;">#</th>
-            <th>Právní oblast</th>
-            <th style="width: 16%;">Limit plnění</th>
-            <th style="width: 16%;">Územní rozsah</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td>Obhajoba v trestním, správním, přestupkovém a jiném obdobném řízení</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
-          <tr><td>2</td><td>Vymáhání náhrady újmy</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
-          <tr><td>3</td><td>Obrana proti vymáhání náhrady újmy</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
-          <tr><td>4</td><td>Smluvní spory v rámci soukromého života</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>5</td><td>Smluvní spory v rámci podnikání</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>6</td><td>Smluvní spory v rámci jiné činnosti</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>7</td><td>Spory s pojišťovnami</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>8</td><td>Spory s odpovědnostními pojišťovnami</td><td>2 500 000 Kč</td><td>Evropa</td></tr>
-          <tr><td>9</td><td>Spory s ostatními finančními institucemi</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>10</td><td>Spory se zaměstnavateli</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>11</td><td>Spory se zaměstnanci</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>12</td><td>Spory ze smluv o výkonu funkce</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>13</td><td>Spory s pronajímateli</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>14</td><td>Spory s nájemci</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>15</td><td>Sousedské spory</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>16</td><td>Ochrana vlastnického práva</td><td>2 500 000 Kč</td><td>ČR</td></tr>
-          <tr><td>17</td><td>Spory v oblasti rodinného práva</td><td>100 000 Kč</td><td>ČR</td></tr>
-          <tr><td>18</td><td>Spory v oblasti dědického práva</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>19</td><td>Spory v oblasti veřejného zdravotního pojištění</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>20</td><td>Spory v oblasti nemocenského a důchodového pojištění</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>21</td><td>Spory v souvislosti s daňovou kontrolou</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>22</td><td>Spory v oblasti práva na ochranu osobnosti</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>23</td><td>Spory v oblasti ochrany osobních údajů a internet. bezpečnosti</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>24</td><td>Právní pomoc v insolvenčním řízení</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>25</td><td>Právní pomoc ve správním řízení</td><td>250 000 Kč</td><td>ČR</td></tr>
-          <tr><td>26</td><td>Právní pomoc při kontrole</td><td>250 000 Kč</td><td>Evropa</td></tr>
-          <tr><td>27</td><td>Kontrola smluv pro soukromí</td><td>10 000 Kč ročně</td><td>ČR</td></tr>
-          <tr><td>28</td><td>Kontrola smluv pro podnikání</td><td>25 000 Kč ročně</td><td>ČR</td></tr>
-          <tr><td>29</td><td>All-risk garance pro právní poradenství</td><td>10 000 Kč</td><td>ČR</td></tr>
-          <tr><td>30</td><td>All-risk garance pro zastoupení</td><td>50 000 Kč</td><td>ČR</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted);">
-      Konkrétní oblasti jsou pokryty podle vybraných pilířů. Detaily v <a href="#" style="font-weight: 600;">pojistných podmínkách</a>.
-    </p>
-  </div>
-</section>
 
-<!-- TRUST -->
-<section>
-  <div class="container">
-    <div class="grid grid-4" style="text-align: center;">
-      <div>
-        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="shield"></i></div>
-        <strong style="display: block; margin-bottom: 4px;">Limit až 2,5 mil. Kč</strong>
-        <p style="font-size: 0.9rem;">Vysoké na českém trhu</p>
-      </div>
-      <div>
-        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="check_circle"></i></div>
-        <strong style="display: block; margin-bottom: 4px;">ALL-RISK garance</strong>
-        <p style="font-size: 0.9rem;">Minimum výluk v podmínkách</p>
-      </div>
-      <div>
-        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="settings"></i></div>
-        <strong style="display: block; margin-bottom: 4px;">Flexibilní úpravy</strong>
-        <p style="font-size: 0.9rem;">Kdykoli upravte podle situace</p>
-      </div>
-      <div>
-        <div style="font-size: 2rem; margin-bottom: 8px;"><i class="icon" data-icon="phone"></i></div>
-        <strong style="display: block; margin-bottom: 4px;">Poradíme zdarma</strong>
-        <p style="font-size: 0.9rem;">+420 465 465 465</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
   <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>

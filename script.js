@@ -285,7 +285,7 @@ function initCalcWizard() {
     if (!form) return '—';
     const get = name => form.querySelector(`[name="${name}"]`)?.value.trim() || '';
     const line = [
-      [get('street'), get('houseNum')].filter(Boolean).join(' '),
+      get('street'),
       [get('zip'), get('city')].filter(Boolean).join(' ')
     ].filter(Boolean).join(', ');
     return line || '—';
@@ -329,13 +329,12 @@ function initCalcWizard() {
       const phone = get('phone');
       const birth = get('birthDate');
       const street = get('street');
-      const houseNum = get('houseNum');
       const city = get('city');
       const zip = get('zip');
 
       const fullName = [firstName, lastName].filter(Boolean).join(' ') || '—';
       const fullAddress = [
-        [street, houseNum].filter(Boolean).join(' '),
+        street,
         [zip, city].filter(Boolean).join(' ')
       ].filter(Boolean).join(', ') || '—';
       const birthFormatted = birth
