@@ -1257,6 +1257,27 @@
     return v && Object.prototype.hasOwnProperty.call(PRODUKTY, v) ? v : null;
   }
 
+  /**
+   * Vstup z konkrétní produktové stránky (Roman 31. 8. 2026).
+   *
+   * Kdo na kalkulačku přijde přes „Sjednat pojištění" z microsity poradců, už
+   * si produkt vybral — ostatní dlaždice by ho jen zvaly pryč od toho, o co
+   * přišel. Zůstane proto jen ta jeho a nadpis to řekne.
+   *
+   * Ostatní varianty se odstraňují z DOM, ne jen skrývají: skryté zaškrtávátko
+   * v `<label>` by šlo pořád přepnout klávesnicí a člověk by skončil na
+   * produktu, který nikde nevidí.
+   */
+  function zuzNaVariantu(varianta) {
+    const zvolena = el(`input[name="variant"][value="${varianta}"]`);
+    if (!zvolena) return;
+    document.querySelectorAll('input[name="variant"]').forEach((i) => {
+      if (i.value !== varianta) i.closest('.calc-option')?.remove();
+    });
+    const nadpis = el('#nadpis-varianta');
+    if (nadpis) nadpis.textContent = '1. Zvolené pojištění';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     if (!el('#calc-pillars')) return;
     pripojUdalosti();
@@ -1275,6 +1296,7 @@
           .querySelectorAll('input[name="variant"]')
           .forEach((i) => i.closest('.calc-option')?.classList.toggle('selected', i.checked));
       }
+      zuzNaVariantu(zAdresy);
     }
     const varianta = zAdresy || el('input[name="variant"]:checked')?.value || 'jednotlivec';
     void prepniProdukt(varianta);
