@@ -667,12 +667,9 @@
       };
       set('businessName', d.businessName);
       const a = d.registeredAddress || {};
-      // Sídlo podnikání jde do adresních polí. `line1` z ARESu nese ulici
-      // i číslo dohromady, takže se rozdělí podle poslední mezery.
-      const cast = String(a.line1 || '').trim();
-      const mezera = cast.lastIndexOf(' ');
-      set('street', mezera > 0 ? cast.slice(0, mezera) : cast);
-      set('houseNum', mezera > 0 ? cast.slice(mezera + 1) : '');
+      // `line1` z ARESu nese ulici i číslo dohromady a pole je teď taky jedno,
+      // takže se nic nedělí a nemá se co uříznout špatně.
+      set('street', a.line1);
       set('city', a.city);
       set('zip', String(a.postalCode || '').replace(/\s+/g, ''));
     } catch {
@@ -794,10 +791,8 @@
         e.dispatchEvent(new Event('input', { bubbles: true }));
         e.dispatchEvent(new Event('change', { bubbles: true }));
       };
-      // `street` bez čísla; číslo popisné má vlastní pole, jinak by se
-      // v návrhu smlouvy objevilo dvakrát.
-      set('street', a.street || a.streetAndNumber || '');
-      set('houseNum', a.number || '');
+      // Ulice i číslo do jednoho pole — tak, jak je našeptávač vrací.
+      set('street', a.streetAndNumber || [a.street, a.number].filter(Boolean).join(' '));
       set('city', a.city || a.cityExtended || '');
       set('zip', (a.zip || '').replace(/\s+/g, ''));
       zavri();
@@ -896,6 +891,7 @@
       if (!res.ok) throw new Error('nedostupné');
       const data = await res.json();
       vykresliDokumenty(data.documents || []);
+      nastavOdkazGdpr();
     } catch {
       dokumentyProProdukt = null; // ať to jde zkusit znovu
       box.innerHTML =
@@ -1000,6 +996,21 @@
     );
   }
 
+  /**
+   * Odkaz „zde" u souhlasu míří na oficiální dokument o zpracování osobních
+   * údajů, tedy na týž soubor, který klient dostane přílohou. Doplňuje se až
+   * po načtení katalogu, protože adresa nese klíč produktu.
+   */
+  function nastavOdkazGdpr() {
+    const a = el('#odkaz-gdpr');
+    if (!a || !stav.produkt) return;
+    a.href =
+      `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
+      `personal-data?tenant=${TENANT}`;
+    a.target = '_blank';
+    a.rel = 'noopener';
+  }
+
   function pripojDokumenty() {
     el('#doc-preview-close')?.addEventListener('click', () => {
       const box = el('#doc-preview');
@@ -1060,16 +1071,15 @@
         phone: pole('phone'),
         birthNumber: pole('rc') || undefined,
         identityDocumentNumber: pole('dokladCislo') || undefined,
-        street: [pole('street'), pole('houseNum')].filter(Boolean).join(' ') || undefined,
+        street: pole('street') || undefined,
         city: pole('city') || undefined,
         postalCode: pole('zip') || undefined,
       },
       consents: {
-        recap: zaskrtnuto('consent-recap'),
-        truthfulness: zaskrtnuto('consent-truthfulness'),
-        terms: zaskrtnuto('consent-terms'),
-        dataProcessing: zaskrtnuto('consent-data'),
         marketing: zaskrtnuto('consent-marketing'),
+        // Souhlas se dává odesláním; posíláme znění, které měl klient před
+        // sebou, aby šlo doložit, s čím souhlasil.
+        shownText: el('#souhlas-zneni')?.textContent?.replace(/\s+/g, ' ').trim() || undefined,
       },
       ...(stav.posledni ? { expectedMonthlyCzk: stav.posledni.monthlyCzk } : {}),
     };
