@@ -37,16 +37,22 @@
       /* Na celou šířku vypadá vycentrovaná dlaždice rozsypaně: název a cena
          pod sebou uprostřed. Srovnáno do řádku, název vlevo a cena vpravo.
          Vpravo nahoře sedí „i", proto to odsazení. */
-      #calc-pillars .calc-option { text-align: left; display: grid;
-        grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline;
-        padding-right: 44px; }
+      #calc-pillars .calc-option { text-align: left; padding: 16px; }
+      /* Mřížka sedí na hlavičce, ne na celé dlaždici: dlaždice je od 31. 8. rám
+         a hlavička ten `<label>`, kterým se pilíř zaškrtává. */
+      #calc-pillars .calc-pillar-head { display: grid; cursor: pointer;
+        grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+      /* Zaškrtávátko dlaždice se schovává, klikacím prvkem je celá hlavička.
+         Pravidlo `.calc-option input` ze styles.css na něj po přestavbě sahat
+         nemusí — a hlavně přestalo sahat na pole UVNITŘ pilíře, kvůli čemuž
+         byly počty, výměry i odměna neviditelné (Roman 29. 8.). */
+      #calc-pillars .calc-pillar-head > input[type="checkbox"] { position: absolute; opacity: 0; }
       #calc-pillars .calc-option strong { display: block; margin: 0; }
       #calc-pillars .calc-option .px-label { justify-self: end; white-space: nowrap;
         font-weight: 600; color: var(--primary); }
-      #calc-pillars .calc-pillar-input { grid-column: 1 / -1; justify-self: stretch; }
       /* „sjednává se vždy" je konstatování, ne varování. Jako modrá pilulka
          navíc mělo tmavý text na tmavém pozadí a nešlo přečíst. */
-      #calc-pillars .calc-option .calc-vzdy { grid-column: 1 / -1; justify-self: start;
+      #calc-pillars .calc-pillar-head .calc-vzdy { grid-column: 1 / -1; justify-self: start;
         margin: 0; padding: 0; background: none; border-radius: 0; font-weight: 400;
         text-transform: none; font-size: .78rem; color: var(--text-muted); }
       .calc-addons-title { margin: 0; font-size: .8rem; letter-spacing: .02em;
@@ -58,26 +64,28 @@
       .calc-badge { font-weight: 400; text-transform: none; display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
       .calc-input-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
-      /* `.calc-option input { position:absolute; opacity:0 }` ve styles.css schovává
-         zaškrtávátko dlaždice. Chytalo ale i pole uvnitř pilíře, takže počet objektů,
-         výměra parcely i odměna byly NEVIDITELNÉ a mimo tok — Roman je 29. 8. nemohl
-         vyplnit, protože tam opticky nebyly. */
-      .calc-pillar-input input { position: static; opacity: 1; }
-      /* „i" u dlaždice. Dlaždice je `<label>`, takže tlačítko musí být nad ním
-         a klik na něj nesmí probublat — jinak by otevření detailu pilíř odškrtlo. */
+      /* Pojistka pro případ, že by se `.calc-option input` ze styles.css někdy
+         zase protáhlo dovnitř pilíře. Tam pole viditelná být MUSÍ. */
+      .calc-pillar-input input, .calc-pillar-input select { position: static; opacity: 1; }
       .calc-option { position: relative; }
-      .calc-info { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
-        display: inline-flex; align-items: center; justify-content: center; padding: 3px;
-        border: none; background: none; color: var(--text-muted); cursor: pointer;
-        border-radius: 50%; transition: color .15s, background .15s; }
-      .calc-info svg { width: 100%; height: 100%; display: block; }
-      .calc-info:hover, .calc-info:focus-visible { color: var(--primary); background: var(--bg-light); }
+      /* „Podrobnosti" místo ikony „i" ukotvené do rohu dlaždice: stejný prvek
+         i stejné jméno jako v portálu, a hlavně v toku pod názvem, takže sdílí
+         účaří s obsahem, ke kterému patří. */
+      #calc-pillars .calc-detail { grid-column: 1 / -1; justify-self: start;
+        margin-top: 2px; padding: 0; border: none; background: none; cursor: pointer;
+        font: inherit; font-size: .82rem; font-weight: 500; color: var(--primary);
+        text-underline-offset: 2px; }
+      #calc-pillars .calc-detail:hover, #calc-pillars .calc-detail:focus-visible {
+        text-decoration: underline; }
       .calc-info-dialog { margin: auto; max-width: 560px; width: calc(100% - 32px);
         max-height: 82vh; border: none; border-radius: var(--radius-md, 12px);
         padding: 24px; display: flex; flex-direction: column; }
       .calc-info-dialog::backdrop { background: rgba(0,0,0,.45); }
       .calc-info-dialog h3 { margin: 0 0 4px; }
       .calc-info-sub { color: var(--text-muted); margin: 0 0 16px; font-size: .9rem; }
+      .calc-info-rubrika { display: block; margin: 0 0 4px; font-size: .9rem; }
+      .calc-info-text { margin: 0 0 16px; font-size: .9rem; line-height: 1.5;
+        white-space: pre-line; color: var(--text-muted); }
       .calc-info-list { list-style: none; margin: 0 0 20px; padding: 0;
         flex: 1 1 auto; overflow-y: auto; min-height: 0; }
       .calc-info-list li { padding: 8px 0; border-bottom: 1px solid var(--primary-light);

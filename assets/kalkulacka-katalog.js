@@ -67,10 +67,14 @@
         // tři položky. U výměry je to jedna položka s plochou v `areaParam`.
         const { typeKey, mnozstvi } = hodnota || {};
         if (!typeKey || !(mnozstvi > 0)) continue;
+        // Skutečný počet, bez stropu. Do 31. 8. 2026 tu bylo `Math.min(mnozstvi, 20)`,
+        // jenže pole žádné `max` nemělo: kdo zadal 50 objektů, dostal cenu za 20
+        // a nic se mu neřeklo. Ukázaná cena pak neseděla se smluvní — přesně ta
+        // třída chyby, kvůli které kalkulačka přešla na společný ceník.
         parameters[pilir.input.param] =
           pilir.input.unit === 'sqm'
             ? [{ typeKey, [pilir.input.areaParam || 'area_m2']: mnozstvi }]
-            : Array.from({ length: Math.min(mnozstvi, 20) }, () => ({ typeKey }));
+            : Array.from({ length: mnozstvi }, () => ({ typeKey }));
       } else if (pilir.input.kind === 'salary') {
         if (Number(hodnota) > 0) {
           // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
@@ -142,10 +146,23 @@
     }
   }
 
+  /**
+   * Dlaždice pilíře.
+   *
+   * Rám je `<div>`, zaškrtávátko sedí ve vnitřním `<label class="calc-pillar-head">`
+   * a vstupy pilíře visí vedle něj, ne uvnitř. Dokud byla dlaždice celá jeden
+   * `<label>`, patřil k zaškrtávátku i každý select, popisek a mezera uvnitř,
+   * takže klik do prázdna ve vyplňovacím bloku pilíř odškrtl i s vyplněnými
+   * údaji — a každý nový prvek se musel ručně vyvazovat přes stopPropagation.
+   * Interní kalkulačka to má stejně: `<label>` obaluje jen hlavičku.
+   */
   function dlazdice(p, jeDoplnek) {
-    const label = document.createElement('label');
+    const label = document.createElement('div');
     label.className = 'calc-option' + (stav.vybrane.has(p.key) ? ' selected' : '');
     if (jeDoplnek) label.classList.add('is-addon');
+
+    const hlavicka = document.createElement('label');
+    hlavicka.className = 'calc-pillar-head';
 
     const vstup = document.createElement('input');
     vstup.type = 'checkbox';
@@ -154,13 +171,14 @@
     if (p.mandatory) {
       vstup.checked = true;
       vstup.disabled = true;
-      label.style.cursor = 'not-allowed';
+      // Kurzor patří hlavičce, ne rámu: klikacím prvkem je od přestavby ona.
+      hlavicka.style.cursor = 'not-allowed';
     }
-    label.appendChild(vstup);
+    hlavicka.appendChild(vstup);
 
     const nazev = document.createElement('strong');
     nazev.textContent = p.name;
-    label.appendChild(nazev);
+    hlavicka.appendChild(nazev);
 
     const cena = document.createElement('span');
     cena.className = 'px-label';
@@ -170,7 +188,7 @@
       p.priceKind === 'fixed' && p.monthlyCzk != null
         ? `${czk(p.monthlyCzk)}/měsíc`
         : p.priceLabel;
-    label.appendChild(cena);
+    hlavicka.appendChild(cena);
 
     if (p.mandatory) {
       const znak = document.createElement('span');
@@ -178,46 +196,69 @@
       // Roman 29. 8. 2026 — „POVINNÝ" verzálkami působilo jako varování; jde
       // přitom o samozřejmost, ne o podmínku, kterou musí klient řešit.
       znak.textContent = 'sjednává se vždy';
-      label.appendChild(znak);
+      hlavicka.appendChild(znak);
     }
 
-    if ((p.coverage || []).length) label.appendChild(infoIkona(p));
+    if (maDetail(p)) hlavicka.appendChild(odkazPodrobnosti(p));
+    label.appendChild(hlavicka);
     // Podmínky se ukazují i u pilíře, který jinak nemá co vyplňovat.
     if (p.input || (p.conditions || []).length) label.appendChild(vstupyPilire(p));
     return label;
   }
 
+  /** Má pilíř co ukázat v Podrobnostech? Bez obsahu odkaz nevznikne. */
+  function maDetail(p) {
+    return Boolean(
+      (p.coverage || []).length || (p.conditions || []).length || p.info || p.insuredPersons,
+    );
+  }
+
   const ROZSAH = { europe: 'Evropa', world: 'celý svět', cz: 'Česko' };
 
   /**
-   * „i" u dlaždice (Roman 29. 8. 2026) — co pilíř kryje, s limity.
+   * Odkaz „Podrobnosti" u dlaždice.
    *
-   * Obsah se bere z oblastí krytí, které katalog stejně publikuje, ne z ručně
-   * psaného textu. Psaný popis by se dřív nebo později rozešel s produktem;
-   * tohle se změní samo, jakmile se změní krytí.
+   * Stejný prvek i stejné jméno jako v portálu: poradce klikne na „Podrobnosti"
+   * a klient taky, takže si o tomtéž otvírají totéž. Předchůdcem byla ikona „i"
+   * ukotvená absolutně do rohu dlaždice — nesdílela účaří s ničím kolem a při
+   * jednosloupcové mřížce skončila na opačném konci řádku než název, ke kterému
+   * patřila.
    *
-   * Tlačítko je `type="button"` a klik nesmí probublat — dlaždice je `<label>`
-   * se zaškrtávátkem, takže bez toho by otevření detailu pilíř zároveň
-   * odškrtlo.
+   * `type="button"`, aby odkaz neodesílal formulář. Sedí uvnitř hlavičkového
+   * `<label>`, takže klik hlídáme dvakrát: tlačítko je sice interaktivní obsah
+   * a aktivace popisku se podle specifikace nespustí, ale spoléhat se na to
+   * u prvku, který má JEDINOU úlohu neodškrtnout pilíř, nestojí za to. Portál
+   * to dělá stejně.
    */
-  function infoIkona(p) {
+  function odkazPodrobnosti(p) {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'calc-info';
-    // Ikona ze sady webu, ne písmeno „i" v kroužku. Automatické doplňování
-    // v icons.js běží jen při načtení stránky, kdežto dlaždice vznikají až po
-    // katalogu, takže SVG vkládáme sami.
-    const svg = typeof LEXIA_ICONS !== 'undefined' ? LEXIA_ICONS.info : null;
-    if (svg) btn.innerHTML = svg;
-    else btn.textContent = 'i';
-    btn.setAttribute('aria-label', `Co kryje ${p.name}`);
-    btn.title = `Co kryje ${p.name}`;
+    btn.className = 'calc-detail';
+    btn.textContent = 'Podrobnosti';
+    btn.setAttribute('aria-label', `Podrobnosti k pilíři ${p.name}`);
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
       otevriInfo(p);
     });
     return btn;
+  }
+
+  /**
+   * Odstavcová rubrika v okně Podrobnosti. Prázdnou hodnotu vynechá i s
+   * nadpisem — katalog posílá `null`, ne prázdný řetězec, právě proto, aby
+   * nadpis nezůstal viset nad ničím.
+   */
+  function rubrika(dlg, nadpis, text) {
+    if (!text) return;
+    const h = document.createElement('strong');
+    h.className = 'calc-info-rubrika';
+    h.textContent = nadpis;
+    dlg.appendChild(h);
+    const p = document.createElement('p');
+    p.className = 'calc-info-text';
+    p.textContent = text;
+    dlg.appendChild(p);
   }
 
   function otevriInfo(p) {
@@ -260,6 +301,20 @@
       box.appendChild(pozn);
       dlg.appendChild(box);
     }
+
+    // Rubriky, které v Podrobnostech čte poradce v portálu. Katalog je publikuje
+    // od 31. 8. 2026 (`info` = „Příklad využití", `insuredPersons`); do té doby
+    // tu žádný souvislý popis nebyl, protože `description` je u pilířů prázdný,
+    // a okno vystačilo s tabulkou limitů — poradce a klient tak nad stejným
+    // pilířem četli jiný text. Pořadí ctí Romanovo zadání z 29. 8.: podmínky
+    // pojistitelnosti zůstávají první, ostatní se řadí za ně.
+    rubrika(dlg, 'K čemu pilíř je', p.info);
+    rubrika(dlg, 'Pojištěné osoby', p.insuredPersons);
+
+    const nadpisKryti = document.createElement('strong');
+    nadpisKryti.className = 'calc-info-rubrika';
+    nadpisKryti.textContent = 'Co pilíř kryje';
+    if (p.coverage.length) dlg.appendChild(nadpisKryti);
 
     const ul = document.createElement('ul');
     ul.className = 'calc-info-list';
