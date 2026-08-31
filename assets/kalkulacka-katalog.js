@@ -907,10 +907,11 @@
     // Rekapitulace je krok 3; seznam načítáme, až se na něj klient dostane.
     document.querySelectorAll('[data-step-next="3"]').forEach((b) =>
       b.addEventListener('click', () => {
-        void nactiDokumenty();
-        // Návrh se obnovuje při každém vstupu do rekapitulace, seznam
-        // oficiálních dokumentů stačí jednou za produkt.
-        void pridejNavrhSmlouvy();
+        // Pořadí je podstatné: seznam oficiálních dokumentů přepisuje obsah
+        // boxu, takže návrh se smí přidat až po něm. Jinak ho dorazivší
+        // seznam smaže. Návrh se obnovuje pokaždé, seznam stačí jednou
+        // za produkt.
+        void nactiDokumenty().then(() => pridejNavrhSmlouvy());
       }),
     );
   }
