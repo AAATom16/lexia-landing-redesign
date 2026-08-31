@@ -570,6 +570,7 @@
     clearTimeout(cekani);
     poradi += 1;
     stav.produkt = PRODUKTY[varianta] || PRODUKTY.jednotlivec;
+    prepniPodnikatele(varianta);
     const popisek = el('#sum-variant');
     const prepinac = el(`input[name="variant"][value="${varianta}"]`);
     if (popisek) popisek.textContent = prepinac?.dataset.label || 'Jednotlivec';
@@ -592,6 +593,108 @@
 
   // Krok 2 wizardu potřebuje vědět, co je vybrané; jinak by si to musel číst
   // z názvů políček, která už neexistují.
+  // ── pojistník podnikatel ──────────────────────────────────────────────────
+
+  /** Varianty, u kterých je pojistníkem vždy podnikatel identifikovaný IČO. */
+  const PODNIKATELSKE = new Set(['poradce']);
+
+  /**
+   * Blok podnikatele podle zvolené varianty (Roman 31. 8. 2026).
+   *
+   * Skrytý blok má pole VYPNUTÁ, ne jen neviditelná. Povinné pole, které není
+   * vidět, umlčí odeslání a člověk nemá jak zjistit proč — na tom se to už
+   * jednou zaseklo u data narození.
+   */
+  function prepniPodnikatele(varianta) {
+    const blok = el('#podnikatel-blok');
+    if (!blok) return;
+    const podnikatel = PODNIKATELSKE.has(varianta);
+    blok.hidden = !podnikatel;
+    blok.querySelectorAll('input').forEach((pole) => {
+      pole.disabled = !podnikatel;
+      if (pole.type !== 'radio') pole.required = podnikatel;
+    });
+    // U podnikatele je adresou pojistníka sídlo podnikání, ne bydliště.
+    const nadpis = el('#nadpis-adresa');
+    if (nadpis) nadpis.textContent = podnikatel ? '2. Sídlo podnikání' : '2. Trvalá adresa';
+    zobrazUpozorneniPO();
+  }
+
+  function zobrazUpozorneniPO() {
+    const po = document.querySelector('input[name="legalForm"]:checked')?.value === 'PO';
+    const upoz = el('#po-upozorneni');
+    if (upoz) upoz.hidden = !po;
+  }
+
+  /**
+   * Dotažení údajů z ARESu. Je to týž veřejný endpoint, jaký používá
+   * registrační brána portálu, takže se název ani sídlo nemůžou rozejít.
+   * Sídlo z ARESu se rovnou propíše do adresních polí — u podnikatele je
+   * adresou pojistníka sídlo podnikání, ne bydliště.
+   */
+  async function dotahniZAres() {
+    const pole = document.querySelector('[name="ico"]');
+    const chyba = el('#ico-chyba');
+    const btn = el('#ico-dotahnout');
+    if (!pole || !btn) return;
+    const ico = (pole.value || '').replace(/\D/g, '');
+    const rekni = (t) => {
+      if (chyba) {
+        chyba.textContent = t;
+        chyba.hidden = !t;
+      }
+    };
+    if (ico.length < 8) return rekni('Zadejte prosím osmimístné IČO.');
+    rekni('');
+    const puvodni = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Načítám…';
+    try {
+      const res = await fetch(`${API}/registrace/ares?tenant=${TENANT}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ico }),
+      });
+      const d = await res.json().catch(() => null);
+      if (!res.ok || !d || !d.found) {
+        return rekni('IČO se v ARESu nenašlo. Zkontrolujte ho prosím, nebo údaje vyplňte ručně.');
+      }
+      const set = (jmeno, hodnota) => {
+        const e = document.querySelector(`[name="${jmeno}"]`);
+        if (!e || !hodnota) return;
+        e.value = hodnota;
+        e.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      set('businessName', d.businessName);
+      const a = d.registeredAddress || {};
+      // Sídlo podnikání jde do adresních polí. `line1` z ARESu nese ulici
+      // i číslo dohromady, takže se rozdělí podle poslední mezery.
+      const cast = String(a.line1 || '').trim();
+      const mezera = cast.lastIndexOf(' ');
+      set('street', mezera > 0 ? cast.slice(0, mezera) : cast);
+      set('houseNum', mezera > 0 ? cast.slice(mezera + 1) : '');
+      set('city', a.city);
+      set('zip', String(a.postalCode || '').replace(/\s+/g, ''));
+    } catch {
+      rekni('ARES se teď nepodařilo dotázat. Vyplňte prosím údaje ručně.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = puvodni;
+    }
+  }
+
+  function pripojPodnikatele() {
+    el('#ico-dotahnout')?.addEventListener('click', () => void dotahniZAres());
+    document.querySelectorAll('input[name="legalForm"]').forEach((r) =>
+      r.addEventListener('change', () => {
+        document
+          .querySelectorAll('input[name="legalForm"]')
+          .forEach((i) => i.closest('.calc-option')?.classList.toggle('selected', i.checked));
+        zobrazUpozorneniPO();
+      }),
+    );
+  }
+
   // ── validace ──────────────────────────────────────────────────────────────
 
   /**
@@ -943,6 +1046,16 @@
           : 'monthly',
       client: {
         name: jmeno,
+        ...(pole('ico') ? { ico: pole('ico') } : {}),
+        ...(document.querySelector('input[name="legalForm"]:checked') &&
+        !el('#podnikatel-blok')?.hidden
+          ? {
+              legalForm: document.querySelector('input[name="legalForm"]:checked').value,
+              businessName: pole('businessName') || undefined,
+              // Za pojistníka jedná ten, kdo formulář vyplňuje.
+              representedBy: jmeno,
+            }
+          : {}),
         email: pole('email'),
         phone: pole('phone'),
         birthNumber: pole('rc') || undefined,
@@ -1142,6 +1255,7 @@
     pripojDokumenty();
     pripojNaseptavac();
     pripojValidaciKroku();
+    pripojPodnikatele();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);

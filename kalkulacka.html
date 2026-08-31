@@ -102,6 +102,11 @@
       .calc-podminka input { position: static; opacity: 1; width: 16px; height: 16px;
         margin-top: 2px; flex: 0 0 auto; padding: 0; accent-color: var(--primary); }
       .calc-podminka span { flex: 1 1 auto; min-width: 0; }
+      .ico-radek { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+      .ico-radek .btn { white-space: nowrap; }
+      #po-upozorneni { color: var(--text-muted); font-weight: 400; margin-top: 8px; }
+      #podnikatel-blok[hidden] { display: none; }
+      #podnikatel-blok .calc-option { text-align: left; padding: 12px 14px; }
       .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
         font-style: normal; color: var(--text-muted); }
       .doc-hint { color: var(--text-muted); font-size: .88rem; margin: 0 0 12px; }
@@ -274,6 +279,46 @@
         <form class="calc-form" id="contract-form">
           <div class="calc-section">
             <h4>1. Osobní údaje</h4>
+            <!-- Podnikatel: u produktu pro poradce a realiťáky je pojistníkem
+                 vždy podnikatel identifikovaný IČO (Roman 31. 8. 2026). Blok se
+                 zobrazí jen u té varianty; jinde je skrytý a vypnutý, aby
+                 povinná pole neblokovala odeslání neviditelným polem. -->
+            <div id="podnikatel-blok" hidden>
+              <div class="form-group">
+                <label>Právní forma pojistníka <span class="req">*</span></label>
+                <div class="calc-options" style="grid-template-columns: 1fr 1fr;">
+                  <label class="calc-option selected">
+                    <input type="radio" name="legalForm" value="FOP" data-label="OSVČ" checked disabled>
+                    <strong>Fyzická podnikající osoba</strong>
+                    <span>OSVČ</span>
+                  </label>
+                  <label class="calc-option">
+                    <input type="radio" name="legalForm" value="PO" data-label="Právnická osoba" disabled>
+                    <strong>Právnická osoba</strong>
+                    <span>Společnost s ručením omezeným</span>
+                  </label>
+                </div>
+                <p class="calc-error" id="po-upozorneni" hidden role="note">
+                  Pojistníkem, právnickou osobou, může být pouze společnost s ručením omezeným,
+                  jejímž jediným společníkem a jednatelem je jedna a tatáž fyzická osoba.
+                </p>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>IČO <span class="req">*</span></label>
+                  <div class="ico-radek">
+                    <input type="text" class="form-input" name="ico" placeholder="04133771"
+                           inputmode="numeric" maxlength="12" disabled>
+                    <button type="button" class="btn btn-outline" id="ico-dotahnout">Načíst z ARESu</button>
+                  </div>
+                  <p class="calc-error" id="ico-chyba" hidden role="alert"></p>
+                </div>
+                <div class="form-group">
+                  <label>Obchodní firma nebo název <span class="req">*</span></label>
+                  <input type="text" class="form-input" name="businessName" placeholder="Načte se z ARESu" disabled>
+                </div>
+              </div>
+            </div>
             <div class="form-row">
               <div class="form-group">
                 <label>Jméno <span class="req">*</span></label>
@@ -311,7 +356,7 @@
           </div>
 
           <div class="calc-section">
-            <h4>2. Trvalá adresa</h4>
+            <h4 id="nadpis-adresa">2. Trvalá adresa</h4>
             <div class="form-row">
               <div class="form-group adr-wrap" style="flex: 2;">
                 <label>Ulice <span class="req">*</span></label>
