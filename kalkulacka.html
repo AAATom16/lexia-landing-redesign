@@ -43,9 +43,12 @@
       #calc-pillars .calc-option strong { display: block; margin: 0; }
       #calc-pillars .calc-option .px-label { justify-self: end; white-space: nowrap;
         font-weight: 600; color: var(--primary); }
-      #calc-pillars .calc-option .calc-badge,
       #calc-pillars .calc-pillar-input { grid-column: 1 / -1; justify-self: stretch; }
-      #calc-pillars .calc-option .calc-badge { justify-self: start; }
+      /* „sjednává se vždy" je konstatování, ne varování. Jako modrá pilulka
+         navíc mělo tmavý text na tmavém pozadí a nešlo přečíst. */
+      #calc-pillars .calc-option .calc-vzdy { grid-column: 1 / -1; justify-self: start;
+        margin: 0; padding: 0; background: none; border-radius: 0; font-weight: 400;
+        text-transform: none; font-size: .78rem; color: var(--text-muted); }
       .calc-addons-title { margin: 0; font-size: .8rem; letter-spacing: .02em;
         text-transform: uppercase; color: var(--text-muted); }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
@@ -63,17 +66,20 @@
       /* „i" u dlaždice. Dlaždice je `<label>`, takže tlačítko musí být nad ním
          a klik na něj nesmí probublat — jinak by otevření detailu pilíř odškrtlo. */
       .calc-option { position: relative; }
-      .calc-info { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
-        border-radius: 50%; border: 1px solid var(--primary-light); background: #fff;
-        color: var(--primary); font: 600 13px/1 serif; cursor: pointer; z-index: 2; }
-      .calc-info:hover { background: var(--primary); color: #fff; }
-      .calc-info-dialog { max-width: 560px; width: calc(100% - 32px); border: none;
-        border-radius: var(--radius-md, 12px); padding: 24px; }
+      .calc-info { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
+        display: inline-flex; align-items: center; justify-content: center; padding: 3px;
+        border: none; background: none; color: var(--text-muted); cursor: pointer;
+        border-radius: 50%; transition: color .15s, background .15s; }
+      .calc-info svg { width: 100%; height: 100%; display: block; }
+      .calc-info:hover, .calc-info:focus-visible { color: var(--primary); background: var(--bg-light); }
+      .calc-info-dialog { margin: auto; max-width: 560px; width: calc(100% - 32px);
+        max-height: 82vh; border: none; border-radius: var(--radius-md, 12px);
+        padding: 24px; display: flex; flex-direction: column; }
       .calc-info-dialog::backdrop { background: rgba(0,0,0,.45); }
       .calc-info-dialog h3 { margin: 0 0 4px; }
       .calc-info-sub { color: var(--text-muted); margin: 0 0 16px; font-size: .9rem; }
       .calc-info-list { list-style: none; margin: 0 0 20px; padding: 0;
-        max-height: 50vh; overflow-y: auto; }
+        flex: 1 1 auto; overflow-y: auto; min-height: 0; }
       .calc-info-list li { padding: 8px 0; border-bottom: 1px solid var(--primary-light);
         display: flex; flex-direction: column; gap: 2px; }
       .calc-info-list li:last-child { border-bottom: none; }
@@ -93,8 +99,9 @@
         color: var(--text-muted); }
       .calc-podminka { display: flex; align-items: flex-start; gap: 8px; margin: 4px 0;
         font-size: .86rem; line-height: 1.35; cursor: pointer; }
-      .calc-podminka input { position: static; opacity: 1; width: auto; margin-top: 2px;
-        flex: 0 0 auto; padding: 0; }
+      .calc-podminka input { position: static; opacity: 1; width: 16px; height: 16px;
+        margin-top: 2px; flex: 0 0 auto; padding: 0; accent-color: var(--primary); }
+      .calc-podminka span { flex: 1 1 auto; min-width: 0; }
       .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
         font-style: normal; color: var(--text-muted); }
       .doc-hint { color: var(--text-muted); font-size: .88rem; margin: 0 0 12px; }
@@ -123,7 +130,10 @@
       /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
          („Dům / ch…"). Pod sebou se vejdou oba celé. */
       .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
-      .calc-pillar-input select, .calc-pillar-input input { width: 100%; padding: 8px 10px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); font: inherit; }
+      /* `:not([type=checkbox])` schválně: zaškrtávátko podmínky je taky `input`
+         uvnitř pilíře a `width: 100%` z něj udělalo pruh přes celou dlaždici. */
+      .calc-pillar-input select,
+      .calc-pillar-input input:not([type="checkbox"]) { width: 100%; padding: 8px 10px; border: 1px solid var(--primary-light); border-radius: var(--radius-sm); font: inherit; }
       .calc-error { color: #b3261e; font-weight: 600; }
       .calc-note { opacity: 0.85; font-style: italic; margin-top: 8px; }
       @media (max-width: 640px) { .calc-addons { margin-left: 8px; padding-left: 10px; } }
@@ -305,22 +315,22 @@
             <div class="form-row">
               <div class="form-group adr-wrap" style="flex: 2;">
                 <label>Ulice <span class="req">*</span></label>
-                <input type="text" class="form-input" name="street" placeholder="Začněte psát ulici a číslo" autocomplete="off">
+                <input type="text" class="form-input" name="street" placeholder="Začněte psát ulici a číslo" autocomplete="off" required>
                 <ul class="adr-navrhy" id="adr-navrhy" hidden role="listbox" aria-label="Návrhy adres"></ul>
               </div>
               <div class="form-group">
                 <label>Číslo popisné <span class="req">*</span></label>
-                <input type="text" class="form-input" name="houseNum" placeholder="1525/1">
+                <input type="text" class="form-input" name="houseNum" placeholder="1525/1" required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group" style="flex: 2;">
                 <label>Obec <span class="req">*</span></label>
-                <input type="text" class="form-input" name="city" placeholder="Praha">
+                <input type="text" class="form-input" name="city" placeholder="Praha" required>
               </div>
               <div class="form-group">
                 <label>PSČ <span class="req">*</span></label>
-                <input type="text" class="form-input" name="zip" placeholder="140 00">
+                <input type="text" class="form-input" name="zip" placeholder="140 00" required>
               </div>
             </div>
             <div class="form-group">
