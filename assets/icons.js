@@ -74,6 +74,7 @@ const LEXIA_ICONS = {
   lx_balicek: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.1 4.9 5.9v6.2c0 4.5 3 7.6 7.1 9 4.1-1.4 7.1-4.5 7.1-9V5.9L12 3.1Z"/><path d="m9.3 12.1 1.9 1.9 3.5-3.6"/></svg>',
   lx_garance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12.2a9 8.5 0 0 1 18 0c-1.5-1.2-3-1.2-4.5 0-1.5-1.2-3-1.2-4.5 0-1.5-1.2-3-1.2-4.5 0-1.5-1.2-3-1.2-4.5 0Z"/><path d="M12 3.7V2.4"/><path d="M12 12.2v5.6c0 1.3-1 2.3-2.2 2.3s-2.2-1-2.2-2.3"/></svg>',
   lx_individual: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.4 7h9.8M17.2 7h3.4M3.4 12h3.9M11.3 12h9.3M3.4 17h10.8M18.4 17h2.2"/><circle cx="15.2" cy="7" r="1.9"/><circle cx="9.3" cy="12" r="1.9"/><circle cx="16.3" cy="17" r="1.9"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.6"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/></svg>',
   question_mark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/></svg>',
 };
 

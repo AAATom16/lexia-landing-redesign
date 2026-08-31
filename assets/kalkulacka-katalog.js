@@ -172,7 +172,7 @@
 
     if (p.mandatory) {
       const znak = document.createElement('span');
-      znak.className = 'calc-badge';
+      znak.className = 'calc-vzdy';
       // Roman 29. 8. 2026 — „POVINNÝ" verzálkami působilo jako varování; jde
       // přitom o samozřejmost, ne o podmínku, kterou musí klient řešit.
       znak.textContent = 'sjednává se vždy';
@@ -202,8 +202,14 @@
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'calc-info';
-    btn.textContent = 'i';
+    // Ikona ze sady webu, ne písmeno „i" v kroužku. Automatické doplňování
+    // v icons.js běží jen při načtení stránky, kdežto dlaždice vznikají až po
+    // katalogu, takže SVG vkládáme sami.
+    const svg = typeof LEXIA_ICONS !== 'undefined' ? LEXIA_ICONS.info : null;
+    if (svg) btn.innerHTML = svg;
+    else btn.textContent = 'i';
     btn.setAttribute('aria-label', `Co kryje ${p.name}`);
+    btn.title = `Co kryje ${p.name}`;
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -584,6 +590,66 @@
 
   // Krok 2 wizardu potřebuje vědět, co je vybrané; jinak by si to musel číst
   // z názvů políček, která už neexistují.
+  // ── validace ──────────────────────────────────────────────────────────────
+
+  /**
+   * Pole ve skrytém bloku nesmí být povinné.
+   *
+   * Předmět pojištění se zobrazuje podle vybraných pilířů; kdo nemá vozidla,
+   * nevidí SPZ. Povinné pole, které není vidět, umlčí odeslání a člověk nemá
+   * jak zjistit proč (přesně na tom se to zaseklo u data narození). Skryté
+   * bloky proto svá pole VYPÍNÁME — vypnuté pole se nevaliduje ani neodesílá.
+   */
+  function synchronizujSkryta() {
+    document.querySelectorAll('#subject-section .subject-block').forEach((blok) => {
+      const skryty = blok.hidden || blok.closest('#subject-section')?.hidden;
+      blok.querySelectorAll('input, select, textarea').forEach((pole) => {
+        pole.disabled = !!skryty;
+      });
+    });
+  }
+
+  /**
+   * Kontrola kroku při „Pokračovat".
+   *
+   * Bez ní se dalo projít až na rekapitulaci s prázdnými údaji a chyba se
+   * ukázala až u odeslání. Kontroluje se jen právě zobrazený krok, aby člověka
+   * nezdržovalo pole, ke kterému se ještě nedostal.
+   */
+  function krokJeVyplneny(cislo) {
+    const panel = document.querySelector(`[data-step-panel="${cislo}"]`);
+    if (!panel) return true;
+    synchronizujSkryta();
+    const spatne = [...panel.querySelectorAll('input, select, textarea')].find(
+      (e) => !e.disabled && !e.checkValidity(),
+    );
+    if (!spatne) return true;
+    spatne.focus();
+    spatne.reportValidity();
+    return false;
+  }
+
+  function pripojValidaciKroku() {
+    document.querySelectorAll('[data-step-next]').forEach((btn) => {
+      const cil = Number(btn.dataset.stepNext);
+      // Zachytávací fáze: musíme rozhodnout dřív, než stepper překlopí panel.
+      btn.addEventListener(
+        'click',
+        (ev) => {
+          const panel = btn.closest('[data-step-panel]');
+          const ted = Number(panel?.dataset.stepPanel);
+          // Zpět se nikdy nevaliduje a poslední krok si hlídá odesílání samo.
+          if (!ted || cil <= ted || btn.id === 'btn-sjednat') return;
+          if (!krokJeVyplneny(ted)) {
+            ev.preventDefault();
+            ev.stopImmediatePropagation();
+          }
+        },
+        true,
+      );
+    });
+  }
+
   // ── našeptávač adresy ─────────────────────────────────────────────────────
 
   /**
@@ -894,8 +960,11 @@
         // `reportValidity()` by tlačítko umlčelo a člověk by nevěděl proč.
         // Proto na to pole skočíme zpátky sami.
         const form = el('#contract-form');
+        synchronizujSkryta();
         const spatne = form
-          ? [...form.querySelectorAll('input, select, textarea')].find((x) => !x.checkValidity())
+          ? [...form.querySelectorAll('input, select, textarea')].find(
+              (x) => !x.disabled && !x.checkValidity(),
+            )
           : null;
         if (spatne) {
           const krok = spatne.closest('[data-step-panel]')?.dataset.stepPanel;
@@ -986,6 +1055,7 @@
     pripojIdentifikaci();
     pripojDokumenty();
     pripojNaseptavac();
+    pripojValidaciKroku();
     const zAdresy = variantaZAdresy();
     if (zAdresy) {
       const prepinac = el(`input[name="variant"][value="${zAdresy}"]`);
