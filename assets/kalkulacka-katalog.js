@@ -33,6 +33,8 @@
     vstupy: {},
     /** klíč pilíře → texty podmínek, které klient ODŠKRTL (tedy nesplňuje) */
     nesplnene: {},
+    /** rozpracovaný koncept: `{ contractId, previewToken }` */
+    koncept: null,
     posledni: null,
   };
 
@@ -798,6 +800,53 @@
     }
   }
 
+  /**
+   * Návrh smlouvy do seznamu dokumentů (Roman 31. 8. 2026).
+   *
+   * Vzniká z rozpracovaného konceptu, takže jde o skutečný dokument, ne
+   * o ukázku — je to týž soubor, který pak dorazí v příloze. Číslo smlouvy
+   * v něm ještě není, to se přidělí až odesláním.
+   */
+  async function pridejNavrhSmlouvy() {
+    const box = el('#doc-list');
+    if (!box) return;
+    // Klient se mezi kroky vrací a mění výběr; starý náhled by ukazoval nabídku,
+    // která už neplatí.
+    el('#doc-navrh')?.remove();
+    const radek = document.createElement('div');
+    radek.className = 'doc-item';
+    radek.id = 'doc-navrh';
+    const popis = document.createElement('div');
+    const nazev = document.createElement('strong');
+    nazev.textContent = 'Návrh pojistné smlouvy';
+    popis.appendChild(nazev);
+    const stavRadku = document.createElement('span');
+    stavRadku.textContent = ' · připravujeme…';
+    popis.appendChild(stavRadku);
+    radek.appendChild(popis);
+    box.prepend(radek);
+
+    try {
+      const k = await pripravKoncept();
+      stavRadku.textContent = ' · PDF, zatím bez čísla smlouvy';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-outline btn-sm';
+      btn.textContent = 'Zobrazit';
+      btn.addEventListener('click', () =>
+        zobrazUrl(
+          'Návrh pojistné smlouvy',
+          `${API}/public/v1/contracts/${encodeURIComponent(k.contractId)}/proposal` +
+            `?tenant=${TENANT}&token=${encodeURIComponent(k.previewToken)}`,
+        ),
+      );
+      radek.appendChild(btn);
+    } catch (e) {
+      // Náhled je služba navíc; když se nepovede, sjednání to nesmí zastavit.
+      stavRadku.textContent = ' · náhled se teď nepodařilo připravit';
+    }
+  }
+
   function vykresliDokumenty(seznam) {
     const box = el('#doc-list');
     if (!box) return;
@@ -829,17 +878,23 @@
     });
   }
 
-  function zobrazDokument(d) {
+  function zobrazUrl(titul, url) {
     const box = el('#doc-preview');
     const ramec = el('#doc-preview-frame');
     const titulek = el('#doc-preview-title');
     if (!box || !ramec) return;
-    if (titulek) titulek.textContent = d.title;
-    ramec.src =
-      `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
-      `${encodeURIComponent(d.key)}?tenant=${TENANT}`;
+    if (titulek) titulek.textContent = titul;
+    ramec.src = url;
     box.hidden = false;
     box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function zobrazDokument(d) {
+    zobrazUrl(
+      d.title,
+      `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
+        `${encodeURIComponent(d.key)}?tenant=${TENANT}`,
+    );
   }
 
   function pripojDokumenty() {
@@ -851,7 +906,12 @@
     });
     // Rekapitulace je krok 3; seznam načítáme, až se na něj klient dostane.
     document.querySelectorAll('[data-step-next="3"]').forEach((b) =>
-      b.addEventListener('click', () => void nactiDokumenty()),
+      b.addEventListener('click', () => {
+        void nactiDokumenty();
+        // Návrh se obnovuje při každém vstupu do rekapitulace, seznam
+        // oficiálních dokumentů stačí jednou za produkt.
+        void pridejNavrhSmlouvy();
+      }),
     );
   }
 
@@ -868,9 +928,9 @@
    * kontrolu, že se mezi nacenením a odesláním nerozešel ceník. Když se
    * rozejde, vrátí 409 a klient musí novou cenu vidět, ne ji dostat podstrčenou.
    */
-  async function odesliSjednani() {
+  function teloSjednani() {
     const jmeno = [pole('firstName'), pole('lastName')].filter(Boolean).join(' ');
-    const telo = {
+    return {
       product: stav.produkt,
       segment: 'FO',
       pillars: [...stav.vybrane],
@@ -899,17 +959,42 @@
       },
       ...(stav.posledni ? { expectedMonthlyCzk: stav.posledni.monthlyCzk } : {}),
     };
+  }
 
-    const res = await fetch(`${API}/public/v1/contracts?tenant=${TENANT}`, {
+  async function poslat(cesta, telo) {
+    const res = await fetch(`${API}/public/v1/${cesta}?tenant=${TENANT}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(telo),
     });
     const data = await res.json().catch(() => null);
-    if (!res.ok) {
-      throw new Error((data && data.message) || 'Žádost se nepodařilo odeslat.');
-    }
+    if (!res.ok) throw new Error((data && data.message) || 'Něco se nepovedlo.');
     return data;
+  }
+
+  /**
+   * Rozpracovaný koncept pro náhled návrhu.
+   *
+   * Zakládá se až v rekapitulaci a při návratu se týž koncept PŘEPISUJE, ne
+   * zakládá znovu — jinak by po jednom sjednání zůstala v přehledu hromada
+   * nedodělků. Číslo smlouvy koncept ještě nemá, přidělí se až potvrzením.
+   */
+  async function pripravKoncept() {
+    const telo = teloSjednani();
+    if (stav.koncept) {
+      telo.draftId = stav.koncept.contractId;
+      telo.previewToken = stav.koncept.previewToken;
+    }
+    const data = await poslat('contracts/draft', telo);
+    stav.koncept = { contractId: data.contractId, previewToken: data.previewToken };
+    return stav.koncept;
+  }
+
+  async function odesliSjednani() {
+    const k = stav.koncept || (await pripravKoncept());
+    return poslat(`contracts/${encodeURIComponent(k.contractId)}/confirm`, {
+      previewToken: k.previewToken,
+    });
   }
 
   /**
