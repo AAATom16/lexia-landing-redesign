@@ -146,7 +146,18 @@
       .adr-navrhy li span { display: block; color: var(--text-muted); font-size: .8rem; }
       /* Dlaždice je úzká (~200 px); dva sloupce vedle sebe zmáčkly výběr typu na 65 px
          („Dům / ch…"). Pod sebou se vejdou oba celé. */
-      .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+      /* Řádek instance: druh, množství a u výměrových pilířů „Odebrat".
+         Na úzkém displeji pod sebou, od 420 px vedle sebe. */
+      .calc-object-list { display: flex; flex-direction: column; gap: 10px; }
+      .calc-object-row { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; }
+      @media (min-width: 420px) {
+        .calc-object-row { grid-template-columns: 1fr 7.5rem; }
+        .calc-object-row:has(.calc-odebrat) { grid-template-columns: 1fr 7.5rem auto; }
+      }
+      .calc-odebrat { padding: 0 2px; border: none; background: none; cursor: pointer;
+        font: inherit; font-size: .8rem; color: var(--text-muted); justify-self: start; }
+      .calc-odebrat:hover, .calc-odebrat:focus-visible { color: var(--primary); text-decoration: underline; }
+      .calc-pridat { margin-top: 10px; }
       /* `:not([type=checkbox])` schválně: zaškrtávátko podmínky je taky `input`
          uvnitř pilíře a `width: 100%` z něj udělalo pruh přes celou dlaždici. */
       .calc-pillar-input select,
