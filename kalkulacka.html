@@ -67,6 +67,11 @@
       .calc-addons-body { display: grid; gap: 10px; }
       .calc-addons-body[hidden],
       .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden], .form-group[hidden], p[data-stav][hidden] { display: none; }
+      /* Roman 1. 9. 2026 — pod krokem 2 svítily obě navigace. `.calc-nav` má
+         `display: flex` ze styles.css, což přebíjí `[hidden]` z prohlížeče,
+         takže skrytá záložní navigace zůstala vidět. Totéž hrozí u každého
+         bloku s vlastním `display`, proto to bere zkratkou přes atribut. */
+      [hidden] { display: none !important; }
       .calc-option.is-addon { background: var(--bg-soft, #fbfcfe); }
       .calc-badge { font-weight: 400; text-transform: none; display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }
       .calc-pillar-input { display: block; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--primary-light); }
