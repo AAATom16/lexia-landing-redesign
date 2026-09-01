@@ -745,33 +745,16 @@ function initParallax() {
    ============================================ */
 window.updateSubjectBlocks = updateSubjectBlocks;
 function updateSubjectBlocks() {
+  // Roman 1. 9. 2026 (LEX-30): krok 2 vykresluje kalkulačka z katalogu —
+  // karty objektů podle vybraných pilířů a specifikace polí, ne natvrdo psané
+  // bloky. Tady se jen předá slovo; bez katalogové kalkulačky sekce zůstane
+  // schovaná a navigace přejde na rekapitulaci rovnou.
+  if (window.LEXIA_CALC && typeof window.LEXIA_CALC.renderSubject === 'function') {
+    window.LEXIA_CALC.renderSubject();
+    return;
+  }
   const section = document.getElementById('subject-section');
-  if (!section) return;
-
-  // Které pilíře jsou vybrané, ví kalkulačka z katalogu — ne názvy políček.
-  // Dokud se to řídilo `input[name="pillar_vozidla"]`, viselo to na produktu,
-  // který se už neprodává.
-  const vybrane = new Set((window.LEXIA_CALC && window.LEXIA_CALC.selected()) || []);
-  const ma = (...klice) => klice.some((k) => [...vybrane].some((v) => v.endsWith(k)));
-
-  const blocks = {
-    'subj-vozidla': ma('-c8', '-c9'),
-    'subj-nemovitost': ma('-c2'),
-    'subj-vystavba': ma('-c5'),
-    'subj-parcely': ma('-c3'),
-    'subj-pronajem': ma('-c4'),
-    'subj-manazer': ma('-c7'),
-  };
-
-  let anyVisible = false;
-  Object.entries(blocks).forEach(([id, visible]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.hidden = !visible;
-    if (visible) anyVisible = true;
-  });
-
-  section.hidden = !anyVisible;
+  if (section) section.hidden = true;
   const fallbackNav = document.getElementById('subject-fallback-nav');
-  if (fallbackNav) fallbackNav.hidden = anyVisible;
+  if (fallbackNav) fallbackNav.hidden = false;
 }

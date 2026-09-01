@@ -20,7 +20,19 @@
     jednotlivec: 'pojisteni_pravni_ochrany_pro_jednotlivce',
     domacnost: 'pojisteni_pravni_ochrany_pro_domacnosti',
     poradce: 'pojisteni_pravni_ochrany_pro_financni_poradce_a_realitni_zprostredkovatele',
+    // Roman 1. 9. 2026 (LEX-24) — produkt dokončil a aktivoval v konfigurátoru.
+    ridic: 'pojisteni_pravni_ochrany_ridice',
   };
+
+  /**
+   * Odškrtnutá podmínka pojistitelnosti (Roman 1. 9. 2026, LEX-26): pojištění
+   * NEJDE sjednat online. Dřív se pilíř poslal na individuální úpis a klient
+   * pokračoval s cenou „potvrdíme individuálně" — Roman to zrušil: bez
+   * splněných podmínek se má klient ozvat, ne sjednávat.
+   */
+  const PODMINKA_BLOKUJE =
+    'Ke sjednání pojištění je nutné individuální posouzení. Kontaktujte nás, prosím. ' +
+    'Pojištění není možné sjednat online.';
 
   const czk = (n) => `${Math.round(n).toLocaleString('cs-CZ')} Kč`;
   const el = (sel, root) => (root || document).querySelector(sel);
@@ -29,7 +41,14 @@
     produkt: null,
     katalog: null,
     vybrane: new Set(),
-    /** klíč pilíře → pole objektů `{ typeKey, quantity }` nebo `{ gross_salary }` */
+    /**
+     * klíč pilíře → pole instancí. Objektový pilíř: `{ typeKey, mnozstvi,
+     * ulice, obec, psc, addrSameAsHolder, custom: {} }` — jedna instance je
+     * jeden objekt (u parcel `mnozstvi` = výměra v m²). Manažerský pilíř:
+     * `{ grossMonthlyCzk, functionTitle, organizationName, insuredName }`.
+     * Tytéž klíče, jaké k instanci ukládá portál, takže návrh smlouvy tiskne
+     * z obou cest totéž.
+     */
     vstupy: {},
     /** klíč pilíře → texty podmínek, které klient ODŠKRTL (tedy nesplňuje) */
     nesplnene: {},
@@ -57,32 +76,52 @@
    * si je sjednání skládalo po svém, mohla by smlouva vzniknout s jinými
    * objekty, než na kterých stála ukázaná cena.
    */
+  /** Adresa pojistníka z kroku 2 — pro objekty se stejnou adresou. */
+  function adresaPojistnika() {
+    const v = (jmeno) => document.querySelector(`[name="${jmeno}"]`)?.value?.trim() || '';
+    return { ulice: v('street'), obec: v('city'), psc: v('zip') };
+  }
+
+  /**
+   * Detaily instance objektu, jak je ukládá portál (`PropertyInstance`).
+   * Objekt se „stejnou adresou" nese adresu pojistníka opsanou, ne jen
+   * příznak — návrh smlouvy tiskne to, co je v instanci.
+   */
+  function detailyObjektu(inst) {
+    const stejna = inst.addrSameAsHolder === true;
+    const adr = stejna ? adresaPojistnika() : inst;
+    const out = { typeKey: inst.typeKey };
+    if (adr.ulice) out.ulice = adr.ulice;
+    if (adr.obec) out.obec = adr.obec;
+    if (adr.psc) out.psc = adr.psc;
+    if (stejna) out.addrSameAsHolder = true;
+    const custom = Object.fromEntries(
+      Object.entries(inst.custom || {}).filter(([, v]) => String(v || '').trim() !== ''),
+    );
+    if (Object.keys(custom).length) out.custom = custom;
+    return out;
+  }
+
   function sestavParametry() {
     const parameters = {};
     for (const [klic, hodnota] of Object.entries(stav.vstupy)) {
       const pilir = stav.katalog.pillars.find((p) => p.key === klic);
       if (!pilir || !pilir.input || !stav.vybrane.has(klic)) continue;
       if (pilir.input.kind === 'objects') {
-        // Engine počítá POLOŽKY seznamu, ne pole `quantity`: tři objekty jsou
-        // tři položky. U výměry nese každá položka svou plochu v `areaParam`,
-        // takže dvě parcely různého druhu jsou dvě položky s vlastní výměrou.
+        // Engine počítá POLOŽKY seznamu: jedna instance = jeden objekt. U výměry
+        // nese každá položka svou plochu v `areaParam`, takže dvě parcely
+        // různého druhu jsou dvě položky s vlastní výměrou. Detaily (adresa,
+        // číslo bytu…) jedou v téže položce — tak je ukládá portál a tak je
+        // čte návrh smlouvy (LEX-30/34).
         const radky = (Array.isArray(hodnota) ? hodnota : []).filter(
-          (r) => r.typeKey && r.mnozstvi > 0,
+          (r) => r.typeKey && (pilir.input.unit !== 'sqm' || r.mnozstvi > 0),
         );
         if (!radky.length) continue;
-        // Skutečný počet, bez stropu. Do 31. 8. 2026 tu bylo `Math.min(mnozstvi, 20)`,
-        // jenže pole žádné `max` nemělo: kdo zadal 50 objektů, dostal cenu za 20
-        // a nic se mu neřeklo. Ukázaná cena pak neseděla se smluvní — přesně ta
-        // třída chyby, kvůli které kalkulačka přešla na společný ceník.
-        parameters[pilir.input.param] =
+        parameters[pilir.input.param] = radky.map((r) =>
           pilir.input.unit === 'sqm'
-            ? radky.map((r) => ({
-                typeKey: r.typeKey,
-                [pilir.input.areaParam || 'area_m2']: r.mnozstvi,
-              }))
-            : radky.flatMap((r) =>
-                Array.from({ length: r.mnozstvi }, () => ({ typeKey: r.typeKey })),
-              );
+            ? { ...detailyObjektu(r), [pilir.input.areaParam || 'area_m2']: r.mnozstvi }
+            : detailyObjektu(r),
+        );
       } else if (pilir.input.kind === 'salary') {
         // Odměna musí být UVNITŘ položky funkce. Engine dává seznamu funkcí
         // přednost před samostatnou hodnotou, a položka bez odměny spadne na
@@ -92,11 +131,15 @@
         // Posílá se JEN seznam. Samostatná hodnota by u víc funkcí stejně
         // prohrála a nesla by jen odměnu té první, což by v požadavku vypadalo
         // jako rozpor sama se sebou.
-        const odmeny = (Array.isArray(hodnota) ? hodnota : [hodnota])
-          .map((x) => Number(x))
-          .filter((x) => x > 0);
-        if (odmeny.length) {
-          parameters[pilir.input.itemsParam] = odmeny.map((x) => ({ grossMonthlyCzk: x }));
+        const funkce = funkceManazera(pilir).filter((f) => Number(f.grossMonthlyCzk) > 0);
+        if (funkce.length) {
+          parameters[pilir.input.itemsParam] = funkce.map((f) => {
+            const out = { grossMonthlyCzk: Number(f.grossMonthlyCzk) };
+            (pilir.input.itemDetails || []).forEach((d) => {
+              if (String(f[d.key] || '').trim()) out[d.key] = String(f[d.key]).trim();
+            });
+            return out;
+          });
         }
       }
     }
@@ -173,7 +216,7 @@
         telo.hidden = vybranychDoplnku === 0;
         doplnky.forEach((d) => telo.appendChild(dlazdice(d, true)));
         wrap.appendChild(telo);
-        popisToggle(nadpis, doplnky.length, vybranychDoplnku, !telo.hidden);
+        popisToggle(nadpis, doplnky, vybranychDoplnku, !telo.hidden);
         skupina.appendChild(wrap);
       }
       box.appendChild(skupina);
@@ -194,8 +237,14 @@
    * Popisek rozbalovátka doplňků. Počet vybraných je vidět i v zabaleném
    * stavu, aby cena nikdy nezahrnovala něco, o čem dlaždice mlčí.
    */
-  function popisToggle(btn, celkem, vybranych, rozbaleno) {
-    const zaklad = celkem === 1 ? 'Doplněk k tomuto pilíři' : 'Doplňky k tomuto pilíři (' + celkem + ')';
+  function popisToggle(btn, doplnky, vybranych, rozbaleno) {
+    // Roman 1. 9. 2026 (LEX-27): samotné „(3)" nikoho nezláká — v zabaleném
+    // stavu musí být vidět aspoň názvy, ať má klient důvod se podívat.
+    const nazvy = doplnky.map((d) => d.name).join(', ');
+    const zaklad =
+      doplnky.length === 1
+        ? 'Doplněk k tomuto pilíři: ' + nazvy
+        : 'Doplňky k tomuto pilíři (' + doplnky.length + '): ' + nazvy;
     const stavova = vybranych > 0 ? ' · vybráno ' + vybranych : '';
     btn.textContent = zaklad + stavova + (rozbaleno ? ' ▴' : ' ▾');
     btn.setAttribute('aria-expanded', String(rozbaleno));
@@ -208,7 +257,7 @@
     telo.hidden = !telo.hidden;
     const doplnky = (stav.katalog?.pillars || []).filter((x) => x.requiresPillarKey === klic);
     const vybranych = doplnky.filter((d) => stav.vybrane.has(d.key)).length;
-    popisToggle(btn, doplnky.length, vybranych, !telo.hidden);
+    popisToggle(btn, doplnky, vybranych, !telo.hidden);
     // Zabalení schová i pole vybraného doplňku — musí se vypnout, jinak by
     // skryté povinné pole neviditelně zastavilo „Pokračovat".
     synchronizujSkryta();
@@ -355,7 +404,7 @@
       box.appendChild(ol);
       const pozn = document.createElement('em');
       pozn.textContent =
-        'Pokud některá neplatí, pojištění sjednat jde, ale cenu vám potvrdíme individuálně.';
+        'Pokud některá z podmínek neplatí, pojištění online sjednat nelze. Ozvěte se nám, posoudíme případ individuálně.';
       box.appendChild(pozn);
       dlg.appendChild(box);
     }
@@ -418,34 +467,71 @@
    * cena spadne na nulu; bez toho by si klient s domem nad 500 m² koupil
    * standardní sazbu, která na jeho případ nesedí.
    */
+  /**
+   * Podmínky, které se u pilíře ukazují: jen ty, jejichž typ objektu je mezi
+   * zadanými instancemi (Roman 1. 9. 2026, LEX-26: „u domu nemá co dělat
+   * podmínka o podlahové ploše bytu"). Podmínka bez vazby na typ platí vždy.
+   */
+  function platnePodminky(p) {
+    const vsechny = Array.isArray(p.conditionsByType) && p.conditionsByType.length
+      ? p.conditionsByType
+      : (p.conditions || []).map((text) => ({ text, objectTypeKey: null }));
+    if (!p.input || p.input.kind !== 'objects') return vsechny.map((c) => c.text);
+    const typy = new Set(instanceObjektu(p).map((i) => i.typeKey).filter(Boolean));
+    return vsechny
+      .filter((c) => !c.objectTypeKey || typy.has(c.objectTypeKey))
+      .map((c) => c.text);
+  }
+
   function podminkyPilire(p) {
     const box = document.createElement('div');
     box.className = 'calc-podminky';
+    box.dataset.podminkyFor = p.key;
     const h = document.createElement('p');
     h.className = 'calc-podminky-title';
     h.textContent = 'Potvrďte prosím, že platí:';
     box.appendChild(h);
-    p.conditions.forEach((text, i) => {
+    const texty = platnePodminky(p);
+    // Podmínka, která zmizela se svým typem objektu, nesmí dál blokovat.
+    const zbyle = (stav.nesplnene[p.key] || []).filter((t) => texty.includes(t));
+    if (zbyle.length) stav.nesplnene[p.key] = zbyle;
+    else delete stav.nesplnene[p.key];
+    texty.forEach((text, i) => {
       const l = document.createElement('label');
       l.className = 'calc-podminka';
       const c = document.createElement('input');
       c.type = 'checkbox';
-      c.checked = !(stav.nesplnene[p.key] || []).includes(text);
+      c.checked = !zbyle.includes(text);
       c.dataset.conditionFor = p.key;
       c.dataset.conditionText = text;
       c.id = `podm-${p.key}-${i}`;
+      // Odškrtnutí zastaví krok stejnou cestou jako prázdné povinné pole.
+      c.setCustomValidity(c.checked ? '' : PODMINKA_BLOKUJE);
       l.appendChild(c);
       const s = document.createElement('span');
       s.textContent = text;
       l.appendChild(s);
       box.appendChild(l);
     });
-    const pozn = document.createElement('em');
-    pozn.className = 'calc-podminky-note';
-    pozn.textContent =
-      'Co odškrtnete, nevadí. Pojištění sjednáte dál, jen vám cenu potvrdíme individuálně.';
-    box.appendChild(pozn);
+    const chyba = document.createElement('p');
+    chyba.className = 'calc-podminky-chyba';
+    chyba.setAttribute('role', 'alert');
+    chyba.hidden = zbyle.length === 0;
+    chyba.append(PODMINKA_BLOKUJE + ' ');
+    const odkaz = document.createElement('a');
+    odkaz.href = 'kontakt.html';
+    odkaz.textContent = 'Kontaktovat Lexii';
+    chyba.appendChild(odkaz);
+    box.appendChild(chyba);
+    if (!texty.length) box.hidden = true;
     return box;
+  }
+
+  /** Překreslí podmínky pilíře (po změně typu objektu) na místě. */
+  function prekresliPodminky(p) {
+    const stare = document.querySelector(`.calc-podminky[data-podminky-for="${p.key}"]`);
+    if (!stare) return;
+    stare.replaceWith(podminkyPilire(p));
   }
 
   function vstupyPilire(p) {
@@ -453,9 +539,11 @@
     box.className = 'calc-pillar-input';
     box.hidden = !stav.vybrane.has(p.key);
     box.dataset.for = p.key;
-    if ((p.conditions || []).length) box.appendChild(podminkyPilire(p));
     // Pilíř může mít podmínky a přitom nic k vyplnění.
-    if (!p.input) return box;
+    if (!p.input) {
+      if ((p.conditions || []).length) box.appendChild(podminkyPilire(p));
+      return box;
+    }
 
     if (p.input.kind === 'salary') {
       // MĚSÍČNÍ, ne roční: engine počítá procento z hrubé měsíční odměny.
@@ -479,11 +567,21 @@
       pridat.dataset.addFor = p.key;
       pridat.textContent = '+ Přidat funkci';
       box.appendChild(pridat);
+      if ((p.conditions || []).length) box.appendChild(podminkyPilire(p));
       return box;
     }
 
     const jeVymera = p.input.unit === 'sqm';
-    box.appendChild(popisek(jeVymera ? 'Typ pozemku a výměra v m²' : 'Typ objektu a počet'));
+    // Roman 1. 9. 2026 (LEX-26): jako v portálu — každý objekt zvlášť, detaily
+    // až v dalším kroku. Dřív nesl pilíř jeden řádek s typem a počtem, takže
+    // dům a byt dohromady zadat nešlo.
+    box.appendChild(
+      popisek(
+        jeVymera
+          ? 'Typ pozemku a výměra v m². Každou parcelu přidejte zvlášť.'
+          : 'Typ objektu. Každý pojišťovaný objekt přidejte zvlášť, druhý a další je cenově zvýhodněný. Adresu a další údaje doplníte v dalším kroku.',
+      ),
+    );
 
     const seznam = document.createElement('div');
     seznam.className = 'calc-object-list';
@@ -491,16 +589,14 @@
     box.appendChild(seznam);
     prekresliInstance(p, seznam);
 
-    // Přidávat se dá jen u výměrových pilířů. U počítaných nese počet jedno
-    // pole, stejně jako stepper v portálu — druhý řádek by tam nic nepřidal.
-    if (jeVymera) {
-      const pridat = document.createElement('button');
-      pridat.type = 'button';
-      pridat.className = 'btn btn-outline btn-sm calc-pridat';
-      pridat.dataset.addFor = p.key;
-      pridat.textContent = '+ Přidat parcelu';
-      box.appendChild(pridat);
-    }
+    const pridat = document.createElement('button');
+    pridat.type = 'button';
+    pridat.className = 'btn btn-outline btn-sm calc-pridat';
+    pridat.dataset.addFor = p.key;
+    pridat.textContent = jeVymera ? '+ Přidat parcelu' : '+ Přidat další objekt';
+    box.appendChild(pridat);
+    // Podmínky až pod objekty: které platí, se řídí zadanými typy.
+    if ((p.conditions || []).length) box.appendChild(podminkyPilire(p));
     return box;
   }
 
@@ -521,6 +617,7 @@
     return {
       typeKey: (p.input.types || [])[0]?.key || '',
       mnozstvi: p.input.unit === 'sqm' ? 1000 : 1,
+      custom: {},
     };
   }
 
@@ -536,20 +633,23 @@
    * Manažerské funkce. Roman 31. 8. 2026: „Každá funkce má vlastní odměnu
    * i vlastní minimum 399 Kč a sčítají se." Dosud šlo zadat jedinou odměnu,
    * takže klient se dvěma funkcemi dostal na webu nižší cenu, než mu pak
-   * spočítal poradce.
+   * spočítal poradce. Funkce je objekt jako v portálu: odměna + popis funkce,
+   * instituce a pojištěná osoba (doplní se v kroku 2).
    */
   function funkceManazera(p) {
     const v = stav.vstupy[p.key];
-    if (Array.isArray(v) && v.length) return v;
-    return [0];
+    if (Array.isArray(v) && v.length) {
+      return v.map((f) => (typeof f === 'object' && f ? f : { grossMonthlyCzk: Number(f) || 0 }));
+    }
+    return [{ grossMonthlyCzk: 0 }];
   }
 
   function prekresliFunkce(p, seznam) {
     const box = seznam || document.querySelector(`.calc-object-list[data-list-for="${p.key}"]`);
     if (!box) return;
     box.innerHTML = '';
-    const odmeny = funkceManazera(p);
-    odmeny.forEach((castka, i) => box.appendChild(radekFunkce(p, castka, i, odmeny.length)));
+    const funkce = funkceManazera(p);
+    funkce.forEach((f, i) => box.appendChild(radekFunkce(p, f.grossMonthlyCzk, i, funkce.length)));
   }
 
   function radekFunkce(p, castka, poradi, celkem) {
@@ -558,7 +658,10 @@
     const i = document.createElement('input');
     i.type = 'number';
     i.min = '1';
-    i.step = '1000';
+    // Roman 1. 9. 2026 (LEX-29): `step="1000"` odmítalo 200 000 („nejbližší
+    // hodnoty 199 001 a 200 001"), protože krok běžel od minima 1. Odměna
+    // je celé koruny.
+    i.step = '1';
     i.required = true;
     i.dataset.salaryFor = p.key;
     i.value = castka || '';
@@ -590,23 +693,28 @@
       if (t.key === inst.typeKey) o.selected = true;
       vyber.appendChild(o);
     });
-    vyber.setAttribute('aria-label', jeVymera ? `Parcela č. ${poradi + 1} — druh` : 'Typ objektu');
+    vyber.setAttribute(
+      'aria-label',
+      jeVymera ? `Parcela č. ${poradi + 1} — druh` : `Objekt č. ${poradi + 1} — typ`,
+    );
     rada.appendChild(vyber);
 
-    const pocet = document.createElement('input');
-    pocet.type = 'number';
-    pocet.min = '1';
-    pocet.step = '1';
-    // Povinné, ať prázdné pole zastaví „Pokračovat" místo aby pilíř tiše
-    // vypadl z ceny. Skrytá pole vyřazuje `synchronizujSkryta`, jinak by
-    // nevybraný pilíř blokoval krok neviditelným polem.
-    pocet.required = true;
-    pocet.value = inst.mnozstvi || '';
-    pocet.dataset.qtyFor = p.key;
-    pocet.setAttribute('aria-label', jeVymera ? `Parcela č. ${poradi + 1} — výměra v m²` : 'Počet objektů');
-    rada.appendChild(pocet);
+    if (jeVymera) {
+      const pocet = document.createElement('input');
+      pocet.type = 'number';
+      pocet.min = '1';
+      pocet.step = '1';
+      // Povinné, ať prázdné pole zastaví „Pokračovat" místo aby pilíř tiše
+      // vypadl z ceny. Skrytá pole vyřazuje `synchronizujSkryta`, jinak by
+      // nevybraný pilíř blokoval krok neviditelným polem.
+      pocet.required = true;
+      pocet.value = inst.mnozstvi || '';
+      pocet.dataset.qtyFor = p.key;
+      pocet.setAttribute('aria-label', `Parcela č. ${poradi + 1} — výměra v m²`);
+      rada.appendChild(pocet);
+    }
 
-    if (jeVymera && celkem > 1) {
+    if (celkem > 1) {
       const pryc = document.createElement('button');
       pryc.type = 'button';
       pryc.className = 'calc-odebrat';
@@ -664,11 +772,14 @@
       if (castka) castka.textContent = czk(rozdil);
     }
 
-    if (q.requiresUnderwriting) {
+    if (q.requiresUnderwriting || Object.keys(stav.nesplnene).length) {
+      // Odškrtnutá podmínka = online se nesjednává (LEX-26). Cenu tu nemá
+      // smysl slibovat, souhrn říká totéž co dlaždice.
       const li = document.createElement('li');
-      li.className = 'calc-note';
-      li.textContent = 'Cena je orientační, případ posoudíme individuálně.';
+      li.className = 'calc-error';
+      li.textContent = PODMINKA_BLOKUJE;
       seznam.appendChild(li);
+      celkem.textContent = '—';
     }
   }
 
@@ -727,12 +838,16 @@
         const klic = t.dataset.conditionFor;
         const text = t.dataset.conditionText;
         const seznam = new Set(stav.nesplnene[klic] || []);
-        // Zaškrtnuto = podmínka platí. Odškrtnuté si pamatujeme, protože právě
-        // ta posílají pilíř na individuální úpis.
+        // Zaškrtnuto = podmínka platí. Odškrtnutá blokuje sjednání online
+        // (LEX-26): zastaví krok jako nevyplněné povinné pole a dlaždice to
+        // řekne nahlas.
         if (t.checked) seznam.delete(text);
         else seznam.add(text);
         if (seznam.size) stav.nesplnene[klic] = [...seznam];
         else delete stav.nesplnene[klic];
+        t.setCustomValidity(t.checked ? '' : PODMINKA_BLOKUJE);
+        const chyba = t.closest('.calc-podminky')?.querySelector('.calc-podminky-chyba');
+        if (chyba) chyba.hidden = seznam.size === 0;
         prepocitej();
         return;
       }
@@ -789,7 +904,11 @@
         return;
       }
       if (t.dataset.typeFor || t.dataset.qtyFor) {
-        nactiVstupZFormulare(form, t.dataset.typeFor || t.dataset.qtyFor);
+        const klic = t.dataset.typeFor || t.dataset.qtyFor;
+        nactiVstupZFormulare(form, klic);
+        // Jiný typ objektu = jiné podmínky pojistitelnosti (LEX-26).
+        const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
+        if (pilir && t.dataset.typeFor) prekresliPodminky(pilir);
         prepocitej();
         return;
       }
@@ -812,25 +931,86 @@
         prepniDoplnky(toggle.dataset.addonsToggle);
         return;
       }
-      const pridat = ev.target.closest('[data-add-for]');
-      const odebrat = ev.target.closest('[data-remove-for]');
-      if (!pridat && !odebrat) return;
-      ev.preventDefault();
-      const klic = (pridat || odebrat).dataset.addFor || (pridat || odebrat).dataset.removeFor;
-      const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
-      if (!pilir) return;
-      const jeFunkce = pilir.input?.kind === 'salary';
-      nactiVstupZFormulare(form, klic);
-      const radky = Array.isArray(stav.vstupy[klic]) ? [...stav.vstupy[klic]] : [];
-      if (pridat) radky.push(jeFunkce ? 0 : vychoziInstance(pilir));
-      else radky.splice(Number(odebrat.dataset.index), 1);
-      // Poslední řádek nemizí: pilíř bez jediné položky by neměl co nacenit.
-      const vychozi = jeFunkce ? 0 : vychoziInstance(pilir);
-      stav.vstupy[klic] = radky.length ? radky : [vychozi];
-      if (jeFunkce) prekresliFunkce(pilir);
-      else prekresliInstance(pilir);
-      prepocitej();
+      obsluzPridatOdebrat(ev, form);
     });
+
+    // Krok 2 (LEX-30): detaily objektů, „Přidat" i „Odebrat" jsou i tady, ať se
+    // člověk nemusí vracet o krok zpět.
+    const smlouva = el('#contract-form');
+    if (smlouva) {
+      smlouva.addEventListener('click', (ev) => obsluzPridatOdebrat(ev, form));
+      smlouva.addEventListener('change', (ev) => {
+        const t = ev.target;
+        if (!t.dataset.detailFor) return;
+        zapisDetail(t);
+        // Typ a výměra mění cenu; adresa a vlastní pole ne.
+        if (t.dataset.detailKey === 'typeKey' || t.dataset.detailKey === 'mnozstvi') {
+          const pilir = stav.katalog?.pillars.find((x) => x.key === t.dataset.detailFor);
+          if (pilir) {
+            if (pilir.input?.kind === 'salary') prekresliFunkce(pilir);
+            else {
+              prekresliInstance(pilir);
+              prekresliPodminky(pilir);
+            }
+          }
+          prepocitej();
+        }
+      });
+      smlouva.addEventListener('input', (ev) => {
+        const t = ev.target;
+        if (t.dataset.detailFor && t.type !== 'checkbox' && t.tagName !== 'SELECT') zapisDetail(t);
+      });
+    }
+  }
+
+  function obsluzPridatOdebrat(ev, form) {
+    const pridat = ev.target.closest('[data-add-for]');
+    const odebrat = ev.target.closest('[data-remove-for]');
+    if (!pridat && !odebrat) return;
+    ev.preventDefault();
+    const klic = (pridat || odebrat).dataset.addFor || (pridat || odebrat).dataset.removeFor;
+    const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
+    if (!pilir) return;
+    const jeFunkce = pilir.input?.kind === 'salary';
+    if (ev.currentTarget === form) nactiVstupZFormulare(form, klic);
+    const radky = Array.isArray(stav.vstupy[klic]) ? [...stav.vstupy[klic]] : [];
+    if (pridat) radky.push(jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir));
+    else radky.splice(Number(odebrat.dataset.index), 1);
+    // Poslední řádek nemizí: pilíř bez jediné položky by neměl co nacenit.
+    const vychozi = jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir);
+    stav.vstupy[klic] = radky.length ? radky : [vychozi];
+    if (jeFunkce) prekresliFunkce(pilir);
+    else {
+      prekresliInstance(pilir);
+      prekresliPodminky(pilir);
+    }
+    vykresliUdaje(true);
+    prepocitej();
+  }
+
+  /** Zápis pole z kroku 2 do instance (`data-detail-for` + `data-detail-index` + `data-detail-key`). */
+  function zapisDetail(pole) {
+    const klic = pole.dataset.detailFor;
+    const i = Number(pole.dataset.detailIndex);
+    const k = pole.dataset.detailKey;
+    const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
+    if (!pilir || !k) return;
+    const radky = pilir.input?.kind === 'salary' ? funkceManazera(pilir) : instanceObjektu(pilir);
+    const inst = radky[i];
+    if (!inst) return;
+    if (k.startsWith('custom.')) {
+      inst.custom = inst.custom || {};
+      inst.custom[k.slice(7)] = pole.value;
+    } else if (pole.type === 'checkbox') {
+      inst[k] = pole.checked;
+      // Stejná adresa: pole se zamknou a opíšou z pojistníka.
+      if (k === 'addrSameAsHolder') vykresliUdaje(true);
+    } else if (k === 'mnozstvi' || k === 'grossMonthlyCzk') {
+      inst[k] = Number(pole.value || 0);
+    } else {
+      inst[k] = pole.value;
+    }
+    stav.vstupy[klic] = radky;
   }
 
   function nactiVstupZFormulare(form, klic) {
@@ -838,13 +1018,25 @@
     if (!box) return;
     const odmeny = [...box.querySelectorAll('[data-salary-for]')];
     if (odmeny.length) {
-      stav.vstupy[klic] = odmeny.map((i) => Number(i.value || 0));
+      // Detaily funkce (název, instituce, osoba) z kroku 2 přežijí — mění se
+      // jen odměna.
+      const puvodni = Array.isArray(stav.vstupy[klic]) ? stav.vstupy[klic] : [];
+      stav.vstupy[klic] = odmeny.map((i, idx) => ({
+        ...(typeof puvodni[idx] === 'object' && puvodni[idx] ? puvodni[idx] : {}),
+        grossMonthlyCzk: Number(i.value || 0),
+      }));
       return;
     }
-    const radky = [...box.querySelectorAll('.calc-object-row')].map((r) => ({
-      typeKey: r.querySelector('[data-type-for]')?.value || '',
-      mnozstvi: Number(r.querySelector('[data-qty-for]')?.value || 0),
-    }));
+    const puvodni = Array.isArray(stav.vstupy[klic]) ? stav.vstupy[klic] : [];
+    const radky = [...box.querySelectorAll('.calc-object-row')].map((r, idx) => {
+      const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
+      const jeVymera = pilir?.input?.unit === 'sqm';
+      return {
+        ...(puvodni[idx] || { custom: {} }),
+        typeKey: r.querySelector('[data-type-for]')?.value || '',
+        mnozstvi: jeVymera ? Number(r.querySelector('[data-qty-for]')?.value || 0) : 1,
+      };
+    });
     stav.vstupy[klic] = radky.length ? radky : null;
   }
 
@@ -1097,12 +1289,13 @@
    * bloky proto svá pole VYPÍNÁME — vypnuté pole se nevaliduje ani neodesílá.
    */
   function synchronizujSkryta() {
-    document.querySelectorAll('#subject-section .subject-block').forEach((blok) => {
-      const skryty = blok.hidden || blok.closest('#subject-section')?.hidden;
-      blok.querySelectorAll('input, select, textarea').forEach((pole) => {
-        pole.disabled = !!skryty;
+    const sekce = el('#subject-section');
+    if (sekce) {
+      // Zamčená adresa (stejná jako pojistník) zůstává vypnutá i v otevřené sekci.
+      sekce.querySelectorAll('input, select, textarea').forEach((pole) => {
+        pole.disabled = !!sekce.hidden || pole.dataset.zamceno === '1';
       });
-    });
+    }
     // Vstupy nevybraného pilíře jsou skryté, ale prohlížeč je pořád validuje.
     // Bez tohohle by od chvíle, kdy je počet objektů `required`, blokovalo
     // „Pokračovat" pole, které není vidět — a `focus()` na skryté pole nic
@@ -1424,9 +1617,298 @@
         // boxu, takže návrh se smí přidat až po něm. Jinak ho dorazivší
         // seznam smaže. Návrh se obnovuje pokaždé, seznam stačí jednou
         // za produkt.
+        vykresliRekapitulaciUdaju();
         void nactiDokumenty().then(() => pridejNavrhSmlouvy());
       }),
     );
+  }
+
+  // ── krok 2: doplnění údajů k pilířům ──────────────────────────────────────
+
+  /**
+   * Karty objektů podle vybraných pilířů (Roman 1. 9. 2026, LEX-30: „krok 2
+   * replikovat 1:1 z kalkulačky v portálu"). Jedna karta na objekt, pole podle
+   * specifikace pilíře z katalogu: typ, výměra (u parcel), ulice/obec/PSČ,
+   * „adresa stejná jako pojistník", vlastní pole podle typu (číslo bytu,
+   * číslo parcely, katastrální území…). Manažerská funkce má odměnu, název
+   * funkce, instituci a pojištěnou osobu. Pilíř bez vstupu (vozidla, řízení)
+   * nic nepotřebuje — v produktu jsou pojištěna všechna vozidla i řidiči.
+   *
+   * Překresluje se jen při změně struktury (pilíře, počet a typy objektů);
+   * jinak by každé písmeno do adresy shodilo fokus.
+   */
+  let podpisUdaju = '';
+
+  function vykresliUdaje(vynutit) {
+    const sekce = el('#subject-section');
+    const box = el('#subject-dynamic');
+    const fallbackNav = el('#subject-fallback-nav');
+    if (!sekce || !box) return;
+    const pilire = (stav.katalog?.pillars || []).filter(
+      (p) => stav.vybrane.has(p.key) && p.input && ['objects', 'salary'].includes(p.input.kind),
+    );
+    const podpis = pilire
+      .map((p) => {
+        const radky = p.input.kind === 'salary' ? funkceManazera(p) : instanceObjektu(p);
+        return p.key + ':' + radky.map((r) => (r.typeKey || 'f') + (r.addrSameAsHolder ? '=' : '')).join(',');
+      })
+      .join('|');
+    if (!vynutit && podpis === podpisUdaju && box.children.length) {
+      sekce.hidden = pilire.length === 0;
+      if (fallbackNav) fallbackNav.hidden = pilire.length > 0;
+      return;
+    }
+    podpisUdaju = podpis;
+    box.innerHTML = '';
+    pilire.forEach((p) => box.appendChild(kartaPilire(p)));
+    sekce.hidden = pilire.length === 0;
+    if (fallbackNav) fallbackNav.hidden = pilire.length > 0;
+    synchronizujSkryta();
+  }
+
+  function kartaPilire(p) {
+    const karta = document.createElement('div');
+    karta.className = 'udaje-pilir';
+    karta.dataset.udajePro = p.key;
+    const h = document.createElement('strong');
+    h.className = 'udaje-pilir-title';
+    h.textContent = p.name;
+    karta.appendChild(h);
+    const jeFunkce = p.input.kind === 'salary';
+    const radky = jeFunkce ? funkceManazera(p) : instanceObjektu(p);
+    radky.forEach((inst, i) =>
+      karta.appendChild(jeFunkce ? kartaFunkce(p, inst, i, radky.length) : kartaObjektu(p, inst, i, radky.length)),
+    );
+    const pridat = document.createElement('button');
+    pridat.type = 'button';
+    pridat.className = 'btn btn-outline btn-sm udaje-pridat';
+    pridat.dataset.addFor = p.key;
+    pridat.textContent = jeFunkce
+      ? '+ Přidat funkci'
+      : p.input.unit === 'sqm'
+        ? '+ Přidat parcelu'
+        : '+ Přidat další objekt';
+    karta.appendChild(pridat);
+    return karta;
+  }
+
+  function poleDetailu(p, i, klic, popis, hodnota, volby) {
+    const skupina = document.createElement('div');
+    skupina.className = 'form-group';
+    const label = document.createElement('label');
+    label.textContent = popis.text;
+    if (popis.povinne) {
+      const req = document.createElement('span');
+      req.className = 'req';
+      req.textContent = ' *';
+      label.appendChild(req);
+    }
+    skupina.appendChild(label);
+    let pole;
+    if (volby && volby.select) {
+      pole = document.createElement('select');
+      pole.className = 'form-input';
+      volby.select.forEach((o) => {
+        const opt = document.createElement('option');
+        opt.value = o.key;
+        opt.textContent = o.label;
+        if (o.key === hodnota) opt.selected = true;
+        pole.appendChild(opt);
+      });
+    } else {
+      pole = document.createElement('input');
+      pole.className = 'form-input';
+      pole.type = volby && volby.cislo ? 'number' : 'text';
+      if (volby && volby.cislo) {
+        pole.min = '1';
+        pole.step = '1';
+      }
+      pole.value = hodnota == null ? '' : String(hodnota);
+      if (volby && volby.placeholder) pole.placeholder = volby.placeholder;
+    }
+    pole.dataset.detailFor = p.key;
+    pole.dataset.detailIndex = String(i);
+    pole.dataset.detailKey = klic;
+    pole.required = !!popis.povinne;
+    if (volby && volby.zamceno) pole.dataset.zamceno = '1';
+    skupina.appendChild(pole);
+    return skupina;
+  }
+
+  function kartaObjektu(p, inst, i, celkem) {
+    const f = p.input.fields || { requiredByType: {}, hiddenByType: {}, custom: [] };
+    const povinne = new Set(f.requiredByType?.[inst.typeKey] || []);
+    const skryte = new Set(f.hiddenByType?.[inst.typeKey] || []);
+    const jeVymera = p.input.unit === 'sqm';
+    const typ = (p.input.types || []).find((t) => t.key === inst.typeKey);
+
+    const karta = document.createElement('div');
+    karta.className = 'udaje-objekt';
+    const hlava = document.createElement('div');
+    hlava.className = 'udaje-objekt-head';
+    const titul = document.createElement('span');
+    titul.textContent = `${jeVymera ? 'Parcela' : 'Objekt'} č. ${i + 1}${typ ? ' · ' + typ.label : ''}`;
+    hlava.appendChild(titul);
+    if (celkem > 1) {
+      const pryc = document.createElement('button');
+      pryc.type = 'button';
+      pryc.className = 'calc-odebrat';
+      pryc.dataset.removeFor = p.key;
+      pryc.dataset.index = String(i);
+      pryc.textContent = 'Odebrat';
+      hlava.appendChild(pryc);
+    }
+    karta.appendChild(hlava);
+
+    const rada1 = document.createElement('div');
+    rada1.className = 'form-row';
+    rada1.appendChild(
+      poleDetailu(p, i, 'typeKey', { text: 'Typ', povinne: true }, inst.typeKey, { select: p.input.types || [] }),
+    );
+    if (jeVymera || povinne.has('area_m2')) {
+      rada1.appendChild(
+        poleDetailu(p, i, 'mnozstvi', { text: 'Plocha (m²)', povinne: true }, inst.mnozstvi, { cislo: true }),
+      );
+    }
+    karta.appendChild(rada1);
+
+    // Adresa — jako v portálu, s možností opsat adresu pojistníka.
+    const adresniPole = ['ulice', 'obec', 'psc'].filter((k) => !skryte.has(k));
+    if (adresniPole.length) {
+      const stejna = document.createElement('label');
+      stejna.className = 'form-checkbox';
+      stejna.style.margin = '0 0 10px';
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = inst.addrSameAsHolder === true;
+      c.dataset.detailFor = p.key;
+      c.dataset.detailIndex = String(i);
+      c.dataset.detailKey = 'addrSameAsHolder';
+      stejna.appendChild(c);
+      const s = document.createElement('span');
+      s.textContent = 'Adresa stejná jako adresa pojistníka';
+      stejna.appendChild(s);
+      karta.appendChild(stejna);
+
+      const zamceno = inst.addrSameAsHolder === true;
+      const zdroj = zamceno ? adresaPojistnika() : inst;
+      const rada2 = document.createElement('div');
+      rada2.className = 'form-row';
+      const POPISKY = { ulice: 'Ulice a č. p.', obec: 'Obec', psc: 'PSČ' };
+      const NAPOVEDY = { ulice: 'Želetavská 1525/1', obec: 'Praha', psc: '140 00' };
+      adresniPole.forEach((k) => {
+        const g = poleDetailu(
+          p,
+          i,
+          k,
+          { text: POPISKY[k], povinne: !zamceno && (povinne.has(k) || k !== 'psc' || povinne.size === 0) },
+          zdroj[k] || '',
+          { placeholder: NAPOVEDY[k], zamceno },
+        );
+        if (k === 'ulice') g.style.flex = '2';
+        rada2.appendChild(g);
+      });
+      karta.appendChild(rada2);
+    }
+
+    // Vlastní pole podle typu (číslo bytu, číslo parcely, katastrální území…).
+    const vlastni = (f.custom || []).filter((cf) => !cf.types?.length || cf.types.includes(inst.typeKey));
+    if (vlastni.length) {
+      const rada3 = document.createElement('div');
+      rada3.className = 'form-row';
+      vlastni.forEach((cf) => {
+        rada3.appendChild(
+          poleDetailu(p, i, 'custom.' + cf.key, { text: cf.label, povinne: povinne.has(cf.key) }, (inst.custom || {})[cf.key] || '', {}),
+        );
+      });
+      karta.appendChild(rada3);
+    }
+    return karta;
+  }
+
+  function kartaFunkce(p, f, i, celkem) {
+    const karta = document.createElement('div');
+    karta.className = 'udaje-objekt';
+    const hlava = document.createElement('div');
+    hlava.className = 'udaje-objekt-head';
+    const titul = document.createElement('span');
+    titul.textContent = `Funkce č. ${i + 1}`;
+    hlava.appendChild(titul);
+    if (celkem > 1) {
+      const pryc = document.createElement('button');
+      pryc.type = 'button';
+      pryc.className = 'calc-odebrat';
+      pryc.dataset.removeFor = p.key;
+      pryc.dataset.index = String(i);
+      pryc.textContent = 'Odebrat';
+      hlava.appendChild(pryc);
+    }
+    karta.appendChild(hlava);
+    const rada1 = document.createElement('div');
+    rada1.className = 'form-row';
+    rada1.appendChild(
+      poleDetailu(p, i, 'grossMonthlyCzk', { text: 'Hrubá měsíční odměna (Kč)', povinne: true }, f.grossMonthlyCzk || '', { cislo: true }),
+    );
+    (p.input.itemDetails || []).forEach((d) => {
+      rada1.appendChild(poleDetailu(p, i, d.key, { text: d.label, povinne: false }, f[d.key] || '', {}));
+    });
+    karta.appendChild(rada1);
+    return karta;
+  }
+
+  // ── rekapitulace údajů po pilířích (LEX-33) ───────────────────────────────
+
+  function vykresliRekapitulaciUdaju() {
+    const karta = el('#recap-udaje');
+    const box = el('#recap-udaje-obsah');
+    if (!karta || !box) return;
+    box.innerHTML = '';
+    const pilire = (stav.katalog?.pillars || []).filter(
+      (p) => stav.vybrane.has(p.key) && p.input && ['objects', 'salary'].includes(p.input.kind),
+    );
+    pilire.forEach((p) => {
+      const blok = document.createElement('div');
+      blok.className = 'recap-udaje-pilir';
+      const h = document.createElement('strong');
+      h.textContent = p.name;
+      blok.appendChild(h);
+      if (p.input.kind === 'salary') {
+        funkceManazera(p).forEach((f, i) => {
+          const r = document.createElement('div');
+          r.className = 'recap-udaje-objekt';
+          const casti = [`Funkce č. ${i + 1}`, f.functionTitle, f.organizationName, f.insuredName].filter(Boolean);
+          r.textContent = casti.join(' · ') + ' — odměna ' + czk(Number(f.grossMonthlyCzk) || 0) + '/měs.';
+          blok.appendChild(r);
+        });
+      } else {
+        const jeVymera = p.input.unit === 'sqm';
+        instanceObjektu(p).forEach((inst, i) => {
+          const d = detailyObjektu(inst);
+          const typ = (p.input.types || []).find((t) => t.key === inst.typeKey);
+          const r = document.createElement('div');
+          r.className = 'recap-udaje-objekt';
+          const nazev = document.createElement('span');
+          nazev.textContent = `${typ ? typ.label : jeVymera ? 'Parcela' : 'Objekt'} č. ${i + 1}`;
+          r.appendChild(nazev);
+          const detail = [];
+          if (jeVymera) detail.push(`${inst.mnozstvi} m²`);
+          const adresa = [d.ulice, [d.psc, d.obec].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+          if (adresa) detail.push(adresa);
+          (p.input.fields?.custom || []).forEach((cf) => {
+            const v = d.custom?.[cf.key];
+            if (v) detail.push(`${cf.label}: ${v}`);
+          });
+          if (detail.length) {
+            const em = document.createElement('em');
+            em.textContent = ' · ' + detail.join(' · ');
+            r.appendChild(em);
+          }
+          blok.appendChild(r);
+        });
+      }
+      box.appendChild(blok);
+    });
+    karta.hidden = pilire.length === 0;
   }
 
   // ── sjednání ──────────────────────────────────────────────────────────────
@@ -1475,7 +1957,7 @@
           : {}),
         email: pole('email'),
         phone: pole('phone'),
-        birthNumber: pole('rc') || undefined,
+        birthNumber: pole('rc') ? normalizujRc(pole('rc')) : undefined,
         identityDocumentNumber: pole('dokladCislo') || undefined,
         street: pole('street') || undefined,
         city: pole('city') || undefined,
@@ -1539,11 +2021,29 @@
    * Skryté pole musí být `disabled`, jinak by ho prohlížeč pořád validoval
    * jako povinné a odeslání by se zaseklo na políčku, které není vidět.
    */
+  /** Rodné číslo s lomítkem po šesté číslici; jiný vstup vrací beze změny. */
+  function normalizujRc(hodnota) {
+    const cislice = String(hodnota || '').replace(/\D/g, '');
+    if (cislice.length === 9 || cislice.length === 10) {
+      return cislice.slice(0, 6) + '/' + cislice.slice(6);
+    }
+    return String(hodnota || '').trim();
+  }
+
   function pripojIdentifikaci() {
     const prepinac = el('#bez-rc');
     const rc = el('[name="rc"]');
     const doklad = el('[name="dokladCislo"]');
     if (!prepinac || !rc || !doklad) return;
+    // Roman 1. 9. 2026 (LEX-31): lomítko doplníme sami; kdo ho nenapíše, nesmí
+    // narazit na nevysvětlené „neplatný formát".
+    rc.addEventListener('blur', () => {
+      const s = normalizujRc(rc.value);
+      if (s !== rc.value) {
+        rc.value = s;
+        rc.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
     const prepni = () => {
       const cizinec = prepinac.checked;
       rc.required = !cizinec;
@@ -1650,13 +2150,18 @@
     );
   }
 
-  window.LEXIA_CALC = { selected: () => [...stav.vybrane], quote: () => stav.posledni };
+  window.LEXIA_CALC = {
+    selected: () => [...stav.vybrane],
+    quote: () => stav.posledni,
+    renderSubject: () => vykresliUdaje(false),
+  };
 
   /**
    * Varianta z adresy (`?varianta=poradce`). Odsud na kalkulačku míří microsity
    * /reality a /financniporadci, které prodávají jiný produkt než výchozí
    * jednotlivce. Neznámou hodnotu ignorujeme — jinak by stačil překlep v odkazu
-   * a katalog by se načetl pro neexistující produkt.
+   * a katalog by se načetl pro neexistující produkt. Starší odkazy z „Pro koho"
+   * nesly `?profil=`; berou se stejně.
    *
    * Týž parametr předvolí přepínač i ve `script.js` (starší deep-link z karet
    * na úvodní stránce), ale jen pro jednotlivce a domácnost. Nezdvojí se to:
@@ -1664,7 +2169,8 @@
    * jeho `change` nikdo nechytí. Produkt si tak řídí jedno místo — tohle.
    */
   function variantaZAdresy() {
-    const v = new URLSearchParams(window.location.search).get('varianta');
+    const q = new URLSearchParams(window.location.search);
+    const v = q.get('varianta') || q.get('profil');
     return v && Object.prototype.hasOwnProperty.call(PRODUKTY, v) ? v : null;
   }
 
@@ -1691,6 +2197,13 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     if (!el('#calc-pillars')) return;
+    // Roman 1. 9. 2026 (LEX-25): volba produktu je samostatná stránka. Kdo
+    // přijde bez produktu, patří tam — kromě editoru textů, který stránku
+    // otevírá v rámu a produkt nepotřebuje.
+    if (!variantaZAdresy() && window.self === window.top) {
+      window.location.replace('sjednat.html');
+      return;
+    }
     pripojUdalosti();
     pripojSjednani();
     pripojIdentifikaci();
