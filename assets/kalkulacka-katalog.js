@@ -892,7 +892,7 @@
           if (btnT && teloT) {
             const sourozenci = stav.katalog.pillars.filter((x) => x.requiresPillarKey === rodicDoplnku);
             const vybranychT = sourozenci.filter((d) => stav.vybrane.has(d.key)).length;
-            popisToggle(btnT, sourozenci.length, vybranychT, !teloT.hidden);
+            popisToggle(btnT, sourozenci, vybranychT, !teloT.hidden);
           }
         }
         // Až za skrytím doplňků: pole odkryté dlaždice musí být zase povolená
