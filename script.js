@@ -332,7 +332,10 @@ function initCalcWizard() {
       const city = get('city');
       const zip = get('zip');
 
-      const fullName = [firstName, lastName].filter(Boolean).join(' ') || '—';
+      // U podnikatele jméno a příjmení ve formuláři nejsou (Roman 1. 9. 2026),
+      // pojistníka pojmenovává firma. Bez tohohle ukazovala rekapitulace pomlčku.
+      const fullName =
+        [firstName, lastName].filter(Boolean).join(' ') || get('businessName') || '—';
       const fullAddress = [
         street,
         [zip, city].filter(Boolean).join(' ')
