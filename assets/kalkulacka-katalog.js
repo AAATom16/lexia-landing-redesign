@@ -887,6 +887,13 @@
     // U podnikatele je adresou pojistníka sídlo podnikání, ne bydliště.
     const nadpis = el('#nadpis-adresa');
     if (nadpis) nadpis.textContent = podnikatel ? '2. Sídlo podnikání' : '2. Trvalá adresa';
+    // Rekapitulace musí pojmenovat údaje stejně jako formulář krok předtím
+    // (Roman 1. 9. 2026), jinak si klient čte o „jménu a příjmení" tam, kde
+    // vyplňoval název firmy.
+    const pj = el('#popisek-jmeno');
+    if (pj) pj.textContent = podnikatel ? 'Název / jméno' : 'Jméno a příjmení';
+    const pa = el('#popisek-adresa');
+    if (pa) pa.textContent = podnikatel ? 'Sídlo / adresa' : 'Trvalá adresa';
     zobrazUpozorneniPO();
   }
 
