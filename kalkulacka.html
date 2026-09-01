@@ -55,10 +55,17 @@
       #calc-pillars .calc-pillar-head .calc-vzdy { grid-column: 1 / -1; justify-self: start;
         margin: 0; padding: 0; background: none; border-radius: 0; font-weight: 400;
         text-transform: none; font-size: .78rem; color: var(--text-muted); }
+      /* Rozbalovátko doplňků (Roman 29. 8.) — titulek je tlačítko, vzhled
+         zůstává, přibývá kurzor a šipka v textu. */
+      button.calc-addons-toggle { border: none; background: none; padding: 0;
+        cursor: pointer; text-align: left; font-family: inherit; color: var(--primary); }
+      button.calc-addons-toggle:hover { text-decoration: underline; }
       .calc-addons-title { margin: 0; font-size: .8rem; letter-spacing: .02em;
         text-transform: uppercase; color: var(--text-muted); }
       /* `hidden` samo o sobě prohrává s `display: grid` výše — doplňky se pak
          nabízely i bez svého rodiče, se kterým je jedině lze sjednat. */
+      .calc-addons-body { display: grid; gap: 10px; }
+      .calc-addons-body[hidden],
       .calc-addons[hidden], .calc-pillar-input[hidden], .calc-error[hidden], .recap-row[hidden], .form-group[hidden], p[data-stav][hidden] { display: none; }
       .calc-option.is-addon { background: var(--bg-soft, #fbfcfe); }
       .calc-badge { font-weight: 400; text-transform: none; display: inline-block; padding: 2px 8px; background: var(--primary); color: #fff; border-radius: 100px; font-size: 0.72rem; font-weight: 700; margin-top: 6px; }

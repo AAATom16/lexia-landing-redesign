@@ -148,12 +148,32 @@
         // Doplněk jde sjednat jen s rodičem — dokud není vybraný, nemá smysl
         // ho ani ukazovat.
         wrap.hidden = !stav.vybrane.has(p.key);
-        const nadpis = document.createElement('p');
-        nadpis.className = 'calc-addons-title';
-        nadpis.textContent =
-          doplnky.length === 1 ? 'Doplněk k tomuto pilíři' : 'Doplňky k tomuto pilíři';
+        // Roman 29. 8. 2026 — doplňky se rozbalují, místo aby v dlaždici
+        // visely všechny naráz (u bydlení jsou tři a blok byl přes celou
+        // obrazovku). Titulek je tlačítko; tělo s dlaždicemi je zabalené,
+        // dokud není některý doplněk vybraný.
+        //
+        // Text tlačítka se mění za běhu (počet vybraných), takže nese
+        // `aria-controls` — editor textů prvky s ním přeskakuje a uložená
+        // úprava se nemá k čemu připnout ani co rozbít (cms/extract.js,
+        // DYNAMIC_SELECTOR).
+        const vybranychDoplnku = doplnky.filter((d) => stav.vybrane.has(d.key)).length;
+        const teloId = 'addons-' + p.key;
+        const nadpis = document.createElement('button');
+        nadpis.type = 'button';
+        nadpis.className = 'calc-addons-title calc-addons-toggle';
+        nadpis.dataset.addonsToggle = p.key;
+        nadpis.setAttribute('aria-controls', teloId);
+        nadpis.setAttribute('aria-expanded', String(vybranychDoplnku > 0));
         wrap.appendChild(nadpis);
-        doplnky.forEach((d) => wrap.appendChild(dlazdice(d, true)));
+
+        const telo = document.createElement('div');
+        telo.className = 'calc-addons-body';
+        telo.id = teloId;
+        telo.hidden = vybranychDoplnku === 0;
+        doplnky.forEach((d) => telo.appendChild(dlazdice(d, true)));
+        wrap.appendChild(telo);
+        popisToggle(nadpis, doplnky.length, vybranychDoplnku, !telo.hidden);
         skupina.appendChild(wrap);
       }
       box.appendChild(skupina);
@@ -170,6 +190,30 @@
    * údaji — a každý nový prvek se musel ručně vyvazovat přes stopPropagation.
    * Interní kalkulačka to má stejně: `<label>` obaluje jen hlavičku.
    */
+  /**
+   * Popisek rozbalovátka doplňků. Počet vybraných je vidět i v zabaleném
+   * stavu, aby cena nikdy nezahrnovala něco, o čem dlaždice mlčí.
+   */
+  function popisToggle(btn, celkem, vybranych, rozbaleno) {
+    const zaklad = celkem === 1 ? 'Doplněk k tomuto pilíři' : 'Doplňky k tomuto pilíři (' + celkem + ')';
+    const stavova = vybranych > 0 ? ' · vybráno ' + vybranych : '';
+    btn.textContent = zaklad + stavova + (rozbaleno ? ' ▴' : ' ▾');
+    btn.setAttribute('aria-expanded', String(rozbaleno));
+  }
+
+  function prepniDoplnky(klic) {
+    const btn = document.querySelector('[data-addons-toggle="' + klic + '"]');
+    const telo = document.getElementById('addons-' + klic);
+    if (!btn || !telo) return;
+    telo.hidden = !telo.hidden;
+    const doplnky = (stav.katalog?.pillars || []).filter((x) => x.requiresPillarKey === klic);
+    const vybranych = doplnky.filter((d) => stav.vybrane.has(d.key)).length;
+    popisToggle(btn, doplnky.length, vybranych, !telo.hidden);
+    // Zabalení schová i pole vybraného doplňku — musí se vypnout, jinak by
+    // skryté povinné pole neviditelně zastavilo „Pokračovat".
+    synchronizujSkryta();
+  }
+
   function dlazdice(p, jeDoplnek) {
     const label = document.createElement('div');
     label.className = 'calc-option' + (stav.vybrane.has(p.key) ? ' selected' : '');
@@ -724,6 +768,18 @@
             });
           }
         }
+        // Zaškrtnutí či odškrtnutí DOPLŇKU se musí propsat do popisku
+        // rozbalovátka jeho rodiče, ať počet vybraných nelže.
+        const rodicDoplnku = stav.katalog?.pillars.find((x) => x.key === klic)?.requiresPillarKey;
+        if (rodicDoplnku) {
+          const btnT = form.querySelector('[data-addons-toggle="' + rodicDoplnku + '"]');
+          const teloT = document.getElementById('addons-' + rodicDoplnku);
+          if (btnT && teloT) {
+            const sourozenci = stav.katalog.pillars.filter((x) => x.requiresPillarKey === rodicDoplnku);
+            const vybranychT = sourozenci.filter((d) => stav.vybrane.has(d.key)).length;
+            popisToggle(btnT, sourozenci.length, vybranychT, !teloT.hidden);
+          }
+        }
         // Až za skrytím doplňků: pole odkryté dlaždice musí být zase povolená
         // (kontrola kroku při neúspěchu vypnula všechna skrytá, jinak by do
         // nich po zaškrtnutí pilíře nešlo psát) a pole schovaného doplňku
@@ -750,6 +806,12 @@
     // posluchač; stav se předtím načte z formuláře, ať se nepřepíšou hodnoty,
     // které člověk zrovna napsal.
     form.addEventListener('click', (ev) => {
+      const toggle = ev.target.closest('[data-addons-toggle]');
+      if (toggle) {
+        ev.preventDefault();
+        prepniDoplnky(toggle.dataset.addonsToggle);
+        return;
+      }
       const pridat = ev.target.closest('[data-add-for]');
       const odebrat = ev.target.closest('[data-remove-for]');
       if (!pridat && !odebrat) return;
@@ -1051,7 +1113,12 @@
       // doplňků nad ním — bez téhle větve by nevybraný doplněk blokoval krok.
       // Schválně se nekouká na libovolného skrytého předka: panely neaktivních
       // kroků jsou taky `hidden` a vypnout kvůli nim pilíře by bylo špatně.
-      const skryty = blok.hidden || blok.closest('.calc-addons')?.hidden === true;
+      const skryty =
+        blok.hidden ||
+        blok.closest('.calc-addons')?.hidden === true ||
+        // Zabalené tělo rozbalovátka (Roman 29. 8.) schovává i dlaždice
+        // vybraných doplňků — jejich pole nesmí blokovat krok naslepo.
+        blok.closest('.calc-addons-body')?.hidden === true;
       blok.querySelectorAll('input, select, textarea').forEach((pole) => {
         pole.disabled = !!skryty;
       });
