@@ -610,14 +610,22 @@
   function instanceObjektu(p) {
     const v = stav.vstupy[p.key];
     if (Array.isArray(v) && v.length) return v;
-    return [vychoziInstance(p)];
+    return [vychoziInstance(p, true)];
   }
 
-  function vychoziInstance(p) {
+  /**
+   * Nová instance objektu. Roman 1. 9. 2026: první objekt HLAVNÍHO pilíře
+   * (typicky bydlení) má „adresa stejná jako pojistník" rovnou zaškrtnutou —
+   * je to nejčastější případ a klient adresu nepřepisuje. U doplňků
+   * (pronajímaná nemovitost, výstavba, parcela) se nezaškrtává: tam jde
+   * o jinou nemovitost, než ve které pojistník bydlí.
+   */
+  function vychoziInstance(p, prvni) {
     return {
       typeKey: (p.input.types || [])[0]?.key || '',
       mnozstvi: p.input.unit === 'sqm' ? 1000 : 1,
       custom: {},
+      ...(prvni && !p.requiresPillarKey ? { addrSameAsHolder: true } : {}),
     };
   }
 
@@ -974,10 +982,10 @@
     const jeFunkce = pilir.input?.kind === 'salary';
     if (ev.currentTarget === form) nactiVstupZFormulare(form, klic);
     const radky = Array.isArray(stav.vstupy[klic]) ? [...stav.vstupy[klic]] : [];
-    if (pridat) radky.push(jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir));
+    if (pridat) radky.push(jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir, false));
     else radky.splice(Number(odebrat.dataset.index), 1);
     // Poslední řádek nemizí: pilíř bez jediné položky by neměl co nacenit.
-    const vychozi = jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir);
+    const vychozi = jeFunkce ? { grossMonthlyCzk: 0 } : vychoziInstance(pilir, true);
     stav.vstupy[klic] = radky.length ? radky : [vychozi];
     if (jeFunkce) prekresliFunkce(pilir);
     else {
@@ -1032,7 +1040,10 @@
       const pilir = stav.katalog?.pillars.find((x) => x.key === klic);
       const jeVymera = pilir?.input?.unit === 'sqm';
       return {
-        ...(puvodni[idx] || { custom: {} }),
+        // Nový řádek zdědí výchozí nastavení instance (u prvního objektu
+        // hlavního pilíře i „adresa stejná jako pojistník"), jinak by se
+        // předvolba ztratila, jakmile se stav načte z formuláře kroku 1.
+        ...(puvodni[idx] || (pilir ? vychoziInstance(pilir, idx === 0) : { custom: {} })),
         typeKey: r.querySelector('[data-type-for]')?.value || '',
         mnozstvi: jeVymera ? Number(r.querySelector('[data-qty-for]')?.value || 0) : 1,
       };
@@ -1373,6 +1384,30 @@
    * Když upstream mlčí nebo spadne, seznam se prostě neukáže a adresa se
    * vyplní ručně. Sjednání to nesmí blokovat.
    */
+  /**
+   * Adresa pojistníka se v kroku 2 opisuje do objektů se zaškrtnutým
+   * „adresa stejná jako pojistník". Když ji člověk (nebo našeptávač) změní,
+   * musí se překreslit i ty karty — jinak by v nich zůstala prázdná pole,
+   * přestože se odesílá adresa pojistníka.
+   */
+  function pripojAdresuPojistnika() {
+    // Jen přepiš hodnoty zamčených polí, NEPŘEKRESLUJ karty: překreslení
+    // uprostřed psaní odpojí právě editovaný input z DOM a rozepsaný text
+    // spadne do prázdna.
+    const dopln = () => {
+      const adr = adresaPojistnika();
+      document.querySelectorAll('#subject-dynamic [data-zamceno="1"]').forEach((pole) => {
+        const k = pole.dataset.detailKey;
+        if (k in adr) pole.value = adr[k] || '';
+      });
+    };
+    ['street', 'city', 'zip'].forEach((jmeno) => {
+      const pole = document.querySelector(`[name="${jmeno}"]`);
+      pole?.addEventListener('change', dopln);
+      pole?.addEventListener('blur', dopln);
+    });
+  }
+
   function pripojNaseptavac() {
     const pole = document.querySelector('[name="street"]');
     const seznam = el('#adr-navrhy');
@@ -1656,6 +1691,10 @@
     if (!vynutit && podpis === podpisUdaju && box.children.length) {
       sekce.hidden = pilire.length === 0;
       if (fallbackNav) fallbackNav.hidden = pilire.length > 0;
+      // Struktura sedí, ale hodnoty se mohly změnit v konfiguraci (typicky
+      // odměna funkce nebo výměra parcely). Přepiš je na místě — překreslení
+      // by uprostřed psaní odpojilo editované pole.
+      srovnejHodnoty(pilire);
       return;
     }
     podpisUdaju = podpis;
@@ -1664,6 +1703,34 @@
     sekce.hidden = pilire.length === 0;
     if (fallbackNav) fallbackNav.hidden = pilire.length > 0;
     synchronizujSkryta();
+  }
+
+  /** Hodnoty polí kroku 2 podle stavu; fokusované pole se nechává být. */
+  function srovnejHodnoty(pilire) {
+    const adr = adresaPojistnika();
+    pilire.forEach((p) => {
+      const radky = p.input.kind === 'salary' ? funkceManazera(p) : instanceObjektu(p);
+      document
+        .querySelectorAll(`#subject-dynamic [data-detail-for="${p.key}"]`)
+        .forEach((pole) => {
+          if (pole === document.activeElement) return;
+          const inst = radky[Number(pole.dataset.detailIndex)];
+          if (!inst) return;
+          const k = pole.dataset.detailKey;
+          if (pole.type === 'checkbox') {
+            pole.checked = inst[k] === true;
+            return;
+          }
+          const zamceno = pole.dataset.zamceno === '1';
+          const hodnota = zamceno && k in adr
+            ? adr[k]
+            : k.startsWith('custom.')
+              ? (inst.custom || {})[k.slice(7)]
+              : inst[k];
+          const text = hodnota == null || hodnota === 0 ? '' : String(hodnota);
+          if (pole.value !== text) pole.value = text;
+        });
+    });
   }
 
   function kartaPilire(p) {
@@ -2209,6 +2276,7 @@
     pripojIdentifikaci();
     pripojDokumenty();
     pripojNaseptavac();
+    pripojAdresuPojistnika();
     pripojValidaciKroku();
     pripojPodnikatele();
     sledujKroky();
