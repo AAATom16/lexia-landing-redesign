@@ -775,7 +775,11 @@
       seznam.appendChild(li);
     });
 
-    celkem.textContent = czk(rocne ? q.payableAnnualCzk : q.monthlyCzk);
+    // Splatná cena, ne ceníková. Dřív tu u měsíční platby stálo `monthlyCzk` —
+    // což bylo do LEX-38 totéž, protože měsíční platba žádnou slevu neměla.
+    // S voucherem už ano, takže by souhrn ukazoval plných 179 Kč u nabídky,
+    // za kterou klient zaplatí 134 Kč.
+    celkem.textContent = czk(rocne ? q.payableAnnualCzk : q.payableMonthlyCzk);
     const popisekObdobi = el('#sum-period-label');
     if (popisekObdobi) popisekObdobi.textContent = rocne ? 'ročně' : 'měsíčně';
 
