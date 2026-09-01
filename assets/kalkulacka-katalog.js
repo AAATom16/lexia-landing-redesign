@@ -936,6 +936,7 @@
         e.dispatchEvent(new Event('change', { bubbles: true }));
       };
       set('businessName', d.businessName);
+      vyplnJednajici(d);
       const a = d.registeredAddress || {};
       // `line1` z ARESu nese ulici i číslo dohromady a pole je teď taky jedno,
       // takže se nic nedělí a nemá se co uříznout špatně.
@@ -950,13 +951,67 @@
     }
   }
 
+  /**
+   * Jednající osoba z ARESu (Roman 1. 9. 2026).
+   *
+   * U OSVČ jedná za sebe sama, takže se předvyplní jménem z rejstříku.
+   * U právnické osoby se vypíšou statutáři ve tvaru „Jméno (funkce)".
+   *
+   * Když jich ARES najde víc než jednoho, přestává jít o vyplnění a začíná
+   * překážka: pojistníkem smí být jen s. r. o., jejímž jediným společníkem
+   * a jednatelem je jedna a tatáž osoba. Upozornění se proto zvýrazní a IČO
+   * dostane vlastní chybu, takže krok neprojde — kontrola kroku už na
+   * `checkValidity()` stojí, není potřeba druhá cesta, která by se s ní
+   * mohla rozejít.
+   */
+  function vyplnJednajici(d) {
+    const pole = document.querySelector('[name="jednajici"]');
+    const ico = document.querySelector('[name="ico"]');
+    const upoz = el('#po-upozorneni');
+    if (!pole) return;
+    const jePO = document.querySelector('input[name="legalForm"]:checked')?.value === 'PO';
+    const lide = Array.isArray(d.statutoryPersons) ? d.statutoryPersons : [];
+
+    if (!jePO) {
+      // OSVČ: v rejstříku je pod svým jménem a jedná sama za sebe.
+      pole.value = (lide[0] && lide[0].name) || d.businessName || pole.value;
+    } else {
+      pole.value = lide
+        .map((o) => [o.name, o.role ? '(' + o.role + ')' : ''].filter(Boolean).join(' '))
+        .join('; ');
+    }
+    pole.dispatchEvent(new Event('change', { bubbles: true }));
+
+    const prekazka = jePO && lide.length > 1;
+    if (upoz) {
+      upoz.hidden = !jePO;
+      upoz.classList.toggle('je-prekazka', prekazka);
+    }
+    if (ico) {
+      ico.setCustomValidity(
+        prekazka
+          ? 'Pojistníkem, právnickou osobou, může být pouze společnost s ručením omezeným, jejímž jediným společníkem a jednatelem je jedna a tatáž fyzická osoba.'
+          : '',
+      );
+    }
+  }
+
+  /** Překážku sundej, jakmile člověk změní IČO nebo právní formu. */
+  function zrusPrekazkuPO() {
+    const ico = document.querySelector('[name="ico"]');
+    ico?.setCustomValidity('');
+    el('#po-upozorneni')?.classList.remove('je-prekazka');
+  }
+
   function pripojPodnikatele() {
     el('#ico-dotahnout')?.addEventListener('click', () => void dotahniZAres());
+    document.querySelector('[name="ico"]')?.addEventListener('input', zrusPrekazkuPO);
     document.querySelectorAll('input[name="legalForm"]').forEach((r) =>
       r.addEventListener('change', () => {
         document
           .querySelectorAll('input[name="legalForm"]')
           .forEach((i) => i.closest('.calc-option')?.classList.toggle('selected', i.checked));
+        zrusPrekazkuPO();
         zobrazUpozorneniPO();
       }),
     );

@@ -113,6 +113,10 @@
       .ico-radek { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
       .ico-radek .btn { white-space: nowrap; }
       #po-upozorneni { color: var(--text-muted); font-weight: 400; margin-top: 8px; }
+      /* Když ARES najde u právnické osoby víc jednatelů, přestává to být
+         poznámka a stává se překážkou — takhle vypadá. */
+      #po-upozorneni.je-prekazka { color: var(--danger, #b3261e); font-weight: 600;
+        padding: 10px 12px; border: 1px solid currentColor; border-radius: var(--radius-sm); }
       #podnikatel-blok[hidden], #osobni-blok[hidden] { display: none; }
       #podnikatel-blok .calc-option { text-align: left; padding: 12px 14px; }
       .calc-podminky-note { display: block; margin-top: 6px; font-size: .78rem;
@@ -357,7 +361,7 @@
       <div class="calc-single">
         <form class="calc-form" id="contract-form">
           <div class="calc-section">
-            <h4>1. Osobní údaje</h4>
+            <h4>Pojistník</h4>
             <!-- Podnikatel: u produktu pro poradce a realiťáky je pojistníkem
                  vždy podnikatel identifikovaný IČO (Roman 31. 8. 2026). Blok se
                  zobrazí jen u té varianty; jinde je skrytý a vypnutý, aby
@@ -393,12 +397,12 @@
                   <p class="calc-error" id="ico-chyba" hidden role="alert"></p>
                 </div>
                 <div class="form-group">
-                  <label>Obchodní firma nebo název <span class="req">*</span></label>
+                  <label>Název / jméno <span class="req">*</span></label>
                   <input type="text" class="form-input" name="businessName" placeholder="Načte se z ARESu" disabled>
                 </div>
                 <div class="form-group">
-                  <label>Za pojistníka jedná <span class="req">*</span></label>
-                  <input type="text" class="form-input" name="jednajici" placeholder="Ing. Jan Novák (jednatel)" disabled>
+                  <label>Jednající osoba (jméno a funkce) <span class="req">*</span></label>
+                  <input type="text" class="form-input" name="jednajici" placeholder="Načte se z ARESu" disabled>
                 </div>
               </div>
             </div>
