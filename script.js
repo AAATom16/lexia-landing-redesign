@@ -201,8 +201,13 @@ function initCalcWizard() {
     syncEcho();
     // Poslední krok — založ smlouvu (číslo, VS) a vyber stav (platba / individuální nacenění)
     if (num === 4) finalizeContract();
-    // Smooth scroll to top of step
-    window.scrollTo({ top: stepper.offsetTop - 100, behavior: 'smooth' });
+    // Tom 1. 9. 2026: plynulý scroll se v prohlížeči přerušil, jakmile se
+    // přepnutím panelu změnila výška stránky, a člověk zůstal u patičky
+    // místo u začátku kroku. Skočit hned, až po překreslení layoutu.
+    requestAnimationFrame(() => {
+      const cil = stepper.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: Math.max(0, cil), behavior: 'auto' });
+    });
   }
 
   // Poslední krok kalkulačky NEZAKLÁDÁ smlouvu — žádný backend za tím zatím
