@@ -396,12 +396,26 @@ function initCalcWizard() {
       });
     }
 
-    // Vypočítej měsíční/roční (roční = 11× měsíční → 12. měsíc zdarma)
+    // Měsíční a roční částka do rekapitulace.
+    //
+    // Dopočet „roční = 11× měsíční" platil, dokud byla jediná sleva „měsíc
+    // zdarma". Slevový voucher (LEX-38) se u roční a měsíční platby uplatňuje
+    // různě — strop celkové slevy ukusuje jen tam, kde je i měsíc zdarma —
+    // takže se ta dvě čísla na sebe přepočítat nedají. Když kalkulačka zná
+    // obojí ze serveru, bereme je odtud; dopočet zůstává jen jako záloha pro
+    // stránky bez katalogu.
     if (total) {
       const YEARLY_MONTHS = 11;
       const num = parseInt(totalText.replace(/\D/g, ''), 10) || 0;
-      const monthly = periodValue === 'rocni' ? Math.round(num / YEARLY_MONTHS) : num;
-      const yearly = periodValue === 'rocni' ? num : num * YEARLY_MONTHS;
+      const q = window.LEXIA_CALC && typeof window.LEXIA_CALC.quote === 'function'
+        ? window.LEXIA_CALC.quote()
+        : null;
+      const monthly = q && typeof q.payableMonthlyCzk === 'number'
+        ? q.payableMonthlyCzk
+        : (periodValue === 'rocni' ? Math.round(num / YEARLY_MONTHS) : num);
+      const yearly = q && typeof q.payableAnnualCzk === 'number'
+        ? q.payableAnnualCzk
+        : (periodValue === 'rocni' ? num : num * YEARLY_MONTHS);
       document.querySelectorAll('[data-echo="month-total"]').forEach(el => el.textContent = monthly.toLocaleString('cs-CZ') + ' Kč');
       document.querySelectorAll('[data-echo="year-total"]').forEach(el => el.textContent = yearly.toLocaleString('cs-CZ') + ' Kč');
     }

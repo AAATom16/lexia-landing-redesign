@@ -55,6 +55,13 @@
     /** rozpracovaný koncept: `{ contractId, previewToken }` */
     koncept: null,
     posledni: null,
+    /**
+     * Slevový voucher (LEX-38). `kod` je to, co klient zadal nebo co přišlo
+     * v odkazu z e-mailu; `uplatneny` drží odpověď serveru, dokud kód platí.
+     * Spotřebuje se až při založení konceptu — nacenění ho jen ověřuje, jinak
+     * by jednorázový kód snědl první přepočet ceny.
+     */
+    voucher: { kod: '', uplatneny: null },
   };
 
   // ── načtení katalogu ──────────────────────────────────────────────────────
@@ -157,6 +164,7 @@
         pillars: [...stav.vybrane],
         parameters,
         unmetConditions: stav.nesplnene,
+        ...(stav.voucher.kod ? { discountCode: stav.voucher.kod } : {}),
       }),
     });
     const data = await res.json().catch(() => null);
@@ -767,18 +775,26 @@
       seznam.appendChild(li);
     });
 
-    celkem.textContent = czk(rocne ? q.payableAnnualCzk : q.monthlyCzk);
+    // Splatná cena, ne ceníková. Dřív tu u měsíční platby stálo `monthlyCzk` —
+    // což bylo do LEX-38 totéž, protože měsíční platba žádnou slevu neměla.
+    // S voucherem už ano, takže by souhrn ukazoval plných 179 Kč u nabídky,
+    // za kterou klient zaplatí 134 Kč.
+    celkem.textContent = czk(rocne ? q.payableAnnualCzk : q.payableMonthlyCzk);
     const popisekObdobi = el('#sum-period-label');
     if (popisekObdobi) popisekObdobi.textContent = rocne ? 'ročně' : 'měsíčně';
 
     if (uspora) {
       // Sleva „měsíc zdarma" je rozdíl technické a splatné roční ceny; u měsíční
-      // platby neplatí, tak ji tam neslibujeme.
-      const rozdil = q.annualCzk - q.payableAnnualCzk;
+      // platby neplatí, tak ji tam neslibujeme. Voucher se do rozdílu počítá
+      // taky, ale hlásí se zvlášť v `voucherStav()` — jinak by dvě různé slevy
+      // splynuly do jedné věty o dvanáctém měsíci zdarma.
+      const rozdil = q.annualCzk - q.payableAnnualCzk - (q.voucher ? q.voucher.annualSavingCzk : 0);
       uspora.hidden = !rocne || rozdil <= 0;
       const castka = uspora.querySelector('strong');
       if (castka) castka.textContent = czk(rozdil);
     }
+
+    voucherStav(q, rocne);
 
     if (q.requiresUnderwriting || Object.keys(stav.nesplnene).length) {
       // Odškrtnutá podmínka = online se nesjednává (LEX-26). Cenu tu nemá
@@ -788,6 +804,91 @@
       li.textContent = PODMINKA_BLOKUJE;
       seznam.appendChild(li);
       celkem.textContent = '—';
+    }
+  }
+
+
+  // ── slevový voucher (LEX-38) ──────────────────────────────────────────────
+  /**
+   * Hláška u pole s voucherem. Kód se v nacenění jen OVĚŘUJE — spotřebuje se až
+   * při založení konceptu, jinak by ho snědl první přepočet ceny.
+   */
+  function voucherStav(q, rocne) {
+    const hlaska = el('#voucher-msg');
+    const pole = el('#voucher-code');
+    if (!hlaska) return;
+
+    if (q && q.voucher) {
+      stav.voucher.uplatneny = q.voucher;
+      const v = q.voucher;
+      // Dvě sazby: strop celkové slevy se potkává s „měsícem zdarma" jen
+      // u roční platby, u měsíční se voucher uplatní celý. Ukazujeme tu,
+      // kterou si klient zvolil — jinak by u měsíční platby viděl nižší
+      // procento, než jaké mu server opravdu odečte.
+      const procenta = rocne ? v.percent : v.monthlyPercent;
+      const usetri = rocne ? v.annualSavingCzk : v.monthlySavingCzk;
+      let text = `Voucher ${v.code} uplatněn — sleva ${procenta} %, ušetříte ${czk(usetri)} ${rocne ? 'ročně' : 'měsíčně'}.`;
+      if (rocne && v.cappedBy != null) {
+        // Roman 21.8.2026 — celková sleva nikdy nepřesáhne 25 %, ani
+        // v kombinaci s roční platbou. Bez téhle věty vypadá voucher −25 %,
+        // který dal 16,7 %, jako chyba.
+        text += ` Voucher nese ${v.requestedPercent} %, ale i s dvanáctým měsícem zdarma je celková sleva zastropovaná na ${v.cappedBy} %.`;
+      }
+      hlaska.textContent = text;
+      hlaska.className = 'calc-voucher-msg ok';
+      hlaska.hidden = false;
+      if (pole) pole.value = v.code;
+      return;
+    }
+
+    stav.voucher.uplatneny = null;
+    if (q && q.voucherError) {
+      hlaska.textContent = q.voucherError.message;
+      hlaska.className = 'calc-voucher-msg err';
+      hlaska.hidden = false;
+      return;
+    }
+    hlaska.hidden = true;
+    hlaska.textContent = '';
+  }
+
+  /**
+   * Připojí pole voucheru. Kód z odkazu v e-mailu (`?voucher=`) se předvyplní
+   * a rovnou uplatní — Roman v e-mailu slibuje „uplatněte voucher", ne
+   * „opište osmimístný kód".
+   */
+  function pripojVoucher() {
+    const pole = el('#voucher-code');
+    const btn = el('#voucher-apply');
+    if (!pole || !btn) return;
+
+    const uplatni = () => {
+      const kod = pole.value.trim().toUpperCase();
+      if (kod === stav.voucher.kod) return;
+      stav.voucher.kod = kod;
+      stav.voucher.uplatneny = null;
+      prepocitej();
+    };
+    btn.addEventListener('click', uplatni);
+    pole.addEventListener('keydown', (e) => {
+      // Enter uvnitř kalkulačky nesmí odeslat formulář kroku 2.
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      uplatni();
+    });
+    // Prázdné pole slevu zase sundá, ať se nedá „odstranit" jen vizuálně.
+    pole.addEventListener('blur', () => {
+      if (pole.value.trim() === '' && stav.voucher.kod) {
+        stav.voucher.kod = '';
+        stav.voucher.uplatneny = null;
+        prepocitej();
+      }
+    });
+
+    const zUrl = (new URLSearchParams(location.search).get('voucher') || '').trim().toUpperCase();
+    if (zUrl) {
+      pole.value = zUrl;
+      stav.voucher.kod = zUrl;
     }
   }
 
@@ -2004,6 +2105,9 @@
       pillars: [...stav.vybrane],
       parameters: sestavParametry(),
       unmetConditions: stav.nesplnene,
+      // Tady se voucher SPOTŘEBUJE. Posílá se jen ten, který nacenění právě
+      // potvrdilo jako platný — jinak by neplatný kód shodil celé sjednání.
+      ...(stav.voucher.uplatneny ? { discountCode: stav.voucher.uplatneny.code } : {}),
       paymentFrequency:
         document.querySelector('input[name="period"]:checked')?.value === 'rocni'
           ? 'annual'
@@ -2277,6 +2381,7 @@
     pripojDokumenty();
     pripojNaseptavac();
     pripojAdresuPojistnika();
+    pripojVoucher();
     pripojValidaciKroku();
     pripojPodnikatele();
     sledujKroky();
