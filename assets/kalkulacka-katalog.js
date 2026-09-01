@@ -817,13 +817,18 @@
     if (q && q.voucher) {
       stav.voucher.uplatneny = q.voucher;
       const v = q.voucher;
-      const usetri = rocne ? v.annualSavingCzk : Math.round(v.annualSavingCzk / 12);
-      let text = `Voucher ${v.code} uplatněn — sleva ${v.percent} %, ušetříte ${czk(usetri)} ${rocne ? 'ročně' : 'měsíčně'}.`;
-      if (v.cappedBy != null) {
+      // Dvě sazby: strop celkové slevy se potkává s „měsícem zdarma" jen
+      // u roční platby, u měsíční se voucher uplatní celý. Ukazujeme tu,
+      // kterou si klient zvolil — jinak by u měsíční platby viděl nižší
+      // procento, než jaké mu server opravdu odečte.
+      const procenta = rocne ? v.percent : v.monthlyPercent;
+      const usetri = rocne ? v.annualSavingCzk : v.monthlySavingCzk;
+      let text = `Voucher ${v.code} uplatněn — sleva ${procenta} %, ušetříte ${czk(usetri)} ${rocne ? 'ročně' : 'měsíčně'}.`;
+      if (rocne && v.cappedBy != null) {
         // Roman 21.8.2026 — celková sleva nikdy nepřesáhne 25 %, ani
         // v kombinaci s roční platbou. Bez téhle věty vypadá voucher −25 %,
         // který dal 16,7 %, jako chyba.
-        text += ` Voucher nese ${v.requestedPercent} %, celková sleva je ale zastropovaná na ${v.cappedBy} %.`;
+        text += ` Voucher nese ${v.requestedPercent} %, ale i s dvanáctým měsícem zdarma je celková sleva zastropovaná na ${v.cappedBy} %.`;
       }
       hlaska.textContent = text;
       hlaska.className = 'calc-voucher-msg ok';
