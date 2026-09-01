@@ -207,6 +207,27 @@
       .udaje-objekt .form-group { margin-bottom: 10px; }
       .udaje-objekt .form-group label { font-size: .82rem; }
       .udaje-pridat { margin: 2px 0 6px; }
+      /* Slevový voucher v souhrnu nabídky (LEX-38). Souhrn je tmavý kobaltový
+         panel, takže pole musí být světlé na tmavém, ne naopak. */
+      .calc-voucher { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2); }
+      .calc-voucher-label { display: block; font-size: .85rem; opacity: .85; margin-bottom: 6px; }
+      .calc-voucher-row { display: flex; gap: 8px; }
+      .calc-voucher-input {
+        flex: 1 1 auto; min-width: 0; padding: 9px 12px; border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.12);
+        color: #fff; font-size: .95rem; letter-spacing: .06em; text-transform: uppercase;
+      }
+      .calc-voucher-input::placeholder { color: rgba(255,255,255,0.6); letter-spacing: normal; text-transform: none; }
+      .calc-voucher-input:focus { outline: 2px solid rgba(255,255,255,0.8); outline-offset: 1px; }
+      .calc-voucher-btn {
+        flex: 0 0 auto; padding: 9px 16px; border-radius: 8px; border: 1px solid #fff;
+        background: #fff; color: var(--primary); font-weight: 600; cursor: pointer;
+      }
+      .calc-voucher-btn[disabled] { opacity: .6; cursor: default; }
+      .calc-voucher-msg { margin: 8px 0 0; font-size: .88rem; line-height: 1.45; }
+      .calc-voucher-msg.ok { color: #d7ffe9; }
+      .calc-voucher-msg.err { color: #ffd9d9; }
+
       /* Rekapitulace údajů po pilířích (LEX-33): co k jakému pilíři patří. */
       .recap-udaje-pilir { padding: 10px 0; border-bottom: 1px solid var(--primary-light); }
       .recap-udaje-pilir:last-child { border-bottom: none; }
@@ -424,6 +445,17 @@
         <div id="sum-saving" class="calc-saving" hidden>
           <i class="icon" data-icon="check_circle"></i>
           <span>Při roční platbě ušetříte <strong>179 Kč</strong> (12. měsíc zdarma)</span>
+        </div>
+        <!-- Slevový voucher (LEX-38). Roman posílá v e-mailu odkaz s ?voucher=KOD,
+             takže se pole samo předvyplní a sleva se propíše rovnou do ceny. -->
+        <div id="sum-voucher" class="calc-voucher">
+          <label class="calc-voucher-label" for="voucher-code">Máte slevový voucher?</label>
+          <div class="calc-voucher-row">
+            <input type="text" id="voucher-code" name="voucherCode" placeholder="Slevový kód"
+                   autocomplete="off" spellcheck="false" maxlength="32" class="calc-voucher-input">
+            <button type="button" id="voucher-apply" class="calc-voucher-btn">Uplatnit</button>
+          </div>
+          <p id="voucher-msg" class="calc-voucher-msg" hidden></p>
         </div>
         <button type="button" class="btn btn-primary btn-lg" data-step-next="2" style="background: white; color: var(--primary); width: 100%; margin-top: 20px; border-color: white;">Pokračovat k doplnění údajů</button>
       </div>
