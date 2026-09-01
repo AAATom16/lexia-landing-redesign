@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sjednat pojištění právní ochrany online | Lexia</title>
+<meta name="description" content="Vyberte si produkt pojištění právní ochrany Lexia a sjednejte ho online během pár minut. Řidič, jednotlivec, domácnost, poradci a realitní zprostředkovatelé.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<template id="__bundler_thumbnail" data-bg-color="#0045bf">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0045bf"/>
+    <g transform="translate(600 400)">
+      <circle r="220" fill="none" stroke="#ffffff" stroke-width="60"/>
+      <circle r="120" fill="#ffffff"/>
+      <path d="M-50 0 l30 30 l70 -70" fill="none" stroke="#0045bf" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </svg>
+</template>
+
+<style>
+  /* Volba produktu (Roman 1. 9. 2026, LEX-25): samostatná stránka před
+     konfigurací. Dlaždice nesou popis a cenu „již od…"; cena se čte z katalogu
+     produktů, ne z HTML — jinak by se rozešla s tím, co se prodává. */
+  .volba-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+  .volba-card { display: flex; flex-direction: column; gap: 10px; padding: 22px 22px 20px;
+    background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-md, 14px);
+    text-decoration: none; color: inherit; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .volba-card:hover, .volba-card:focus-visible { transform: translateY(-2px); border-color: var(--primary);
+    box-shadow: 0 16px 32px -18px rgba(0, 69, 191, .45); outline: none; }
+  .volba-card--featured { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 69, 191, .08); }
+  .volba-head { display: flex; align-items: center; gap: 12px; }
+  .volba-icon { width: 44px; height: 44px; border-radius: 12px; background: #e7eefb; color: var(--primary);
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .volba-icon .icon { width: 24px; height: 24px; }
+  .volba-card h2 { margin: 0; font-size: 1.2rem; line-height: 1.2; }
+  .volba-sub { margin: 0; font-size: .82rem; font-weight: 600; color: var(--accent); }
+  .volba-desc { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--text-muted); flex: 1 1 auto; }
+  .volba-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-top: 12px; border-top: 1px solid var(--primary-light); }
+  .volba-price { font-size: .85rem; color: var(--text-muted); }
+  .volba-price strong { color: var(--primary); font-size: 1.05rem; }
+  .volba-cta { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--primary); }
+  .volba-cta .icon { width: 16px; height: 16px; }
+  .volba-note { margin: 22px 0 0; font-size: .9rem; color: var(--text-muted); }
+  .volba-note a { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Ceník</a></li>
+      <li><a href="pro-partnery.html">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li class="nav-mobile-only"><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://portal.lexia.cz/login" target="_blank" rel="noopener" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="kontakt.html" class="btn btn-primary">Kontakt <i class="icon" data-icon="mail"></i></a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Vyberte si <span style="color: var(--primary);">právní ochranu</span></h1>
+    <p>Zvolte produkt, který sedí na vaši situaci. V dalším kroku si z pilířů a doplňků sestavíte pojištění přesně podle svých potřeb a rovnou uvidíte cenu.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <ol class="calc-stepper" aria-label="Postup sjednání">
+      <li class="step is-active" data-step="0"><span class="step-num">1</span><span class="step-label">Volba produktu</span></li>
+      <li class="step" data-step="1"><span class="step-num">2</span><span class="step-label">Konfigurace</span></li>
+      <li class="step" data-step="2"><span class="step-num">3</span><span class="step-label">Vaše údaje</span></li>
+      <li class="step" data-step="3"><span class="step-num">4</span><span class="step-label">Rekapitulace</span></li>
+      <li class="step" data-step="4"><span class="step-num">5</span><span class="step-label">Potvrzení</span></li>
+    </ol>
+
+    <div class="volba-grid" id="volba-produktu">
+      <a class="volba-card" href="kalkulacka.html?varianta=ridic" data-produkt="ridic">
+        <div class="volba-head">
+          <span class="volba-icon"><i class="icon" data-icon="lx_ridic"></i></span>
+          <div>
+            <h2>Řidič</h2>
+            <p class="volba-sub">Právní ochrana řidiče</p>
+          </div>
+        </div>
+        <p class="volba-desc">Pro jednu nepodnikající osobu za volantem. Dopravní nehody, pokuty a body, spory s pojišťovnou i vymáhání odškodnění.</p>
+        <div class="volba-foot">
+          <span class="volba-price">již od <strong data-cena>…</strong>/měs.</span>
+          <span class="volba-cta">Konfigurovat <i class="icon" data-icon="arrow_right"></i></span>
+        </div>
+      </a>
+
+      <a class="volba-card" href="kalkulacka.html?varianta=jednotlivec" data-produkt="jednotlivec">
+        <div class="volba-head">
+          <span class="volba-icon"><i class="icon" data-icon="lx_jednotlivec"></i></span>
+          <div>
+            <h2>Jednotlivec</h2>
+            <p class="volba-sub">Ochrana na míru pro jednotlivce</p>
+          </div>
+        </div>
+        <p class="volba-desc">Vy a děti do 26 let bez vlastního příjmu. Základní ochrana vždy, k ní bydlení, vozidla, práce nebo manažerská ochrana podle potřeby.</p>
+        <div class="volba-foot">
+          <span class="volba-price">již od <strong data-cena>…</strong>/měs.</span>
+          <span class="volba-cta">Konfigurovat <i class="icon" data-icon="arrow_right"></i></span>
+        </div>
+      </a>
+
+      <a class="volba-card volba-card--featured" href="kalkulacka.html?varianta=domacnost" data-produkt="domacnost">
+        <div class="volba-head">
+          <span class="volba-icon"><i class="icon" data-icon="lx_domacnost"></i></span>
+          <div>
+            <h2>Domácnost</h2>
+            <p class="volba-sub">Právní ochrana celé domácnosti</p>
+          </div>
+        </div>
+        <p class="volba-desc">Všechny osoby ve společné domácnosti v jedné smlouvě. Stejné pilíře a doplňky jako u jednotlivce, jen pro celou rodinu.</p>
+        <div class="volba-foot">
+          <span class="volba-price">již od <strong data-cena>…</strong>/měs.</span>
+          <span class="volba-cta">Konfigurovat <i class="icon" data-icon="arrow_right"></i></span>
+        </div>
+      </a>
+
+      <a class="volba-card" href="kalkulacka.html?varianta=poradce" data-produkt="poradce">
+        <div class="volba-head">
+          <span class="volba-icon"><i class="icon" data-icon="briefcase"></i></span>
+          <div>
+            <h2>Poradci a realiťáci</h2>
+            <p class="volba-sub">Pro výkon profese</p>
+          </div>
+        </div>
+        <p class="volba-desc">Finanční poradci a realitní zprostředkovatelé. Ochrana při výkonu profese, sjednává se na IČO.</p>
+        <div class="volba-foot">
+          <span class="volba-price">již od <strong data-cena>…</strong>/měs.</span>
+          <span class="volba-cta">Konfigurovat <i class="icon" data-icon="arrow_right"></i></span>
+        </div>
+      </a>
+    </div>
+
+    <p class="volba-note">Podnikatelé a firmy sjednávají pojištění s naším poradcem. <a href="kontakt.html">Ozvěte se nám</a> a připravíme nabídku na míru.</p>
+  </div>
+</section>
+
+<svg class="footer-curve" viewBox="0 0 1920 190" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,120 C300,165 1350,150 1920,15 L1920,190 L0,190 Z"/>
+</svg>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="assets/volba-produktu.js" defer></script>
+<script src="script.js"></script>
+</body>
+</html>
