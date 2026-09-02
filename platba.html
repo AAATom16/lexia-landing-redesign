@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platba pojistného | Lexia</title>
+<meta name="description" content="Potvrzení platby pojistného Lexia.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .platba-page { background: var(--bg-section); padding: 64px 0 80px; }
+  .platba-page .state-card { margin-top: 8px; }
+  .state-icon--warn { background: rgba(214, 158, 46, 0.14); color: #b7791f; }
+  .platba-pozn { margin-top: 22px; font-size: .92rem; line-height: 1.6; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html" class="logo" aria-label="Lexia - První pomoc v právu"><img src="assets/lexia-logo.svg" alt="Lexia"></a>
+    <ul class="nav-links">
+      <li><a href="pro-koho.html">Pro koho</a></li>
+      <li><a href="index.html#jak-funguje">Jak funguje</a></li>
+      <li><a href="sluzby.html">Ceník</a></li>
+      <li><a href="pro-partnery.html">Pro partnery</a></li>
+      <li><a href="o-nas.html">O nás</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+      <li class="nav-mobile-only"><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Přihlásit se do klientské zóny</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://portal.lexia.cz/login" target="_blank" rel="noopener" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
+      <a href="sjednat.html" class="btn btn-primary">Spočítat cenu</a>
+    </div>
+    <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<section class="platba-page">
+  <div class="container">
+
+    <!-- Platba prošla. Pojištění ale NEBĚŽÍ okamžitě: aktivuje se, až se
+         platba spáruje na straně pojišťovny, a klientovi to potvrdíme
+         e-mailem. Slibovat tady aktivní krytí by bylo nepravdivé. -->
+    <div class="state-card state-card--wide" data-platba="paid" hidden>
+      <div class="state-icon state-icon--success">
+        <i class="icon" data-icon="check_circle"></i>
+      </div>
+      <h2>Platba proběhla, děkujeme</h2>
+      <p>Pojistné jsme přijali. Jakmile platbu spárujeme, pošleme vám e-mailem potvrzení o aktivaci pojištění i samotnou pojistku.</p>
+      <p class="platba-pozn">Párování platby obvykle trvá do druhého pracovního dne. Do té doby nemusíte nic dělat.</p>
+      <div class="state-actions">
+        <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+        <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
+      </div>
+    </div>
+
+    <!-- Převod z účtu. Comgate vrátí `pending` i u bankovního tlačítka, kde
+         peníze dorazí klidně za pár dní. -->
+    <div class="state-card state-card--wide" data-platba="pending" hidden>
+      <div class="state-icon state-icon--pending">
+        <i class="icon" data-icon="clock"></i>
+      </div>
+      <h2>Platbu zpracováváme</h2>
+      <p>Platba je na cestě. Až peníze dorazí, pošleme vám e-mailem potvrzení o aktivaci pojištění i pojistku.</p>
+      <p class="platba-pozn">U převodu z účtu to může trvat i několik pracovních dnů. Platit znovu není potřeba.</p>
+      <div class="state-actions">
+        <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+        <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
+      </div>
+    </div>
+
+    <!-- Zrušeno nebo zamítnuto. Platební údaje má klient v e-mailu s návrhem,
+         takže ho neposíláme nikam, kde by musel začínat znovu. -->
+    <div class="state-card state-card--wide" data-platba="cancelled" hidden>
+      <div class="state-icon state-icon--warn">
+        <i class="icon" data-icon="clock"></i>
+      </div>
+      <h2>Platba neproběhla</h2>
+      <p>Platba se nedokončila, žádné peníze jsme vám nestrhli. Pojištění zatím neplatí.</p>
+      <p class="platba-pozn">Zkusit to znovu můžete kdykoli přes odkaz na platební bránu nebo QR kód v e-mailu s návrhem smlouvy. Kdyby cokoli nešlo, ozvěte se nám.</p>
+      <div class="state-actions">
+        <a href="kontakt.html" class="btn btn-primary btn-lg">Kontaktovat nás</a>
+        <a href="index.html" class="btn btn-outline btn-lg">Zpět na hlavní stránku</a>
+      </div>
+    </div>
+
+    <!-- Bez parametru `result` nevíme nic. Radši ať stránka nic netvrdí, než
+         aby klientovi potvrdila platbu, která neproběhla. -->
+    <div class="state-card state-card--wide" data-platba="neznamy">
+      <div class="state-icon state-icon--custom">
+        <i class="icon" data-icon="chat"></i>
+      </div>
+      <h2>Stav platby zjišťujeme</h2>
+      <p>Nepodařilo se nám tady zobrazit, jak platba dopadla. O výsledku vás bez ohledu na to informujeme e-mailem.</p>
+      <div class="state-actions">
+        <a href="index.html" class="btn btn-primary btn-lg">Zpět na hlavní stránku</a>
+        <a href="kontakt.html" class="btn btn-outline btn-lg">Kontaktovat nás</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><img src="assets/lexia-logo.svg" alt="Lexia"></div>
+        <ul class="footer-contact">
+          <li><i class="icon" data-icon="phone"></i><span>+420 465 465 465</span></li>
+          <li><i class="icon" data-icon="mail"></i><span>info@lexia.cz</span></li>
+          <li><i class="icon" data-icon="location"></i><span>Želetavská 1525/1,<br>140 00 Praha 4</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Naše produkty</h4>
+        <ul>
+          <li><a href="pro-koho.html#jednotlivci">Jednotlivci a domácnosti</a></li>
+          <li><a href="pro-koho.html#rodiny">Podnikatelé a firmy</a></li>
+          <li><a href="pro-koho.html">Další produkty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Lexia</h4>
+        <ul>
+          <li><a href="index.html#jak-funguje">Jak to funguje</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></li>
+          <li><a href="stiznosti.html">Postup při podání stížnosti</a></li>
+          <li><a href="hlaseni-poruseni.html">Hlášení porušení právních předpisů</a></li>
+          <li><a href="assets/dokumenty/formular-odstoupeni-od-smlouvy.pdf" target="_blank" rel="noopener">Formulář pro odstoupení od smlouvy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Podpora</h4>
+        <ul>
+          <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
+          <li><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Sledovat případ</a></li>
+          <li><a href="kontakt.html">Kontakty</a></li>
+          <li><a href="ke-stazeni.html">Ke stažení</a></li>
+          <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
+          <li><a href="assets/dokumenty/brozura-jednotlivci-domacnosti.pdf" target="_blank" rel="noopener">Brožura - jednotlivci a domácnosti</a></li>
+          <li><a href="assets/dokumenty/brozura-podnikatele-firmy.pdf" target="_blank" rel="noopener">Brožura - podnikatelé a firmy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LEXIA Legal Protection a.s. Všechna práva vyhrazena.</span>
+      <span>IČO: 22189432 • <a href="#">Obchodní podmínky</a> • <a href="assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">GDPR</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/icons.js"></script>
+<script src="script.js"></script>
+<script>
+  // Stav platby výhradně z parametru `result`, který k návratové adrese
+  // připojuje backend (url_paid / url_pending / url_cancelled). Stránka si nic
+  // nedotahuje: `paymentId` v adrese je sice vlastní platba klienta, ale
+  // veřejná stránka nemá důvod na něj čímkoli sahat.
+  (function () {
+    var povolene = { paid: 1, pending: 1, cancelled: 1 };
+    var result = new URLSearchParams(location.search).get('result');
+    var stav = povolene[result] ? result : 'neznamy';
+    document.querySelectorAll('[data-platba]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-platba') !== stav;
+    });
+  })();
+</script>
+</body>
+</html>
