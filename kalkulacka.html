@@ -90,16 +90,20 @@
       #calc-pillars .calc-detail:hover, #calc-pillars .calc-detail:focus-visible {
         text-decoration: underline; }
       .calc-info-dialog { margin: auto; max-width: 560px; width: calc(100% - 32px);
-        max-height: 82vh; border: none; border-radius: var(--radius-md, 12px);
-        padding: 24px; display: flex; flex-direction: column; }
+        max-height: 82vh; max-height: 82dvh; border: none; border-radius: var(--radius-md, 12px);
+        padding: 24px; display: flex; flex-direction: column; overflow-y: auto; }
       .calc-info-dialog::backdrop { background: rgba(0,0,0,.45); }
       .calc-info-dialog h3 { margin: 0 0 4px; }
       .calc-info-sub { color: var(--text-muted); margin: 0 0 16px; font-size: .9rem; }
       .calc-info-rubrika { display: block; margin: 0 0 4px; font-size: .9rem; }
       .calc-info-text { margin: 0 0 16px; font-size: .9rem; line-height: 1.5;
         white-space: pre-line; color: var(--text-muted); }
+      /* Seznam NESMI byt jediny smrsknutelny prvek ve flex sloupci: kdyz je
+         obsah nad nim vyssi nez max-height dialogu, flexbox ho smrskne az na
+         nulu a pojistene oblasti se stanou nedosazitelnymi (LEX-47, mobil).
+         Roste tedy do sve prirozene vysky a scrolluje cely dialog. */
       .calc-info-list { list-style: none; margin: 0 0 20px; padding: 0;
-        flex: 1 1 auto; overflow-y: auto; min-height: 0; }
+        flex: 0 0 auto; }
       .calc-info-list li { padding: 8px 0; border-bottom: 1px solid var(--primary-light);
         display: flex; flex-direction: column; gap: 2px; }
       .calc-info-list li:last-child { border-bottom: none; }
