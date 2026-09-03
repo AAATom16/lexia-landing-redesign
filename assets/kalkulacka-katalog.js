@@ -810,6 +810,30 @@
 
   // ── slevový voucher (LEX-38) ──────────────────────────────────────────────
   /**
+   * Ukázat pole voucheru jen tam, kde ho jde uplatnit.
+   *
+   * Rozhoduje `vouchersRedeemable` z katalogu, protože to je táž konfigurace,
+   * podle které kód schvaluje nebo odmítá backend. Seznam vyloučených produktů
+   * natvrdo tady by se rozešel při první změně — a Roman ho už jednou měnil.
+   * Když příznak chybí (starší backend), pole necháváme; případný kód odmítne
+   * validace, což je lepší než tiše schovat funkční slevu.
+   */
+  function prepniVoucher(katalog) {
+    const blok = el('#sum-voucher');
+    if (!blok) return;
+    const lze = !katalog || katalog.vouchersRedeemable !== false;
+    blok.hidden = !lze;
+    if (!lze) {
+      stav.voucher.kod = '';
+      stav.voucher.uplatneny = null;
+      const pole = el('#voucher-code');
+      if (pole) pole.value = '';
+      const hlaska = el('#voucher-msg');
+      if (hlaska) hlaska.hidden = true;
+    }
+  }
+
+  /**
    * Hláška u pole s voucherem. Kód se v nacenění jen OVĚŘUJE — spotřebuje se až
    * při založení konceptu, jinak by ho snědl první přepočet ceny.
    */
@@ -1169,6 +1193,7 @@
       vykresliShrnuti(null, e.message);
       return;
     }
+    prepniVoucher(stav.katalog);
     // Povinné pilíře jsou ve smlouvě vždycky; předvybrané doporučujeme.
     stav.vybrane = new Set(
       stav.katalog.pillars.filter((p) => p.mandatory || p.defaultSelected).map((p) => p.key),

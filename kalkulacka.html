@@ -259,10 +259,8 @@
       <li><a href="sluzby.html">Ceník</a></li>
       <li><a href="pro-partnery.html">Pro partnery</a></li>
       <li><a href="o-nas.html">O nás</a></li>
-      <li class="nav-mobile-only"><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Přihlásit se do klientské zóny</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="https://portal.lexia.cz/login" target="_blank" rel="noopener" class="btn btn-icon" aria-label="Klientská zóna" title="Klientská zóna"><i class="icon" data-icon="user"></i></a>
       <a href="kontakt.html" class="btn btn-primary">Kontakt <i class="icon" data-icon="mail"></i></a>
     </div>
     <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -454,8 +452,14 @@
           <span>Při roční platbě ušetříte <strong>179 Kč</strong> (12. měsíc zdarma)</span>
         </div>
         <!-- Slevový voucher (LEX-38). Roman posílá v e-mailu odkaz s ?voucher=KOD,
-             takže se pole samo předvyplní a sleva se propíše rovnou do ceny. -->
-        <div id="sum-voucher" class="calc-voucher">
+             takže se pole samo předvyplní a sleva se propíše rovnou do ceny.
+
+             Roman 3. 9. 2026 — schované ve výchozím stavu. Na produkt pro
+             poradce a realiťáky voucher uplatnit NELZE (je odměnou za jeho
+             sjednání), a pole se tam přesto nabízelo. O tom, jestli se ukáže,
+             rozhoduje `vouchersRedeemable` z katalogu, ne seznam v tomhle
+             souboru — jinak by se to rozešlo, jakmile Roman seznam změní. -->
+        <div id="sum-voucher" class="calc-voucher" hidden>
           <label class="calc-voucher-label" for="voucher-code">Máte slevový voucher?</label>
           <div class="calc-voucher-row">
             <input type="text" id="voucher-code" name="voucherCode" placeholder="Slevový kód"
@@ -879,7 +883,6 @@
         <h4>Podpora</h4>
         <ul>
           <li><a href="nahlasit-pripad.html">Nahlásit případ</a></li>
-          <li><a href="https://portal.lexia.cz/login" target="_blank" rel="noopener">Sledovat případ</a></li>
           <li><a href="kontakt.html">Kontakty</a></li>
           <li><a href="ke-stazeni.html">Ke stažení</a></li>
           <li><a href="assets/dokumenty/pojistne-podminky.pdf" target="_blank" rel="noopener">Pojistné podmínky</a></li>
