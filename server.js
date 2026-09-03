@@ -36,6 +36,25 @@ const DENY = [
   /^_to_delete(\/|$)/, /^_sablona-microsite(\/|$)/,
 ];
 
+/**
+ * Stránky, které na ostrém webu být nesmí, ale mají zůstat dostupné pro práci
+ * na novém webu.
+ *
+ * Roman 3. 9. 2026: „to vidím úplně poprvé… zatím nijak, asi nápady/invence
+ * během přípravy nového webu… může to prosím zůstat někde na railway ale na
+ * ostrém webu nikoliv."
+ *
+ * Jde o `akce.html` — slibuje slevu 50 %, bonus 500 Kč za doporučení a soutěž
+ * o iPhone, což nikdo neschválil. Z webu na ni nevede jediný odkaz, ale byla
+ * veřejně dostupná, takže se na ty sliby šlo odvolat.
+ *
+ * Ostrý web i náhled na Railway jsou TÁŽ aplikace (www.lexia.cz je CNAME na
+ * *.up.railway.app), takže je nejde oddělit nasazením — jen hostitelem. Na
+ * lexia.cz vrací 404, na railwayové adrese se servíruje dál.
+ */
+const OSTRE_HOSTY = new Set(['lexia.cz', 'www.lexia.cz']);
+const JEN_MIMO_OSTRY_WEB = [/^\/akce(\.html)?\/?$/i];
+
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
 // Klientská zóna a administrace nikdy nebyly funkční — statické atrapy
 // duplikovaly portál (klient.html dokonce ukazoval vymyšlený počet klientů).
@@ -494,6 +513,24 @@ editor.post('/api/reset', requireAuth, async (req, res) => {
 app.use('/editor', editor);
 
 // ------------------------------------------------------- veřejné stránky
+
+/**
+ * Skryté na ostrém webu, dostupné na Railway. Musí běžet PŘED servírováním
+ * stránek i statiky, jinak by ji `express.static` vydal dřív, než se sem
+ * dostaneme. `trust proxy` je zapnuté, takže `req.hostname` nese doménu
+ * návštěvníka, ne interní adresu.
+ */
+app.use((req, res, next) => {
+  const host = String(req.hostname || '').toLowerCase();
+  if (OSTRE_HOSTY.has(host) && JEN_MIMO_OSTRY_WEB.some((re) => re.test(req.path))) {
+    const notFound = path.join(ROOT, '404.html');
+    res.status(404).setHeader('Cache-Control', 'no-cache');
+    if (fs.existsSync(notFound)) return res.type('html').send(fs.readFileSync(notFound, 'utf8'));
+    return res.type('text/plain; charset=utf-8').send('Stránka nenalezena.');
+  }
+  next();
+});
+
 
 app.use((req, res, next) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') return next();
