@@ -68,6 +68,41 @@ const JEN_MIMO_OSTRY_WEB = [
   /^\/nabidka(\.html)?\/?$/i,
 ];
 
+/**
+ * Google Analytics 4.
+ *
+ * ID měření od Adme (Ladislav Šmíd, 3. 9. 2026, stream „www" pro
+ * https://www.lexia.cz). Není to tajemství — v hotové stránce ho vidí každý,
+ * kdo se podívá do zdroje; proto je rovnou tady a ne v proměnné prostředí.
+ *
+ * Vkládá se AŽ PŘI ODESLÁNÍ stránky, ne do souborů, a to ze dvou důvodů:
+ *
+ *  1. Web má pětadvacet samostatných HTML stránek bez společné hlavičky. Kód
+ *     nalepený do každé z nich je pětadvacet kopií, které se časem rozejdou,
+ *     a nová stránka by měření tiše minula.
+ *  2. Ostrý web a náhled na Railway jsou TÁŽ aplikace (www.lexia.cz je CNAME
+ *     na *.up.railway.app). Kód natvrdo ve stránce by počítal každý náš test
+ *     a každý náhled jako návštěvu lexia.cz. Proto se měří jen na ostrých
+ *     hostech — a při práci v editoru vůbec, ať si redaktor nezaměřuje sám
+ *     sebe.
+ */
+const GA_ID = 'G-LW56283YF2';
+const GA_SNIPPET = `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GA_ID}');
+</script>
+`;
+
+/** Vloží měřicí kód těsně před `</head>`. Bez hlavičky stránku nechá být. */
+function vlozMereni(html) {
+  const i = html.search(/<\/head>/i);
+  if (i < 0) return html;
+  return html.slice(0, i) + GA_SNIPPET + html.slice(i);
+}
+
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
 // Klientská zóna a administrace nikdy nebyly funkční — statické atrapy
 // duplikovaly portál (klient.html dokonce ukazoval vymyšlený počet klientů).
@@ -574,13 +609,16 @@ app.use((req, res, next) => {
     }).html
     : entry.source;
 
+  const ostryHost = OSTRE_HOSTY.has(String(req.hostname || '').toLowerCase());
+  const merit = ostryHost && !editMode;
+
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-cache, must-revalidate');
   if (editMode) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     auth.refreshCookie(req, res);
   }
-  res.send(html);
+  res.send(merit ? vlozMereni(html) : html);
 });
 
 app.use((req, res, next) => {
