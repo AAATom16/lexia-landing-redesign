@@ -44,16 +44,29 @@ const DENY = [
  * během přípravy nového webu… může to prosím zůstat někde na railway ale na
  * ostrém webu nikoliv."
  *
- * Jde o `akce.html` — slibuje slevu 50 %, bonus 500 Kč za doporučení a soutěž
- * o iPhone, což nikdo neschválil. Z webu na ni nevede jediný odkaz, ale byla
- * veřejně dostupná, takže se na ty sliby šlo odvolat.
+ * Jde o:
+ *
+ *  - `akce.html` — slibuje slevu 50 %, bonus 500 Kč za doporučení a soutěž
+ *    o iPhone, což nikdo neschválil. Z webu na ni nevedl jediný odkaz, ale byla
+ *    veřejně dostupná, takže se na ty sliby šlo odvolat.
+ *  - `sluzby.html` (Roman 3. 9. 2026: „prosím tuhle stránku z webu úplně skrýt,
+ *    je zjevně nedodělaná") a její detail `nabidka.html`. Na `sluzby.html`
+ *    mířila položka „Ceník" v hlavní navigaci všech stránek — ta proto ze
+ *    stránek mizí spolu s tímhle záznamem, protože odkaz na 404 je horší než
+ *    žádný odkaz. `nabidka.html` je detail balíčku pod ní: nevede na ni odkaz
+ *    odnikud a sama odkazuje zpátky na skrytý ceník, takže veřejně zůstat
+ *    nemůže — přesně to byl případ `akce.html`.
  *
  * Ostrý web i náhled na Railway jsou TÁŽ aplikace (www.lexia.cz je CNAME na
  * *.up.railway.app), takže je nejde oddělit nasazením — jen hostitelem. Na
- * lexia.cz vrací 404, na railwayové adrese se servíruje dál.
+ * lexia.cz vrací 404, na railwayové adrese se servírují dál.
  */
 const OSTRE_HOSTY = new Set(['lexia.cz', 'www.lexia.cz']);
-const JEN_MIMO_OSTRY_WEB = [/^\/akce(\.html)?\/?$/i];
+const JEN_MIMO_OSTRY_WEB = [
+  /^\/akce(\.html)?\/?$/i,
+  /^\/sluzby(\.html)?\/?$/i,
+  /^\/nabidka(\.html)?\/?$/i,
+];
 
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
 // Klientská zóna a administrace nikdy nebyly funkční — statické atrapy
