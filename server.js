@@ -69,38 +69,163 @@ const JEN_MIMO_OSTRY_WEB = [
 ];
 
 /**
- * Google Analytics 4.
+ * Měření návštěvnosti a souhlas s ním.
  *
  * ID měření od Adme (Ladislav Šmíd, 3. 9. 2026, stream „www" pro
  * https://www.lexia.cz). Není to tajemství — v hotové stránce ho vidí každý,
  * kdo se podívá do zdroje; proto je rovnou tady a ne v proměnné prostředí.
  *
- * Vkládá se AŽ PŘI ODESLÁNÍ stránky, ne do souborů, a to ze dvou důvodů:
+ * Vkládá se AŽ PŘI ODESLÁNÍ stránky, ne do souborů, ze dvou důvodů:
  *
  *  1. Web má pětadvacet samostatných HTML stránek bez společné hlavičky. Kód
  *     nalepený do každé z nich je pětadvacet kopií, které se časem rozejdou,
- *     a nová stránka by měření tiše minula.
+ *     a nová stránka by měření tiše minula. Vkládáním cestou ven jsou zdarma
+ *     pokryté i mikrostránky /reality a /financniporadci.
  *  2. Ostrý web a náhled na Railway jsou TÁŽ aplikace (www.lexia.cz je CNAME
  *     na *.up.railway.app). Kód natvrdo ve stránce by počítal každý náš test
  *     a každý náhled jako návštěvu lexia.cz. Proto se měří jen na ostrých
  *     hostech — a při práci v editoru vůbec, ať si redaktor nezaměřuje sám
  *     sebe.
+ *
+ * --- Souhlas ---------------------------------------------------------------
+ *
+ * Analytická cookies jsou v ČR na výslovný souhlas od 1. 1. 2022 (§ 89 odst. 3
+ * zákona č. 127/2005 Sb.). Nestačí tedy lišta, která jen oznamuje, že se měří.
+ *
+ * Zvolili jsme nejpřísnější variantu, jaká jde: dokud návštěvník nesouhlasí,
+ * NEODEJDE na Google ani jeden požadavek — skript gtag.js se do stránky vloží
+ * teprve po kliknutí na „Přijmout". Google nabízí i mírnější Consent Mode, kde
+ * se skript načte hned a jen nesmí ukládat; ten by nám dal víc dat, ale zároveň
+ * by prohlížeč návštěvníka kontaktoval Google dřív, než k tomu dal svolení.
+ * U firmy, která prodává právní ochranu, to nestojí za tu diskuzi. Consent Mode
+ * nastavujeme i tak, jako druhou pojistku pro případ, že by se skript někdy
+ * načetl jinudy.
+ *
+ * „Odmítnout" a „Přijmout" jsou stejně velké, stejně tučné a na stejné úrovni —
+ * odmítnutí musí být stejně snadné jako souhlas. Volba se pamatuje v
+ * localStorage (uložit vlastní rozhodnutí je „nezbytně nutné", tedy bez
+ * souhlasu přípustné) a dá se kdykoli změnit odkazem „Nastavení cookies"
+ * v patičce.
  */
 const GA_ID = 'G-LW56283YF2';
-const GA_SNIPPET = `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+
+const SOUHLAS_BLOK = `
+<style>
+.lx-ck{position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:0 16px 16px;
+  font-family:var(--font-base,'Poppins',Arial,sans-serif)}
+.lx-ck[hidden]{display:none}
+.lx-ck-in{max-width:1080px;margin:0 auto;background:var(--white,#fff);
+  border:1px solid var(--border,#e5e9f0);border-radius:var(--radius,12px);
+  box-shadow:0 10px 34px -6px rgba(0,26,77,.28);padding:20px 24px;
+  display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.lx-ck-txt{flex:1 1 420px;min-width:0}
+.lx-ck-txt strong{display:block;font-family:var(--font-heading,'Nunito',Arial,sans-serif);
+  font-weight:800;color:var(--heading,#001a4d);font-size:16px;margin-bottom:4px}
+.lx-ck-txt p{margin:0;font-size:14px;line-height:1.55;color:var(--text-muted,#4a5468)}
+.lx-ck-txt a{color:var(--primary,#0045bf);text-decoration:underline}
+.lx-ck-btns{display:flex;gap:12px;flex:0 0 auto}
+.lx-ck-b{font-family:inherit;font-size:15px;font-weight:600;line-height:1;
+  padding:12px 26px;min-height:44px;min-width:148px;border-radius:999px;
+  cursor:pointer;border:1.5px solid transparent;transition:background .15s,border-color .15s}
+.lx-ck-b:focus-visible{outline:3px solid var(--accent,#00a5bf);outline-offset:2px}
+.lx-ck-no{background:var(--white,#fff);color:var(--heading,#001a4d);
+  border-color:var(--border-strong,#cfd6e2)}
+.lx-ck-no:hover{background:var(--bg-light,#f0f5ff);border-color:var(--primary-light,#7da0dc)}
+.lx-ck-yes{background:var(--primary,#0045bf);color:#fff;border-color:var(--primary,#0045bf)}
+.lx-ck-yes:hover{background:var(--primary-dark,#003599);border-color:var(--primary-dark,#003599)}
+.lx-ck-open{background:none;border:0;padding:0;font:inherit;color:inherit;
+  text-decoration:underline;cursor:pointer}
+@media (max-width:720px){
+  .lx-ck-in{padding:18px;gap:16px}
+  .lx-ck-btns{width:100%}
+  .lx-ck-b{flex:1 1 0;min-width:0;padding:12px 12px}
+}
+</style>
+<div class="lx-ck" id="lx-ck" role="region" aria-label="Souhlas s měřením návštěvnosti" hidden>
+  <div class="lx-ck-in">
+    <div class="lx-ck-txt">
+      <strong>Měření návštěvnosti</strong>
+      <p>Rádi bychom sledovali, jak se vám web používá, abychom ho mohli zlepšovat.
+        Dokud nám to nedovolíte, nic neukládáme a na Google neodchází žádný požadavek.
+        Podrobnosti najdete v <a href="/assets/dokumenty/informace-o-zpracovani-osobnich-udaju.pdf" target="_blank" rel="noopener">informacích ke zpracování osobních údajů</a>.</p>
+    </div>
+    <div class="lx-ck-btns">
+      <button type="button" class="lx-ck-b lx-ck-no" data-ck="denied">Odmítnout</button>
+      <button type="button" class="lx-ck-b lx-ck-yes" data-ck="granted">Přijmout</button>
+    </div>
+  </div>
+</div>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', '${GA_ID}');
+(function () {
+  var KLIC = 'lexia-souhlas-mereni';
+  var ID = '${GA_ID}';
+  var lista = document.getElementById('lx-ck');
+  if (!lista) return;
+
+  function precti() {
+    try { return localStorage.getItem(KLIC); } catch (e) { return null; }
+  }
+  function uloz(v) {
+    try { localStorage.setItem(KLIC, v); } catch (e) { /* soukromé okno */ }
+  }
+
+  // Skript Googlu se vkládá teprve tady, po souhlasu.
+  function zapniMereni() {
+    if (window.__lxMereni) return;
+    window.__lxMereni = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied', ad_user_data: 'denied',
+      ad_personalization: 'denied', analytics_storage: 'denied'
+    });
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', ID);
+  }
+
+  function ukaz() { lista.hidden = false; }
+  function skryj() { lista.hidden = true; }
+
+  lista.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ck]');
+    if (!b) return;
+    var volba = b.getAttribute('data-ck');
+    uloz(volba);
+    skryj();
+    if (volba === 'granted') zapniMereni();
+  });
+
+  // Odkaz na změnu rozhodnutí. Patří do patičky vedle GDPR; na stránkách bez
+  // patičky (vyskakovací okna produktů) se prostě nezobrazí.
+  var paticka = document.querySelector('.footer-bottom span:last-child')
+    || document.querySelector('.footer-bottom');
+  if (paticka) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'lx-ck-open';
+    b.textContent = 'Nastavení cookies';
+    b.addEventListener('click', ukaz);
+    paticka.append(' • ', b);
+  }
+
+  var volba = precti();
+  if (volba === 'granted') zapniMereni();
+  else if (volba !== 'denied') ukaz();
+})();
 </script>
 `;
 
-/** Vloží měřicí kód těsně před `</head>`. Bez hlavičky stránku nechá být. */
+/** Vloží lištu souhlasu (a s ní měření) těsně před `</body>`. */
 function vlozMereni(html) {
-  const i = html.search(/<\/head>/i);
+  const i = html.search(/<\/body>/i);
   if (i < 0) return html;
-  return html.slice(0, i) + GA_SNIPPET + html.slice(i);
+  return html.slice(0, i) + SOUHLAS_BLOK + html.slice(i);
 }
 
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
