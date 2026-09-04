@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Validace povinných polí — zvýraznění a odskok na první nevyplněné
   initFormValidation();
 
+  // Žádost o právní pomoc — jediný formulář na webu, který opravdu odesílá
+  initClaimForm();
+
   // Form submit demo
   document.querySelectorAll('form[data-demo]').forEach(form => {
     form.addEventListener('submit', e => {
@@ -580,6 +583,104 @@ function initTestimonialsCarousel() {
   nextBtn && nextBtn.addEventListener('click', () => goTo(index + 1));
 
   goTo(0);
+}
+
+/* ============================================
+   ŽÁDOST O POSKYTNUTÍ PRÁVNÍ POMOCI
+   Formulář na nahlasit-pripad.html odesílá skutečnou žádost — přes vlastní
+   server (/api/zadost-o-pravni-pomoc) do drAIve, odkud odejde e-mailem na
+   pravnipomoc@lexia.cz. Zbytek formulářů na webu jsou poptávky (data-demo),
+   tenhle jediný nese pojistnou událost, takže se nesmí ztratit: když se
+   odeslání nezdaří, formulář zůstane vyplněný i s chybovou hláškou.
+   ============================================ */
+
+/** Text chyby: vlastní důvod od serveru + vždy cesta, kudy žádost podat jinak. */
+const SELHANI = (duvod) => (duvod ? duvod + ' ' : 'Žádost se nepodařilo odeslat. ')
+  + 'Zkuste to prosím znovu, nebo nám napište na pravnipomoc@lexia.cz.';
+
+/** Limity musí sedět se serverem: FilesInterceptor('files', 6) + 7 MB celkem. */
+const ZADOST_MAX_SOUBORU = 6;
+const ZADOST_MAX_BAJTU = 7 * 1024 * 1024;
+
+function initClaimForm() {
+  const form = document.querySelector('form[data-claim-form]');
+  if (!form) return;
+
+  const chyba = form.querySelector('[data-claim-error]');
+  const hotovo = document.querySelector('[data-claim-done]');
+  const btn = form.querySelector('button[type="submit"]');
+  const puvodniPopisek = btn ? btn.textContent : 'Odeslat žádost';
+  // Kam žádost jde, řeší server (server.js → LEXIA_ZADOST_URL), ne stránka.
+  const endpoint = '/api/zadost-o-pravni-pomoc';
+
+  function ukazChybu(text) {
+    if (!chyba) return;
+    chyba.hidden = false;
+    chyba.textContent = text;
+    chyba.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function skryjChybu() {
+    if (chyba) chyba.hidden = true;
+  }
+
+  /** Přílohy zkontrolujeme dřív, než je vůbec pošleme — server je stejně odmítne. */
+  function prilohyVadi(input) {
+    const soubory = input && input.files ? Array.from(input.files) : [];
+    if (soubory.length > ZADOST_MAX_SOUBORU) {
+      return `Najednou lze přiložit nejvýš ${ZADOST_MAX_SOUBORU} souborů. Zbytek doložíte po zaregistrování žádosti.`;
+    }
+    const celkem = soubory.reduce((sum, f) => sum + f.size, 0);
+    if (celkem > ZADOST_MAX_BAJTU) {
+      return 'Přílohy jsou dohromady příliš velké — vejít se musí do 7 MB. Větší dokumenty doložíte po zaregistrování žádosti.';
+    }
+    return null;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    skryjChybu();
+
+    // Povinná pole hlídá prohlížeč; initFormValidation navíc zčervená a odskočí.
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const potiz = prilohyVadi(form.querySelector('input[type="file"]'));
+    if (potiz) { ukazChybu(potiz); return; }
+
+    const data = new FormData(form);
+    // Souhlas se zpracováním je podmínka odeslání, ne údaj pro likvidátora.
+    data.delete('consent');
+
+    if (btn) { btn.disabled = true; btn.textContent = 'Odesílám…'; }
+    try {
+      // Content-Type nenastavujeme — hranici multipartu doplní prohlížeč sám.
+      const res = await fetch(endpoint, { method: 'POST', body: data });
+      let odpoved = null;
+      try { odpoved = await res.json(); } catch (err) { /* server neodpověděl JSONem */ }
+      if (!res.ok || !odpoved || odpoved.ok !== true) {
+        // Server umí říct proč (velké přílohy, výpadek e-mailu) — pokud řekl,
+        // dostane to návštěvník doslova; jinak zůstane obecná hláška níž.
+        const duvod = odpoved && typeof odpoved.error === 'string' ? odpoved.error : '';
+        console.error('[lexia] odeslání žádosti selhalo:', res.status, duvod);
+        ukazChybu(SELHANI(duvod));
+        return;
+      }
+      form.hidden = true;
+      if (hotovo) {
+        hotovo.hidden = false;
+        hotovo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch (err) {
+      // Sem spadne výpadek sítě — žádost neodešla, formulář zůstává vyplněný.
+      console.error('[lexia] odeslání žádosti selhalo:', err);
+      ukazChybu(SELHANI(''));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = puvodniPopisek; }
+    }
+  });
 }
 
 /* ============================================

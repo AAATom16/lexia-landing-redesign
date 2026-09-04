@@ -62,6 +62,16 @@
 .claim-consent .req{color:#b3315a}
 .claim-actions{display:flex;justify-content:center;margin-top:24px}
 .claim-foot{text-align:center;color:var(--text-muted);font-size:0.9rem;margin:28px 0 0}
+/* Past na roboty — pro člověka neviditelná, pro čtečku obrazovky skrytá */
+.claim-trap{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+/* Hlášky formuláře */
+.claim-alert{background:rgba(239,70,63,0.08);border:1px solid var(--danger);color:#8c1f1a;
+  border-radius:14px;padding:14px 18px;margin:24px 0 0;font-size:0.95rem;line-height:1.5}
+.claim-alert a{color:inherit;text-decoration:underline}
+.claim-done{background:var(--white);border-radius:20px;padding:32px 36px;box-shadow:var(--shadow-2);text-align:center}
+.claim-done h2{color:var(--primary);font-size:1.3rem;margin:0 0 10px}
+.claim-done p{color:var(--text-muted);margin:0}
+.claim-actions .btn[disabled]{opacity:0.6;cursor:progress}
 @media(max-width:860px){
   .claim-grid{grid-template-columns:1fr}
   .claim-card{padding:26px 22px}
@@ -97,25 +107,25 @@
         <p>Online formulář pro nahlášení škody a právní pomoc</p>
       </div>
 
-      <form data-demo>
+      <form id="claim-form" data-claim-form>
         <div class="claim-card">
           <h2>Informace o vás</h2>
           <div class="claim-grid">
             <div class="claim-field">
               <label for="cl-firstname">Jméno <span class="req">*</span></label>
-              <input type="text" id="cl-firstname" name="firstname" required>
+              <input type="text" id="cl-firstname" name="firstName" maxlength="120" autocomplete="given-name" required>
             </div>
             <div class="claim-field">
               <label for="cl-lastname">Příjmení <span class="req">*</span></label>
-              <input type="text" id="cl-lastname" name="lastname" required>
+              <input type="text" id="cl-lastname" name="lastName" maxlength="120" autocomplete="family-name" required>
             </div>
             <div class="claim-field">
               <label for="cl-company">Název právnické osoby</label>
-              <input type="text" id="cl-company" name="company">
+              <input type="text" id="cl-company" name="companyName" maxlength="200" autocomplete="organization">
             </div>
             <div class="claim-field">
               <label for="cl-policy">Číslo pojistné smlouvy <span class="req">*</span></label>
-              <input type="text" id="cl-policy" name="policy" placeholder="např. 7310000123" required>
+              <input type="text" id="cl-policy" name="policyNumber" maxlength="60" placeholder="např. 7310000123" required>
             </div>
           </div>
         </div>
@@ -125,11 +135,11 @@
           <div class="claim-grid">
             <div class="claim-field">
               <label for="cl-email">E-mail <span class="req">*</span></label>
-              <input type="email" id="cl-email" name="email" required>
+              <input type="email" id="cl-email" name="email" maxlength="200" autocomplete="email" required>
             </div>
             <div class="claim-field">
               <label for="cl-phone">Telefonní číslo <span class="req">*</span></label>
-              <input type="tel" id="cl-phone" name="phone" value="+420" required>
+              <input type="tel" id="cl-phone" name="phone" maxlength="40" autocomplete="tel" value="+420" required>
             </div>
           </div>
         </div>
@@ -147,15 +157,15 @@
         <div class="claim-card">
           <h2>Co se vám přihodilo? <span class="req">*</span></h2>
           <div class="claim-field">
-            <textarea name="description" placeholder="Popište nám prosím co nejpodrobněji, s čím potřebujete pomoci." required></textarea>
+            <textarea name="description" maxlength="5000" placeholder="Popište nám prosím co nejpodrobněji, s čím potřebujete pomoci." required></textarea>
           </div>
         </div>
 
         <div class="claim-card">
           <h2>Přiložte dokumenty</h2>
-          <p class="claim-hint">Formáty PDF, JPG, JPEG, PNG, XLSX, DOCX, celkem max. 20 MB. Přiložené soubory budou uvedeny v potvrzovacím e-mailu. Další dokumenty můžete doložit po zaregistrování žádosti.</p>
+          <p class="claim-hint">Formáty PDF, JPG, JPEG, PNG, XLSX, DOCX, nejvýš 6 souborů a celkem max. 7 MB. Další dokumenty můžete doložit po zaregistrování žádosti.</p>
           <div class="claim-file">
-            <input type="file" name="attachments" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.docx">
+            <input type="file" name="files" multiple accept=".pdf,.jpg,.jpeg,.png,.xlsx,.docx">
           </div>
         </div>
 
@@ -166,10 +176,25 @@
           </label>
         </div>
 
+        <!-- Past na roboty: pole je pro člověka neviditelné. Když v něm něco
+             přijde, žádost odesílá robot a server ji tiše zahodí. -->
+        <div class="claim-trap" aria-hidden="true" data-no-edit>
+          <label for="cl-website">Webová stránka</label>
+          <input type="text" id="cl-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <p class="claim-alert" data-claim-error data-no-edit role="alert" hidden></p>
+
         <div class="claim-actions">
           <button type="submit" class="btn btn-primary btn-lg">Odeslat žádost</button>
         </div>
       </form>
+
+      <div class="claim-done" data-claim-done hidden>
+        <h2>Děkujeme, žádost jsme přijali</h2>
+        <p>Ozveme se vám co nejdříve s jednacím číslem případu. Další dokumenty
+          k případu můžete doložit odpovědí na náš e-mail.</p>
+      </div>
 
       <p class="claim-foot">© LEXIA Legal Protection a.s. · www.lexia.cz</p>
     </div>

@@ -685,6 +685,89 @@ editor.post('/api/reset', requireAuth, async (req, res) => {
 
 app.use('/editor', editor);
 
+// ------------------------------------------- žádost o poskytnutí právní pomoci
+
+/**
+ * Formulář na `nahlasit-pripad.html` je jediné místo na webu, kde návštěvník
+ * hlásí pojistnou událost. Do 4. 9. 2026 měl atribut `data-demo` jako poptávkové
+ * formuláře, takže po odeslání jen schoval sám sebe a poděkoval — žádost
+ * neodešla nikam. Teď jde sem a odsud do drAIve, které z ní udělá e-mail na
+ * pravnipomoc@lexia.cz (stejná cesta, jakou používá formulář na
+ * hlaseni.lexia.cz).
+ *
+ * Proč přes vlastní server a ne rovnou z prohlížeče:
+ *
+ *  1. Ostrý web, náhled na Railway i localhost jsou TÁŽ aplikace na různých
+ *     doménách. drAIve pouští přes CORS jen `*.lexia.cz`, takže přímé volání
+ *     z prohlížeče by fungovalo na ostrém webu a mlčky padalo všude jinde —
+ *     tedy přesně tam, kde se formulář zkouší před nasazením.
+ *  2. Adresa drAIve se stěhuje (draive.online → draive.cz, protože .online
+ *     blokují firemní filtry). Odsud ji přepíšeme proměnnou prostředí bez
+ *     zásahu do stránky; kdyby ji volal prohlížeč, byla by zadrátovaná v JS.
+ */
+const ZADOST_URL = process.env.LEXIA_ZADOST_URL
+  || 'https://api.draive.cz/api/public/lexia/legal-aid-request';
+// drAIve bere 6 příloh po 7 MB a 7 MB celkem. Multipart k tomu přidá hlavičky
+// a hranice, tak necháváme rezervu — přes limit to stejně neprojde na druhé
+// straně, ale s vlastní hláškou místo useknutého spojení.
+const ZADOST_MAX_BAJTU = 9 * 1024 * 1024;
+const ZADOST_TIMEOUT_MS = 30_000;
+
+app.post(
+  '/api/zadost-o-pravni-pomoc',
+  express.raw({ type: () => true, limit: ZADOST_MAX_BAJTU }),
+  async (req, res) => {
+    const telo = Buffer.isBuffer(req.body) ? req.body : null;
+    const typ = req.get('content-type');
+    if (!telo || !telo.length || !typ) {
+      return res.status(400).json({ ok: false, error: 'Žádost dorazila prázdná.' });
+    }
+
+    let odpoved;
+    try {
+      odpoved = await fetch(ZADOST_URL, {
+        method: 'POST',
+        // Hranici multipartu nese content-type z prohlížeče — musí projít beze změny.
+        headers: { 'content-type': typ, 'x-tenant-slug': 'lexia', accept: 'application/json' },
+        body: telo,
+        signal: AbortSignal.timeout(ZADOST_TIMEOUT_MS),
+      });
+    } catch (err) {
+      console.error('[lexia] žádost o právní pomoc — drAIve neodpovědělo:', err.message);
+      return res.status(502).json({ ok: false, error: 'Server pro příjem žádostí neodpovídá.' });
+    }
+
+    const text = await odpoved.text().catch(() => '');
+    if (!odpoved.ok) {
+      console.error(`[lexia] žádost o právní pomoc — drAIve vrátilo ${odpoved.status}: ${text.slice(0, 300)}`);
+      // Hlášku o velkých přílohách si drAIve píše česky a pro návštěvníka,
+      // tak ji pustíme dál. Zbytek jsou interní chyby, ty ven nepatří.
+      let duvod = '';
+      try {
+        const json = JSON.parse(text);
+        if (odpoved.status === 400 && typeof json.message === 'string') duvod = json.message;
+      } catch { /* neJSONová odpověď */ }
+      return res.status(odpoved.status === 400 ? 400 : 502)
+        .json({ ok: false, error: duvod || 'Žádost se nepodařilo předat ke zpracování.' });
+    }
+
+    console.log('[lexia] žádost o právní pomoc předána do drAIve');
+    res.json({ ok: true });
+  },
+);
+
+/** Příliš velké přílohy pozná express.raw dřív, než se stihne cokoli odeslat. */
+app.use('/api/zadost-o-pravni-pomoc', (err, req, res, next) => {
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({
+      ok: false,
+      error: 'Přílohy jsou dohromady příliš velké — vejít se musí do 7 MB.',
+    });
+  }
+  console.error('[lexia] žádost o právní pomoc — chyba při čtení požadavku:', err.message);
+  res.status(400).json({ ok: false, error: 'Žádost se nepodařilo přečíst.' });
+});
+
 // ------------------------------------------------------- veřejné stránky
 
 /**
