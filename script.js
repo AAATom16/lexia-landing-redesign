@@ -80,18 +80,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Validace povinných polí — zvýraznění a odskok na první nevyplněné
   initFormValidation();
 
-  // Form submit demo
-  document.querySelectorAll('form[data-demo]').forEach(form => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const wrapper = form.parentElement;
-      const success = document.createElement('div');
-      success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
-      success.innerHTML = 'Děkujeme! Vaši poptávku jsme přijali, ozveme se do 24 hodin.';
-      form.style.display = 'none';
-      wrapper.appendChild(success);
-    });
-  });
+  // Odeslání formulářů z webu.
+  //
+  // Tom 4. 9. 2026 — do téhle chvíle tady stál handler `form[data-demo]`, který
+  // jen zavolal preventDefault(), formulář schoval a napsal „Děkujeme! Vaši
+  // poptávku jsme přijali, ozveme se do 24 hodin." Nic nikam neodešlo. Takhle
+  // fungovalo všech pět formulářů na ostrém webu včetně oznamovacího kanálu
+  // podle zákona 171/2023 Sb.
+  //
+  // Poděkovat smí jen za podání, které opravdu došlo. Když odeslání selže,
+  // formulář zůstane vyplněný, ukáže se chyba i náhradní kontakt a jde to
+  // zkusit znovu.
+  initWebForms();
 
   // Scroll reveal animations
   initScrollReveal();
@@ -776,4 +776,85 @@ function updateSubjectBlocks() {
   if (section) section.hidden = true;
   const fallbackNav = document.getElementById('subject-fallback-nav');
   if (fallbackNav) fallbackNav.hidden = false;
+}
+
+
+/**
+ * Formuláře na webu: odešle je na náš server, který je předá do drAIve.
+ *
+ * Přes vlastní server schválně. drAIve pouští přes CORS jen *.lexia.cz, takže
+ * přímé volání z prohlížeče by fungovalo na ostrém webu a mlčky padalo na
+ * railwayovém náhledu i na localhostu, tedy přesně tam, kde se to před
+ * nasazením zkouší.
+ */
+function initWebForms() {
+  document.querySelectorAll('form[data-form]').forEach((form) => {
+    const druh = form.getAttribute('data-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const puvodniText = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Odesílám…'; }
+      zrusChybu(form);
+
+      // Hlášení pojistné události má vlastní cestu: v drAIve zakládá případ
+      // a bere přílohy, takže jde na `legal-aid-request`, ne na obecný
+      // formulářový endpoint. Pole se jmenují podle jeho DTO.
+      const jePripad = druh === 'pripad';
+      const cil = jePripad ? '/api/zadost-o-pravni-pomoc' : '/api/formular';
+
+      const fd = new FormData();
+      if (!jePripad) fd.append('kind', druh);
+      const val = (n) => (form.querySelector('[name="' + n + '"]') || {}).value || '';
+      fd.append('firstName', val('firstname'));
+      fd.append('lastName', val('lastname'));
+      if (val('email')) fd.append('email', val('email'));
+      fd.append('phone', val('phone'));
+      fd.append('website', val('website'));
+      if (jePripad) {
+        if (val('company')) fd.append('companyName', val('company'));
+        fd.append('policyNumber', val('policy'));
+        const lhuta = form.querySelector('[name="deadline"]:checked');
+        fd.append('deadline', lhuta ? lhuta.value : 'nevim');
+        fd.append('description', val('description'));
+      } else {
+        if (val('topic')) fd.append('subject', val('topic'));
+        fd.append('message', val('message') || val('description'));
+      }
+      const soubory = form.querySelector('input[type="file"]');
+      if (soubory && soubory.files) {
+        for (const f of soubory.files) fd.append('files', f, f.name);
+      }
+
+      try {
+        const res = await fetch(cil, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(String(res.status));
+        const wrapper = form.parentElement;
+        const success = document.createElement('div');
+        success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
+        success.textContent = 'Děkujeme! Vaši zprávu jsme přijali, ozveme se do 24 hodin.';
+        form.style.display = 'none';
+        wrapper.appendChild(success);
+      } catch (err) {
+        ukazChybu(form);
+        if (btn) { btn.disabled = false; btn.textContent = puvodniText; }
+      }
+    });
+  });
+}
+
+function zrusChybu(form) {
+  const old = form.querySelector('.form-send-error');
+  if (old) old.remove();
+}
+
+function ukazChybu(form) {
+  zrusChybu(form);
+  const box = document.createElement('div');
+  box.className = 'form-send-error';
+  box.style.cssText = 'background:#FEE2E2;color:#991B1B;padding:14px;border-radius:12px;margin-top:14px;font-size:14px;line-height:1.5';
+  box.innerHTML = 'Zprávu se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na ' +
+    '<a href="mailto:info@lexia.cz" style="color:#991B1B;font-weight:600">info@lexia.cz</a> ' +
+    'nebo zavolejte na +420 465 465 465. Vyplněné údaje zůstávají ve formuláři.';
+  form.appendChild(box);
 }
