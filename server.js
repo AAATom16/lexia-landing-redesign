@@ -696,10 +696,20 @@ editor.post('/api/reset', requireAuth, async (req, res) => {
  * nasazením zkouší. Tělo se přeposílá beze změny včetně hranice multipartu,
  * takže přílohy projdou.
  */
+/**
+ * Kam se formuláře posílají.
+ *
+ * NE na `api.draive.cz`. Ten host míří na SDÍLENÝ `draive-backend`, kdežto
+ * LEXIA má vlastní deployment `draive-backend-lexia` za `portal.lexia.cz/api`.
+ * Sdílený backend běží na jiné verzi obrazu, takže endpoint pro formuláře na
+ * něm nemusí existovat — a `api.draive.cz` na něj 4. 9. 2026 opravdu vracelo
+ * 404, zatímco přes portal.lexia.cz odpovídal. Adresa `.cz` vypadá jako ta
+ * správná veřejná, ale patří někomu jinému.
+ */
 const DRAIVE_FORM_URL =
-  process.env.LEXIA_FORMULAR_URL || 'https://api.draive.cz/api/public/lexia/web-form';
+  process.env.LEXIA_FORMULAR_URL || 'https://portal.lexia.cz/api/public/lexia/web-form';
 const DRAIVE_PRIPAD_URL =
-  process.env.LEXIA_ZADOST_URL || 'https://api.draive.cz/api/public/lexia/legal-aid-request';
+  process.env.LEXIA_ZADOST_URL || 'https://portal.lexia.cz/api/public/lexia/legal-aid-request';
 
 function preposliDoDraive(cilovaAdresa) {
   return (req, res) => {
