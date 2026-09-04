@@ -683,6 +683,63 @@ editor.post('/api/reset', requireAuth, async (req, res) => {
   }
 });
 
+/**
+ * Formuláře z webu → drAIve.
+ *
+ * Tom 4. 9. 2026: pět formulářů na ostrém webu mělo `data-demo`, takže se jen
+ * schovaly a poděkovaly. Nic nikam nešlo, včetně oznamovacího kanálu podle
+ * zákona 171/2023 Sb.
+ *
+ * Proč přes vlastní server a ne rovnou z prohlížeče: drAIve pouští přes CORS
+ * jen *.lexia.cz. Přímé volání by tedy fungovalo na ostrém webu a mlčky padalo
+ * na railwayovém náhledu i na localhostu, tedy přesně tam, kde se to před
+ * nasazením zkouší. Tělo se přeposílá beze změny včetně hranice multipartu,
+ * takže přílohy projdou.
+ */
+const DRAIVE_FORM_URL =
+  process.env.LEXIA_FORMULAR_URL || 'https://api.draive.cz/api/public/lexia/web-form';
+const DRAIVE_PRIPAD_URL =
+  process.env.LEXIA_ZADOST_URL || 'https://api.draive.cz/api/public/lexia/legal-aid-request';
+
+function preposliDoDraive(cilovaAdresa) {
+  return (req, res) => {
+  const cil = new URL(cilovaAdresa);
+  const client = cil.protocol === 'http:' ? require('http') : require('https');
+  const proxy = client.request(
+    {
+      hostname: cil.hostname,
+      port: cil.port || (cil.protocol === 'http:' ? 80 : 443),
+      path: cil.pathname + cil.search,
+      method: 'POST',
+      headers: {
+        // Content-Type nese hranici multipartu — musí projít nedotčený.
+        'content-type': req.headers['content-type'] || 'application/octet-stream',
+        'content-length': req.headers['content-length'],
+        'x-tenant-slug': 'lexia',
+      },
+      timeout: 30_000,
+    },
+    (r) => {
+      res.status(r.statusCode || 502);
+      r.pipe(res);
+    },
+  );
+  proxy.on('timeout', () => {
+    proxy.destroy();
+    if (!res.headersSent) res.status(504).json({ error: 'Server pro příjem formulářů neodpovídá.' });
+  });
+  proxy.on('error', (e) => {
+    console.error('[lexia] přeposlání formuláře selhalo:', e.message);
+    if (!res.headersSent) res.status(502).json({ error: 'Odeslání se nezdařilo.' });
+  });
+  req.pipe(proxy);
+  };
+}
+
+app.post('/api/formular', preposliDoDraive(DRAIVE_FORM_URL));
+// Hlášení pojistné události — zakládá v drAIve případ, proto jiný endpoint.
+app.post('/api/zadost-o-pravni-pomoc', preposliDoDraive(DRAIVE_PRIPAD_URL));
+
 app.use('/editor', editor);
 
 // ------------------------------------------------------- veřejné stránky
