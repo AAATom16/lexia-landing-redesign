@@ -1,0 +1,5 @@
+
+(function() {
+    const data = {"transcripts":[{"name":"captions","cues":[{"start":608,"text":"Gratuluji, že jste to zvládli až sem"},{"start":3444,"text":"Pojištění právní ochrany je skvělé,"},{"start":5964,"text":"ať už jde o soukromé spory, problémy s úřady nebo výzvy v podnikání."},{"start":10924,"text":"Nezáleží na tom, jestli se jedná o jednotlivce, firmu nebo jinou organizaci,"},{"start":16044,"text":"s Lexií získávají vaši klienti spolehlivého partnera,"},{"start":20368,"text":"který jim šetří nervy, čas a peníze."},{"start":24032,"text":"A teď… pro vás máme malé překvapení!"},{"start":27776,"text":"Váš certifikát o absolvování kurzu."},{"start":31068,"text":"Tak nezapomeňte vyplnit údaje a těšíme se na naši další spolupráci! "}]}]};
+    window.globalLoadJsAsset('story_content/5sVpo2d7Wsd_transcripts.js', JSON.stringify(data));
+})();
