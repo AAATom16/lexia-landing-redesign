@@ -228,6 +228,20 @@ function vlozMereni(html) {
   return html.slice(0, i) + SOUHLAS_BLOK + html.slice(i);
 }
 
+/**
+ * E-learningové kurzy (Articulate Rise a Storyline) jsou hotové balíčky —
+ * vlastní index.html, vlastní JavaScript, vlastní kaskádové styly. Nesmí
+ * projít redakční vrstvou: `readPage` by je zkusil rozebrat na editovatelné
+ * bloky a `vlozMereni` by jim do stránky vložil lištu souhlasu, která tam
+ * nepatří a v kurzu běžícím v rámu jen překáží. Pouštíme je rovnou do
+ * `express.static`.
+ *
+ * Obnoveno 5. 9. 2026 ze starého webu (WEDOS), který po přesunu domény na
+ * Railway zůstal dostupný jen po IP. Odkazy v partnerské zóně na ně mířily
+ * absolutně na https://lexia.cz/..., takže po přesměrování domény vracely 404.
+ */
+const KURZY = /^\/(elearning|www\/elearning)\//i;
+
 const REWRITES = { '/financniporadci': '/financni-poradci/index.html' };
 // Klientská zóna a administrace nikdy nebyly funkční — statické atrapy
 // duplikovaly portál (klient.html dokonce ukazoval vymyšlený počet klientů).
@@ -774,6 +788,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  if (KURZY.test(req.path)) return next();
 
   const redirect = REDIRECTS[req.path];
   if (redirect) return res.redirect(301, redirect);

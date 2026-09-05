@@ -1,0 +1,5 @@
+
+(function() {
+    const data = {"transcripts":[{"name":"captions","cues":[{"start":2560,"text":"To je fakt dobrý!"},{"start":5056,"text":"Jo? Vy jste ještě tady, jo?"},{"start":7444,"text":"No... tak já vám teda ještě něco prozradím."},{"start":10400,"text":"Můžete se těšit na další kurzy, které připravujeme,"},{"start":13568,"text":"a jestli máte jakékoliv dotazy, neváhejte se na nás obrátit."},{"start":18152,"text":"Kontakt najdete na konci kurzu, společně s doplňujícími dokumenty ke stažení,"},{"start":23732,"text":"které se vám určitě budou hodit."},{"start":26015,"text":"Tak si je nezapomeňte stáhnout."},{"start":28091,"text":"Děkujeme a já už se pro tentokrát doopravdy loučím."}]}]};
+    window.globalLoadJsAsset('story_content/6pxojSHg9MD_transcripts.js', JSON.stringify(data));
+})();

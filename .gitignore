@@ -3,4 +3,6 @@ node_modules
 *.log
 .env
 .env.local
-data/
+# Jen redakční úložiště v kořeni. Neukotvené `data/` bralo i `html5/data/`
+# uvnitř e-learningových kurzů, kde leží obsah slajdů.
+/data/
