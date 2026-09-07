@@ -844,6 +844,27 @@ app.use((req, res, next) => {
  */
 const REVALIDATE = /\.(css|js|mjs)$/i;
 
+/**
+ * Storyline si úvodní obrázek slidu vyžádá DVAKRÁT: jednou pod vlastní
+ * adresou a hned podruhé s příponou `?rs=<číslo>`, kterou používá pro
+ * přepočet velikosti. Pro prohlížeč jsou to dvě různé adresy, takže je stáhne
+ * obě — u úvodní animace prvního kurzu to znamenalo 56 MB místo 28.
+ *
+ * Odpovídáme proto přesměrováním na adresu bez parametru. Obě žádosti pak
+ * míří na tentýž soubor, prohlížeč je slije do jedné a druhá se obslouží
+ * z jeho paměti. Změřeno 7. 9. 2026 na prvním kurzu: 15,2 → 10,7 MB.
+ *
+ * Schválně jen uvnitř kurzů a jen pro obrázky — zbytek webu tenhle parametr
+ * nepoužívá a nemá důvod chytat cizí dotazy.
+ */
+app.use((req, res, next) => {
+  if (!KURZY.test(req.path)) return next();
+  if (!/\.(gif|png|jpe?g)$/i.test(req.path)) return next();
+  if (!/^rs=\d+$/.test(String(req.url.split('?')[1] || ''))) return next();
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  return res.redirect(302, req.path);
+});
+
 app.use(express.static(ROOT, {
   index: false,
   dotfiles: 'ignore',
