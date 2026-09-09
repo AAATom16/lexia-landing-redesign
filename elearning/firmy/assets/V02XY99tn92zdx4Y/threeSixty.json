@@ -1,0 +1,27 @@
+{
+  "version": "3.101.34961.0",
+  "course_id": "5krScW43lhC",
+  "title": "Pojištění právní ochrany pro podnikatele a firmy",
+  "thumbnail": "story_content/thumbnail.jpg",
+  "scenes": [
+    {
+      "title": "Bezpečnost a ochrana zdraví při práci"
+    }
+  ],
+  "slides": [
+    {
+      "id": "6qMmboaBunS",
+      "title": "DaD_2",
+      "scene_index": "1.1"
+    }
+  ],
+  "player": {
+    "name": "unified",
+    "width": 1620,
+    "height": 894
+  },
+  "stage": {
+    "width": 1600,
+    "height": 800
+  }
+}
