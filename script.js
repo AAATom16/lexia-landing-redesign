@@ -790,6 +790,23 @@ function updateSubjectBlocks() {
 function initWebForms() {
   document.querySelectorAll('form[data-form]').forEach((form) => {
     const druh = form.getAttribute('data-form');
+
+    // LEX-76 — pole s termínem se ukáže až u odpovědi „Ano" a je pak povinné.
+    // Minulé datum kalendář nenabídne: „do kdy" nikdy neleží za námi.
+    const obalTerminu = form.querySelector('[data-deadline-date]');
+    const termin = form.querySelector('[name="deadlineDate"]');
+    if (obalTerminu && termin) {
+      termin.min = new Date().toISOString().slice(0, 10);
+      form.querySelectorAll('[name="deadline"]').forEach((radio) => {
+        radio.addEventListener('change', () => {
+          const ano = radio.value === 'ano' && radio.checked;
+          obalTerminu.hidden = !ano;
+          termin.required = ano;
+          if (!ano) termin.value = '';
+        });
+      });
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = form.querySelector('button[type="submit"]');
@@ -816,6 +833,12 @@ function initWebForms() {
         fd.append('policyNumber', val('policy'));
         const lhuta = form.querySelector('[name="deadline"]:checked');
         fd.append('deadline', lhuta ? lhuta.value : 'nevim');
+        // LEX-76 — termín lhůty posíláme jen u „Ano"; drAIve z něj plní lhůtu
+        // na případu a likvidátorovi svítí v přehledu hlášení.
+        const termin = form.querySelector('[name="deadlineDate"]');
+        if (lhuta && lhuta.value === 'ano' && termin && termin.value) {
+          fd.append('deadlineDate', termin.value);
+        }
         fd.append('description', val('description'));
       } else {
         if (val('topic')) fd.append('subject', val('topic'));
@@ -832,7 +855,7 @@ function initWebForms() {
         const wrapper = form.parentElement;
         const success = document.createElement('div');
         success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
-        success.textContent = 'Děkujeme! Vaši zprávu jsme přijali, ozveme se do 24 hodin.';
+        success.textContent = 'Děkujeme. Vaši žádost jsme úspěšně přijali.';
         form.style.display = 'none';
         wrapper.appendChild(success);
       } catch (err) {
