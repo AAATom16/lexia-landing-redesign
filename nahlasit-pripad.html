@@ -94,7 +94,7 @@
     <div class="claim-wrap">
       <div class="claim-head">
         <h1>Žádost o poskytnutí právní pomoci</h1>
-        <p>Online formulář pro nahlášení škody a právní pomoc</p>
+        <p>Online formulář pro nahlášení škodní události</p>
       </div>
 
       <form data-form="pripad">
@@ -143,6 +143,13 @@
             <label><input type="radio" name="deadline" value="ne"> Ne</label>
             <label><input type="radio" name="deadline" value="nevim"> Nevím</label>
           </div>
+          <!-- LEX-76 (Petra 10. 9. 2026): u „Ano" chce likvidátor znát konkrétní
+               termín, ne jen že lhůta hrozí — podle data řadí práci. Pole se
+               jmenuje `deadlineDate`, stejně jako ho čeká drAIve. -->
+          <div class="claim-field" data-deadline-date hidden>
+            <label for="deadlineDate">Do kdy musí být lhůta dodržena? <span class="req">*</span></label>
+            <input type="date" id="deadlineDate" name="deadlineDate">
+          </div>
         </div>
 
         <div class="claim-card">
@@ -172,7 +179,6 @@
         </div>
       </form>
 
-      <p class="claim-foot">© LEXIA Legal Protection a.s. · www.lexia.cz</p>
     </div>
   </div>
 </section>
