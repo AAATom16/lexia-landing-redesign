@@ -2421,6 +2421,18 @@ textarea.is-invalid:focus {
 input[type="checkbox"].is-invalid,
 input[type="radio"].is-invalid { outline: 2px solid var(--danger); outline-offset: 2px; }
 
+/* Seznam příloh (LEX-60) — každý soubor na vlastním řádku, s velikostí a Odebrat */
+.file-list ul { list-style: none; margin: 12px 0 0; padding: 0; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+.file-list li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; font-size: 14px; }
+.file-list li + li { border-top: 1px solid var(--border); }
+.file-list .file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+.file-list .file-size { color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.file-list .file-remove { background: none; border: 0; padding: 4px 6px; margin: -4px -6px -4px 0; color: var(--primary); font: inherit; font-weight: 600; cursor: pointer; border-radius: 6px; }
+.file-list .file-remove:hover,
+.file-list .file-remove:focus-visible { color: var(--danger); text-decoration: underline; }
+.file-list .file-total { margin: 8px 0 0; font-size: 13px; color: var(--text-muted); }
+.file-list .file-total.is-over { color: var(--danger); font-weight: 600; }
+
 .form-checkbox {
   display: flex;
   gap: 10px;

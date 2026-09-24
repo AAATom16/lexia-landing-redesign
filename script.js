@@ -790,6 +790,7 @@ function updateSubjectBlocks() {
 function initWebForms() {
   document.querySelectorAll('form[data-form]').forEach((form) => {
     const druh = form.getAttribute('data-form');
+    const prilohy = initPrilohy(form, druh);
 
     // LEX-76 — pole s termínem se ukáže až u odpovědi „Ano" a je pak povinné.
     // Minulé datum kalendář nenabídne: „do kdy" nikdy neleží za námi.
@@ -809,6 +810,12 @@ function initWebForms() {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      // Přes limit nepouštět: drAIve by žádost odmítl a klient by viděl jen
+      // obecnou chybu. U seznamu příloh je napsané, co odebrat.
+      if (prilohy && prilohy.prekrocen()) {
+        prilohy.ukaz();
+        return;
+      }
       const btn = form.querySelector('button[type="submit"]');
       const puvodniText = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Odesílám…'; }
@@ -844,10 +851,9 @@ function initWebForms() {
         if (val('topic')) fd.append('subject', val('topic'));
         fd.append('message', val('message') || val('description'));
       }
-      const soubory = form.querySelector('input[type="file"]');
-      if (soubory && soubory.files) {
-        for (const f of soubory.files) fd.append('files', f, f.name);
-      }
+      // Posílá se seznam, ne `input.files`: v prohlížeči bez DataTransfer drží
+      // pole jen poslední výběr.
+      for (const f of prilohy ? prilohy.soubory() : []) fd.append('files', f, f.name);
 
       try {
         const res = await fetch(cil, { method: 'POST', body: fd });
@@ -864,6 +870,121 @@ function initWebForms() {
       }
     });
   });
+}
+
+// Petra 4. 9. 2026 (LEX-60) — po nahrání více souborů byly přílohy „jeden
+// balík": nebylo vidět, co je přiložené ani kolik to váží, a omylem vybraný
+// soubor šel odebrat jen se všemi ostatními. Každý soubor má teď vlastní řádek
+// s názvem, velikostí a tlačítkem Odebrat a další soubory jde přidávat
+// postupně. Limity jsou ty, které formuláře uvádějí a drAIve přijme.
+const LIMITY_PRILOH = {
+  pripad: { maxSouboru: 10, maxBajtu: 20 * 1024 * 1024 },
+  oznameni: { maxSouboru: 10, maxBajtu: 7 * 1024 * 1024 },
+};
+
+const cisloCz = new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 1 });
+
+function velikostSouboru(bajty) {
+  if (bajty < 1024) return bajty + ' B';
+  if (bajty < 1024 * 1024) return Math.round(bajty / 1024) + ' kB';
+  return cisloCz.format(bajty / (1024 * 1024)) + ' MB';
+}
+
+function pocetSouboru(n) {
+  return n + ' ' + (n === 1 ? 'soubor' : n >= 2 && n <= 4 ? 'soubory' : 'souborů');
+}
+
+function initPrilohy(form, druh) {
+  const input = form.querySelector('input[type="file"]');
+  if (!input) return null;
+  const limit = LIMITY_PRILOH[druh] || LIMITY_PRILOH.pripad;
+  const vybrane = [];
+
+  const seznam = document.createElement('div');
+  seznam.className = 'file-list';
+  seznam.setAttribute('aria-live', 'polite');
+  seznam.setAttribute('data-no-edit', '');
+  input.insertAdjacentElement('afterend', seznam);
+
+  const soucet = () => vybrane.reduce((s, f) => s + f.size, 0);
+  const prekrocen = () => soucet() > limit.maxBajtu;
+
+  // Nativní pole si pamatuje jen poslední výběr. Přepíšeme mu obsah na celý
+  // seznam, ať ukazuje totéž co seznam. Kde to prohlížeč neumí, odesílá se
+  // stejně ze seznamu.
+  function srovnejPole() {
+    try {
+      const dt = new DataTransfer();
+      vybrane.forEach((f) => dt.items.add(f));
+      input.files = dt.files;
+    } catch (_) { /* starší prohlížeč */ }
+  }
+
+  function radek(text, trida) {
+    const p = document.createElement('p');
+    p.className = trida;
+    p.textContent = text;
+    return p;
+  }
+
+  function vykresli(hlaska) {
+    seznam.textContent = '';
+    if (vybrane.length) {
+      const ul = document.createElement('ul');
+      vybrane.forEach((f, i) => {
+        const li = document.createElement('li');
+        const nazev = document.createElement('span');
+        nazev.className = 'file-name';
+        nazev.textContent = f.name;
+        nazev.title = f.name;
+        const vel = document.createElement('span');
+        vel.className = 'file-size';
+        vel.textContent = velikostSouboru(f.size);
+        const odebrat = document.createElement('button');
+        odebrat.type = 'button';
+        odebrat.className = 'file-remove';
+        odebrat.textContent = 'Odebrat';
+        odebrat.setAttribute('aria-label', 'Odebrat soubor ' + f.name);
+        odebrat.addEventListener('click', () => {
+          vybrane.splice(i, 1);
+          srovnejPole();
+          vykresli();
+          input.focus();
+        });
+        li.append(nazev, vel, odebrat);
+        ul.appendChild(li);
+      });
+      seznam.appendChild(ul);
+      seznam.appendChild(prekrocen()
+        ? radek('Celkem ' + velikostSouboru(soucet()) + ', povoleno je nejvýše ' +
+            velikostSouboru(limit.maxBajtu) + '. Odeberte prosím některý soubor.', 'file-total is-over')
+        : radek('Celkem ' + pocetSouboru(vybrane.length) + ', ' + velikostSouboru(soucet()) +
+            ' z ' + velikostSouboru(limit.maxBajtu) + '.', 'file-total'));
+    }
+    if (hlaska) seznam.appendChild(radek(hlaska, 'file-total is-over'));
+  }
+
+  input.addEventListener('change', () => {
+    let hlaska = '';
+    for (const f of Array.from(input.files || [])) {
+      const uzJe = vybrane.some((v) =>
+        v.name === f.name && v.size === f.size && v.lastModified === f.lastModified);
+      if (uzJe) continue;
+      if (vybrane.length >= limit.maxSouboru) {
+        hlaska = 'Přiložit lze nejvýše ' + pocetSouboru(limit.maxSouboru) + '.';
+        break;
+      }
+      vybrane.push(f);
+    }
+    srovnejPole();
+    vykresli(hlaska);
+  });
+
+  return {
+    soubory: () => vybrane.slice(),
+    prekrocen,
+    ukaz: () => seznam.scrollIntoView({ block: 'center', behavior: 'smooth' }),
+  };
 }
 
 function zrusChybu(form) {
