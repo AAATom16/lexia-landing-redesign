@@ -1324,6 +1324,8 @@
         body: JSON.stringify({ ico }),
       });
       const d = await res.json().catch(() => null);
+      // Mezitím se IČO změnilo — odpověď patří jinému a nesmí nic přepsat.
+      if (icoZPole() !== ico) return;
       if (!res.ok || !d || !d.found) {
         return rekni('IČO se v ARESu nenašlo. Zkontrolujte ho prosím, nebo údaje vyplňte ručně.');
       }
@@ -1401,9 +1403,40 @@
     el('#po-upozorneni')?.classList.remove('je-prekazka');
   }
 
+  function icoZPole() {
+    return (document.querySelector('[name="ico"]')?.value || '').replace(/\D/g, '');
+  }
+
+  /**
+   * Název firmy a jednající osoba patří k IČO, pro které je vrátil ARES
+   * (24. 9. 2026). Po změně IČO dřív zůstávaly: 7310000930 odešla se správným
+   * IČO a cizí firmou z dřívějšího načtení, 7310000929 se jménem z IČO, které
+   * klientka zadala předtím. Změna IČO je proto smaže a po osmé číslici se
+   * ARES zeptá sám — na tlačítko se zapomíná.
+   */
+  function zapomenAres() {
+    ['businessName', 'jednajici'].forEach((jmeno) => {
+      const pole = document.querySelector(`[name="${jmeno}"]`);
+      if (!pole || !pole.value) return;
+      pole.value = '';
+      pole.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  }
+
+  let aresCasovac = null;
+
   function pripojPodnikatele() {
     el('#ico-dotahnout')?.addEventListener('click', () => void dotahniZAres());
-    document.querySelector('[name="ico"]')?.addEventListener('input', zrusPrekazkuPO);
+    // Prohlížeč by do polí rád doplnil údaje z minula — tady by byly cizí.
+    ['ico', 'businessName', 'jednajici'].forEach((jmeno) =>
+      document.querySelector(`[name="${jmeno}"]`)?.setAttribute('autocomplete', 'off'),
+    );
+    document.querySelector('[name="ico"]')?.addEventListener('input', () => {
+      zrusPrekazkuPO();
+      zapomenAres();
+      clearTimeout(aresCasovac);
+      if (icoZPole().length === 8) aresCasovac = setTimeout(() => void dotahniZAres(), 400);
+    });
     document.querySelectorAll('input[name="legalForm"]').forEach((r) =>
       r.addEventListener('change', () => {
         document
