@@ -863,6 +863,12 @@ function initWebForms() {
         success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
         success.textContent = 'Děkujeme. Vaši žádost jsme úspěšně přijali.';
         form.style.display = 'none';
+        // LEX-76 (Petra 29. 9. 2026): po odeslání už podnadpis „Online formulář
+        // pro nahlášení škodní události" nedává smysl — formulář tam není.
+        if (jePripad) {
+          const podnadpis = document.querySelector('.claim-head p');
+          if (podnadpis) podnadpis.hidden = true;
+        }
         wrapper.appendChild(success);
       } catch (err) {
         ukazChybu(form);
