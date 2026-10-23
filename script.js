@@ -808,31 +808,18 @@ function initWebForms() {
       });
     }
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // LEX-147 — přílohy se kopírují do paměti hned po výběru; počkat, než
-      // se kopírování dokončí, ať neodejde žádost bez poslední přidané přílohy.
-      if (prilohy) await prilohy.pripraveno();
-      // Přes limit nepouštět: drAIve by žádost odmítl a klient by viděl jen
-      // obecnou chybu. U seznamu příloh je napsané, co odebrat.
-      if (prilohy && prilohy.prekrocen()) {
-        prilohy.ukaz();
-        return;
-      }
-      const btn = form.querySelector('button[type="submit"]');
-      const puvodniText = btn ? btn.textContent : '';
-      if (btn) { btn.disabled = true; btn.textContent = 'Odesílám…'; }
-      zrusChybu(form);
+    // Hlášení pojistné události má vlastní cestu: v drAIve zakládá případ
+    // a bere přílohy, takže jde na `legal-aid-request`, ne na obecný
+    // formulářový endpoint. Pole se jmenují podle jeho DTO.
+    const jePripad = druh === 'pripad';
+    const cil = jePripad ? '/api/zadost-o-pravni-pomoc' : '/api/formular';
+    const val = (n) => (form.querySelector('[name="' + n + '"]') || {}).value || '';
+    const btn = form.querySelector('button[type="submit"]');
+    const puvodniText = btn ? btn.textContent : '';
 
-      // Hlášení pojistné události má vlastní cestu: v drAIve zakládá případ
-      // a bere přílohy, takže jde na `legal-aid-request`, ne na obecný
-      // formulářový endpoint. Pole se jmenují podle jeho DTO.
-      const jePripad = druh === 'pripad';
-      const cil = jePripad ? '/api/zadost-o-pravni-pomoc' : '/api/formular';
-
+    function sestavData(bezPriloh) {
       const fd = new FormData();
       if (!jePripad) fd.append('kind', druh);
-      const val = (n) => (form.querySelector('[name="' + n + '"]') || {}).value || '';
       fd.append('firstName', val('firstname'));
       fd.append('lastName', val('lastname'));
       if (val('email')) fd.append('email', val('email'));
@@ -856,30 +843,142 @@ function initWebForms() {
       }
       // Posílá se seznam, ne `input.files`: v prohlížeči bez DataTransfer drží
       // pole jen poslední výběr.
-      for (const f of prilohy ? prilohy.soubory() : []) fd.append('files', f, f.name);
+      if (!bezPriloh) {
+        for (const f of prilohy ? prilohy.soubory() : []) fd.append('files', f, f.name);
+      }
+      return fd;
+    }
+
+    function ukazPodekovani(bezPriloh, odpoved) {
+      const wrapper = form.parentElement;
+      const success = document.createElement('div');
+      success.setAttribute('role', 'status');
+      success.tabIndex = -1;
+      success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
+      if (bezPriloh) {
+        // Přílohy nedorazily — klient musí vědět, kam je poslat a jak je
+        // spárujeme s žádostí. Údaje z formuláře jdou jen přes textContent.
+        const cislo = odpoved && (odpoved.referenceNumber || odpoved.reference);
+        const odkaz = document.createElement('a');
+        odkaz.href = 'mailto:' + EMAIL_PRO_PRILOHY;
+        odkaz.textContent = EMAIL_PRO_PRILOHY;
+        odkaz.style.cssText = 'color:#065F46;font-weight:700;overflow-wrap:anywhere';
+        let pripis = '.';
+        if (cislo) pripis = ' a uveďte v něm číslo žádosti ' + String(cislo) + '.';
+        else if (jePripad && val('policy')) pripis = ' a uveďte v něm číslo pojistné smlouvy ' + val('policy') + '.';
+        success.append(
+          'Děkujeme. Vaši žádost jsme přijali, zatím bez příloh. Přílohy nám prosím pošlete e-mailem na ',
+          odkaz,
+          pripis,
+        );
+      } else {
+        success.textContent = 'Děkujeme. Vaši žádost jsme úspěšně přijali.';
+      }
+      form.style.display = 'none';
+      // LEX-76 (Petra 29. 9. 2026): po odeslání už podnadpis „Online formulář
+      // pro nahlášení škodní události" nedává smysl — formulář tam není.
+      if (jePripad) {
+        const podnadpis = document.querySelector('.claim-head p');
+        if (podnadpis) podnadpis.hidden = true;
+      }
+      wrapper.appendChild(success);
+      if (bezPriloh) success.focus();
+    }
+
+    async function odeslat(bezPriloh, tlacitko) {
+      const puvodni = tlacitko ? tlacitko.textContent : '';
+      if (btn) btn.disabled = true;
+      // Box s tlačítkem „Odeslat bez příloh" zůstane, dokud není výsledek —
+      // jinak by klient přišel o hlášku i o stav „Odesílám…".
+      if (tlacitko) { tlacitko.disabled = true; tlacitko.textContent = 'Odesílám…'; } else zrusChybu(form);
+      const soubory = bezPriloh || !prilohy ? [] : prilohy.soubory();
 
       try {
-        const res = await fetch(cil, { method: 'POST', body: fd });
-        if (!res.ok) throw new Error(String(res.status));
-        const wrapper = form.parentElement;
-        const success = document.createElement('div');
-        success.style.cssText = 'background: #D1FAE5; color: #065F46; padding: 18px; border-radius: 12px; text-align: center; font-weight: 600;';
-        success.textContent = 'Děkujeme. Vaši žádost jsme úspěšně přijali.';
-        form.style.display = 'none';
-        // LEX-76 (Petra 29. 9. 2026): po odeslání už podnadpis „Online formulář
-        // pro nahlášení škodní události" nedává smysl — formulář tam není.
-        if (jePripad) {
-          const podnadpis = document.querySelector('.claim-head p');
-          if (podnadpis) podnadpis.hidden = true;
+        const vysledek = await odesliSOpakovanim(cil, () => sestavData(bezPriloh));
+        const res = vysledek.res;
+        if (!res.ok) {
+          throw Object.assign(new Error(String(res.status)), { pokus: vysledek.pokus });
         }
-        wrapper.appendChild(success);
+        const odpoved = await res.json().catch(() => null);
+        ukazPodekovani(bezPriloh, odpoved);
       } catch (err) {
-        nahlasChybuOdeslani(druh, err, prilohy ? prilohy.soubory() : []);
-        ukazChybu(form);
+        nahlasChybuOdeslani(druh, err, soubory, bezPriloh);
+        // LEX-147 — dvakrát se nepodařilo ani dostat odpověď a žádost nese
+        // přílohy: nabídnout odeslání bez nich, ať případ nepropadne. Jen
+        // u hlášení případu — oznamovací kanál (171/2023 Sb.) nesmí posílat
+        // důkazy do obecné schránky, tam zůstane jen opakování a hlášení chyby.
+        const nabidnout = jePripad && err && err.sitova && soubory.length > 0;
+        ukazChybu(form, {
+          sitova: !!(err && err.sitova),
+          sondaOk: err ? err.sondaOk : null,
+          bezPriloh: nabidnout ? (t) => odeslat(true, t) : null,
+        });
         if (btn) { btn.disabled = false; btn.textContent = puvodniText; }
+        if (tlacitko && tlacitko.isConnected) { tlacitko.disabled = false; tlacitko.textContent = puvodni; }
       }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // LEX-147 — přílohy se kopírují do paměti hned po výběru; počkat, než
+      // se kopírování dokončí, ať neodejde žádost bez poslední přidané přílohy.
+      if (prilohy) await prilohy.pripraveno();
+      // Přes limit nepouštět: drAIve by žádost odmítl a klient by viděl jen
+      // obecnou chybu. U seznamu příloh je napsané, co odebrat.
+      if (prilohy && prilohy.prekrocen()) {
+        prilohy.ukaz();
+        return;
+      }
+      if (btn) btn.textContent = 'Odesílám…';
+      await odeslat(false, null);
     });
   });
+}
+
+/**
+ * LEX-147 — odeslání s jedním opakováním.
+ *
+ * Opakuje se jen tehdy, když prohlížeč nedostal žádnou odpověď (`fetch`
+ * odmítne, typicky „TypeError: Failed to fetch"). Odpověď serveru — i 4xx
+ * nebo 5xx — se vrací hned, bez opakování: druhé odeslání by mohlo založit
+ * žádost dvakrát a na chybě ve formuláři nic nezmění.
+ *
+ * Když selže i druhý pokus, zkusí se malý dotaz bez příloh (`/api/ping`).
+ * Projde-li, cesta k serveru funguje a odeslání zastavily přílohy (antivirus,
+ * firemní síť, rozšíření prohlížeče); neprojde-li, je venku síť.
+ */
+const PRODLEVA_OPAKOVANI_MS = 1500;
+// Schránka pro hlášení případů (do ní drAIve posílá i žádosti z formuláře).
+const EMAIL_PRO_PRILOHY = 'pravnipomoc@lexia.cz';
+
+async function odesliSOpakovanim(cil, sestav) {
+  try {
+    return { res: await fetch(cil, { method: 'POST', body: sestav() }), pokus: 1 };
+  } catch (_) {
+    await new Promise((r) => setTimeout(r, PRODLEVA_OPAKOVANI_MS));
+  }
+  try {
+    return { res: await fetch(cil, { method: 'POST', body: sestav() }), pokus: 2 };
+  } catch (err) {
+    const chyba = err instanceof Error ? err : new Error(String(err));
+    throw Object.assign(chyba, { sitova: true, pokus: 2, sondaOk: await sondaSpojeni() });
+  }
+}
+
+async function sondaSpojeni() {
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const casovac = ctrl ? setTimeout(() => ctrl.abort(), 5000) : null;
+  try {
+    const res = await fetch('/api/ping?t=' + Date.now(), {
+      cache: 'no-store',
+      signal: ctrl ? ctrl.signal : undefined,
+    });
+    return res.ok;
+  } catch (_) {
+    return false;
+  } finally {
+    if (casovac) clearTimeout(casovac);
+  }
 }
 
 // Petra 4. 9. 2026 (LEX-60) — po nahrání více souborů byly přílohy „jeden
@@ -1034,7 +1133,7 @@ async function kopieVPameti(f) {
  * technické údaje, nic z formuláře). Požadavek, který prohlížeč zruší dřív,
  * než odejde, v HTTP logu jinak nezanechá žádnou stopu.
  */
-function nahlasChybuOdeslani(druh, err, soubory) {
+function nahlasChybuOdeslani(druh, err, soubory, bezPriloh) {
   try {
     const data = JSON.stringify({
       druh,
@@ -1043,6 +1142,10 @@ function nahlasChybuOdeslani(druh, err, soubory) {
       souboru: soubory.length,
       bajtu: soubory.reduce((s, f) => s + f.size, 0),
       online: navigator.onLine,
+      // kolikátý pokus selhal a jak dopadl dotaz bez příloh (null = neběžel)
+      pokus: (err && err.pokus) || 1,
+      sondaOk: err && typeof err.sondaOk === 'boolean' ? err.sondaOk : null,
+      bezPriloh: !!bezPriloh,
     });
     navigator.sendBeacon('/api/chyba-formulare', new Blob([data], { type: 'application/json' }));
   } catch (_) { /* hlášení chyby nesmí shodit formulář */ }
@@ -1053,13 +1156,46 @@ function zrusChybu(form) {
   if (old) old.remove();
 }
 
-function ukazChybu(form) {
+function ukazChybu(form, moznosti) {
+  const m = moznosti || {};
   zrusChybu(form);
   const box = document.createElement('div');
   box.className = 'form-send-error';
-  box.style.cssText = 'background:#FEE2E2;color:#991B1B;padding:14px;border-radius:12px;margin-top:14px;font-size:14px;line-height:1.5';
-  box.innerHTML = 'Zprávu se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na ' +
-    '<a href="mailto:info@lexia.cz" style="color:#991B1B;font-weight:600">info@lexia.cz</a> ' +
-    'nebo zavolejte na +420 465 465 465. Vyplněné údaje zůstávají ve formuláři.';
+  box.setAttribute('role', 'alert');
+  box.tabIndex = -1;
+  box.style.cssText = 'background:#FEE2E2;color:#991B1B;padding:14px;border-radius:12px;margin-top:14px;font-size:14px;line-height:1.5;overflow-wrap:anywhere';
+  const mail = '<a href="mailto:info@lexia.cz" style="color:#991B1B;font-weight:600">info@lexia.cz</a>';
+  if (m.bezPriloh) {
+    // LEX-147 — dvakrát bez odpovědi a s přílohami. Podle sondy rozlišit,
+    // jestli vázne síť, nebo jen přílohy, a nabídnout odeslání bez nich.
+    box.innerHTML = (m.sondaOk
+      ? 'Zprávu se nepodařilo odeslat ani na druhý pokus. Spojení s naším serverem přitom funguje, ' +
+        'takže odeslání nejspíš zastavily přílohy – může je blokovat například antivirus nebo firemní síť. '
+      : 'Zprávu se nepodařilo odeslat ani na druhý pokus. Vypadá to, že se přerušilo připojení ' +
+        'k internetu – zkontrolujte ho prosím a zkuste to znovu. ') +
+      'Žádost můžete odeslat také bez příloh a přílohy nám poslat e-mailem na ' +
+      '<a href="mailto:' + EMAIL_PRO_PRILOHY + '" style="color:#991B1B;font-weight:600">' + EMAIL_PRO_PRILOHY + '</a>' +
+      '. Vyplněné údaje zůstávají ve formuláři.';
+    const akce = document.createElement('div');
+    akce.style.cssText = 'margin-top:12px';
+    const tl = document.createElement('button');
+    tl.type = 'button';
+    tl.className = 'btn btn-outline btn-sm';
+    tl.style.cssText = 'max-width:100%;white-space:normal';
+    tl.textContent = 'Odeslat bez příloh';
+    tl.addEventListener('click', () => m.bezPriloh(tl));
+    akce.appendChild(tl);
+    box.appendChild(akce);
+  } else {
+    box.innerHTML = 'Zprávu se nepodařilo odeslat. ' +
+      (m.sitova && m.sondaOk === false
+        ? 'Vypadá to, že se přerušilo připojení k internetu – zkontrolujte ho prosím a zkuste to znovu, nebo nám napište na '
+        : 'Zkuste to prosím znovu, nebo nám napište na ') +
+      mail + ' nebo zavolejte na +420 465 465 465. Vyplněné údaje zůstávají ve formuláři.';
+  }
   form.appendChild(box);
+  // Chyba se objeví pod tlačítkem, často mimo obrazovku — přesunout na ni
+  // fokus, ať ji čtečka přečte a klient ji uvidí.
+  box.focus({ preventScroll: true });
+  box.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
