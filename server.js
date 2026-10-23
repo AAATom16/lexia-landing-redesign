@@ -764,6 +764,35 @@ app.post('/api/formular', preposliDoDraive(DRAIVE_FORM_URL));
 // Hlášení pojistné události — zakládá v drAIve případ, proto jiný endpoint.
 app.post('/api/zadost-o-pravni-pomoc', preposliDoDraive(DRAIVE_PRIPAD_URL));
 
+/**
+ * LEX-147 — prohlížeč hlásí, že odeslání formuláře selhalo (`script.js`,
+ * `nahlasChybuOdeslani`). Zapíše se do logu Railway, nic víc. Bere jen
+ * technické údaje — počet a velikost příloh, druh chyby — žádné údaje
+ * z formuláře; i kdyby je někdo poslal, nezapíšou se.
+ */
+app.post(
+  '/api/chyba-formulare',
+  express.json({ limit: '2kb', type: () => true }),
+  (req, res) => {
+    const b = req.body && typeof req.body === 'object' ? req.body : {};
+    const text = (v, max) => String(v ?? '').replace(/[\r\n]+/g, ' ').slice(0, max);
+    const cislo = (v) => (Number.isFinite(Number(v)) ? Number(v) : null);
+    console.warn(
+      '[lexia] odeslání formuláře selhalo v prohlížeči:',
+      JSON.stringify({
+        druh: text(b.druh, 20),
+        chyba: text(b.chyba, 40),
+        zprava: text(b.zprava, 200),
+        souboru: cislo(b.souboru),
+        bajtu: cislo(b.bajtu),
+        online: b.online === true,
+        ua: text(req.headers['user-agent'], 200),
+      }),
+    );
+    res.status(204).end();
+  },
+);
+
 app.use('/editor', editor);
 
 // ------------------------------------------------------- veřejné stránky

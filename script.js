@@ -810,6 +810,9 @@ function initWebForms() {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      // LEX-147 — přílohy se kopírují do paměti hned po výběru; počkat, než
+      // se kopírování dokončí, ať neodejde žádost bez poslední přidané přílohy.
+      if (prilohy) await prilohy.pripraveno();
       // Přes limit nepouštět: drAIve by žádost odmítl a klient by viděl jen
       // obecnou chybu. U seznamu příloh je napsané, co odebrat.
       if (prilohy && prilohy.prekrocen()) {
@@ -871,6 +874,7 @@ function initWebForms() {
         }
         wrapper.appendChild(success);
       } catch (err) {
+        nahlasChybuOdeslani(druh, err, prilohy ? prilohy.soubory() : []);
         ukazChybu(form);
         if (btn) { btn.disabled = false; btn.textContent = puvodniText; }
       }
@@ -970,9 +974,13 @@ function initPrilohy(form, druh) {
     if (hlaska) seznam.appendChild(radek(hlaska, 'file-total is-over'));
   }
 
-  input.addEventListener('change', () => {
+  // Výběry se zpracují jeden po druhém: kopie do paměti je asynchronní
+  // a dva rychlé výběry za sebou se nesmí předběhnout.
+  let nacitani = Promise.resolve();
+
+  async function pridej(nove) {
     let hlaska = '';
-    for (const f of Array.from(input.files || [])) {
+    for (const f of nove) {
       const uzJe = vybrane.some((v) =>
         v.name === f.name && v.size === f.size && v.lastModified === f.lastModified);
       if (uzJe) continue;
@@ -980,17 +988,64 @@ function initPrilohy(form, druh) {
         hlaska = 'Přiložit lze nejvýše ' + pocetSouboru(limit.maxSouboru) + '.';
         break;
       }
-      vybrane.push(f);
+      try {
+        vybrane.push(await kopieVPameti(f));
+      } catch (_) {
+        hlaska = 'Soubor „' + f.name + '“ se nepodařilo načíst. Zavřete ho prosím ' +
+          'v programu, ve kterém je otevřený, a přiložte ho znovu.';
+      }
     }
     srovnejPole();
     vykresli(hlaska);
+  }
+
+  input.addEventListener('change', () => {
+    const nove = Array.from(input.files || []);
+    nacitani = nacitani.then(() => pridej(nove)).catch(() => {});
   });
 
   return {
     soubory: () => vybrane.slice(),
+    pripraveno: () => nacitani,
     prekrocen,
     ukaz: () => seznam.scrollIntoView({ block: 'center', behavior: 'smooth' }),
   };
+}
+
+/**
+ * LEX-147 (22. 10. 2026) — kopie přílohy v paměti, pořízená hned při výběru.
+ *
+ * Prohlížeč si u vybraného souboru drží jen odkaz na disk a obsah čte až při
+ * odeslání. Když se soubor mezitím změní (klient ho upraví a uloží ve Wordu,
+ * přepíše ho synchronizace OneDrivu) nebo zmizí, Chrome celé odeslání zruší
+ * ještě před odchodem („TypeError: Failed to fetch") — na server nedorazí nic
+ * a klient vidí jen obecnou chybu. Přesně tak 22. 10. nedošlo hlášení s pěti
+ * přílohami: v logu Railway po něm není ani jeden POST. Kopie v paměti na
+ * pozdější změny na disku nereaguje; limit 20 MB celkem ji drží malou.
+ */
+async function kopieVPameti(f) {
+  if (typeof File !== 'function' || typeof f.arrayBuffer !== 'function') return f;
+  const data = await f.arrayBuffer();
+  return new File([data], f.name, { type: f.type, lastModified: f.lastModified });
+}
+
+/**
+ * LEX-147 — když odeslání selže, dá prohlížeč vědět našemu serveru (jen
+ * technické údaje, nic z formuláře). Požadavek, který prohlížeč zruší dřív,
+ * než odejde, v HTTP logu jinak nezanechá žádnou stopu.
+ */
+function nahlasChybuOdeslani(druh, err, soubory) {
+  try {
+    const data = JSON.stringify({
+      druh,
+      chyba: (err && err.name) || '',
+      zprava: String((err && err.message) || '').slice(0, 200),
+      souboru: soubory.length,
+      bajtu: soubory.reduce((s, f) => s + f.size, 0),
+      online: navigator.onLine,
+    });
+    navigator.sendBeacon('/api/chyba-formulare', new Blob([data], { type: 'application/json' }));
+  } catch (_) { /* hlášení chyby nesmí shodit formulář */ }
 }
 
 function zrusChybu(form) {
