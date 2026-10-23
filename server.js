@@ -786,12 +786,26 @@ app.post(
         souboru: cislo(b.souboru),
         bajtu: cislo(b.bajtu),
         online: b.online === true,
+        pokus: cislo(b.pokus),
+        sondaOk: typeof b.sondaOk === 'boolean' ? b.sondaOk : null,
+        bezPriloh: b.bezPriloh === true,
         ua: text(req.headers['user-agent'], 200),
       }),
     );
     res.status(204).end();
   },
 );
+
+/**
+ * LEX-147 — sonda spojení. Když odeslání formuláře dvakrát selže bez odpovědi,
+ * prohlížeč zkusí tenhle malý dotaz bez příloh: projde-li, síť funguje a
+ * odeslání zastavily přílohy (antivirus, firemní síť); neprojde-li, je venku
+ * připojení. Výsledek pak nese hlášení na `/api/chyba-formulare`.
+ */
+app.get('/api/ping', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(204).end();
+});
 
 app.use('/editor', editor);
 
