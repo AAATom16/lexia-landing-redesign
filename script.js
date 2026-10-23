@@ -860,8 +860,8 @@ function initWebForms() {
         // spárujeme s žádostí. Údaje z formuláře jdou jen přes textContent.
         const cislo = odpoved && (odpoved.referenceNumber || odpoved.reference);
         const odkaz = document.createElement('a');
-        odkaz.href = 'mailto:info@lexia.cz';
-        odkaz.textContent = 'info@lexia.cz';
+        odkaz.href = 'mailto:' + EMAIL_PRO_PRILOHY;
+        odkaz.textContent = EMAIL_PRO_PRILOHY;
         odkaz.style.cssText = 'color:#065F46;font-weight:700;overflow-wrap:anywhere';
         let pripis = '.';
         if (cislo) pripis = ' a uveďte v něm číslo žádosti ' + String(cislo) + '.';
@@ -904,8 +904,10 @@ function initWebForms() {
       } catch (err) {
         nahlasChybuOdeslani(druh, err, soubory, bezPriloh);
         // LEX-147 — dvakrát se nepodařilo ani dostat odpověď a žádost nese
-        // přílohy: nabídnout odeslání bez nich, ať případ nepropadne.
-        const nabidnout = err && err.sitova && soubory.length > 0;
+        // přílohy: nabídnout odeslání bez nich, ať případ nepropadne. Jen
+        // u hlášení případu — oznamovací kanál (171/2023 Sb.) nesmí posílat
+        // důkazy do obecné schránky, tam zůstane jen opakování a hlášení chyby.
+        const nabidnout = jePripad && err && err.sitova && soubory.length > 0;
         ukazChybu(form, {
           sitova: !!(err && err.sitova),
           sondaOk: err ? err.sondaOk : null,
@@ -946,6 +948,8 @@ function initWebForms() {
  * firemní síť, rozšíření prohlížeče); neprojde-li, je venku síť.
  */
 const PRODLEVA_OPAKOVANI_MS = 1500;
+// Schránka pro hlášení případů (do ní drAIve posílá i žádosti z formuláře).
+const EMAIL_PRO_PRILOHY = 'pravnipomoc@lexia.cz';
 
 async function odesliSOpakovanim(cil, sestav) {
   try {
@@ -1169,7 +1173,8 @@ function ukazChybu(form, moznosti) {
         'takže odeslání nejspíš zastavily přílohy – může je blokovat například antivirus nebo firemní síť. '
       : 'Zprávu se nepodařilo odeslat ani na druhý pokus. Vypadá to, že se přerušilo připojení ' +
         'k internetu – zkontrolujte ho prosím a zkuste to znovu. ') +
-      'Žádost můžete odeslat také bez příloh a přílohy nám poslat e-mailem na ' + mail +
+      'Žádost můžete odeslat také bez příloh a přílohy nám poslat e-mailem na ' +
+      '<a href="mailto:' + EMAIL_PRO_PRILOHY + '" style="color:#991B1B;font-weight:600">' + EMAIL_PRO_PRILOHY + '</a>' +
       '. Vyplněné údaje zůstávají ve formuláři.';
     const akce = document.createElement('div');
     akce.style.cssText = 'margin-top:12px';
