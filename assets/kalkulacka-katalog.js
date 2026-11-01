@@ -54,6 +54,10 @@
     nesplnene: {},
     /** rozpracovaný koncept: `{ contractId, previewToken }` */
     koncept: null,
+    /** `blob:` adresa návrhu v náhledu; uvolňuje se při zavření nebo výměně */
+    navrhUrl: null,
+    /** `AbortController` běžícího stahování návrhu */
+    navrhStahovani: null,
     posledni: null,
     /**
      * Slevový voucher (LEX-38). `kod` je to, co klient zadal nebo co přišlo
@@ -1712,6 +1716,7 @@
     // Klient se mezi kroky vrací a mění výběr; starý náhled by ukazoval nabídku,
     // která už neplatí.
     el('#doc-navrh')?.remove();
+    stav.navrhStahovani?.abort();
     const radek = document.createElement('div');
     radek.className = 'doc-item';
     radek.id = 'doc-navrh';
@@ -1726,19 +1731,13 @@
     box.prepend(radek);
 
     try {
-      const k = await pripravKoncept();
+      await pripravKoncept();
       stavRadku.textContent = ' · PDF, zatím bez čísla smlouvy';
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-outline btn-sm';
       btn.textContent = 'Zobrazit';
-      btn.addEventListener('click', () =>
-        zobrazUrl(
-          'Návrh pojistné smlouvy',
-          `${API}/public/v1/contracts/${encodeURIComponent(k.contractId)}/proposal` +
-            `?tenant=${TENANT}&token=${encodeURIComponent(k.previewToken)}`,
-        ),
-      );
+      btn.addEventListener('click', () => zobrazNavrh(btn, stavRadku));
       radek.appendChild(btn);
     } catch (e) {
       // Náhled je služba navíc; když se nepovede, sjednání to nesmí zastavit.
@@ -1784,11 +1783,61 @@
     if (!box || !ramec) return;
     if (titulek) titulek.textContent = titul;
     ramec.src = url;
+    uvolniNavrh();
     box.hidden = false;
     box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  function uvolniNavrh() {
+    if (stav.navrhUrl) URL.revokeObjectURL(stav.navrhUrl);
+    stav.navrhUrl = null;
+  }
+
+  /**
+   * PDF návrhu stahujeme přes POST s klíčem v těle a do rámu dáváme `blob:`.
+   * Rám umí jen GET a dotaz z adresy si ukládá access log proxy, přitom klíč
+   * otevírá údaje klienta a umožňuje koncept přepsat nebo potvrdit.
+   */
+  async function stahniNavrh(k, signal) {
+    const res = await fetch(
+      `${API}/public/v1/contracts/${encodeURIComponent(k.contractId)}/proposal?tenant=${TENANT}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/pdf' },
+        body: JSON.stringify({ previewToken: k.previewToken }),
+        signal,
+      },
+    );
+    if (!res.ok) throw await chybaOdpovedi(res);
+    return res.blob();
+  }
+
+  async function zobrazNavrh(btn, stavRadku) {
+    stav.navrhStahovani?.abort();
+    const stahovani = new AbortController();
+    stav.navrhStahovani = stahovani;
+    const puvodni = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Načítáme…';
+    try {
+      const pdf = await sPlatnymKlicem((k) => stahniNavrh(k, stahovani.signal));
+      const url = URL.createObjectURL(pdf);
+      zobrazUrl('Návrh pojistné smlouvy', url);
+      stav.navrhUrl = url;
+      stavRadku.textContent = ' · PDF, zatím bez čísla smlouvy';
+    } catch (e) {
+      // Zrušené stahování nahradil jiný dokument nebo zavření náhledu.
+      if (e.name !== 'AbortError') {
+        stavRadku.textContent = ' · náhled se teď nepodařilo připravit';
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = puvodni;
+    }
+  }
+
   function zobrazDokument(d) {
+    stav.navrhStahovani?.abort();
     zobrazUrl(
       d.title,
       `${API}/public/v1/products/${encodeURIComponent(stav.produkt)}/documents/` +
@@ -1801,7 +1850,9 @@
     el('#doc-preview-close')?.addEventListener('click', () => {
       const box = el('#doc-preview');
       const ramec = el('#doc-preview-frame');
+      stav.navrhStahovani?.abort();
       if (ramec) ramec.src = 'about:blank';
+      uvolniNavrh();
       if (box) box.hidden = true;
     });
     // Rekapitulace je krok 3; seznam načítáme, až se na něj klient dostane.
@@ -2209,9 +2260,16 @@
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(telo),
     });
+    if (!res.ok) throw await chybaOdpovedi(res);
+    return res.json().catch(() => null);
+  }
+
+  /** Chyba se stavem odpovědi: 403 znamená neplatný klíč ke konceptu. */
+  async function chybaOdpovedi(res) {
     const data = await res.json().catch(() => null);
-    if (!res.ok) throw new Error((data && data.message) || 'Něco se nepovedlo.');
-    return data;
+    const chyba = new Error((data && data.message) || 'Něco se nepovedlo.');
+    chyba.status = res.status;
+    return chyba;
   }
 
   /**
@@ -2227,16 +2285,40 @@
       telo.draftId = stav.koncept.contractId;
       telo.previewToken = stav.koncept.previewToken;
     }
-    const data = await poslat('contracts/draft', telo);
-    stav.koncept = { contractId: data.contractId, previewToken: data.previewToken };
-    return stav.koncept;
+    try {
+      const data = await poslat('contracts/draft', telo);
+      stav.koncept = { contractId: data.contractId, previewToken: data.previewToken };
+      return stav.koncept;
+    } catch (e) {
+      // Přepis konceptu ověřuje klíč taky, takže s prošlým klíčem by se opakovalo
+      // totéž 403. Klient údaje pořád má ve formuláři, stačí založit nový koncept.
+      if (e.status !== 403 || !stav.koncept) throw e;
+      stav.koncept = null;
+      return pripravKoncept();
+    }
+  }
+
+  /**
+   * Klíč platí 7 dní od posledního uložení konceptu. Když mezitím v otevřené
+   * stránce vypršel, založí se nový koncept a akce se jednou zopakuje.
+   */
+  async function sPlatnymKlicem(akce) {
+    const k = stav.koncept || (await pripravKoncept());
+    try {
+      return await akce(k);
+    } catch (e) {
+      if (e.status !== 403) throw e;
+      stav.koncept = null;
+      return akce(await pripravKoncept());
+    }
   }
 
   async function odesliSjednani() {
-    const k = stav.koncept || (await pripravKoncept());
-    return poslat(`contracts/${encodeURIComponent(k.contractId)}/confirm`, {
-      previewToken: k.previewToken,
-    });
+    return sPlatnymKlicem((k) =>
+      poslat(`contracts/${encodeURIComponent(k.contractId)}/confirm`, {
+        previewToken: k.previewToken,
+      }),
+    );
   }
 
   /**
